@@ -1,12 +1,6 @@
-import Header from "../components/Header"
-import SideToolBar from "../components/SideToolBar"
-
 const MainPage = () => {
   return (
-    <>
-    <Header/>
-    <SideToolBar/>
-    </>
+      <h1>메인페이지입니다</h1>
   )
 }
 

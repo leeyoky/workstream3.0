@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import profile from '../img/guriman.jpg'
+import { Link } from 'react-router-dom'
 
 const SideToolBar = () => {
 
@@ -36,10 +37,10 @@ const SideToolBar = () => {
               </a>
             </li>
             <li>
-              <a href="/">
+              <Link to="/approval">
                 <i className="fa-regular fa-pen-to-square"></i>
                 <span>전자결재</span>
-              </a>
+              </Link>
             </li>
             <li>
               <a href="/">
@@ -60,10 +61,10 @@ const SideToolBar = () => {
               </a>
             </li>
             <li>
-              <a href="/address">
+              <Link to="/address">
                 <i className="fa-regular fa-address-book"></i>
                 <span>사내연락망</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
