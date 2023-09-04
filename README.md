@@ -1,6 +1,6 @@
-# workstream3.0
+# WorkStream3.0
 
-New Webpage for Datastreams
+New Webpage for Datastreams!
 
 ### 1. Login Page
 
