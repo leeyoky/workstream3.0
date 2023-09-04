@@ -4,5 +4,6 @@ New Webpage for Datastreams!
 
 ### 1. Login Page
 
-![화면 캡처 2023-09-04 123949](https://github.com/leeyoky/workstream3.0/assets/107028682/843b48d7-b957-43a1-8981-5b7cac5bae73)
+![chrome-capture-2023-8-4](https://github.com/leeyoky/workstream3.0/assets/107028682/dbf78146-8ca4-43d2-a79c-a0e6873cb78e)
+
 
