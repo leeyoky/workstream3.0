@@ -1,23 +1,20 @@
-import { useState } from 'react'
-import profile from '../img/guriman.jpg'
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import profile from '../assets/img/guriman.jpg'
+import AuthContext from '../store/auth-context';
 
 const SideToolBar = () => {
+  const { onActive, toggleActive, sideBarClass } =useContext(AuthContext);
 
-  const [onActive, setActive] = useState(false);
-  const toggleActive = () => {
-    setActive(!onActive);
-  }
-  const activeClass = onActive? 'active' : '';
+
   return (
-    <div className={`side-bar-wrapper ${activeClass}`}>
-      <div className={`side-bar-container ${activeClass}`}>
-        <div className={`side-bar-menus ${activeClass}`}>
+    <div className={`side-bar-wrapper ${sideBarClass}`}>
+      <div className={`side-bar-container ${sideBarClass}`}>
+        <div className={`side-bar-menus ${sideBarClass}`}>
           <button onClick={toggleActive}>
             <i className="fa-solid fa-bars"></i>
           </button>
         </div>
-        <div className={`side-bar-1200 ${activeClass}`}>
+        <div className={`side-bar-1200 ${sideBarClass}`}>
           <div className="side-bar-profile-wrapper side-sm">
             <img src={profile}/>
           </div>
@@ -28,19 +25,19 @@ const SideToolBar = () => {
             <p>KM팀</p>
           </div>
         </div>
-        <div className={`side-bar-list-wrapper ${activeClass}`}>
-          <ul className={`menu-icon ${activeClass}`}>
+        <div className={`side-bar-list-wrapper ${sideBarClass}`}>
+          <ul className={`menu-icon ${sideBarClass}`}>
             <li>
               <a href="/notice">
-                <i className={`fa-regular fa-heart ${activeClass}`}></i>
-                <span className={`${activeClass}`}>전사공지</span>
+                <i className={`fa-regular fa-heart ${sideBarClass}`}></i>
+                <span className={`${sideBarClass}`}>전사공지</span>
               </a>
             </li>
             <li>
-              <Link to="/approval">
+              <a href="/approval">
                 <i className="fa-regular fa-pen-to-square"></i>
                 <span>전자결재</span>
-              </Link>
+              </a>
             </li>
             <li>
               <a href="/">
@@ -61,10 +58,10 @@ const SideToolBar = () => {
               </a>
             </li>
             <li>
-              <Link to="/address">
+              <a href="/address">
                 <i className="fa-regular fa-address-book"></i>
                 <span>사내연락망</span>
-              </Link>
+              </a>
             </li>
           </ul>
         </div>

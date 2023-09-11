@@ -1,16 +1,10 @@
-import { useNavigate } from 'react-router-dom';
-
-import logoSmall from '../img/logo.png'
+import logoSmall from '../assets/img/logo.png'
+import { useContext } from 'react';
+import AuthContext from '../store/auth-context';
 
 const Header = () => {
-
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-      localStorage.removeItem('token')
-      navigate('/login');
-  }
-  
+  const ctx = useContext(AuthContext);
+ 
   return (
     <div className="header">
     <div className="header-logo margin-right">
@@ -80,7 +74,7 @@ const Header = () => {
           <ul className="toolbar-dropdown my-page">
             <li><div> 내 정보 </div></li>
             <li>
-              <button onClick={handleLogout}> 로그아웃 </button>  
+              <button onClick={ctx?.onLogout}> 로그아웃 </button>  
             </li>
           </ul>
         </li>

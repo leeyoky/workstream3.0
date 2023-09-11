@@ -1,5 +1,5 @@
-import mainImg from '../img/main.jpg'
-import logo from '../img/logo.png'
+import mainImg from '../assets/img/main.jpg'
+import logo from '../assets/img/logo.png'
 import LoginForm from '../components/LoginForm'
 
 const LoginPage = () => {

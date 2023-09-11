@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useContext } from 'react';
 import axios from '../api/axios'
+import { useNavigate } from 'react-router-dom';
+import AuthContext from '../store/auth-context';
 
 
 /* interface User {
@@ -15,12 +16,14 @@ const User = {
 
 const LoginForm: React.FC = () => {
 
-  const [username, setusername] = useState<string>('');
-  const [password, setpassword] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [isLogin, setIsLogin] = useState(false);
-  const [msg, setMsg] = useState<string>('');
-  
+  const [msg, setMsg] = useState<string>("");
+
   const navigate = useNavigate();
+  const authCtx = useContext(AuthContext);
+  
 
   const usernameInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
@@ -35,6 +38,7 @@ const LoginForm: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
 
     e.preventDefault();
+    
 
     /* Validation Check */
     if(!username){
@@ -56,15 +60,22 @@ const LoginForm: React.FC = () => {
         username : username,
         password : password
       }
+
       const response = await axios.post('login', userData);
 
       if(response.status === 201){
         localStorage.setItem('token', response.headers.authorization);
+        authCtx?.onLogin(username, password);
         setIsLogin(true);
-        navigate('/main');
+        navigate('/main')
+
+        // data 초기화
+        setUsername('');
+        setPassword('');
+        setMsg('');
       }
 
-    } catch (error: AxiosError) {
+    } catch (error: any) {
       if(error.response && error.response.status === 401){
         setMsg('아이디 혹은 비밀번호가 잘못되었습니다.');
       }else{
@@ -74,17 +85,12 @@ const LoginForm: React.FC = () => {
 
     /* NOTE: SEVER OFF */
 
-/*     if(username === User.username && password === User.password){
-      alert('로그인 성공');
-      navigate('/main');
-    } */
+    // if(username === User.username && password === User.password){
+    //   alert('로그인 성공');
+    //   navigate('/main');
+    // } 
 
   }
-
-
-
-
-
   return ( 
     <form className="login-form" onSubmit={handleLogin}>
       <div className="account-container login-box">
@@ -98,7 +104,7 @@ const LoginForm: React.FC = () => {
               type="text"
               className="username"
               placeholder="ID"
-              onChange={(e) => handleOnChange(e, setusername)}
+              onChange={(e) => handleOnChange(e, setUsername)}
               value={username}
               ref={usernameInputRef}
             />
@@ -114,7 +120,7 @@ const LoginForm: React.FC = () => {
               type="password"
               className="password"
               placeholder="password"
-              onChange={(e) => handleOnChange(e, setpassword)}
+              onChange={(e) => handleOnChange(e, setPassword)}
               value={password}
               ref={passwordInputRef}
             />

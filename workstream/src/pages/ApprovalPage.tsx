@@ -1,6 +1,15 @@
+import { useState } from "react"
 import SearchForm from "../components/SearchForm"
 
 const ApprovalPage: React.FC = () => {
+
+  const [modalActive, setModalActive] = useState(false);
+
+  const modalHandler = () => {
+    setModalActive(!modalActive);
+  }
+  const activeClass = modalActive? '' : 'hidden';
+
   return (
     <>
       <div className="board-title">
@@ -17,8 +26,17 @@ const ApprovalPage: React.FC = () => {
         writer="기안자"
         attach="첨부파일"/>
       <div className="button-box">
-        <button className="write-btn">결재 작성</button>
+        <button className="write-btn" onClick={modalHandler}>결재 작성</button>
       </div>
+
+      <div className={`modal ${activeClass}`}>
+        <div className="modal__overlay"></div>
+        <div className="modal__content">
+          <h1>modal~~~~~~~~~~~~~~~~~</h1>
+          <button onClick={modalHandler}>x</button>
+        </div>
+      </div>
+
       <div className="board-wrapper">
       <table className="table-board">
         <thead>

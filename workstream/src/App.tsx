@@ -1,47 +1,36 @@
-import React, { createContext, useState } from 'react';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Route, Navigate, BrowserRouter, Routes } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import MainPage from './pages/MainPage';
+import AuthContext from './store/auth-context';
 import Header from './components/Header';
 import SideToolBar from './components/SideToolBar';
 
-import LoginPage from "./pages/LoginPage"
-import MainPage from './pages/MainPage';
-import AddressPage from './pages/AddressPage';
-import ApprovalPage from './pages/ApprovalPage';
-
-const AuthContext = createContext<{
-  token: string | null,
-  setToken: React.Dispatch<React.SetStateAction<string | null>>;
-}>({
-  token: null,
-  setToken: () => {},
-})
-
 function App() {
+  const ctx = useContext(AuthContext);
 
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  /* TODO: 로그인이 되어 있으면 MainPage */
-  /* TODO: 로그인이 되어 있지 않으면 LoginPage */
-  
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
-      <React.StrictMode>
-        <BrowserRouter>
-          <Header/>
-          {/* sideToolbar가 active면, margin-left: 4rem; */}
-          <SideToolBar/>
-          <div className="index-wrapper">
+      <React.Fragment>
+        {/* 사용자가 로그인한 경우 */}
+        {ctx?.isLogin && (
+          <React.Fragment>
+            <Header />
+            <SideToolBar />
+            <main className={`index-wrapper ${ctx?.sideBarClass}`}>
             <Routes>
-              <Route path="/main" element={<MainPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/approval" element={<ApprovalPage />} />
-              <Route path="/address" element={<AddressPage />} />
-              {token ? <Route path="/" element={<Navigate to="/main" replace />} /> : <Route path="/" element={<Navigate to="/login" replace />} />}
+              <Route path="/main" element={<MainPage/>}/>
             </Routes>
-          </div>
-        </BrowserRouter>
-      </React.StrictMode>
-    </AuthContext.Provider>
-  )
+            </main>
+          </React.Fragment>
+        )}
+        {/* 사용자가 로그인하지 않았을 때 */}
+        {!ctx?.isLogin && <Navigate to="/login" />}
+        {/* 로그인 페이지 */}
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </React.Fragment>
+  );
 }
 
-export default App
+export default App;
