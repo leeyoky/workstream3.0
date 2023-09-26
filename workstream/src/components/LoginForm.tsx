@@ -1,44 +1,29 @@
-import React, { useState, useRef, useContext } from 'react';
-import axios from '../api/axios'
+import React, { useState, useRef } from 'react';
+import { useAuthActions } from '../store/actions/authActions';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../store/auth-context';
-
-
-/* interface User {
-  username: string,
-  password: string,
-}
-
-const User = {
-  username: "kwb",
-  password: "12345",
-} */
 
 const LoginForm: React.FC = () => {
 
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [isLogin, setIsLogin] = useState(false);
   const [msg, setMsg] = useState<string>("");
 
+  const { login } = useAuthActions();
   const navigate = useNavigate();
-  const authCtx = useContext(AuthContext);
   
-
   const usernameInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleOnChange = (
       e: React.ChangeEvent<HTMLInputElement>, 
-      setter: React.Dispatch<React.SetStateAction<string>>) => {
-        setter(e.target.value);
-        setMsg('');
+      setter: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+      setter(e.target.value);
+      setMsg('');
   }
 
   const handleLogin = async (e: React.FormEvent) => {
-
     e.preventDefault();
-    
 
     /* Validation Check */
     if(!username){
@@ -51,46 +36,15 @@ const LoginForm: React.FC = () => {
       return;
     }
     setMsg('');
-    
-    /* NOTE: SEVER ON */
 
-    // 비즈니스 로직
-    try {
-      const userData = {
-        username : username,
-        password : password
-      }
-
-      const response = await axios.post('login', userData);
-
-      if(response.status === 201){
-        localStorage.setItem('token', response.headers.authorization);
-        authCtx?.onLogin(username, password);
-        setIsLogin(true);
-        navigate('/main')
-
-        // data 초기화
-        setUsername('');
-        setPassword('');
-        setMsg('');
-      }
-
-    } catch (error: any) {
-      if(error.response && error.response.status === 401){
-        setMsg('아이디 혹은 비밀번호가 잘못되었습니다.');
-      }else{
-        setMsg('서버 통신 중 오류가 발생하였습니다.')
-      }
-    }
-
-    /* NOTE: SEVER OFF */
-
-    // if(username === User.username && password === User.password){
-    //   alert('로그인 성공');
-    //   navigate('/main');
-    // } 
-
+  try {
+    await login(username, password);
+    // 로그인 성공 시 페이지 이동
+    navigate('/main');
+  } catch (error) {
+    setMsg('아이디 혹은 비밀번호가 잘못되었습니다.');
   }
+}
   return ( 
     <form className="login-form" onSubmit={handleLogin}>
       <div className="account-container login-box">

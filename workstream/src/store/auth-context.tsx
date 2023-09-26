@@ -6,9 +6,6 @@ import { useEffect } from 'react';
 
 // AuthContext의 타입 정의
 interface AuthContextType {
-  isLogin: boolean;
-  onLogin: (username: string, password: string) => void;
-  onLogout: () => void;
   onActive: boolean;
   toggleActive: () => void;
   sideBarClass: string;
@@ -23,36 +20,31 @@ interface AuthContextProviderProps {
 }
 
 export const AuthContextProvider: React.FC<AuthContextProviderProps> = (props) => {
+  // 로그인 여부
   const [isLogin, setIsLogin] = useState(false);
   const [onActive, setOnActive] = useState(false);
+  const [token, setToken] = useState('');
   const [sideBarClass, setSideBarClass] = useState('');
+  
   const navigate = useNavigate();
-
+  
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 초기 로딩 시 실행
+
     const storedUserLoginInfo = localStorage.getItem('token');
     
-    if (storedUserLoginInfo === '') {
-      // 'token'이 로컬 스토리지에 있을 때 로그인 상태로 설정
+    // 컴포넌트가 마운트될 때 초기 로딩 시 실행
+    
+    if (storedUserLoginInfo !== null) {
+      setIsLogin(true);
+      setToken(storedUserLoginInfo)
+      console.log("Available Token");
+    }
+    if(storedUserLoginInfo === null){
       setIsLogin(false);
-      console.log("unvailable Token");
+      console.log("Unvailable Token");
       navigate('/login')
     }
-  }, [navigate]);
-
-  // 로그인
-  const loginHandler = () => {
-    setIsLogin(true);
-  };
-
-  // 로그아웃
-  const logoutHandler = () => {
-    localStorage.removeItem('token')
-    console.log("========  DELETE TOKEN ===========");
-    setIsLogin(false);
-    console.log("========  LOGOUT ===========");
-    
-  };
+  }, []);
 
   // 사이드 메뉴 토글 
   const toggleActive = () => {
@@ -63,9 +55,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (props) =
   return (
     <AuthContext.Provider
       value={{
-        isLogin: isLogin,
-        onLogin: loginHandler,
-        onLogout: logoutHandler,
         onActive: onActive,
         toggleActive: toggleActive,
         sideBarClass: sideBarClass,

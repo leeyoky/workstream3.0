@@ -1,5 +1,3 @@
-const index = () => {
-
+interface RouterInterface {
+  name: string;
 }
-
-export default index

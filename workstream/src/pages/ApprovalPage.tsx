@@ -1,41 +1,36 @@
-import { useState } from "react"
-import SearchForm from "../components/SearchForm"
+import SearchForm from "../UI/SearchForm"
+import BoardTitle from "../UI/BoardTitle"
+import Modal from "../UI/Modal"
 
-const ApprovalPage: React.FC = () => {
-
-  const [modalActive, setModalActive] = useState(false);
-
-  const modalHandler = () => {
-    setModalActive(!modalActive);
+const ApprovalPage: React.FC = (props) => {
+  const boardTitle = {
+    title: '전자결재'
   }
-  const activeClass = modalActive? '' : 'hidden';
+
+  const searchForm = {
+    writeDate: '기안일',
+    form: '결재양식',
+    important:'중요도',
+    title:'제목',
+    status:'진행상태',
+    writer:'기안자',
+    attach: '첨부파일'
+  }
 
   return (
     <>
-      <div className="board-title">
-        <p>전자결재</p>
-        <hr />
-      </div>
+      <BoardTitle title={boardTitle.title}/>
     <div className="index-box">
       <SearchForm 
-        writeDate="기안일" 
-        form="결재양식"
-        important="중요도"
-        title="제목"
-        status ="진행상태"
-        writer="기안자"
-        attach="첨부파일"/>
-      <div className="button-box">
-        <button className="write-btn" onClick={modalHandler}>결재 작성</button>
-      </div>
+        writeDate={searchForm.writeDate} 
+        form={searchForm.form}
+        important={searchForm.important}
+        title={searchForm.title}
+        status ={searchForm.status}
+        writer={searchForm.writer}
+        attach={searchForm.attach}/>
 
-      <div className={`modal ${activeClass}`}>
-        <div className="modal__overlay"></div>
-        <div className="modal__content">
-          <h1>modal~~~~~~~~~~~~~~~~~</h1>
-          <button onClick={modalHandler}>x</button>
-        </div>
-      </div>
+      <Modal onClick={props.hideModalHandler}/>
 
       <div className="board-wrapper">
       <table className="table-board">
