@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { useAuthActions } from '../store/actions/authActions';
-import { useNavigate } from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
 
@@ -8,11 +7,10 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [msg, setMsg] = useState<string>("");
 
-  const { login } = useAuthActions();
-  const navigate = useNavigate();
-  
   const usernameInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
+
+  const { login } = useAuthActions();
 
   const handleOnChange = (
       e: React.ChangeEvent<HTMLInputElement>, 
@@ -39,10 +37,12 @@ const LoginForm: React.FC = () => {
 
   try {
     await login(username, password);
-    // 로그인 성공 시 페이지 이동
-    navigate('/main');
-  } catch (error) {
-    setMsg('아이디 혹은 비밀번호가 잘못되었습니다.');
+  } catch (error: any) {
+    if (error.response && error.response.status === 401) {
+      setMsg('아이디 혹은 비밀번호가 잘못되었습니다.');
+    } else {
+      setMsg('서버 통신 오류가 발생했습니다.');
+    }
   }
 }
   return ( 

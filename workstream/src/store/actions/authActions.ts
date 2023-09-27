@@ -1,9 +1,11 @@
 import { useDispatch } from 'react-redux';
 import { authActions } from "../auth-slice";
 import { login } from '../../api/axios' 
+import { useNavigate } from 'react-router-dom';
 
 export const useAuthActions = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   /* LOGIN  */
   const loginUser = async (username: string, password: string) => {
@@ -21,9 +23,13 @@ export const useAuthActions = () => {
         dispatch(authActions.login());
         dispatch(authActions.setToken(token));
         localStorage.setItem('token', token);
-      } 
+        navigate('/main');
+      }else{
+        throw new Error('로그인 실패')
+      }
     } catch (error) {
       console.error('로그인 오류:', error);
+      throw error;
     }
   };
 

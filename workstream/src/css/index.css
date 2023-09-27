@@ -237,6 +237,7 @@ i:hover {
 }
 .header-logo {
   display: flex;
+  cursor: pointer;
 }
 .header-logo img {
   width: 170px;
@@ -554,7 +555,7 @@ i:hover {
 .button-box{
   width: 100%;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 .table-board {
   width: 100%;

@@ -1,12 +1,14 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./auth-slice";
+import uiSlice from "./ui-slice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 
 // 1. authSlice.reducer를 직접 사용하는 대신 combineReducers를 사용하여 rootReducer를 생성합니다.
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
+  ui: uiSlice.reducer,
 });
 
 const persistConfig = {

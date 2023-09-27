@@ -1,0 +1,361 @@
+hr {
+  height: 2px;
+  background-color: black;
+  border: none;
+}
+
+
+
+li, ul {
+  list-style: none;
+}
+
+
+input{
+  height: 20px;
+  font-size: 10pt;
+}
+
+input::placeholder {
+  font-size: 10pt;
+  color: #a7a7a7;
+  transform-origin: left center;
+  padding-left: 2px;
+  overflow: visible;
+}
+
+input:focus{
+  outline: 1px solid #aedaff;
+  box-shadow: 0 0 3px #7ebbec;
+  z-index: 999;
+}
+.approval-container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.organizaion-selector-wrapper{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.oraganization-selector__input-wrapper,
+.oraganization-selector__result-wrapper,
+.document-selector-wrapper{
+  width: 250px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* margin: 20px 10px; */
+}
+.oraganization-selector__result-wrapper{
+  width: 400px;
+}
+.oraganization-selector__result-wrapper .card,
+.document-selector-wrapper .card {
+  flex: 1;
+}
+
+.oraganization-selector__input-wrapper input,
+.document-selector-wrapper input{
+  border-radius: 3px 0px 0px 3px;
+  border: 1px solid #e0e0e0;
+  flex: 1;
+}
+
+
+/* card */
+
+.card{
+  width: 100%;
+  height: auto;
+  box-shadow: #4444442e 0px 5px 10px 2px;
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.card-header p{
+  font-weight: 500;
+  font-size: 12pt;
+  line-height: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+/* card-search */
+
+.card-search{
+  display: flex;
+  flex-direction: row;
+}
+
+.card-search button,
+.emp-list__undo-btn {
+  border: none;
+  border-radius: 0px 3px 3px 0px;
+  background-color: rgb(233, 233, 233);
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-search button:hover,
+.emp-list__undo-btn:hover {
+  background-color: rgb(209, 209, 209);
+  transition: all 0.2s ease;
+}
+.card-search i {
+  font-size: 10pt;
+}
+
+/* organization-list */
+
+.organization-list{
+  
+  padding: 5px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.organization-list i {
+  color: #1f5079;
+  font-size: 8pt
+}
+
+/* accordion  */
+
+#accordion {
+  margin-top: 10px;
+  padding: 5px 5px;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  height: 150px;
+  font-size: 9pt;
+  overflow-y: scroll;
+}
+.accordion-header{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  line-height: 20px;
+}
+.accordion-item{
+  letter-spacing: -1px;
+}
+.accordion-header span {
+  font-size: 11pt;
+}
+.accordion-header i{
+  margin-right: 10px;
+  font-size: 8pt;
+}
+.accordion-content {
+  display: none;
+}
+.accordion-header i {
+  color: #1f5079;
+}
+
+/* 아코디언 및 서브 아코디언 활성화 스타일 */
+.show {
+  display: block;
+}
+.depth2, .depth3{
+  padding-left: 10px;
+}
+.depth2 i {
+  color: #3384c7;
+}
+.depth3 i {
+  color: #43aaff;
+}
+.depth4 {
+  display: none;
+}
+
+/* EMP list */
+
+.emp-list,
+.document-list{
+  padding: 5px 5px;
+  margin-top: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  height: 100px;
+  font-size: 8pt;
+  overflow-y: scroll;
+}
+.emp-list{
+  display: none;
+}
+.document-list{
+  height: 150px;
+}
+
+
+
+
+.emp-list__result{
+  padding: 10px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  height: -webkit-fill-available;
+  font-size: 12pt;
+  line-height: 13pt;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.emp-list__1,
+.emp-list__agreement{
+  display: flex;
+  justify-content: center;
+}
+
+.emp-list__agreement{
+  margin-top: 20px;
+}
+
+.emp-list__result p {
+  font-weight: 600;
+  font-size: 12pt;
+  background-color: #ececec;
+  width: 80px;
+  padding: 3px;
+}
+.emp-list__undo-btn{
+  font-size: 11pt;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+/* Emp Item */
+
+.emp-item-wrapper{
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.emp-item-wrapper .emp-item {
+  margin-top: 5px;
+}
+.emp-item,
+.document-item{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  letter-spacing: -1px;
+  cursor: pointer;
+}
+.emp-item:hover,
+.document-item:hover,
+.accordion-item:hover{
+  background-color: #f3f3f3;
+}
+.emp-list i ,
+.emp-list__result i{
+  font-size: 10pt;
+  color: #5f5f5f;
+}
+.emp-list__result span {
+  font-size: 11pt;
+}
+.emp-item span{
+  margin-left: 8px;
+}
+.document-item span{
+  margin-left: 8px;
+}
+
+/* font-size */
+.emp-item,
+.document-item,
+.accordion-header span{
+  font-size: 11pt;
+  line-height: 20px;
+}
+
+/* selectBox */
+
+.emp-list__result-select{
+  font-size: 10pt;
+  text-align: center;
+  border: 1px solid #d3d3d3;
+  border-radius: 3px;
+  width: 30%;
+}
+option {
+  font-size: 10pt;
+}
+.emp-list__result-select-wrapper{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 10px
+}
+
+/* add-delete-wrapper */
+
+.add-delete-wrapper{
+  margin: 0px 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.add-delete-wrapper button,
+.emp-list-result__btn-wrapper button {
+  border: none;
+  margin: 2px;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+.add-delete-wrapper button:hover{
+  background-color: #dbdbdb;
+  transition: all 0.2s ease;
+}
+
+.add-delete-wrapper span{
+  font-size: 7px;
+  color: #383838;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* Emp-list-result__btn-wrapper */
+
+.emp-list-result__btn-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 10px;
+}
+.emp-list-result__btn-wrapper button{
+  font-size: 11pt;
+  background-color: #1f5079;
+  color: white;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 2px 10px 3px 10px;
+}
+.emp-list-result__btn-wrapper button:hover{
+  background-color: #143652;
+  transition: all 0.2s ease;
+}

@@ -7,13 +7,18 @@ interface addressType {
   name: string,
   department: string,
   email: string,
-  join_date: Date,
+  join_date: number,
   phone: number,
+  ext_number: number,
   position: string,
+  responsibility: string,
+  home_number: string,
+  birthday: number,
+  project: string,
 }
 
 const AddressPage = () => {
-  const [address, setAddress] = useState([]);
+  const [address, setAddress] = useState<addressType[]>([]);
 
   const boardTitle = {
     title: '연락처'
@@ -34,8 +39,13 @@ const AddressPage = () => {
           department: addressData.department,
           email: addressData.email,
           phone: addressData.phone,
+          birthday: addressData.birthday,
+          ext_number: addressData.ext_number,
           join_date: addressData.join_date,
           position: addressData.position,
+          responsibility: addressData.responsibility,
+          home_number: addressData.home_number,
+          project: addressData.project,
         }
       })
       setAddress(transformedAddress)
@@ -77,8 +87,16 @@ const AddressPage = () => {
               <tr key={index} className="table-hover">
                 <td>{item.name}</td>
                 <td>{item.department}</td>
+                <td>{item.responsibility}</td>
                 <td>{item.position}</td>
-                {/* 다른 데이터도 이와 같이 표시 */}
+                <td>{item.ext_number}</td>
+                <td>{item.position}</td>
+                <td>{item.email}</td>
+                <td>{item.home_number}</td>
+                <td>{item.join_date}</td>
+                <td>{item.birthday}</td>
+                <td> - </td>
+                <td>{item.project}</td>
               </tr>
             ))}
           </tbody>

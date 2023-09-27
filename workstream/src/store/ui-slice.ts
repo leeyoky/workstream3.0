@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const uiSlice = createSlice({
   name: 'ui',
-  initialState : { toggleIsVisible : false },
+  initialState : { isSidebarOpen : false },
   reducers: {
     toggle(state) {
-      state.toggleIsVisible = !state.toggleIsVisible;
+      state.isSidebarOpen = !state.isSidebarOpen;
     }
   }
 })

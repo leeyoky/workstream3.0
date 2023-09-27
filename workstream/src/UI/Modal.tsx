@@ -4,46 +4,32 @@ import classes from './Modal.module.css';
 
 interface ModalProps {
   children?: ReactNode;
+  isOpen: boolean; // 모달의 열림/닫힘 상태를 받아오도록 수정
+  onClose: () => void; // 모달 닫기 핸들러
 }
 
 const Modal: React.FC<ModalProps> = (props) => {
-  const [onModal, setOnModal] = useState(false);
-
-  const showModalHandler = () => {
-    setOnModal(true);
-  }
-
-  const hideModalHandler = () => {
-    setOnModal(false);
-  }
+  const { isOpen, onClose } = props; // props에서 isOpen과 onClose를 추출
 
   const portalElement = document.getElementById('overlays');
 
-  if (!portalElement) {
-    return null; // 포털 엘리먼트가 없을 경우 처리
+  if (!portalElement || !isOpen) {
+    return null; // 포털 엘리먼트가 없거나 모달이 닫혀있을 경우 처리
   }
 
-  return (
-    <React.Fragment>
-      <div className="button-box">
-        <button className="write-btn" onClick={showModalHandler}>결재 작성</button>
+  return ReactDOM.createPortal(
+    <div>
+      <div className={classes.backdrop} onClick={onClose}></div>
+      <div className={classes.modal}>
+        <div className={classes.content}>
+          {props.children}
+          <button className={classes['button--alt']} onClick={onClose}>
+            닫기
+          </button>
+        </div>
       </div>
-
-      {onModal && ReactDOM.createPortal(
-        <div>
-          <div className={classes.backdrop} onClick={hideModalHandler}></div>
-          <div className={classes.modal}>
-            <div className={classes.content}>
-              {props.children}
-              <button className={classes['button--alt']} onClick={hideModalHandler}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>,
-        portalElement
-      )}
-    </React.Fragment>
+    </div>,
+    portalElement
   );
 };
 

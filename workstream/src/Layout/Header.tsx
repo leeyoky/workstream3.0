@@ -7,20 +7,24 @@ const Header = () => {
   const { logout } = useAuthActions();
   const navigate = useNavigate();
 
+  const logoClickHandler = () => {
+    navigate('/main')
+  }
+
   const handleLogout = async () => {
     try {
       await logout();
       console.log("LOGOUT");
-      
       navigate('/login')
     } catch(error) {
-
+      console.log("ERROR");
+      
     }
   }
  
   return (
     <div className="header">
-    <div className="header-logo margin-right">
+    <div className="header-logo margin-right" onClick={logoClickHandler}>
       <img src={logoSmall} alt="로고"/>
     </div>
     <div className="header-logo">
@@ -77,7 +81,7 @@ const Header = () => {
         <i className="fa-regular fa-circle-question"></i>
       </span>
       <div className="sidebar-right-divr">
-        <i className="fa-solid fa-house"></i>
+        <i className="fa-solid fa-house" onClick={logoClickHandler}></i>
       </div>
       <ul className="toolbar-menus padding-0">
         <li className="toolbar-menu">

@@ -1,48 +1,40 @@
 import React from 'react';
-
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { RootState } from './store/index';
-
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import Header from './Layout/Header';
 import SideToolBar from './Layout/SideToolBar';
-import ApprovalPage from './pages/ApprovalPage';
+import ApprovalPage from './pages/Approval/ApprovalPage';
 import AddressPage from './pages/AddressPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-
 function App() {
-
+  const isSidebarOpen: boolean = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const isLogin: boolean = useSelector((state: RootState) => state.auth.isLogin);
 
   return (
-      <React.Fragment>
-        {isLogin && (
-          <React.Fragment>
-            <Header />
-            <SideToolBar />
-            <main className={`index-wrapper`}>
+    <React.Fragment>
+      {isLogin ? (
+        <React.Fragment>
+          <Header />
+          <SideToolBar />
+          <main className={`index-wrapper ${isSidebarOpen ? 'active' : ''}`}>
             <Routes>
-              <Route path='/approval' element={<ApprovalPage/>} />
-              <Route path='/address' element={<AddressPage/>} />
-              <Route path='/*' element={<NotFoundPage/>} />
+              <Route path="/main" element={<MainPage />} />
+              <Route path="/approval" element={<ApprovalPage />} />
+              <Route path="/address" element={<AddressPage />} />
+              <Route path="/*" element={<NotFoundPage />} />
             </Routes>
-            <Routes>
-              <Route path="/main" element={<MainPage/>}/>
-            </Routes>
-            </main>
-          </React.Fragment>
-        )}
-        {!isLogin && (
+          </main>
+        </React.Fragment>
+      ) : (
         <Routes>
           <Route path="/login" element={<LoginPage />} />
         </Routes>
-        )}
-        {/* 로그인 페이지 */}
-        
-      </React.Fragment>
+      )}
+    </React.Fragment>
   );
 }
 
