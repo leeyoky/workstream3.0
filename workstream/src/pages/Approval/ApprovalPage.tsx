@@ -14,9 +14,8 @@ const ApprovalPage: React.FC = (props) => {
     form: '결재양식',
     important:'중요도',
     title:'제목',
-    status:'진행상태',
+    status:'결재상태',
     writer:'기안자',
-    attach: '첨부파일'
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
@@ -41,7 +40,7 @@ const ApprovalPage: React.FC = (props) => {
         title={searchForm.title}
         status ={searchForm.status}
         writer={searchForm.writer}
-        attach={searchForm.attach}/>
+        />
         <Button onShowModal={handleShowModal}>
           새 결재 작성
         </Button>
@@ -58,7 +57,7 @@ const ApprovalPage: React.FC = (props) => {
             <th>제목</th>
             <th>결재상태</th>
             <th>기안자</th>
-            <th>첨부</th>
+            <th>첨부파일</th>
           </tr>
         </thead>
         <tbody>

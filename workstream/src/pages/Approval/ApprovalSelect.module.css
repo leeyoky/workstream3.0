@@ -4,15 +4,12 @@ hr {
   border: none;
 }
 
-
-
 li, ul {
   list-style: none;
 }
 
-
-input{
-  height: 20px;
+.card input{
+  height: 18px;
   font-size: 10pt;
 }
 
@@ -42,28 +39,28 @@ input:focus{
   height: auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
-.oraganization-selector__input-wrapper,
-.oraganization-selector__result-wrapper,
+.organization-selector__input-wrapper,
+.organization-selector__result-wrapper,
 .document-selector-wrapper{
-  width: 250px;
+  width: 220px;
   height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* margin: 20px 10px; */
+  margin: 10px 20px;
 }
-.oraganization-selector__result-wrapper{
+.organization-selector__result-wrapper{
   width: 400px;
 }
-.oraganization-selector__result-wrapper .card,
+.organization-selector__result-wrapper .card,
 .document-selector-wrapper .card {
   flex: 1;
 }
 
-.oraganization-selector__input-wrapper input,
+.organization-selector__input-wrapper input,
 .document-selector-wrapper input{
   border-radius: 3px 0px 0px 3px;
   border: 1px solid #e0e0e0;
@@ -102,12 +99,13 @@ input:focus{
 .emp-list__undo-btn {
   border: none;
   border-radius: 0px 3px 3px 0px;
-  background-color: rgb(233, 233, 233);
-
+  background-color: rgb(209, 209, 209);
+  width: 30px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0px 5px;
 }
 .card-search button:hover,
 .emp-list__undo-btn:hover {
@@ -134,13 +132,13 @@ input:focus{
 
 /* accordion  */
 
-#accordion {
+.accordion {
   margin-top: 10px;
   padding: 5px 5px;
   border: 1px solid #e0e0e0;
   border-radius: 3px;
-  height: 150px;
-  font-size: 9pt;
+  height: 180px;
+  font-size: 11pt;
   overflow-y: scroll;
 }
 .accordion-header{
@@ -153,40 +151,45 @@ input:focus{
   letter-spacing: -1px;
 }
 .accordion-header span {
-  font-size: 11pt;
+  font-size: 14pt;
 }
 .accordion-header i{
   margin-right: 10px;
-  font-size: 8pt;
-}
-.accordion-content {
-  display: none;
-}
-.accordion-header i {
+  font-size: 12pt;
   color: #1f5079;
 }
 
+.accordion-content {
+  padding-left: 10px;
+}
+
+
 /* 아코디언 및 서브 아코디언 활성화 스타일 */
-.show {
+.active {
   display: block;
 }
-.depth2, .depth3{
-  padding-left: 10px;
+.depth2, .depth3, .depth4{
+  padding-left: 5px;
 }
 .depth2 i {
   color: #3384c7;
 }
 .depth3 i {
-  color: #43aaff;
+  color: #92c4ec;
 }
-.depth4 {
-  display: none;
+.depth4 i {
+  color: #607485;
 }
+
+
+
+
 
 /* EMP list */
 
 .emp-list,
-.document-list{
+.document-list,
+.document-bookmark{
   padding: 5px 5px;
   margin-top: 10px;
   border: 1px solid #e0e0e0;
@@ -195,21 +198,22 @@ input:focus{
   font-size: 8pt;
   overflow-y: scroll;
 }
-.emp-list{
-  display: none;
+
+/* Bookmark */
+
+.document-bookmark {
+  background-color: #f5f5f5;
+
 }
 .document-list{
-  height: 150px;
+  height: 180px;
 }
-
-
-
 
 .emp-list__result{
   padding: 10px 10px;
   border: 1px solid #e0e0e0;
   border-radius: 3px;
-  height: -webkit-fill-available;
+  height: 100%;
   font-size: 12pt;
   line-height: 13pt;
 
@@ -224,7 +228,8 @@ input:focus{
 }
 
 .emp-list__agreement{
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 .emp-list__result p {
@@ -233,11 +238,15 @@ input:focus{
   background-color: #ececec;
   width: 80px;
   padding: 3px;
+  margin: 10px;
 }
 .emp-list__undo-btn{
-  font-size: 11pt;
-  border-radius: 3px;
-  padding: 5px;
+  font-size: 10pt;
+  border-radius: 5px;
+  font-weight: 900;
+  width: 1.5rem;
+  background-color: white;
+  border: 1px solid rgb(155, 155, 155);
 }
 
 /* Emp Item */
@@ -262,12 +271,12 @@ input:focus{
 }
 .emp-item:hover,
 .document-item:hover,
-.accordion-item:hover{
+.accordion-header:hover{
   background-color: #f3f3f3;
 }
 .emp-list i ,
 .emp-list__result i{
-  font-size: 10pt;
+  font-size: 15pt;
   color: #5f5f5f;
 }
 .emp-list__result span {
@@ -284,8 +293,9 @@ input:focus{
 .emp-item,
 .document-item,
 .accordion-header span{
-  font-size: 11pt;
+  font-size: 10.5pt;
   line-height: 20px;
+  font-weight: 400;
 }
 
 /* selectBox */
@@ -327,7 +337,12 @@ option {
   border-radius: 3px;
   background-color: #ffffff;
   cursor: pointer;
+  font-weight: 500;
 }
+.control-button-group  {
+  display: flex;
+}
+
 .add-delete-wrapper button:hover{
   background-color: #dbdbdb;
   transition: all 0.2s ease;

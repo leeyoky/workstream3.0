@@ -18,7 +18,9 @@ const LoginPage = () => {
             </div>
               <LoginForm />
             <div className="login-wrapper-img">
+              <div>
                 <img src={logo} alt="logo" />
+              </div>
             </div>
         </div>
     </div>
