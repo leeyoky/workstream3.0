@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import SearchForm from "../../UI/SearchForm"
-import BoardTitle from "../../UI/BoardTitle"
-import Button from "../../UI/Button"
-import ApprovalCreate from './ApprovalCreate';
+import SearchForm from "../../Layout/SearchBox"
+import Button from "../../Layout/Button"
+import ApprovalCreate from '../../components/Approval/ApprovalCreate';
+import Pagination from '../../Layout/Pagination';
+import BoardTitle from '../../Layout/BoardTitle';
 
 const ApprovalPage: React.FC = (props) => {
   const boardTitle = {
@@ -34,18 +35,18 @@ const ApprovalPage: React.FC = (props) => {
       <BoardTitle title={boardTitle.title}/>
     <div className="index-box">
       <SearchForm 
+        writer={searchForm.writer}
         writeDate={searchForm.writeDate} 
         form={searchForm.form}
         important={searchForm.important}
         title={searchForm.title}
         status ={searchForm.status}
-        writer={searchForm.writer}
         />
         <Button onShowModal={handleShowModal}>
           새 결재 작성
         </Button>
           {/* 모달 열기 이벤트 전달 */}
-          {isModalOpen && <ApprovalCreate onClose={handleCloseModal} />}
+          {isModalOpen && <ApprovalCreate onClose={handleCloseModal} isEdit={false}/>}
         {/* 모달이 열려 있을 때 ApprovalCreate 컴포넌트를 렌더링하고, 닫기 이벤트 핸들러 전달 */}
       <div className="board-wrapper">
       <table className="table-board">
@@ -74,6 +75,7 @@ const ApprovalPage: React.FC = (props) => {
         </tbody>
       </table>
     </div>
+      <Pagination />
     </div>
     </>
   )

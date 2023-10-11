@@ -14,13 +14,10 @@ a {
   text-decoration: none;
 }
 
-
-
 li ul {
   list-style: none;
 }
 html {
-  overflow-y: hidden;
   max-width: initial;
   height: auto;
   font-family: "Noto Sans KR", sans-serif;
@@ -66,7 +63,21 @@ i[name]:hover::after {
   background-color: #000000;
 }
 
+.border {
+  border: 1px solid black;
+}
+
 #root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.test{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-top: 45px;     /* header height */
   height: 100%;
 }
 
@@ -107,7 +118,7 @@ i[name]:hover::after {
   .index-wrapper {
     display: flex;
     height: 100%;
-    margin-left: 15rem;
+    margin-left: 4rem;
   }
 }
 @media all and (min-width: 480px) and (max-width: 767px) {
@@ -120,14 +131,17 @@ i[name]:hover::after {
 
 .index-box {
   font-family: "Noto Sans KR", sans-serif;
-
   /* width: 100%; */
-  height: 85%;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 10px 70px;
+  padding: 20px 20px 100px 20px;
+}
+.inner-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 /* Header */
@@ -137,12 +151,14 @@ i[name]:hover::after {
   background-color: rgb(255, 255, 255);
   display: flex;
   padding: 0px 20px;
+  width: 100%;
   justify-content: space-between;
-  position: relative;
+  position: fixed;
   z-index: 999;
   align-items: center;
   box-shadow: #9a9a9a2e 0px 0px 10px 2px;
   height: 45px;
+  box-sizing: border-box;
 }
 
 .header img {
@@ -298,6 +314,9 @@ i[name]:hover::after {
   font-size: 19pt;
   padding-top: 2px;
 }
+.fa-house{
+  font-size: 1.4rem !important;
+}
 
 .full-screen{
   width: 10px;
@@ -326,17 +345,15 @@ i[name]:hover::after {
 /* SideToolBar */
 .side-bar-wrapper {
   background-color: #ff9800;
-  width: calc(12rem + 32px);
+  /* width: calc(12rem + 32px); */
+  width: 14rem;
   height: 100vh;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   z-index: 999;
-  position: absolute;
+  position: fixed;
   transition: 0.3s ease-out;
-
-  @media (max-width: 768px) {
-  }
 }
 .side-bar-wrapper button {
   border: none;
@@ -496,7 +513,7 @@ i[name]:hover::after {
 
 /* mini SideBar */
 
-@media all and (max-width: 1023px) {
+@media all and (min-width: 480px) and (max-width: 1023px) {
   .side-bar-wrapper {
     display: flex;
     width: 3.5rem;
@@ -623,29 +640,13 @@ i[name]:hover::after {
   color: #000000;
   font-weight: 500;
 }
-
 .btn-success {
   background-color: #97a7ac52;
   transition: 0.2s;
   color: #000000;
-  font-weight: 500;
+  font-weight: bolder;
 }
-.btn-red {
-  background-color: rgb(211, 0, 0);
-  color: white;
-  border-radius: 3px;
-  font-weight: 400;
-  padding: 3px 10px 3px 10px;
-}
-.btn-yellow {
-  background-color: #ff9900;
-  padding: 3px 10px 3px 10px;
-  border-radius: 3px;
-  font-family: "Noto Sans KR", sans-serif;
-  font-weight: 300;
-  font-size: 9pt;
-  color: rgb(0, 0, 0);
-}
+
 .btn-outline-yellow {
   border: 1px solid #ff9900;
   padding: 3px 10px 3px 10px;
@@ -663,12 +664,7 @@ i[name]:hover::after {
   font-weight: 500;
   border: 1px solid rgb(0, 0, 0);
 }
-.btn-yellow:hover {
-  background-color: #97a7ac52;
-  transition: 0.2s;
-  color: #000000;
-  font-weight: 500;
-}
+
 
 /* box-shawdow */
 .box-shadow {
@@ -864,4 +860,32 @@ i[name]:hover::after {
 .notFound-routers:hover {
   border: 2px dotted rgb(255, 145, 0);
   transition: 0.5s;
+}
+
+/* Pagenation */
+
+.pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination a{
+  margin: 0px 5px;
+  border-radius: 50%;
+}
+
+.pagination .page {
+  color: #000000;
+  padding: 1px 10px 3px 10px;
+}
+.pagination .page.active {
+  color: #000000;
+  background-color: #ffc56d;
+  padding: 1px 10px 3px 10px;
+}
+.pagination .previous,
+.pagination .next {
+  color: #000000;
+  margin: 0px 10px;
 }

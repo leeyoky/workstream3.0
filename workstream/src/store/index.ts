@@ -5,6 +5,7 @@ import uiSlice from "./ui-slice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import approvalSlice from "./Approval/approval-slice";
+import thunk from "redux-thunk";
 
 const persistConfig = {
   key: "root",
@@ -27,7 +28,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
       serializableCheck: false, // 직렬화 체크를 비활성화합니다.
-    });
+    }).concat(thunk);
   },
   devTools: true,
 });

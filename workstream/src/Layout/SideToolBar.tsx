@@ -21,6 +21,7 @@ const SideToolBar = () => {
   };
 
   const menuItems = [
+    { to: '/main', iconClass: 'fa-solid fa-house', label: '메인페이지', title: '메인페이지' },
     { to: '/notice', iconClass: 'fa-regular fa-heart', label: '전사공지', title: '전사공지' },
     { to: '/approval', iconClass: 'fa-regular fa-pen-to-square', label: '전자결재', title:'전자결재' },
     { to: '/booking', iconClass: 'fa-regular fa-calendar', label: '회의예약', title:'회의예약' },

@@ -5,43 +5,81 @@ interface Employee {
 }
 
 interface ApprovalState {
+  documentType: string;
+  selectedOption: string;
   approvers: Employee[];
+  agreements: Employee[];
 }
 
 const initialState: ApprovalState = { 
-  approvers: []
+  documentType: '',
+  selectedOption: '',
+  approvers: [],
+  agreements: [],
 };
+// 결재 직원 최대 수와 합의 직원 최대 수
+
+const MAX_APPROVERS = 4;
+const MAX_AGREEMENTS = 3;
 
 const approvalSlice = createSlice({
   name: 'approval',
   initialState,
   reducers: {
+    // 문서 종류
+    updateDocumentType(state, action: PayloadAction<string>) {
+      state.documentType = action.payload;
+    },
+    // 결재 라인 방식 선택 옵션
+    updateSelectedOption(state, action: PayloadAction<string>) {
+      state.selectedOption = action.payload;
+    },
+    // 결재 직원을 추가
     addEmp(state, action: PayloadAction<Employee>) {
-      console.log("클릭했숨당");
       const newEmp = action.payload;
       const isDuplicate = state.approvers.find((emp) => emp.name === newEmp.name);
-      if(state.approvers.length < 4 && !isDuplicate ) {
-        state.approvers.push(newEmp); // 직원 추가
-        console.log('Added employee:', newEmp.name); // 직원 추가 로그
-      }else{
+      if (state.approvers.length < MAX_APPROVERS  && !isDuplicate) {
+        state.approvers.push(newEmp);
+      } else {
         return;
+      }
+    },
+    // 합의 직원을 추가
+    addAgreement(state, action: PayloadAction<Employee>) {
+      const newAgreement = action.payload;
+      if (state.approvers.length === 4 && state.agreements.length < MAX_AGREEMENTS) {
+        const isDuplicate = state.agreements.find((emp) => emp.name === newAgreement.name);
+        const isDuplicateApprovers = state.approvers.find((emp) => emp.name === newAgreement.name)
+        if (!isDuplicate && !isDuplicateApprovers) {
+          state.agreements.push(newAgreement);
+        } else {
+          return;
+        }
       }
     },
     removeAllEmps(state) {
       state.approvers = [];
-      console.log("일괄삭제");
+      state.agreements = [];
     },
     undoEmp(state) {
-      console.log("UNDO");
-      if(state.approvers.length > 0){
-        const popEmp = state.approvers.pop();
-        if(popEmp){
-          console.log("POP EMP");
-        }else{
-          console.log("THE ARRAY IS EMPTY");
-          
-        }
+      console.log('undoEmp');
+      
+      if (state.approvers.length > 0) {
+        state.approvers.pop();
       }
+    },
+    undoAgreement(state) {
+      console.log('undoAgreement');
+      
+      if (state.agreements.length > 0) {
+        state.agreements.pop();
+      }
+    },
+    resetArray(state) {
+      state.documentType = '';
+      state.selectedOption = '';
+      state.approvers = [];
+      state.agreements = [];
     }
   },
 });

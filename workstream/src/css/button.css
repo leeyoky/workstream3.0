@@ -1,0 +1,62 @@
+.btn {
+  border-radius: 5px;
+  font-weight: bold;
+  padding: 3px 10px 3px 10px;
+  font-family: "Noto Sans KR", sans-serif;
+}
+.btn:hover{
+  background-color: #00000020;
+  transition: all 0.3s ease; 
+}
+
+
+.btn-red {
+  background-color: #da0000;
+  color: white;
+}
+.btn-red:hover{
+  background-color: rgb(179, 0, 0);
+  transition: all 0.3s ease; 
+}
+.btn-red-line{
+  border: 1px solid #da0000;
+  transition: all 0.3s ease; 
+}
+
+.btn-yellow {
+  background-color: #ff9900;
+  font-size: 9pt;
+  color: rgb(0, 0, 0);
+}
+
+.btn-yellow:hover {
+  background-color: #97a7ac52;
+  transition: all 0.3s ease; 
+}
+
+.btn-blue {
+  background-color: #1f5079;
+  color: white;
+}
+
+.btn-green-line {
+  border: 1px solid #008a00;
+  color: #008a00;
+  background: #ffffff;
+}
+
+.btn-blue-line {
+  border: 1px solid #1f5079;
+  color: #1f5079;
+  background: #ffffff;
+}
+.btn-blue-line:hover{
+  background: #e7e7e7;
+  transition: all 0.3s ease; 
+}
+
+.btn-blue:hover{
+  background-color: #143652;
+  transition: all 0.3s ease; 
+}
+

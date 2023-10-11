@@ -1,3 +1,4 @@
+// ApprovalSelect.tsx
 import React from 'react';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 
@@ -8,13 +9,12 @@ interface ApprovalSelectProps {
   removeAllHandler: () => void;
 }
 
-const ApprovalSelect:React.FC<ApprovalSelectProps> = ({
+const ApprovalSelect: React.FC<ApprovalSelectProps> = ({
   selectedOption,
   selectChangeHandler,
   undoHandler,
   removeAllHandler,
 }) => {
-  
   return (
     <div className={classes['card-header']}>
       <p>결재라인 방식 선택</p>
@@ -25,7 +25,6 @@ const ApprovalSelect:React.FC<ApprovalSelectProps> = ({
           value={selectedOption}
           onChange={selectChangeHandler}
         >
-          <option value="">-- 선택 --</option>
           <option value="approval">결재만</option>
           <option value="addAgreement">결재+합의</option>
         </select>
@@ -33,7 +32,9 @@ const ApprovalSelect:React.FC<ApprovalSelectProps> = ({
           <button className={classes['emp-list__undo-btn']} onClick={undoHandler}>
             <i className="fa-solid fa-rotate-left"></i>
           </button>
-          <button className='btn-red' onClick={removeAllHandler}>전체삭제</button>
+          <button className="btn-red btn" onClick={removeAllHandler}>
+            전체삭제
+          </button>
         </div>
       </div>
     </div>

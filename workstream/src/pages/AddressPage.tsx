@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react"
-import BoardTitle from "../UI/BoardTitle"
-import SearchForm from "../UI/SearchForm"
+import { useState, useEffect } from "react"
 import {getUsersInfo} from "../api/axios"
+import IndexPage from "./IndexPage"
 
 interface addressType {
   name: string,
@@ -20,12 +19,6 @@ interface addressType {
 const AddressPage = () => {
   const [address, setAddress] = useState<addressType[]>([]);
 
-  const boardTitle = {
-    title: '연락처'
-  }
-  const searchForm = {
-    name: '이름'
-  }
   const fetchAddressInfoHandler = async() => {
     try{
       const response = await getUsersInfo();
@@ -60,10 +53,7 @@ const AddressPage = () => {
   },[])
 
   return (
-    <React.Fragment>
-      <BoardTitle title={boardTitle.title}/>
-      <div className="index-box">
-      <SearchForm name={searchForm.name}/>
+    <IndexPage boardTitle="연락처" searchForm="이름">
       <div className="board-wrapper">
         <table className="table-board">
           <thead>
@@ -102,8 +92,7 @@ const AddressPage = () => {
           </tbody>
         </table>
       </div>
-    </div>
-  </React.Fragment>
+    </IndexPage>
   )
 }
 

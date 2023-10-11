@@ -9,6 +9,7 @@ import SideToolBar from './Layout/SideToolBar';
 import ApprovalPage from './pages/Approval/ApprovalPage';
 import AddressPage from './pages/AddressPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ApprovalEdit from './components/Approval/ApprovalEdit';
 
 function App() {
   const isSidebarOpen: boolean = useSelector((state: RootState) => state.ui.isSidebarOpen);
@@ -19,15 +20,19 @@ function App() {
       {isLogin ? (
         <React.Fragment>
           <Header />
-          <SideToolBar />
-          <main className={`index-wrapper ${isSidebarOpen ? 'active' : ''}`}>
-            <Routes>
-              <Route path="/main" element={<MainPage />} />
-              <Route path="/approval" element={<ApprovalPage />} />
-              <Route path="/address" element={<AddressPage />} />
-              <Route path="/*" element={<NotFoundPage />} />
-            </Routes>
-          </main>
+          <div className='test'>
+            <SideToolBar />
+            <main className={`index-wrapper ${isSidebarOpen ? 'active' : ''}`}>
+              <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route path="/main" element={<MainPage />} />
+                <Route path="/approval" element={<ApprovalPage />} />
+                <Route path="/address" element={<AddressPage />} />
+                <Route path="/approvalEdit" element={<ApprovalEdit />} />
+                <Route path="/*" element={<NotFoundPage />} />
+              </Routes>
+            </main>
+          </div>
         </React.Fragment>
       ) : (
         <Routes>

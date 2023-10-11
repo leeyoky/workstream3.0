@@ -19,11 +19,18 @@ type Employee = {
 const OrganizationAccordion = () => {
 
   const dispatch = useDispatch();
-  const handleEmpClick = (emp: Employee) => {
-    console.log('Clicked employee:', emp.name);
-    dispatch(selectedActions.addEmp(emp));
-    const updatedApprovers = store.getState().approval.approvers; // Redux Store에서 approvers 배열 가져오기
-    console.log('Updated Approvers:', updatedApprovers); // approvers 배열 확인 로그
+  const approvalState = store.getState().approval;
+  
+  const handleEmpClick = async (emp: Employee) => {
+    if (approvalState.approvers.length < 4) {
+      await dispatch(selectedActions.addEmp(emp)); // 결재 직원 추가
+    }
+    // 결재 + 합의가 선택되었을때
+    if (approvalState.selectedOption === 'addAgreement' 
+      && approvalState.approvers.length === 4 
+      && approvalState.agreements.length < 3) {
+      await dispatch(selectedActions.addAgreement(emp)); // 합의 직원 추가
+    }
   };
 
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
@@ -65,7 +72,6 @@ const OrganizationAccordion = () => {
     };
 
     const itemClass = `${classes['accordion-item']} ${classes[`depth${depth}`] || ''}`;
-
 
     return (
       <div key={index} className={itemClass}>

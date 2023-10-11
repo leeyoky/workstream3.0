@@ -6,6 +6,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = (props) => {
+  
   return (
     <div className="button-box">
       <button className="write-btn" onClick={props.onShowModal}>

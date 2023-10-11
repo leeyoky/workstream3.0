@@ -288,6 +288,14 @@ input:focus{
 .document-item span{
   margin-left: 8px;
 }
+.document-item.active{
+  background-color: #d8e4ee;
+}
+.document-item.active span {
+  font-size: 11pt;
+  font-weight: bolder;
+}
+
 
 /* font-size */
 .emp-item,
@@ -373,4 +381,21 @@ option {
 .emp-list-result__btn-wrapper button:hover{
   background-color: #143652;
   transition: all 0.2s ease;
+}
+
+
+/* BUTTON GROUP */
+
+.btn-group{
+  display: flex;
+  width: 56rem;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+}
+.btn-group i {
+  font-weight: bold;
+  padding-left: 5px;
+}
+.btn-group button {
+  margin-left: 7px;
 }

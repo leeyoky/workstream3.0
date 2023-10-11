@@ -81,7 +81,6 @@ const Header = () => {
         <i className="fa-regular fa-circle-question"></i>
       </span>
       <div className="sidebar-right-divr">
-        <i className="fa-solid fa-house" onClick={logoClickHandler}></i>
       </div>
       <ul className="toolbar-menus padding-0">
         <li className="toolbar-menu">
