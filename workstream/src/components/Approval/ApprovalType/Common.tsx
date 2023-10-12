@@ -1,12 +1,20 @@
 import React from 'react';
 import logoSmall from '../../../assets/img/logo.png';
 import classes from '../../../pages/Approval/Approval.module.css';
-import store from '../../../store';
+import { RootState } from '../../../store';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 const Common = () => {
 
-  const approvers = store.getState().approval.approvers;
-  const agreement = store.getState().approval.agreements;
+  const approvers = useSelector((state: RootState) => state.approval.approvers);
+  const agreement = useSelector((state: RootState) => state.approval.agreements);
+
+  useEffect(() =>{
+    console.log("기본품의서 재 랜더링");
+    console.log('approvers:', approvers);
+    console.log('agreements:', agreement);
+  }, [approvers, agreement]);
 
   return (
     <React.Fragment>
@@ -71,13 +79,11 @@ const Common = () => {
                     <th></th>
                   </tr>
                   <tr>
-                    {agreement.slice(0, 2).map((agreement, index) => (
+                    {Array.from({ length: 4 }).map((_, index) => (
                       <td className={classes['agreement-content']} key={index}>
-                        {agreement.name}
+                        {agreement[index] ? agreement[index].name : ''}
                       </td>
                     ))}
-                    <td></td>
-                    <td></td>
                   </tr>
                   </tbody>
                 </table>

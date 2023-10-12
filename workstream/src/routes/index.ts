@@ -1,3 +1,0 @@
-interface RouterInterface {
-  name: string;
-}

@@ -4,6 +4,8 @@ import Button from "../../Layout/Button"
 import ApprovalCreate from '../../components/Approval/ApprovalCreate';
 import Pagination from '../../Layout/Pagination';
 import BoardTitle from '../../Layout/BoardTitle';
+import { useDispatch } from 'react-redux';
+import { selectedActions } from '../../store/Approval/approval-slice';
 
 const ApprovalPage: React.FC = (props) => {
   const boardTitle = {
@@ -20,16 +22,19 @@ const ApprovalPage: React.FC = (props) => {
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
+  const dispatch = useDispatch();
 
   // 모달 열기 이벤트 핸들러
   const handleShowModal = () => {
     setIsModalOpen(true);
+    dispatch(selectedActions.resetArray());
   }
 
   // 모달 닫기 이벤트 핸들러
   const handleCloseModal = () => {
     setIsModalOpen(false);
   }
+
   return (
     <>
       <BoardTitle title={boardTitle.title}/>
@@ -63,14 +68,6 @@ const ApprovalPage: React.FC = (props) => {
         </thead>
         <tbody>
           <tr className="table-hover">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
           </tr>
         </tbody>
       </table>

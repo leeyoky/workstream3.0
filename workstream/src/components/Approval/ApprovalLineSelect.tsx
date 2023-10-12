@@ -15,6 +15,7 @@ const ApprovalSelect: React.FC<ApprovalSelectProps> = ({
   undoHandler,
   removeAllHandler,
 }) => {
+
   return (
     <div className={classes['card-header']}>
       <p>결재라인 방식 선택</p>
@@ -30,7 +31,7 @@ const ApprovalSelect: React.FC<ApprovalSelectProps> = ({
         </select>
         <div className={classes['control-button-group']}>
           <button className={classes['emp-list__undo-btn']} onClick={undoHandler}>
-            <i className="fa-solid fa-rotate-left"></i>
+            <i className="fa-solid fa-reply"></i>
           </button>
           <button className="btn-red btn" onClick={removeAllHandler}>
             전체삭제

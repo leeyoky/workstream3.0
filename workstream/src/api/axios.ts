@@ -7,3 +7,8 @@ export function login(userData: string) {
 export function getUsersInfo() {
   return instance.get("users");
 }
+
+export function getDepartment() {
+  console.log("1");
+  return instance.get("dept");
+}

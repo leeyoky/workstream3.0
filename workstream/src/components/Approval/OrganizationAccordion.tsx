@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../store/Approval/approval-slice'
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import store from '../../store';
+import { getDepartment } from '../../api/axios';
+import { useEffect } from 'react';
 
 type OrganizationItem = {
   name: string;
@@ -20,6 +22,22 @@ const OrganizationAccordion = () => {
 
   const dispatch = useDispatch();
   const approvalState = store.getState().approval;
+
+  // API Text
+  const fetchOrganization = async() => {
+    try {
+      const response = await getDepartment();
+      const data = response.data;
+      console.log(data);
+    }catch(error){
+      console.log("서버통신오류");
+    }
+  }
+
+  useEffect(()=> {
+    console.log("useEffect");
+    fetchOrganization();
+  },[])
   
   const handleEmpClick = async (emp: Employee) => {
     if (approvalState.approvers.length < 4) {

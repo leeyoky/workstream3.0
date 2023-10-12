@@ -4,6 +4,48 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
 }
+
+@media all and (min-width: 768px) and (max-width: 1023px) {
+  .main-wrapper {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  .document-card__table li:nth-child(2) {
+    display: none;
+  }
+  .document-card__table li:nth-child(3) {
+    display: none;
+  }
+}
+@media all and (min-width: 480px) and (max-width: 767px) {
+  .main-wrapper {
+    /* 1fr이 안먹히는 이유? */
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .notice-wrapper {
+    grid-column: auto;
+    min-width: 550px /* background-color: #ecf3fd */;
+  }
+  .orderPerformance-wrapper {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .news-wrapper {
+    grid-row: auto;
+    background-color: #fffae1;
+  }
+  .calender-wrapper {
+    grid-row: auto;
+  }
+  .document-card__table li:nth-child(2) {
+    display: none;
+  }
+  .document-card__table li:nth-child(3) {
+    display: none;
+  }
+
+}
 .dsvalue-wrapper{
   display: flex;
   align-items: center;

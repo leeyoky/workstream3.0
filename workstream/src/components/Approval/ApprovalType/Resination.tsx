@@ -1,15 +1,19 @@
+import React from 'react';
 import classes from '../../../pages/Approval/Approval.module.css';
 import logoSmall from '../../../assets/img/logo.png';
-import store from '../../../store';
-import React from 'react';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 const Resination = () => {
 
   const today = new Date();
   const getDate = today.toISOString().slice(0,10);
-  const approvers = store.getState().approval.approvers;
-  const agreement = store.getState().approval.agreements;
+  const approvers = useSelector((state: RootState) => state.approval.approvers);
+  const agreement = useSelector((state: RootState) => state.approval.agreements);
 
+  useEffect(() =>{
+  }, [approvers, agreement]);
 
   return (
     <React.Fragment>
@@ -35,22 +39,28 @@ const Resination = () => {
                       <th className={classes['header-table__approval-th']}>결재4</th>
                     </tr>
                     <tr>
-                    {approvers.slice(0, 4).map((approver, index) => (
+                    {
+                      Array.from({ length: 4 }).map((_, index) => (
                         <td className={classes['approver-content']} key={index}>
-                          {approver.name}
+                          {index < approvers.length ? approvers[index].name : ''}
                         </td>
-                      ))}
+                      ))
+                    }
                     </tr>
                   <tr>
                     <th className={classes['header-table__approval-th']}>합의</th>
                     <th className={classes['header-table__approval-th']}>합의</th>
+                    <th className={classes['header-table__approval-th']}></th>
+                    <th className={classes['header-table__approval-th']}></th>
                   </tr>
                   <tr>
-                    {agreement.slice(0, 2).map((agreement, index) => (
+                  {
+                    Array.from({ length: 4 }).map((_, index) => (
                       <td className={classes['agreement-content']} key={index}>
-                        {agreement.name}
+                        {agreement[index] ? agreement[index].name : ''}
                       </td>
-                    ))}
+                    ))
+                  }
                   </tr>
                   </tbody>
                 </table>
@@ -109,6 +119,7 @@ const Resination = () => {
 
           {/* 사직자 준수사항 및 현업 부서장 및 업무인수자 준수사항 */}
           <table className={classes['text-table']}>
+            <tbody>
             <td>
               <div className={classes['text-wrapper']}>
                 <div>
@@ -147,6 +158,7 @@ const Resination = () => {
                 </div>
                 </div>
             </td>
+            </tbody>
           </table>
         </header>
           <footer>

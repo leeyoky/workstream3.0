@@ -1,5 +1,5 @@
 import profile from '../assets/img/guriman.jpg';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { uiActions } from '../store/ui-slice';
@@ -7,10 +7,13 @@ import { uiActions } from '../store/ui-slice';
 const SideToolBar = () => {
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
+  const location = useLocation();   // 현재 경로 가져오기
 
   const toggleSideBar = () => {
     dispatch(uiActions.toggle());
   };
+
+  const isMainActive = location.pathname === '/' || location.pathname === '/main' ;
 
   const classNames = {
     wrapper: `side-bar-wrapper ${isSidebarOpen ? 'active' : ''}`,
@@ -53,9 +56,17 @@ const SideToolBar = () => {
           <ul className={classNames.menuIcon}>
             {menuItems.map((item, index) => (
               <li key={index}>
-                <NavLink to={item.to}>
-                  <i className={`${item.iconClass} ${classNames.menuIcon}`} title={`${item.title}`}></i>
-                  <span className={classNames.menuIcon}>{item.label}</span>
+                <NavLink 
+                  to={item.to} 
+                  className={item.to === '/main' ? isMainActive ? 'active' : '' : ''}>
+                  <i 
+                    className={`${item.iconClass} ${classNames.menuIcon}`} 
+                    title={`${item.title}`}>
+                  </i>
+                  <span 
+                    className={classNames.menuIcon}>
+                      {item.label}
+                  </span>
                 </NavLink>
               </li>
             ))}

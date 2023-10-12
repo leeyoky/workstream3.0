@@ -29,6 +29,12 @@ input[type="file"] {
     overflow: hidden;
     border: 0;
 }
+.input-box{
+  padding: 0 !important;
+}
+.input-box input {
+  height: 90%;
+}
 
 strong{
   font-size: 10pt;

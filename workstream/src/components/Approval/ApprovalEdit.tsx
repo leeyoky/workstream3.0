@@ -10,7 +10,7 @@ const ApprovalEdit = () => {
   const boardTitle = {
     title: '전자결재 > 새 결재 작성'
   }
-  const documentType = store.getState().approval.documentType
+  const documentType = store.getState().approval.documentType;
 
   return (
     <React.Fragment>

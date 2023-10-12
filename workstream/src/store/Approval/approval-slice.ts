@@ -20,7 +20,7 @@ const initialState: ApprovalState = {
 // 결재 직원 최대 수와 합의 직원 최대 수
 
 const MAX_APPROVERS = 4;
-const MAX_AGREEMENTS = 3;
+const MAX_AGREEMENTS = 2;
 
 const approvalSlice = createSlice({
   name: 'approval',
@@ -57,8 +57,17 @@ const approvalSlice = createSlice({
         }
       }
     },
+    updateApprovers(state, action: PayloadAction<Employee[]>) {
+      state.approvers = [...action.payload];
+    },
+    updateAgreements(state, action: PayloadAction<Employee[]>) {
+      state.agreements = [...action.payload];
+    },
     removeAllEmps(state) {
       state.approvers = [];
+      state.agreements = [];
+    },
+    removeAgreements(state){
       state.agreements = [];
     },
     undoEmp(state) {
@@ -77,7 +86,6 @@ const approvalSlice = createSlice({
     },
     resetArray(state) {
       state.documentType = '';
-      state.selectedOption = '';
       state.approvers = [];
       state.agreements = [];
     }
