@@ -1,127 +1,217 @@
-import { organization } from './DummyData';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { selectedActions } from '../../store/Approval/approval-slice'
+import { useState, useEffect } from 'react';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
-import store from '../../store';
-import { getDepartment } from '../../api/axios';
-import { useEffect } from 'react';
+import { getDepartment, getEmployeeInfo } from '../../api/axios';
+import { useDispatch } from 'react-redux';
+import { uiActions } from '../../store/ui-slice';
 
 type OrganizationItem = {
-  name: string;
-  class?: string;
-  type?: string;
-  children?: OrganizationItem[];
+  deptCd: number;
+  deptNm: string;
+  deptOrder: number;
+  deptType: string;
+  isFinal: string;
+  level: number;
+  modDate: string;
+  modUsr: string;
+  regDate: string;
+  regUsr: string;
+  upDeptCd: number;
+  upDeptNm: string;
 };
-
-type Employee = {
-  name: string;
+type EmployeeItem = {
+  boss: string;
+  deptCd: number;
+  deptNm: string;
+  email: string;
+  empNm: string;
+  empNo: string;
+  loginId: string;
+  officeDuty: string;
+  officeDutyNm: string;
+  rank: string;
+  rankNm: string;
 }
 
 const OrganizationAccordion = () => {
-
-  const dispatch = useDispatch();
-  const approvalState = store.getState().approval;
-
-  // API Text
-  const fetchOrganization = async() => {
-    try {
-      const response = await getDepartment();
-      const data = response.data;
-      console.log(data);
-    }catch(error){
-      console.log("서버통신오류");
-    }
-  }
-
-  useEffect(()=> {
-    console.log("useEffect");
-    fetchOrganization();
-  },[])
-  
-  const handleEmpClick = async (emp: Employee) => {
-    if (approvalState.approvers.length < 4) {
-      await dispatch(selectedActions.addEmp(emp)); // 결재 직원 추가
-    }
-    // 결재 + 합의가 선택되었을때
-    if (approvalState.selectedOption === 'addAgreement' 
-      && approvalState.approvers.length === 4 
-      && approvalState.agreements.length < 3) {
-      await dispatch(selectedActions.addAgreement(emp)); // 합의 직원 추가
-    }
-  };
-
+  const [deptData, setDeptData] = useState<OrganizationItem[]>([]);
+  const [employeeData, setEmployeeData] = useState<EmployeeItem[]>([]);
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const [openDepth2, setOpenDepth2] = useState<number | null>(null);
-  const [openDepth3, setOpenDepth3] = useState<number | null>(null); // depth 3 상태 추가
+  const [openDepth3, setOpenDepth3] = useState<number | null>(null);
 
-  const toggleAccordion = (index: number) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchOrganization = async () => {
+      try {
+        const response = await getDepartment();
+        const data = response.data;
+        setDeptData(data);
+        console.log(data);
+      } catch (error) {
+        console.log("서버 통신 오류", error);
+      }
+    };
+    fetchOrganization();
+  }, []);
+
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      try {
+        const response = await getEmployeeInfo();
+        const data = response.data.content;
+        console.log(data);
+        setEmployeeData(data);
+      } catch (error) {
+        console.log("서버 통신 오류", error);
+      }
+    };
+    fetchEmployee();
+  }, []);
+
+  const toggleAccordion = (index: number | null) => {
     if (openAccordion === index) {
       setOpenAccordion(null);
     } else {
       setOpenAccordion(index);
     }
-
     setOpenDepth2(null);
-    setOpenDepth3(null); // depth 1 클릭 시 depth 3 초기화
+    setOpenDepth3(null);
   };
 
-  const toggleDepth2 = (index: number) => {
+  const toggleDepth2 = (index: number | null) => {
     setOpenDepth2(openDepth2 === index ? null : index);
   };
 
-  const toggleDepth3 = (index: number) => {
+  const toggleDepth3 = (index: number | null) => {
     setOpenDepth3(openDepth3 === index ? null : index);
   };
 
-  const createAccordionItem = (item: OrganizationItem, depth: number, index: number) => {
+  const handleDragStart = ( 
+    e:React.DragEvent<HTMLSpanElement>, 
+    empNo: string,
+    empNm:string, 
+    rankNm: string,
+    officeDutyNm:string, 
+    ) => {
+      const empInfo = {
+      empNo,
+      name: empNm,
+      rankName : rankNm,
+      duty : officeDutyNm,
+      approvalType: 'approve',
+    }
+    
+    // 객체를 문자열로 직렬화 
+    const empInfoString = JSON.stringify(empInfo)
+
+    e.dataTransfer.setData('empName', empInfoString);
+    dispatch(uiActions.setDraggingItem(empNm));
+  };
+
+  const createAccordionItem = (item: OrganizationItem, index: number, level: number) => {
     const isOpen = openAccordion === index;
     const isDepth2Open = openDepth2 === index;
-    const isDepth3Open = openDepth3 === index; // depth 3 상태 추가
-    
-    const toggleFunction = () => {
-      if (depth === 1) {
+    const isDepth3Open = openDepth3 === index;
+
+    const itemClass = `${classes['accordion-item']} ${classes[`depth${item.level}`] || ''} ${openAccordion === index ? 'active' : ''}`;
+    const hasSubDepartments = deptData.some((subDept) => subDept.upDeptCd === item.deptCd);
+
+    const toggleFunction = async () => {
+      if (level === 0) {
+        if(openAccordion === index ) {
+          toggleAccordion(null);
+        }else{
+          toggleAccordion(index);
+        }
+      } else if (level === 1) {
         toggleAccordion(index);
-      } else if (depth === 2) {
+      } else if (level === 2) {
         toggleDepth2(index);
-      } else if (depth === 3) {
-        toggleDepth3(index); // depth 3 클릭 시 depth 4 초기화
+      } else if (level === 3) {
+        toggleDepth3(index);
       }
     };
 
-    const itemClass = `${classes['accordion-item']} ${classes[`depth${depth}`] || ''}`;
+    const subEmployeeData = employeeData.filter((employee) => employee.deptCd === item.deptCd);
+    const boss = employeeData.filter((employee) => employee.empNm === '이영상');
 
     return (
       <div key={index} className={itemClass}>
         <div className={classes['accordion-header']} onClick={toggleFunction}>
-          {item.type === 'emp' ? (
-            <>
-            <i className="fa-solid fa-user" style={{color: '#607485'}}></i>
-            <span onClick={()=> handleEmpClick(item)}>{item.name}</span>
-            </>
-          ) : (
-            <>
-            <i className="fa-solid fa-folder"></i>
-            <span>{item.name}</span>
-            </>
-          )}
+        {level === 0 && <i className="fa-solid fa-folder-open"></i>}
+        {level !== 0 && <i className="fa-solid fa-folder"></i>}  
+          <span>{item.deptNm}</span>
         </div>
-        {item.children && ((depth === 1 && isOpen) || (depth === 2 && isDepth2Open) || (depth === 3 && isDepth3Open)) && (
+
+        { level === 0 &&
+        <div className={classes['accordion-content']}>
+          <div className={classes['accordion-item']}>
+          <div 
+            className={classes['accordion-header']}
+            draggable="true"
+            onDragStart={(e) => handleDragStart(
+              e,boss[0].empNo ,boss[0].empNm, boss[0].officeDutyNm, boss[0].rankNm, )}
+              >
+            <i className="fa-solid fa-user" style={{ color: '#607485', fontSize: '13pt' }}></i>
+            <span style={{ fontSize: '10pt', fontWeight: '500' }}>
+            {boss.length > 0 ? boss[0].empNm : ''}</span>
+          </div>
+          </div>
+        </div>}
+        
+        {
+        ((level === 1 && isOpen ) || (level === 2 && isDepth2Open ) || (level === 3 && isDepth3Open)) &&
+        (
           <div className={classes['accordion-content']}>
-            {item.children.map((child, childIndex) =>
-              createAccordionItem(child, depth + 1, childIndex)
-              )}
+            {subEmployeeData.map((employee, employeeIndex) => (
+              <div key={employeeIndex} className={classes['accordion-item']}>
+                <div 
+                  className={classes['accordion-header']}
+                  draggable="true"
+                  onDragStart={(e) => handleDragStart(
+                    e,employee.empNo ,employee.empNm, employee.officeDutyNm, employee.rankNm )}
+                  >
+                  <i className="fa-solid fa-user" style={{ color: '#607485', fontSize: '13pt', paddingLeft: '5px' }}></i>
+                  <span style={{ fontSize: '10pt' }}>
+                    {employee.empNm}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
+
+        {hasSubDepartments && openAccordion === index && level === 1 && (
+          <div className={classes['accordion-content']}>
+            {deptData
+              .filter((subDept) => subDept.upDeptCd === item.deptCd)
+              .map((subDept, subIndex) => createAccordionItem(subDept, subIndex, level + 1))
+              
+            }
+          </div>
+        )}
+        {openDepth2 === index && level === 2 && (
+          <div className={classes['accordion-content']}>
+            {deptData
+              .filter((subDept) => subDept.upDeptCd === item.deptCd)
+              .map((subDept, subIndex) => createAccordionItem(subDept, subIndex, level + 1))
+            }
+          </div>
+        )}
+
       </div>
     );
   };
 
   return (
-      <div className={classes['accordion']}>
-        {organization.map((item, index) => createAccordionItem(item, 1, index))}
-      </div>
-  )
-}
+    <div className={classes['accordion']}>
+      {deptData
+        .filter((item) => item.level === 1 || item.level === 0 )
+        .map((item, index) => createAccordionItem(item, index, item.level))
+      }
+    </div>
+  );
+};
 
 export default OrganizationAccordion;

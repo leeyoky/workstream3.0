@@ -6,6 +6,7 @@ import './css/index.css'
 import './css/login.css'
 import './css/button.css'
 import './css/mainPage.css'
+
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'

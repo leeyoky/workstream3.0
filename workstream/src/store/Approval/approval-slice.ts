@@ -1,26 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Employee {
+  id: number;
+  empNo: number;
   name: string;
+  duty: string;
+  rankName: string;
+  approvalType: string;
+  index: number;
 }
 
 interface ApprovalState {
-  documentType: string;
-  selectedOption: string;
+  documentType: string;   // 품의서 종류
+  selectedOption: string;   // 결재방식 선택
+  approvalType: string;
+  agreementType: string;    // 힙의방식 선택
   approvers: Employee[];
-  agreements: Employee[];
 }
 
 const initialState: ApprovalState = { 
   documentType: '',
   selectedOption: '',
+  approvalType: '',
+  agreementType: '',
   approvers: [],
-  agreements: [],
 };
-// 결재 직원 최대 수와 합의 직원 최대 수
-
-const MAX_APPROVERS = 4;
-const MAX_AGREEMENTS = 2;
+// 결재자는 기안자와 최종결재권자 포함 최대 6명
+// 합의자는 최대 7명까지
 
 const approvalSlice = createSlice({
   name: 'approval',
@@ -30,64 +36,58 @@ const approvalSlice = createSlice({
     updateDocumentType(state, action: PayloadAction<string>) {
       state.documentType = action.payload;
     },
+
     // 결재 라인 방식 선택 옵션
     updateSelectedOption(state, action: PayloadAction<string>) {
       state.selectedOption = action.payload;
     },
+
+    // 합의 라인 방식 선택 옵션
+    updateSelectedAgreementOption(state, action: PayloadAction<string>) {
+      state.agreementType = action.payload;
+    },
+
     // 결재 직원을 추가
     addEmp(state, action: PayloadAction<Employee>) {
       const newEmp = action.payload;
       const isDuplicate = state.approvers.find((emp) => emp.name === newEmp.name);
-      if (state.approvers.length < MAX_APPROVERS  && !isDuplicate) {
-        state.approvers.push(newEmp);
+      // 새로운 배열을 생성하고 새로운 직원을 추가
+      if (!isDuplicate) {
+        state.approvers = [...state.approvers, newEmp];
       } else {
         return;
       }
     },
-    // 합의 직원을 추가
-    addAgreement(state, action: PayloadAction<Employee>) {
-      const newAgreement = action.payload;
-      if (state.approvers.length === 4 && state.agreements.length < MAX_AGREEMENTS) {
-        const isDuplicate = state.agreements.find((emp) => emp.name === newAgreement.name);
-        const isDuplicateApprovers = state.approvers.find((emp) => emp.name === newAgreement.name)
-        if (!isDuplicate && !isDuplicateApprovers) {
-          state.agreements.push(newAgreement);
-        } else {
-          return;
+
+    // 직원 중 결재직원 선택
+    updateApprovers(state, action: PayloadAction<{ indexes: number[]; approvalType: string }>) {
+      const { indexes, approvalType } = action.payload;
+      // 선택한 직원들의 index를 사용하여 approvalType을 업데이트
+      state.approvers = state.approvers.map((employee, index) => {
+        if (indexes.includes(index)) {
+          return { ...employee, approvalType };
         }
+        return employee;
+      });
+    },
+    setApprovers(state, action: PayloadAction<Employee[]>) {
+      state.approvers = action.payload;
+    },
+    // 개별 삭제
+    removeEmp(state, action: PayloadAction<string>){
+      const confirmDelete = window.confirm('식제하시겠습니까?');
+      if (confirmDelete) {
+        state.approvers = state.approvers.filter(employee => employee.name !== action.payload);
       }
-    },
-    updateApprovers(state, action: PayloadAction<Employee[]>) {
-      state.approvers = [...action.payload];
-    },
-    updateAgreements(state, action: PayloadAction<Employee[]>) {
-      state.agreements = [...action.payload];
     },
     removeAllEmps(state) {
       state.approvers = [];
-      state.agreements = [];
-    },
-    removeAgreements(state){
-      state.agreements = [];
-    },
-    undoEmp(state) {
-      console.log('undoEmp');
-      
-      if (state.approvers.length > 0) {
-        state.approvers.pop();
-      }
-    },
-    undoAgreement(state) {
-      console.log('undoAgreement');
-      
-      if (state.agreements.length > 0) {
-        state.agreements.pop();
-      }
     },
     resetArray(state) {
       state.documentType = '';
+      state.selectedOption = '';
+      state.agreementType = '';
       state.approvers = [];
-      state.agreements = [];
     }
   },
 });

@@ -5,12 +5,11 @@ import classes from './Modal.module.css';
 interface ModalProps {
   children?: ReactNode;
   isOpen: boolean;
-  onClose: () => void;
   isEdit?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = (props) => {
-  const { isOpen, onClose, isEdit } = props;
+  const { isOpen, isEdit } = props;
   const portalElement = document.getElementById('overlays');
 
   if (!portalElement || !isOpen) {
@@ -25,9 +24,6 @@ const Modal: React.FC<ModalProps> = (props) => {
       <div className={modalClassName}>
         <div className={classes.content}>
           {props.children}
-          <button className={classes['button--alt']} onClick={onClose}>
-            닫기
-          </button>
         </div>
       </div>
     </div>,

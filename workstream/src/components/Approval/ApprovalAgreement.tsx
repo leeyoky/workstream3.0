@@ -14,6 +14,11 @@ const ApprovalAgreement: React.FC<ApprovalAgreementProps> = ({ agreementItems, a
         <div key={index} className={classes['emp-item-wrapper']}>
           <p>{item}</p>
           <div className={classes['emp-item']}>
+            <div className={classes['emp-item-add-box']}>
+              <button>
+                <i className="fa-solid fa-plus"></i>
+              </button>
+            </div>
             {agreementEmployees[index] ? (
               <>
               <i className="fa-solid fa-user"></i>

@@ -15,13 +15,14 @@ import { RootState } from '../store';
 
 export function AuthenticatedRoutes() {
   const isSidebarOpen: boolean = useSelector((state: RootState) => state.ui.isSidebarOpen);
+  const isSubBarOpen: boolean = useSelector((state: RootState) => state.ui.isSubbarOpen);
 
   return (
     <React.Fragment>
       <Header />
       <div className='test'>
         <SideToolBar />
-        <main className={`index-wrapper ${isSidebarOpen ? 'active' : ''}`}>
+        <main className={`index-wrapper ${isSidebarOpen ? 'active' : ''}${isSubBarOpen ? 'sub-bar' : ''}`}>
           <Routes>
             <Route index element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />

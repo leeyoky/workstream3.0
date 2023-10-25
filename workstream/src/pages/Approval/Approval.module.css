@@ -168,6 +168,9 @@ footer p {
   height: 30px;
   border: 1px solid black;
 }
+.header-table__approval-td{
+  width: 70%;
+}
 /* Body Table */
 .body-table{
   width: 94%;
@@ -200,8 +203,8 @@ footer p {
 .agreement-content {
   height: 35%;
   text-align: center;
-  font-size: 14pt !important;
-  letter-spacing: 1pt;
+  font-size: 12pt !important;
+  letter-spacing: -1pt;
   font-weight: bolder;
 }
 
@@ -280,7 +283,26 @@ footer p {
   padding: 10px;
   margin: 0 auto;
 }
-
+.approval__document-type{
+  margin-top: 45px;
+  margin-right: 35px;
+  margin-bottom: 35px;
+  margin-left: 35px;
+  border: 1px solid #919191;
+  padding: 10px;
+  border-radius: 10px;
+}
+.approval__document{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.inner-container{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: row;
+}
 
 /* approval Attachment */
 .approval-attachment{

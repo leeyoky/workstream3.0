@@ -8,6 +8,10 @@
   background-color: #00000020;
   transition: all 0.3s ease; 
 }
+.btn-border{
+  background-color: #ffffff;
+  border: 1px solid #c7c7c7;
+}
 
 
 .btn-red {
@@ -36,6 +40,11 @@
 
 .btn-blue {
   background-color: #1f5079;
+  color: white;
+}
+
+.btn-skyblue {
+  background-color: #1a74be;
   color: white;
 }
 

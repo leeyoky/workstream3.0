@@ -9,6 +9,9 @@ export function getUsersInfo() {
 }
 
 export function getDepartment() {
-  console.log("1");
   return instance.get("dept");
+}
+
+export function getEmployeeInfo() {
+  return instance.get("emp?size=300")
 }

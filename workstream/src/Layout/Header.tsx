@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import logoSmall from '../assets/img/logo.png'
+import favicon from '../assets/img/favicon.png'
 import { useAuthActions } from '../store/actions/authActions';
 
 const Header = () => {
@@ -25,9 +26,10 @@ const Header = () => {
   return (
     <div className="header">
     <div className="header-logo margin-right" onClick={logoClickHandler}>
-      <img src={logoSmall} alt="로고"/>
+      <img src={logoSmall} alt="로고" className='md-1023'/>
+      <img src={favicon} alt="로고" className='media-1200'/>
     </div>
-    <div className="header-logo">
+{/*     <div className="header-logo">
       <ul className="toolbar-menus underline">
         <li className="toolbar-menu underline">
           <span className="flex align-center justify-center"
@@ -74,7 +76,7 @@ const Header = () => {
           </ul>
         </li>
       </ul>
-    </div>
+    </div> */}
 
     <div className="sidebar-right margin-left">
       <span className="sidebar-right-divr">

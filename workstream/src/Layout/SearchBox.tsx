@@ -1,26 +1,10 @@
+import React from 'react';
+
 interface SearchBoxProps {
-  writeDate?: string;
-  form: string;
-  important: string;
-  title: string;
-  status: string;
-  writer: string;
-  attach?: string;
-  name?: string;
+  tags: { label: string, name: string }[];
 }
 
-const SearchBox: React.FC<SearchBoxProps> = (props) => {
-  const { writeDate, form, important, title, status, writer, attach, name } = props;
-
-  const tags = [
-    { label: writeDate, name: 'writeDate' },
-    { label: form, name: 'department' },
-    { label: important, name: 'department' },
-    { label: title, name: 'email' },
-    { label: status, name: 'phone' },
-    { label: name, name: 'phone' },
-  ];
-
+const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
   return (
     <div className="board-search-wrapper">
       <div className="board-search">

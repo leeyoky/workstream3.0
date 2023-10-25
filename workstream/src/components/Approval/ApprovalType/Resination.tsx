@@ -1,23 +1,15 @@
 import React from 'react';
 import classes from '../../../pages/Approval/Approval.module.css';
 import logoSmall from '../../../assets/img/logo.png';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import Signature from './Signature';
 
 const Resination = () => {
 
   const today = new Date();
   const getDate = today.toISOString().slice(0,10);
-  const approvers = useSelector((state: RootState) => state.approval.approvers);
-  const agreement = useSelector((state: RootState) => state.approval.agreements);
-
-  useEffect(() =>{
-  }, [approvers, agreement]);
 
   return (
     <React.Fragment>
-      <div className={classes['approval-wrapper']}>
         <form>
           <header className={classes['header-type']}>
             <div className={classes['header-logo']}>
@@ -28,43 +20,7 @@ const Resination = () => {
                 <h1>사 직 원</h1>
                 <p> - 그 동안의 노고에 감사드립니다 - </p>
               </div>
-              <div className={classes['header__right']}>
-                <table className={classes['header-table']}>
-                  <tbody>
-                    <tr>
-                      <th rowSpan={4} style={{ width: '30px' }}>결재</th>
-                      <th className={classes['header-table__approval-th']}>결재1</th>
-                      <th className={classes['header-table__approval-th']}>결재2</th>
-                      <th className={classes['header-table__approval-th']}>결재3</th>
-                      <th className={classes['header-table__approval-th']}>결재4</th>
-                    </tr>
-                    <tr>
-                    {
-                      Array.from({ length: 4 }).map((_, index) => (
-                        <td className={classes['approver-content']} key={index}>
-                          {index < approvers.length ? approvers[index].name : ''}
-                        </td>
-                      ))
-                    }
-                    </tr>
-                  <tr>
-                    <th className={classes['header-table__approval-th']}>합의</th>
-                    <th className={classes['header-table__approval-th']}>합의</th>
-                    <th className={classes['header-table__approval-th']}></th>
-                    <th className={classes['header-table__approval-th']}></th>
-                  </tr>
-                  <tr>
-                  {
-                    Array.from({ length: 4 }).map((_, index) => (
-                      <td className={classes['agreement-content']} key={index}>
-                        {agreement[index] ? agreement[index].name : ''}
-                      </td>
-                    ))
-                  }
-                  </tr>
-                  </tbody>
-                </table>
-                </div>
+              <Signature/>
                 </div>
 
                 <table className={classes['header-info']}>
@@ -165,7 +121,6 @@ const Resination = () => {
             <p className={classes['footer']}>주식회사 데이터스트림즈</p>
           </footer>
       </form>
-    </div>
   </React.Fragment>
   );
 };

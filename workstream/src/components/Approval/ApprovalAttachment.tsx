@@ -64,7 +64,8 @@ const ApprovalAttachment = () => {
             </div>
             <div className={classes['file-info']} >
               <p>
-                첨부할 파일을 드래그하거나 <i className="fa-solid fa-paperclip"></i>
+                첨부할 파일을 드래그하거나 
+                <i className="fa-solid fa-paperclip"></i>
               </p>
               <label htmlFor="approval-attach-file"> 파일선택 </label>
               <input

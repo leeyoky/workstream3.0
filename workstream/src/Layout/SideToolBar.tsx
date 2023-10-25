@@ -3,17 +3,28 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { uiActions } from '../store/ui-slice';
+import SubToolBar from './SubToolBar';
+import { useEffect } from 'react';
 
 const SideToolBar = () => {
-  const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
+  const dispatch = useDispatch();
   const location = useLocation();   // 현재 경로 가져오기
-
+  const isMainActive = location.pathname === '/' || location.pathname === '/main' ;
+  const isSubToolBarActive = location.pathname.startsWith('/approval')
+  
   const toggleSideBar = () => {
     dispatch(uiActions.toggle());
   };
 
-  const isMainActive = location.pathname === '/' || location.pathname === '/main' ;
+  const toggleSubBar = () => {
+    dispatch(uiActions.setSubToolBar(isSubToolBarActive));
+  };
+
+  useEffect(()=>{
+    toggleSubBar();
+  },[location.pathname])
+  
 
   const classNames = {
     wrapper: `side-bar-wrapper ${isSidebarOpen ? 'active' : ''}`,
@@ -73,6 +84,7 @@ const SideToolBar = () => {
           </ul>
         </div>
       </div>
+      {isSubToolBarActive && <SubToolBar />}
     </div>
   );
 };

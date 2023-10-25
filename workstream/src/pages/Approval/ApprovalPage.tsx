@@ -1,69 +1,47 @@
-import React, {useState} from 'react';
-import SearchForm from "../../Layout/SearchBox"
-import Button from "../../Layout/Button"
-import ApprovalCreate from '../../components/Approval/ApprovalCreate';
+import React from 'react';
 import Pagination from '../../Layout/Pagination';
 import BoardTitle from '../../Layout/BoardTitle';
-import { useDispatch } from 'react-redux';
-import { selectedActions } from '../../store/Approval/approval-slice';
+import SearchBox from '../../Layout/SearchBox';
 
-const ApprovalPage: React.FC = (props) => {
+const ApprovalPage: React.FC = () => {
+
   const boardTitle = {
-    title: '전자결재'
+    title: '전체문서함'
   }
-
-  const searchForm = {
-    writeDate: '기안일',
-    form: '결재양식',
-    important:'중요도',
-    title:'제목',
-    status:'결재상태',
-    writer:'기안자',
-  }
-
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
-  const dispatch = useDispatch();
-
-  // 모달 열기 이벤트 핸들러
-  const handleShowModal = () => {
-    setIsModalOpen(true);
-    dispatch(selectedActions.resetArray());
-  }
-
-  // 모달 닫기 이벤트 핸들러
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  }
+  
+  const searchTags = [
+    {label:'문서명', name: 'title'},
+    {label:'기안부서', name: 'department'},
+    {label:'기안자', name: 'writer'},
+    {label:'문서종류', name: 'type'},
+    {label:'등록일', name: 'regDate'},
+    {label:'결재유형', name: 'approvalType'},
+    {label:'진행현황', name: 'status'},
+  ]
+  const columns = [
+    '구분',
+    '문서명',
+    '문서종류',
+    '기안부서',
+    '기안자',
+    '등록일',
+    '결재유형',
+    '진행현황',
+  ];
 
   return (
     <>
       <BoardTitle title={boardTitle.title}/>
     <div className="index-box">
-      <SearchForm 
-        writer={searchForm.writer}
-        writeDate={searchForm.writeDate} 
-        form={searchForm.form}
-        important={searchForm.important}
-        title={searchForm.title}
-        status ={searchForm.status}
+      <SearchBox tags={searchTags}
         />
-        <Button onShowModal={handleShowModal}>
-          새 결재 작성
-        </Button>
-          {/* 모달 열기 이벤트 전달 */}
-          {isModalOpen && <ApprovalCreate onClose={handleCloseModal} isEdit={false}/>}
-        {/* 모달이 열려 있을 때 ApprovalCreate 컴포넌트를 렌더링하고, 닫기 이벤트 핸들러 전달 */}
-      <div className="board-wrapper">
+      <div className="board-wrapper approval-page-wrapper">
       <table className="table-board">
         <thead>
           <tr className="bg-grey-lighten-5">
-            <th>기안일</th>
-            <th>결재양식</th>
-            <th>중요도</th>
-            <th>제목</th>
-            <th>결재상태</th>
-            <th>기안자</th>
-            <th>첨부파일</th>
+            {columns.map((column, index) => (
+              <th key={index}>{column}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
