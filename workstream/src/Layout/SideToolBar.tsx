@@ -4,14 +4,44 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { uiActions } from '../store/ui-slice';
 import SubToolBar from './SubToolBar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { authActions } from '../store/auth-slice';
+import { EmployeeItem } from '../components/Organization/OrganizationType';
+import { getEmployeeInfo } from '../api/axios';
 
 const SideToolBar = () => {
+  const [employeeData, setEmployeeData] = useState<EmployeeItem[]>([]);
+  const [foundData, setFoundData] = useState<EmployeeItem | null>(null);
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const dispatch = useDispatch();
   const location = useLocation();   // 현재 경로 가져오기
   const isMainActive = location.pathname === '/' || location.pathname === '/main' ;
   const isSubToolBarActive = location.pathname.startsWith('/approval')
+  
+  // 유저 사번 하드코딩
+  
+  const getUserNo = useSelector((state: RootState) => state.auth.empNo);
+
+  const fetchEmployee = async () => {
+    try {
+      const response = await getEmployeeInfo();
+      const data = response.data.content;
+
+      const foundEmployee = data.find((item: EmployeeItem) => item.empNo === getUserNo);
+      setFoundData(foundEmployee);
+      dispatch(authActions.setUserInfo(foundEmployee));
+      dispatch(authActions.setEmpNo())
+
+      setEmployeeData(data);
+    } catch (error) {
+      console.log("서버 통신 오류", error);
+    }
+  };
+
+  useEffect(()=> {
+    fetchEmployee();
+  },[dispatch, getUserNo])
+  
   
   const toggleSideBar = () => {
     dispatch(uiActions.toggle());
@@ -58,9 +88,10 @@ const SideToolBar = () => {
           </div>
           <div className="side-bar-profile">
             <h3>
+              <span>{foundData?.empNm}</span>
               <span>사원</span>
             </h3>
-            <p>KM팀</p>
+            <p>{foundData?.deptNm}</p>
           </div>
         </div>
         <div className={classNames.listWrapper}>

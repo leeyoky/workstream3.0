@@ -1,16 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 interface AuthState {
   isLogin : boolean;
   token: string;
+  empNo: string;
+  userInfo: [];
+}
+// 한수진 "2022001454"
+const initialState: AuthState = {
+  isLogin: false, 
+  token: '',
+  empNo: '',
+  userInfo: [],
 }
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    isLogin: false, 
-    token: '',
-  } as AuthState,
-
+  initialState,
   reducers: {
     login(state) {
       state.isLogin = true;
@@ -21,6 +27,12 @@ const authSlice = createSlice({
     },
     setToken(state,action) {
       state.token = action.payload;
+    },
+    setEmpNo(state) {
+      state.empNo = '2022001454'
+    },
+    setUserInfo(state, action){
+      state.userInfo = action.payload;
     }
   }
 })

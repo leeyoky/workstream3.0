@@ -321,6 +321,14 @@ input:focus{
   display: flex;
   flex: 1;
 }
+
+.emp-index-default{
+  display: flex;
+  flex: 1;
+}
+.emp-index-default button{
+  cursor: auto;
+}
 .approver-item span:first-child{
   width: 5%;
   text-align: center;
@@ -354,16 +362,11 @@ input:focus{
   display: flex;
 }
 
-.button-box button.active {
+.button-box button.active,
+.button-box .approval {
   background-color: #ffbb00;
   color: #000000;
   font-weight: 600;
-}
-.first-employee,
-.last-employee {
-}
-.first-employee .button-box button,
-.last-employee .button-box button{
 }
 
 .first-employee .button-box .active,
@@ -385,7 +388,15 @@ input:focus{
   width: 100%;
   align-items: center
 }
+.approver-item__default{
+background-color: #5f5f5f;
+}
 
+/* Drag */
+
+.dragging {
+  opacity: 0.9;
+}
 
 .emp-index__drag__wrapper{
   text-align: center;

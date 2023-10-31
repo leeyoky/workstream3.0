@@ -1,36 +1,11 @@
 import { useState, useEffect } from 'react';
-import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import { getDepartment, getEmployeeInfo } from '../../api/axios';
 import { useDispatch } from 'react-redux';
 import { uiActions } from '../../store/ui-slice';
+import { OrganizationItem, EmployeeItem } from '../Organization/OrganizationType';
 
-type OrganizationItem = {
-  deptCd: number;
-  deptNm: string;
-  deptOrder: number;
-  deptType: string;
-  isFinal: string;
-  level: number;
-  modDate: string;
-  modUsr: string;
-  regDate: string;
-  regUsr: string;
-  upDeptCd: number;
-  upDeptNm: string;
-};
-type EmployeeItem = {
-  boss: string;
-  deptCd: number;
-  deptNm: string;
-  email: string;
-  empNm: string;
-  empNo: string;
-  loginId: string;
-  officeDuty: string;
-  officeDutyNm: string;
-  rank: string;
-  rankNm: string;
-}
+import classes from '../../pages/Approval/ApprovalSelect.module.css';
+import EmpItem from './EmpItem';
 
 const OrganizationAccordion = () => {
   const [deptData, setDeptData] = useState<OrganizationItem[]>([]);
@@ -38,7 +13,6 @@ const OrganizationAccordion = () => {
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const [openDepth2, setOpenDepth2] = useState<number | null>(null);
   const [openDepth3, setOpenDepth3] = useState<number | null>(null);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -110,14 +84,18 @@ const OrganizationAccordion = () => {
   };
 
   const createAccordionItem = (item: OrganizationItem, index: number, level: number) => {
+
     const isOpen = openAccordion === index;
     const isDepth2Open = openDepth2 === index;
     const isDepth3Open = openDepth3 === index;
 
-    const itemClass = `${classes['accordion-item']} ${classes[`depth${item.level}`] || ''} ${openAccordion === index ? 'active' : ''}`;
+    const itemClass = `${classes['accordion-item']} ${classes[`depth${item.level}`] || ''}`;
     const hasSubDepartments = deptData.some((subDept) => subDept.upDeptCd === item.deptCd);
+    const subEmployeeData = employeeData.filter((employee) => employee.deptCd === item.deptCd);
+    const boss = employeeData.filter((employee) => employee.empNm === '이영상');
 
     const toggleFunction = async () => {
+
       if (level === 0) {
         if(openAccordion === index ) {
           toggleAccordion(null);
@@ -131,16 +109,13 @@ const OrganizationAccordion = () => {
       } else if (level === 3) {
         toggleDepth3(index);
       }
-    };
 
-    const subEmployeeData = employeeData.filter((employee) => employee.deptCd === item.deptCd);
-    const boss = employeeData.filter((employee) => employee.empNm === '이영상');
+    };
 
     return (
       <div key={index} className={itemClass}>
         <div className={classes['accordion-header']} onClick={toggleFunction}>
-        {level === 0 && <i className="fa-solid fa-folder-open"></i>}
-        {level !== 0 && <i className="fa-solid fa-folder"></i>}  
+          <i className={`fa-solid fa-folder${isOpen ? '-open' : ''}`}></i>
           <span>{item.deptNm}</span>
         </div>
 
@@ -165,19 +140,14 @@ const OrganizationAccordion = () => {
         (
           <div className={classes['accordion-content']}>
             {subEmployeeData.map((employee, employeeIndex) => (
-              <div key={employeeIndex} className={classes['accordion-item']}>
-                <div 
-                  className={classes['accordion-header']}
-                  draggable="true"
-                  onDragStart={(e) => handleDragStart(
-                    e,employee.empNo ,employee.empNm, employee.officeDutyNm, employee.rankNm )}
-                  >
-                  <i className="fa-solid fa-user" style={{ color: '#607485', fontSize: '13pt', paddingLeft: '5px' }}></i>
-                  <span style={{ fontSize: '10pt' }}>
-                    {employee.empNm}
-                  </span>
-                </div>
-              </div>
+              <EmpItem
+              key={employeeIndex}
+              empNo={employee.empNo}
+              empNm={employee.empNm}
+              rankNm={employee.rankNm}
+              officeDutyNm={employee.officeDutyNm}
+              handleDragStart={handleDragStart}
+            />
             ))}
           </div>
         )}
@@ -187,7 +157,6 @@ const OrganizationAccordion = () => {
             {deptData
               .filter((subDept) => subDept.upDeptCd === item.deptCd)
               .map((subDept, subIndex) => createAccordionItem(subDept, subIndex, level + 1))
-              
             }
           </div>
         )}
@@ -199,7 +168,6 @@ const OrganizationAccordion = () => {
             }
           </div>
         )}
-
       </div>
     );
   };

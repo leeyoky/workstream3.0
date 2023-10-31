@@ -1,41 +1,52 @@
-import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { uiActions } from '../store/ui-slice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 const Pagination = () => {
-  const [activePage, setActivePage] = useState(1);
+  const activePage = useSelector((state: RootState) => state.ui.selectPage);
+  const totalItems = useSelector((state: RootState) => state.ui.totalItems);
+  const pageSize = useSelector((state: RootState) => state.ui.selectPageSize);
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const dispatch = useDispatch();
 
   const handlePageClick = (page: number) => {
-    setActivePage(page);
+    dispatch(uiActions.selectPage(page));
   };
 
-  const renderPage = (page:number, text:string) => (
-    <a
-      href="#"
-      className={`page ${activePage === page ? 'active' : ''}`}
-      onClick={() => handlePageClick(page)}
-    >
-      {text}
-    </a>
-  );
+  // 페이지 이동 함수
+  const goToPage = (page: number) => {
+    if (page >= 0 && page < totalPages) {
+      handlePageClick(page);
+    }
+  }
+
+  // 페이지 버튼을 동적으로 생성
+  const pages = Array.from({ length: totalPages }, (_, index) => index);
 
   return (
     <div className="pagination">
-      <a href="#" className="previous">
+      <button className="previous" onClick={() => goToPage(activePage - 1)}>
         <i className="fa-solid fa-angles-left"></i>
-      </a>
-      <a href="#" className="previous">
+      </button>
+      <button className="previous" onClick={() => goToPage(0)}>
         <i className="fa-solid fa-angle-left"></i>
-      </a>
-      {renderPage(1, '1')}
-      {renderPage(2, '2')}
-      {renderPage(3, '3')}
-      {renderPage(4, '4')}
-      {renderPage(5, '5')}
-      <a href="#" className="next">
+      </button>
+      {pages.map((page) => (
+        <button
+          key={page}
+          className={`page ${activePage === page ? 'active' : ''}`}
+          onClick={() => goToPage(page)}
+        >
+          {page + 1}
+        </button>
+      ))}
+      <button className="next" onClick={() => goToPage(activePage + 1)}>
         <i className="fa-solid fa-angle-right"></i>
-      </a>
-      <a href="#" className="next">
+      </button>
+      <button className="next" onClick={() => goToPage(totalPages - 1)}>
         <i className="fa-solid fa-angles-right"></i>
-      </a>
+      </button>
     </div>
   );
 };

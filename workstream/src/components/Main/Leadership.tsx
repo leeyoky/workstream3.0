@@ -15,7 +15,8 @@ const Leadership = () => {
       </div>
       <div className="inner-box__content inner-box__content_leadership">
         <div className="emp-photo-box">
-          <img src={profile} alt="" />
+          <i className="fa-solid fa-user-tie"></i>
+          {/* <img src={profile} alt="" /> */}
         </div>
         <div className='emp-content-box'>
           <div className='emp-content__title'>

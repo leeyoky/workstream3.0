@@ -10,7 +10,8 @@ th {
   border: 1px solid #000;
 }
 .approval-wrapper td{
-  font-size: 10pt;
+  font-size: 9.5pt;
+  font-weight: 500;
 }
 .approval-wrapper p {
   margin: 0;
@@ -162,6 +163,16 @@ footer p {
   width: 100%;
   border-collapse: collapse;
   height: 100%;
+}
+.header-table__common input{
+  border: none;
+  display: flex;
+  height: -webkit-fill-available;
+  width: 97%;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  font-size: 9.5pt;
+  text-align: center;
 }
 .header-table__approval-th{
   width: 140px;

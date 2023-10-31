@@ -2,80 +2,87 @@ import React from 'react';
 import classes from '../../../pages/Approval/Approval.module.css';
 import logoSmall from '../../../assets/img/logo.png';
 import Signature from './Signature';
+import { RootState } from '../../../store';
+import { useSelector } from 'react-redux';
 
 const Resination = () => {
 
   const today = new Date();
   const getDate = today.toISOString().slice(0,10);
+  const userInfo = useSelector((state:RootState) => state.auth.userInfo);
+  console.log(userInfo);
 
   return (
     <React.Fragment>
-        <form>
-          <header className={classes['header-type']}>
-            <div className={classes['header-logo']}>
-              <img src={logoSmall} alt="Logo" />
+      <form>
+        <header className={classes['header-type']}>
+          <div className={classes['header-logo']}>
+            <img src={logoSmall} alt="Logo" />
+          </div>
+          <div className={classes['header-box__wrapper']}>
+            <div className={classes['header__left']}>
+              <h1>사 직 원</h1>
+              <p> - 그 동안의 노고에 감사드립니다 - </p>
             </div>
-            <div className={classes['header-box__wrapper']}>
-              <div className={classes['header__left']}>
-                <h1>사 직 원</h1>
-                <p> - 그 동안의 노고에 감사드립니다 - </p>
-              </div>
-              <Signature/>
-                </div>
-
-                <table className={classes['header-info']}>
-                  <tbody>
-                    <tr>
-                      <th className={classes['body-table__150']}>부 서 명</th>
-                      <td colSpan={2} className={classes['body-table__300']}></td>
-                      <th className={classes['body-table__150']}>직책/직위</th>
-                      <td colSpan={2}></td>
-                    </tr>
-                    <tr>
-                      <th>성 명</th>
-                      <td colSpan={2}>
-                        
-                      </td>
-                      <th>주민 번호</th>
-                      <td colSpan={2}>
-                        <p>-</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>입사 일자</th>
-                      <td colSpan={2}>
-                        {/*datepicker */}
-                      </td>
-                      <th>퇴사 일자</th>
-                      <td colSpan={2}>
-                        {getDate}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>현재 주소</th>
-                      <td colSpan={2}></td>
-                      <th rowSpan={2}>연 락 처</th>
-                      <th className={classes['body-table__100']}>집</th>
-                      <td>
-                        <input className={classes['body-table__input']} type="text" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>퇴직 사유</th>
-                      <td colSpan={2}>
-                        <input className={classes['body-table__input']} type="text" />
-                      </td>
-                      <th>휴대폰</th>
-                      <td>
-                        <input className={classes['body-table__input']} type="text" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-          {/* 사직자 준수사항 및 현업 부서장 및 업무인수자 준수사항 */}
-          <table className={classes['text-table']}>
+            <Signature/>
+          </div>
+          <table className={classes['header-info']}>
             <tbody>
+              <tr>
+                <th className={classes['body-table__150']}>부 서 명</th>
+                <td colSpan={2} className={classes['body-table__300']}>
+                {userInfo?.deptNm}
+                </td>
+                <th className={classes['body-table__150']}>직책/직위</th>
+                <td colSpan={2}>
+                {userInfo?.rankNm}
+                </td>
+              </tr>
+              <tr>
+                <th>성 명</th>
+                <td colSpan={2}>
+                {userInfo?.empNm}
+                </td>
+                <th>주민 번호</th>
+                <td colSpan={2}>
+                  <p>-</p>
+                </td>
+              </tr>
+              <tr>
+                <th>입사 일자</th>
+                <td colSpan={2}>
+                  {/*datepicker */}
+                </td>
+                <th>퇴사 일자</th>
+                <td colSpan={2}>
+                  {getDate}
+                </td>
+              </tr>
+              <tr>
+                <th>현재 주소</th>
+                <td colSpan={2}></td>
+                <th rowSpan={2}>연 락 처</th>
+                <th className={classes['body-table__100']}>집</th>
+                <td>
+                  <input className={classes['body-table__input']} type="text" />
+                </td>
+              </tr>
+              <tr>
+                <th>퇴직 사유</th>
+                <td colSpan={2}>
+                  <input className={classes['body-table__input']} type="text" />
+                </td>
+                <th>휴대폰</th>
+                <td>
+                  <input className={classes['body-table__input']} type="text" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        {/* 사직자 준수사항 및 현업 부서장 및 업무인수자 준수사항 */}
+        <table className={classes['text-table']}>
+          <tbody>
             <td>
               <div className={classes['text-wrapper']}>
                 <div>
@@ -112,15 +119,15 @@ const Resination = () => {
                 <p><span>2. 업무인수인계 세부내역서 1부.</span></p>
                 <p><span>3. 퇴직서약서 1부.</span></p>
                 </div>
-                </div>
+              </div>
             </td>
-            </tbody>
-          </table>
-        </header>
-          <footer>
-            <p className={classes['footer']}>주식회사 데이터스트림즈</p>
-          </footer>
-      </form>
+          </tbody>
+        </table>
+      </header>
+      <footer>
+        <p className={classes['footer']}>주식회사 데이터스트림즈</p>
+      </footer>
+    </form>
   </React.Fragment>
   );
 };

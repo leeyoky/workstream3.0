@@ -10,7 +10,8 @@ const NewestEmp = () => {
         </div>
         <div className="inner-box__content inner-box__content_leadership">
         <div className="emp-photo-box">
-          <img src={profile} alt="" />
+          <i className="fa-solid fa-user-tie"></i>
+          {/* <img src={profile} alt="" /> */}
         </div>
         <div className='emp-content-box emp-content-box_NewestEmp'>
           <div className='emp-content__title emp-content__title_NewestEmp'>

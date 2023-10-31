@@ -23,13 +23,12 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 'latest',
+    ecmaVersion: 12,
     sourceType: 'module',
-    parser: '@babel/eslint-parser',
   },
   plugins: ['@typescript-eslint', 'react'],
   rules: {
-    /* jsx파일에 react import 경고줄 무시 */
+    /* jsx 파일에 react import 경고 줄 무시 */
     'react/react-in-jsx-scope': 'off',
     quotes: 'single',
     'no-duplicate-imports': 'error',

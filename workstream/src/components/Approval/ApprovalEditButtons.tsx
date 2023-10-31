@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../store/Approval/approval-slice';
-import ApprovalEmpEditModal from './ApprovalModalEmpEdit';
+import ApprovalModalEmpEdit from './ApprovalModalEmpEdit';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 const ApprovalEditButtons: React.FC = () => {
   
@@ -37,7 +37,7 @@ const ApprovalEditButtons: React.FC = () => {
         <span>결재자지정</span>
         <i className="fa-solid fa-user-pen"></i>
       </button>
-        {isModalOpen && <ApprovalEmpEditModal onClose={handleCloseModal} isEdit={true}/>}
+        {isModalOpen && <ApprovalModalEmpEdit onClose={handleCloseModal} isEdit={true}/>}
       <button className="btn">
         <span>임시저장</span>
         <i className="fa-solid fa-floppy-disk"></i>

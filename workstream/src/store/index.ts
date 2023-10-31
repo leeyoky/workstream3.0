@@ -6,6 +6,7 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import approvalSlice from "./Approval/approval-slice";
 import thunk from "redux-thunk";
+import textEditorSlice from "./textEditor-slice";
 
 const persistConfig = {
   key: "root",
@@ -16,7 +17,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
   ui: uiSlice.reducer,
-  approval: approvalSlice.reducer
+  approval: approvalSlice.reducer,
+  textEditor: textEditorSlice.reducer,
 });
 
 

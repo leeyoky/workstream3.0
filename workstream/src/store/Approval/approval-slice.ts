@@ -13,7 +13,7 @@ interface Employee {
 interface ApprovalState {
   documentType: string;   // 품의서 종류
   selectedOption: string;   // 결재방식 선택
-  approvalType: string;
+  approvalType: string;   
   agreementType: string;    // 힙의방식 선택
   approvers: Employee[];
 }

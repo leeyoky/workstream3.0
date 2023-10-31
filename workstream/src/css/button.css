@@ -27,10 +27,13 @@
   transition: all 0.3s ease; 
 }
 
-.btn-yellow {
+.btn-primary {
   background-color: #ff9900;
   font-size: 9pt;
   color: rgb(0, 0, 0);
+}
+.primary{
+  background-color: #ff9900;
 }
 
 .btn-yellow:hover {
@@ -69,3 +72,26 @@
   transition: all 0.3s ease; 
 }
 
+/* badge */
+.badge {
+  width: 60px;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 9.5pt;
+}
+
+.badge-primary {
+  background-color: #ff9900;
+}
+.badge-temp {
+  border: 1px solid #143652;
+}
+.badge-info{
+  background-color: #8dbeff;
+}
+.badge-success{
+  background-color: #84ce84;
+}
+.badge-warning{
+  background-color: #ffd900;
+}

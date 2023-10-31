@@ -7,23 +7,64 @@ const uiSlice = createSlice({
     isSubbarOpen: false,
     draggingItem: null,
     dropTarget: null,
+    selectMenu: null,
+    selectPageSize: 4,
+    selectPage: 0,
+    totalItems: 0,
+    searchInput: {
+      title: '',
+      deptCd: '',
+      docType: '',
+      regUsrNm: '',
+      state: '',
+    } 
   },
   reducers: {
+    // Side Bar 
     toggle(state) {
       state.isSidebarOpen = !state.isSidebarOpen;
     },
+    // Sub Bar
     setSubToolBar(state, action) {
       state.isSubbarOpen = action.payload;
     },
+    // Dragging
     setDraggingItem(state, action) {
       state.draggingItem = action.payload;
     },
+    // Drop
     setDropTarget(state,action) {
       state.dropTarget = action.payload;
     },
-    resetDropTarget: (state) => {
+    resetDropTarget(state) {
       state.dropTarget = null;
     },
+    // Recent Menu
+    selectMenu(state, action) {
+      state.selectMenu = action.payload;
+    },
+    // PageSize
+    selectPageSize(state,action) {
+      state.selectPageSize = action.payload;
+    },
+    // Page
+    selectPage(state,action) {
+      state.selectPage = action.payload;
+    },
+    // totalItem
+    setTotalItems (state,action) {
+      state.totalItems = action.payload;
+    },
+    // resetData
+    resetPage (state) {
+      state.selectPageSize = 4;
+      state.selectPage = 0;
+      state.totalItems = 0;
+    },
+    // search
+    searchInput(state, action) {
+      state.searchInput = action.payload;
+    }
   }
 })
 
