@@ -1,13 +1,14 @@
-import { ChangeEvent, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getEmployeeInfo } from '../../api/axios';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import OrganizationAccordion from '../Organization/OrganizationAccordion';
-import { EmployeeItem } from '../Organization/OrganizationType';
+import { EmployeeItem } from '../../types/Organization/OrganizationType';
 
 const ApprovalOrganization = () => {
   const [searchText, setSearchText] = useState('');
   const [employeeData, setEmployeeData] = useState<EmployeeItem[]>([]);
   const [searchResults, setSearchResults] = useState<EmployeeItem[]>([]);
+  const [empDeptCd, setEmpDeptCd] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,18 +17,13 @@ const ApprovalOrganization = () => {
         const employeeData = employeeResponse.data.content;
         setEmployeeData(employeeData);
       } catch (error) {
-        console.log("서버 통신 오류", error);
+        console.error("서버 통신 오류", error);
       }
     };
 
     fetchData();
   }, []);
 
-  const searchChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const searchText = e.target.value;
-    setSearchText(searchText);
-    performSearch(searchText);
-  };
 
   const performSearch = (searchText: string) => {
     const filteredEmployeeData = employeeData.filter((item) => {
@@ -35,7 +31,20 @@ const ApprovalOrganization = () => {
     });
   
     setSearchResults(filteredEmployeeData);
+    console.log(searchResults);
+
   };
+
+  const searchButtonClickHandler = () => {
+    performSearch(searchText);
+    console.log('검색 버튼 클릭', searchText);
+      if (searchResults.length > 0) {
+      const deptCd = searchResults[0].deptCd;
+      console.log("뭐요", deptCd);
+      setEmpDeptCd(deptCd);
+    }
+  };
+
 
   return (
     <div className={classes['organization-selector__input-wrapper']}>
@@ -49,16 +58,14 @@ const ApprovalOrganization = () => {
             type="text"
             placeholder="사원을 검색해주세요"
             value={searchText}
-            onChange={searchChangeHandler}
+            onChange={(e) => setSearchText(e.target.value)}
           />
-          <button>
+          <button onClick={searchButtonClickHandler}>
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
 
-        <OrganizationAccordion
-          searchResults={searchResults} // 검색 결과를 전달
-        />
+        <OrganizationAccordion empDeptCd={empDeptCd} searchText={searchText}/>
       </div>
     </div>
   );

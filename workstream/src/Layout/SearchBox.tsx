@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { uiActions } from '../store/ui-slice';
-
-interface SearchBoxOption {
-  label: string;
-  value: string;
-}
-interface SearchBoxProps {
-  tags: { label: string; name: string; type?: string; options?:SearchBoxOption[] }[];
-}
+import { SearchBoxProps } from '../types/Approval/Approaval'; 
+import SelectBox from './SelectBox';
 
 const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
   const [localSearchInput, setLocalSearchInput] = useState<{ [key: string]: string }>({});
@@ -20,41 +14,27 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
   }
 
   const searchHandler = () => {
-    // 검색어 객체를 복제
     const updatedSearchInput = { ...localSearchInput };
-  
-    // 각 검색어 필드를 검사하고 비어 있는 필드를 삭제
+
     for (const key in updatedSearchInput) {
       if (updatedSearchInput[key] === '') {
         delete updatedSearchInput[key];
       }
     }
-  
     // 수정된 검색어 객체를 사용하여 쿼리를 서버로 보냄
     dispatch(uiActions.searchInput(updatedSearchInput));
-  
-    // 서버로 보내기 전에 검색어 확인
-    console.log('검색어:', updatedSearchInput);
   }
 
   return (
     <div className="board-search-wrapper">
       <div className="board-search">
-        {tags.map((tag, index: number) => (
-          <div key={index.toString()} className="board-search-tag">
+        {tags.map((tag: any, index: number) => (
+          <div 
+            key={index.toString()} 
+            className='board-search-tag'>
             <label>{tag.label}</label>
-            {tag.type === 'select' ? ( 
-              <select
-                name={tag.name}
-                value={localSearchInput[tag.name] || ''}
-                onChange={(e) => inputChangeHandler(e, tag.name)}
-              >
-              {tag.options?.map((option, optionIndex) => (
-                <option key={optionIndex} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-              </select>
+            {tag.type === 'select' ? (
+              <SelectBox tag={tag} localSearchInput={localSearchInput} setLocalSearchInput={setLocalSearchInput} />
             ) : (
               <input
                 type="text"

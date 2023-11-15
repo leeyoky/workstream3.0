@@ -3,7 +3,6 @@ import React from 'react';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { useDispatch } from 'react-redux';
 
 interface ApprovalSelectProps {
   selectedOption: string;
@@ -21,9 +20,7 @@ const ApprovalEmpLineSelect: React.FC<ApprovalSelectProps> = ({
   removeAllHandler,
 }) => {
 
-  const dispatch = useDispatch();
   const lineSelector = useSelector((state: RootState) => state.approval.selectedOption);
-
 
   return (
     <div className={classes['card-header']}>

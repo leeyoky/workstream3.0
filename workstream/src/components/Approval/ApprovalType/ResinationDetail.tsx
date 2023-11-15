@@ -5,12 +5,11 @@ import Signature from './Signature';
 import { RootState } from '../../../store';
 import { useSelector } from 'react-redux';
 
-const Resination = () => {
+const ResinationDetail = () => {
 
   const today = new Date();
   const getDate = today.toISOString().slice(0,10);
   const userInfo = useSelector((state:RootState) => state.auth.userInfo);
-  console.log(userInfo);
 
   return (
     <React.Fragment>
@@ -132,4 +131,4 @@ const Resination = () => {
   );
 };
 
-export default Resination;
+export default ResinationDetail;

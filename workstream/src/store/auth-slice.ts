@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-
+import { EmployeeItem } from '../types/Organization/OrganizationType';
 interface AuthState {
   isLogin : boolean;
   token: string;
   empNo: string;
-  userInfo: [];
+  userInfo: EmployeeItem[];
 }
 // 한수진 "2022001454"
+// 김원봉 "2022001453"
 const initialState: AuthState = {
   isLogin: false, 
   token: '',
-  empNo: '',
+  empNo: '202201453',
   userInfo: [],
 }
 const authSlice = createSlice({
@@ -29,7 +29,7 @@ const authSlice = createSlice({
       state.token = action.payload;
     },
     setEmpNo(state) {
-      state.empNo = '2022001454'
+      state.empNo = '2022001464'
     },
     setUserInfo(state, action){
       state.userInfo = action.payload;

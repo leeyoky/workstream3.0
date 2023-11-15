@@ -26,10 +26,10 @@ const Pagination = () => {
 
   return (
     <div className="pagination">
-      <button className="previous" onClick={() => goToPage(activePage - 1)}>
+      <button className="previous" onClick={() => goToPage(0)}>
         <i className="fa-solid fa-angles-left"></i>
       </button>
-      <button className="previous" onClick={() => goToPage(0)}>
+      <button className="previous" onClick={() => goToPage(activePage - 1)}>
         <i className="fa-solid fa-angle-left"></i>
       </button>
       {pages.map((page) => (

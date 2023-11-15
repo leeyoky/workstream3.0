@@ -5,6 +5,7 @@ import { RootState } from '../../store';
 import { selectedActions } from '../../store/Approval/approval-slice';
 import { uiActions } from '../../store/ui-slice';
 import ApprovalTypeSelector from './ApprovalTypeSelector';
+import { useEffect } from 'react';
 interface ApprovalEmpResultProps {
   selectedOption: string;
 }
@@ -12,26 +13,33 @@ interface ApprovalEmpResultProps {
 const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
   const [isDragging, setIsDragging] = useState(false);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
+  const approvalApprovers = approvers.filter((approver) => approver.approvalType === 'APPROVER');
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const dispatch = useDispatch();
+
+useEffect(()=> {
+  console.log('approvers' , approvers);
+},[])
 
   // dragStartIndex를 ref로 관리
   const dragStartIndex = useRef(-1);
   const handleDragStart = useCallback(
     (
       e: React.DragEvent<HTMLDivElement>,
-      empNo: number,
+      empNo: string,
       empNm: string,
       rankNm: string,
       officeDutyNm: string,
       index: number
     ) => {
       const empInfo = {
+        dragIndex: index,
         empNo,
         name: empNm,
         rankName: rankNm,
         duty: officeDutyNm,
         approvalType: '',
+        index,
       };
 
       // 시작 인덱스 업데이트
@@ -40,9 +48,10 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
       
       setIsDragging(true);
       const empInfoString = JSON.stringify(empInfo);
-
+      
+      
       e.dataTransfer.setData('empName', empInfoString);
-      dispatch(uiActions.setDraggingItem(empNm));
+      dispatch(uiActions.setDraggingItem(empInfo));
     },
     []
   );
@@ -57,10 +66,15 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
     e.preventDefault();
 
     if (!isDragging) {
-
-      // Accordion에서 가져온 드래그 앤 드롭
-      dispatch(selectedActions.addEmp(draggedData));
-      dispatch(uiActions.setDropTarget(draggedData));
+      console.log('draggedData: ', draggedData);
+      
+      if(approvalApprovers.length < 5){
+        // Accordion에서 가져온 드래그 앤 드롭
+        dispatch(selectedActions.addEmp(draggedData));
+        dispatch(uiActions.setDropTarget(draggedData));
+      } else {
+        alert('결재자는 기안자와 최종결재자를 포함한 최대 6명까지 선택 가능합니다.) ')
+      }
 
     } else {
 
@@ -100,13 +114,14 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
         key={index}
         draggable="true"
         data-index={index}
+        data-emp-info={JSON.stringify(employee)}
         onDragStart={(e) => handleDragStart(
           e, employee.empNo, employee.name, employee.rankName, employee.duty, index)}
       >
         <div className={classes['approver-item']}
         >
           <div className={classes['approver-item__items']}>
-            <span>{index}</span>
+            <span>{index + 2}</span>
             <span>{employee.name}</span>
             <span>{employee.rankName || ''}</span>
             <span>{employee.duty}</span>
@@ -127,9 +142,9 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
           <div className={classes['approver-item']}>
             <div className={classes['approver-item__items']}>
             <span>{1}</span>
-            <span>{userInfo?.empNm}</span>
-            <span>{userInfo?.rankNm}</span>
-            <span>{userInfo?.officeDutyNm}</span>
+            <span>{userInfo.empNm}</span>
+            <span>{userInfo.rankNm}</span>
+            <span>{userInfo.officeDutyNm}</span>
           </div>
           <div className={classes['button-box']}>
             <div className={classes['button-box__buttons']}>
@@ -143,7 +158,7 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
             </div>
             <span className={classes['button-delete']}>
             </span>
-    </div>
+          </div>
           </div>
         </div>
         {approvers.length > 0 ? (

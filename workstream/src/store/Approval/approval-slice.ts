@@ -1,29 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface Employee {
-  id: number;
-  empNo: number;
-  name: string;
-  duty: string;
-  rankName: string;
-  approvalType: string;
-  index: number;
-}
-
-interface ApprovalState {
-  documentType: string;   // 품의서 종류
-  selectedOption: string;   // 결재방식 선택
-  approvalType: string;   
-  agreementType: string;    // 힙의방식 선택
-  approvers: Employee[];
-}
+import { ApprovalState, Employee } from "../../types/Approval/Approaval";
 
 const initialState: ApprovalState = { 
+  isEditMode: true,
+  isDetailMode: true,
   documentType: '',
-  selectedOption: '',
-  approvalType: '',
-  agreementType: '',
+  selectedOption: 'approval', /* 결재 / 합의 */
+  agreementType: 'sequential',  /* 순차 / 병렬 */
   approvers: [],
+  title: '',
+  content:'',
+  executeDate: '',
+  comment: '',
 };
 // 결재자는 기안자와 최종결재권자 포함 최대 6명
 // 합의자는 최대 7명까지
@@ -48,17 +36,32 @@ const approvalSlice = createSlice({
     },
 
     // 결재 직원을 추가
-    addEmp(state, action: PayloadAction<Employee>) {
-      const newEmp = action.payload;
-      const isDuplicate = state.approvers.find((emp) => emp.name === newEmp.name);
-      // 새로운 배열을 생성하고 새로운 직원을 추가
+    addEmp(state, action: PayloadAction<Employee & { index: number }>) {
+      const { empNo, name, rankName, duty, approvalType, index } = action.payload;
+      const isDuplicate = state.approvers.find((emp) => emp.name === name);
+    
       if (!isDuplicate) {
-        state.approvers = [...state.approvers, newEmp];
+        state.approvers.push({ empNo, name, rankName, duty, approvalType, index });
       } else {
-        return;
+        // 이미 추가된 직원이 있을 때 index를 업데이트
+        const existingEmpIndex = state.approvers.findIndex((emp) => emp.name === name);
+        if (existingEmpIndex !== -1) {
+          state.approvers[existingEmpIndex].index = index;
+        }
       }
     },
-
+    // 제목
+    setTitle(state, action) {
+      state.title = action.payload;
+    },
+    // 시행날짜
+    setDate(state, action){
+      state.executeDate = action.payload;
+    },
+    // 내용
+    setContent(state, action) {
+      state.content = action.payload;
+    },
     // 직원 중 결재직원 선택
     updateApprovers(state, action: PayloadAction<{ indexes: number[]; approvalType: string }>) {
       const { indexes, approvalType } = action.payload;
@@ -83,11 +86,31 @@ const approvalSlice = createSlice({
     removeAllEmps(state) {
       state.approvers = [];
     },
+    // 수정하기
+    setIsEditMode(state, action) {
+      state.isEditMode = action.payload;
+    },
+    setIsDetailMode(state, action) {
+      state.isDetailMode = action.payload;
+    },
+    // 댓글
+    setComment(state,action) {
+      state.comment = action.payload;
+    },
     resetArray(state) {
       state.documentType = '';
       state.selectedOption = '';
       state.agreementType = '';
       state.approvers = [];
+      state.isEditMode = true;
+    },
+    resetDocument(state){
+      state.selectedOption = '';
+      state.agreementType = '';
+      state.approvers = [];
+      state.title = '';
+      state.content = '';
+      state.executeDate = '';
     }
   },
 });

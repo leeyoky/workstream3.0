@@ -1,57 +1,89 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { selectedActions } from '../../store/Approval/approval-slice';
-import ApprovalModalEmpEdit from './ApprovalModalEmpEdit';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
-const ApprovalEditButtons: React.FC = () => {
-  
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
+import ApprovalModalEmpEdit from './ApprovalModalEmpEdit';
+import useApprovalRequest from '../../hooks/Approval/useApprovalRequest';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+type ApprovalEditButtonsProps = {
+  temp: boolean;
+};
 
-  const handleShowModal = () => {
-    setIsModalOpen(true);
-  }
+const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
+  const {
+    id,
+    isModalOpen,
+    handleShowModal,
+    handleCloseModal,
+    goBackPage,
+    requestApprovalHandler,
+    updateDocumentHandler,
+    deleteDocumentHandler,
+    recallDocument,
+  } = useApprovalRequest();
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  }
-
-  const goBackPage = () => {
-    const isCancle = window.confirm('작업한 모든 문서의 정보를 잃게됩니다. 취소하시겠습니까?')
-    if(isCancle){
-      navigate('/approval')
-      dispatch(selectedActions.resetArray());
-    }
-  }
+  const isDetail = useSelector((state:RootState) => state.approval.isDetailMode);
+    
 
   return (
     <div className={classes['btn-group']}>
       <button className="btn btn-border" onClick={goBackPage}>
         <span>문서함이동</span>
-        <i className="fa-solid fa-rotate-left"></i>
       </button>
-      <button className="btn" onClick={handleShowModal}>
-        <span>결재자지정</span>
-        <i className="fa-solid fa-user-pen"></i>
-      </button>
-        {isModalOpen && <ApprovalModalEmpEdit onClose={handleCloseModal} isEdit={true}/>}
-      <button className="btn">
-        <span>임시저장</span>
-        <i className="fa-solid fa-floppy-disk"></i>
-      </button>
-      {/* <button className="btn">
-        <span>미리보기</span>
-        <i className="fa-solid fa-eye"></i>
-      </button> */}
-      <button className="btn">
-        <span>결재요청</span>
-        <i className="fa-solid fa-pen-to-square"></i>
-      </button>
+      {/* CREATE */}
+      {!isDetail ? (
+        <div>
+          <button className="btn" onClick={handleShowModal}>
+            <span>결재자지정</span>
+            <i className="fa-solid fa-user-pen"></i>
+          </button>
+          {isModalOpen && <ApprovalModalEmpEdit onClose={handleCloseModal} isEdit={true} />}
+          <button className="btn" onClick={() => requestApprovalHandler('TEMP')}>
+            <span>임시저장</span>
+            <i className="fa-solid fa-floppy-disk"></i>
+          </button>
+          <button className="btn btn-blue" onClick={() => requestApprovalHandler('PROCEEDING')}>
+            <span>결재요청</span>
+            <i className="fa-solid fa-pen-nib"></i>
+          </button>
+        </div>
+      ) : (
+        <div>
+          {!temp ? (
+            <>
+              <button className="btn" onClick={() => recallDocument(id)}>
+                <span>문서회수</span>
+              </button>
+              <button className="btn btn-green">
+                <span>PDF다운</span>
+                <i className="fa-solid fa-file-pdf"></i>
+              </button>
+            </>
+          ) : null}
+          {temp && isDetail && (
+            <>
+              <button className="btn" onClick={handleShowModal}>
+                <span>결재자지정</span>
+                <i className="fa-solid fa-user-pen"></i>
+              </button>
+              {isModalOpen && <ApprovalModalEmpEdit onClose={handleCloseModal} isEdit={true} />}
+              <button className="btn" onClick={updateDocumentHandler}>
+                <span>임시저장</span>
+                <i className="fa-solid fa-floppy-disk"></i>
+              </button>
+              <button className="btn btn-red" onClick={()=>deleteDocumentHandler(id)}>
+                <span>문서삭제</span>
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+              <button className="btn btn-blue" onClick={() => requestApprovalHandler('PROCEEDING')}>
+                <span>결재요청</span>
+                <i className="fa-solid fa-pen-nib"></i>
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default ApprovalEditButtons
+export default ApprovalEditButtons;

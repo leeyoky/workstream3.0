@@ -2,7 +2,6 @@ import React from 'react';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import { RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
 import { selectedActions } from '../../store/Approval/approval-slice';
 
 import ApprovalLineSelect from './ApprovalEmpLineSelect';
@@ -24,6 +23,9 @@ const ApprovalEmpSelector:React.FC<ApprovalEmpSelectorProps> = (props) => {
   // 결재라인 방식 선택
   const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(selectedActions.updateSelectedOption(e.target.value));
+    if (e.target.value === "addAgreement") {
+      dispatch(selectedActions.updateSelectedAgreementOption("sequential"));
+    }
   };
   // 합의라인 방식 선택
   const selectChangeAgreementHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,11 +33,10 @@ const ApprovalEmpSelector:React.FC<ApprovalEmpSelectorProps> = (props) => {
   }
 
   useEffect(() => {
-    if (props.isEdit) {
-      dispatch(selectedActions.updateSelectedOption(selectedOption));
-      dispatch(selectedActions.updateSelectedAgreementOption(selectedAgreeOption));
+    if(selectedOption === ''){
+      dispatch(selectedActions.updateSelectedOption('approval'))
     }
-  }, [props.isEdit, selectedOption,selectedAgreeOption, dispatch]);
+  }, [props.isEdit]);
 
   // 결재 직원을 전체 삭제
   const removeAllHandler = () => {

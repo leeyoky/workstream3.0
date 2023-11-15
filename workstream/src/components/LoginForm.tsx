@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useAuthActions } from '../store/actions/authActions';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../store/auth-slice';
 
 const LoginForm: React.FC = () => {
 
@@ -10,6 +12,13 @@ const LoginForm: React.FC = () => {
   const usernameInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
 
+  const dispatch = useDispatch();
+  const token = 'eyJhbGciOiJIUzI1NiJ9.eyJFTVBOTSI6Iuq5gOybkOu0iSIsIkRFUFROTSI6IktN7YyAIiwic3ViIjoiMjAyMjAwMTQ1MyIsImlhdCI6MTY5NzA3NTU0NSwiZXhwIjoxNzY5MDc1NTQ1fQ.VXBXbnhmF9x2N7xpxgViCclrPPBxlizw5feMrbWWdnA'
+  localStorage.setItem('token', token);
+  dispatch(authActions.setToken(token))
+  dispatch(authActions.login());
+  
+  
   const { login } = useAuthActions();
 
   const handleOnChange = (

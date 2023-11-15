@@ -1,180 +1,152 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { getApprovalList } from './../../api/axios';
-import { ApprovalListItem } from './ApprovalType';
-import IndexPage from '../IndexPage';
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { uiActions } from '../../store/ui-slice';
+import { useNavigate } from 'react-router-dom';
+import { columns, searchTags, progressSearchTags } from './ApprovalSearchTag';
+import { selectedActions } from '../../store/Approval/approval-slice';
+import { useApprovalList } from '../../hooks/Approval/useApprovalList';
+import IndexPage from '../IndexPage';
 
 const ApprovalPage: React.FC = () => {
-  const [listData, setListData] = useState<ApprovalListItem[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
-  const selectMenu = useSelector((state:RootState) => state.ui.selectMenu);
-  const getPageSize = useSelector((state:RootState) => state.ui.selectPageSize);
-  const getPage = useSelector((state:RootState) => state.ui.selectPage);
-  const getSearchInput = useSelector((state:RootState) => state.ui.searchInput);
-  const dispatch = useDispatch();
-
+  // sort 값 상태 관리 state
+  const [sortValue , setSortValue] = useState<string>('');
+  // sort icon 정렬 방향 관리 state
+  const [sortDirections, setSortDirections] = useState<Record<string, 'asc' | 'desc'>>(columns.reduce((acc, column) => {
+    acc[column] = 'asc';
+    return acc;
+  }, {} as Record<string, 'asc' | 'desc'>));
   
-  const fetchApprovalList = async () => {
-    try {
-      const { title, deptCd, docType, regUsrNm, state } = getSearchInput;
-      const pending = selectMenu === '/approval/pending' ? 'Y' : '';
-      console.log('state : ' , getSearchInput);
-      
-      const response = await getApprovalList({
-        page: getPage,
-        pageSize: getPageSize,
-        state: state,
-        pending: pending,
-        title: title,
-        deptCd: deptCd,
-        docType: docType,
-        regUsrNm: regUsrNm,
-      });
+  // 선택한 메뉴 정보
+  const selectMenu = useSelector((state: RootState) => state.ui.selectMenu || '');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-      const data = response.data.content;
-      const getTotalElements = response.data.totalElements;
+  useEffect(()=>{},[location.pathname])
 
-      setListData(data);
-      setTotalItems(getTotalElements);
+  // 메뉴 제목
+  const getMenuTitle = (menuPath: string): string => {
+    const menuTitles: Record<string, string> = {
+      '/approval/temporary': '임시보관함',
+      '/approval/document': '전체문서함',
+      '/approval/pending': '결재대기함',
+      '/approval/in-progress': '결재진행함',
+      '/approval/completed': '완료문서함',
+      '/approval/rejected': '반려문서함',
+    };
+    return menuTitles[menuPath] || '';
+  };
 
-      dispatch(uiActions.setTotalItems(getTotalElements));
+  // 아이콘 변경
+  const toggleSortDirection = (column: string) =>
+  setSortDirections((prevSortDirections) => ({
+    ...prevSortDirections,
+    [column]: prevSortDirections[column] === 'asc' ? 'desc' : 'asc',
+  }));
 
-    } catch (error) {
-      console.log('Error fetching approval list:', error);
+  // 테이블 헤더 클릭 시 아이콘 변경 및 api 전달 값 설정
+  const sortHandler = (column: string) => {
+    let newSortValue = '';
+    // 각 열에 따라 새로운 정렬 값을 설정
+    if (column === '문서명') {
+      newSortValue = sortDirections[column] === 'asc' ? 'title,asc&' : 'title,desc&';
     }
-  }
-
-  useEffect(() => {
-    
-    let state = '';
-    let pending = '';
-
-    if (selectMenu === '/approval/temporary') {
-      state = 'TEMP';
-    } else if (selectMenu === '/approval/in-progress') {
-      state = 'PROCEEDING';
-    } else if (selectMenu === '/approval/completed') {
-      state = 'APPROVED';
-    } else if (selectMenu === '/approval/rejected') {
-      state = 'REJECTED';
-    } else if (selectMenu === '/approval/pending') {
-      pending = "Y";
+    if (column === '문서종류') {
+      newSortValue = sortDirections[column] === 'asc' ? 'docType,desc&' : 'docType,asc&';
     }
+    if (column === '기안자') {
+      newSortValue = sortDirections[column] === 'asc' ? 'regUsr,desc&' : 'regUsr,asc&';
+    }
+    if (column === '등록일') {
+      newSortValue = sortDirections[column] === 'asc' ? 'regDate,desc&' : 'regDate,asc&';
+    }
+    if (column === '진행현황') {
+      newSortValue = sortDirections[column] === 'asc' ? 'state,desc&' : 'state,asc&';
+    }
+    setSortValue(newSortValue);
+    toggleSortDirection(column);
+  };
 
-    // API 호출
-    fetchApprovalList();
-  }, [getPage, getPageSize, selectMenu, getSearchInput]);
+  const { listData, totalItems } = useApprovalList(sortValue);
 
-  let boardTitle = {
-    title: ''
-  }
+  // 검색 태그 설정
+  const searchTagsToUse = selectMenu === '/approval/document' ? [...searchTags, ...progressSearchTags] : searchTags;
+  const boardTitle = `전자결재 > ${getMenuTitle(selectMenu)} (${totalItems})`;
 
-  if (selectMenu === '/approval/temporary') {
-    boardTitle.title = '전자결재 > 임시보관함';
-  } else if (selectMenu === '/approval/document') {
-    boardTitle.title = '전자결재 > 전체문서함';
-  } else if (selectMenu === '/approval/pending') {
-    boardTitle.title = '전자결재 > 결재대기함';
-  } else if (selectMenu === '/approval/in-progress') {
-    boardTitle.title = '전자결재 > 결재진행함';
-  } else if (selectMenu === '/approval/completed') {
-    boardTitle.title = '전자결재 > 완료문서함';
-  } else if (selectMenu === '/approval/rejected') {
-    boardTitle.title = '전자결재 > 반려문서함';
-  }
-
-  const searchTags = [
-    {label:'문서명', name: 'title'},
-    {label:'기안부서', name: 'deptCd', type: 'select', options: [
-      {label : '전체' , value: ''},
-      {label : 'KM팀' , value: '2016002252'},
-      {label : '전체' , value: ''},
-    ]},
-    {label:'기안자', name: 'regUsrNm'},
-    {label:'문서종류', name: 'type'},
-    {label:'등록일', name: 'regDate'},    /* 추후 수정 */
-    {label:'진행현황', name: 'state', type: 'select', options: [
-      { label: '전체' , value: ''},
-      { label: '결재대기' , value: ''},
-      { label: '진행중' , value: ''},
-      { label: '완료' , value: ''},
-      { label: '반려' , value: ''},
-      { label: '임시저장' , value: ''}
-    ]},
-  ]
-
-  const columns = [
-    '구분',
-    '문서명',
-    '문서종류',
-    '기안부서',
-    '기안자',
-    '등록일',
-    '결재유형',
-    '진행현황',
-  ];
+  const goDetailPage = (isDetail: boolean, id: string, docType: string) => {
+    navigate(`/approval/detail/${id}`, { state: { isDetail } });
+    dispatch(selectedActions.updateDocumentType(docType));
+  };
 
   return (
-    <IndexPage boardTitle={boardTitle.title} searchTags={searchTags}>
+    <IndexPage boardTitle={boardTitle} searchTags={searchTagsToUse}>
       <div className="board-wrapper approval-page-wrapper">
         <table className="table-board">
           <thead>
             <tr>
-              {columns.map((column, index) => (
-                <th key={index}>{column}</th>
-              ))}
+            {columns.map((column, index) => (
+            <th key={index}>
+              <span className='table-title-header' onClick={()=> sortHandler(column)}>
+                <span>{column}</span>
+                {index !== 0 && (
+                  <i className={`fa-solid fa-sort-${sortDirections[column] === 'asc' ? 'down' : 'up'}`}></i>
+                )}
+              </span>
+            </th>
+            ))}
             </tr>
           </thead>
           <tbody>
             {listData.length > 0 ? (
               listData.map((item, index) => {
-                let statusLabel;
-                if (item.state === 'APPROVED') {
-                  statusLabel = '완료';
-                } else if (item.state === 'PROCEEDING') {
-                  statusLabel = '진행중';
-                } else if (item.state === 'REJECTED') {
-                  statusLabel = '반려';
-                } else if (item.state === 'TEMP') {
-                  statusLabel = '임시저장';
-                } else {
-                  statusLabel = '결재대기';
-                }
-
-                let documentType;
-                if (item.docType === 'APPROVAL_COMMON') {
-                  documentType = '품의서';
-                } else if (item.docType === 'RESIGNATION') {
-                  documentType = '사직서';
-                }
-
-                // regDate를 가공
+                const statusLabels: Record<string, string> = {
+                  'APPROVED': '완료',
+                  'PROCEEDING': '진행중',
+                  'REJECTED': '반려',
+                  'TEMP': '임시',
+                };
+                
+                const documentTypes: Record<string, string> = {
+                  'APPROVAL_COMMON': '품의서',
+                  'RESIGNATION': '사직서',
+                };
                 const regDate = new Date(item.regDate);
-                const formattedRegDate = regDate.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
+                const formattedRegDate = regDate.toISOString().split('T')[0];
 
-                return (
-                  <tr className="table-hover" key={index}>
-                    <td><span>{index + 1}</span></td>
+                const statusLabel = statusLabels[item.state] || '결재대기';
+                const documentType = documentTypes[item.docType] || '';
+                return (  
+                  <tr 
+                    className="table-hover" 
+                    key={index} 
+                    >
+                    <td><span>{item.index}</span></td>
                     <td>
-                      <span>{item.title}</span>
+                      <span className="approval-list-title" onClick={() => goDetailPage(true, item.id, item.docType)}>
+                      {item.title}
+                      </span>
                     </td>
                     <td><span>{documentType}</span></td>
                     <td><span>{item.regUsrDeptNm}</span></td>
                     <td><span>{item.regUsrNm}</span></td>
                     <td><span>{formattedRegDate}</span></td>
-                    <td><span>결재+합의</span></td>
+                    <td>{item.lineType === '순차' || item.lineType ==='병렬' ? (
+                      <span>결재+합의</span>
+                    ) : (
+                      <span>결재</span>
+                    )}</td>
                     <td>
                       <div>
                         <span 
-                          className={`badge ${statusLabel === '진행중' ? 'badge-info' : 
-                          statusLabel === '완료' ? 'badge-success' : 
-                          statusLabel === '반려' ? 'badge-warning' : 
-                          statusLabel === '결재대기' ? 'badge-primary' : 
-                          ''
-                          }`}>
+                          className={`status-badge ${
+                            statusLabel === '진행중' ? 'badge-info' : 
+                            statusLabel === '완료' ? 'badge-success' : 
+                            statusLabel === '반려' ? 'badge-warning' : 
+                            statusLabel === '결재대기' ? 'badge-primary' : 
+                            statusLabel === '임시' ? 'badge-temp' : 
+                            ''
+                          }`}
+                        >
                           {statusLabel}
                         </span>
                       </div>
@@ -193,7 +165,7 @@ const ApprovalPage: React.FC = () => {
         </table>
       </div>
     </IndexPage>
-  )
+  );
 }
 
 export default ApprovalPage;

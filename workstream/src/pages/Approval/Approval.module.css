@@ -64,21 +64,27 @@ footer p {
   border: 1px solid black;
 }
 
+.apporval-document{
+  border: 2px solid black;
+}
 /* approval-wrapper */
 .approval-wrapper{
+  width: 55rem;
   display: flex;
-  width: 50rem;
-  /* border: 2px solid black; */
+  align-items: center;
+  border: 2px solid black;
+  padding: 50px 25px;
+  margin-bottom: 50px;
   justify-content: center;
+  flex-direction: column;
 }
 
 /* A4 SIZE */
 
-.approval-wrapper {
+.approval-wrapper form {
   width: 21cm;
   min-height: 29.7cm;
   padding: 1.5cm 1.5cm 2cm 1.5cm;
-  border: 2px solid #000;
 }
 
 .approval-wrapper form {
@@ -105,7 +111,6 @@ footer p {
   display: flex;
   justify-content: space-between;
   height: 200px;
-  margin-bottom: 15px;
 }
 .header__left{
   width: 49%;
@@ -142,10 +147,21 @@ footer p {
   justify-content: flex-end;
 }
 .header-table,
-.header-info {
+.header-info,
+.reference-table {
   border: 1px solid #000;
   width: 100%;
   border-collapse: collapse;
+}
+.reference-table{
+  width: 100%;
+}
+.reference-table th{
+  width: 113px;
+  height: 30px;
+}
+.reference-table div {
+  padding: 5px 0px;
 }
 
 .header-info{
@@ -164,7 +180,8 @@ footer p {
   border-collapse: collapse;
   height: 100%;
 }
-.header-table__common input{
+.header-table__common input,
+.reference-table input{
   border: none;
   display: flex;
   height: -webkit-fill-available;
@@ -174,10 +191,14 @@ footer p {
   font-size: 9.5pt;
   text-align: center;
 }
+.reference-table input{
+  text-align: left;
+}
 .header-table__approval-th{
   width: 140px;
   height: 30px;
   border: 1px solid black;
+  position: relative;
 }
 .header-table__approval-td{
   width: 70%;
@@ -216,7 +237,61 @@ footer p {
   text-align: center;
   font-size: 12pt !important;
   letter-spacing: -1pt;
-  font-weight: bolder;
+}
+.approver-content-item-container {
+  width: 100%;
+}
+.approver-content div span:first-child{
+  font-weight: 700;
+}
+.approver-content div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.approver-complete-container {
+  height: 55px;
+}
+.approver-index {
+  border-radius: 50%;
+  background-color: #332F29;
+  color: #ffffff;
+  display: inline-block;
+  position: absolute;
+  left: 5%;
+}
+.approver-index div {
+  width: 15px;
+  font-size: 8pt;
+}
+.approver-table-header{
+  text-align: center;
+}
+.approver-result-blue{
+  font-size: 10pt !important;
+  color: #2750a8;
+  font-weight: 900 !important;
+}
+
+.approver-result-red{
+  font-size: 10pt;
+  color: #da0000;
+  font-weight: 900 !important;
+}
+
+.approver-result-gray{
+  font-size: 10pt;
+  color: #919191;
+  font-weight: 500 !important;
+}
+.approver-complete-container span:nth-child(3){
+  font-size: 8pt;
+}
+.approver-complete-date {
+  font-size: 9pt;
 }
 
 /* Text Table */
@@ -290,9 +365,8 @@ footer p {
 .approval-create-wrapper{
   display: flex;
   flex-direction: column;
-  width: 960px;
+  width: 95%;
   padding: 10px;
-  margin: 0 auto;
 }
 .approval__document-type{
   margin-top: 45px;
@@ -305,14 +379,18 @@ footer p {
 }
 .approval__document{
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8rem;
 }
 .inner-container{
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: row;
+}
+.update-input {
+  background-color: #e9f4fd;
 }
 
 /* approval Attachment */
@@ -332,11 +410,55 @@ footer p {
   color: #a0a0a0;
   position: absolute;
 }
+.file-download{
+  font-size: 9pt;
+  font-weight: 500;
+  padding: 10px;
+}
+.file-download ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+.file-download li,
+.file-list li {
+  cursor: pointer;
+  color: #585858;
+  border: 1px solid #CC8B29;
+  border-radius: 30px;
+  margin: 2px;
+  padding: 2px 7px;
+}
+.file-download li:hover{
+  background-color: #f3f3f3;
+  transition: 0.2s all;
+}
+.file-download span {
+  text-align: center;
+  font-size: 10pt;
+  color: #585858;
+}
+.file-download button {
+  background-color: #ffffff00;
+  font-size: 8pt;
+  padding-right: 0px;
+}
 .approval-attachment p {
   font-size: 10pt;
   display: inline-block;
 }
+.approval-attachment h2{
+  margin-top: 0;
+  font-size: 12pt;
+}
+.approval-attachment h2 i {
+  margin-right: 5px;
+}
 .approval-attachment-item{
+  justify-content: center;
+}
+.approval-attachment-item,
+.approval-attachment-item-download{
   border: 1px solid #c9c5c5;
   border-radius: 3px;
   width: 100%;
@@ -344,8 +466,9 @@ footer p {
   height: auto;
   border-style: dashed;
   display: flex;
-  justify-content: center;
   align-items: center;
+}
+.approval-attachment-item-download{
 }
 .approval-attachment-item label {
   display: inline-block;
@@ -355,7 +478,6 @@ footer p {
   margin-left: 3px;
   border-radius: 3px;
   font-size: 11pt;
-  text-decoration: underline;
   font-weight: bold;
 }
 .approval-attachment-item input {
@@ -379,9 +501,14 @@ footer p {
   padding: 0px 10px;
   display: none;
 }
+.file-list ul {
+  display: flex;
+  flex-direction: row;
+}
 .file-list.active{
   display: block;
 }
+
 .file-list p {
   font-size: 10pt;
   margin: 0;
@@ -395,7 +522,6 @@ footer p {
   font-size: 9pt;
   display: flex;
   line-height: 1.5rem;
-  text-decoration: underline;
 }
 .file-list span {
   display: flex;
@@ -441,4 +567,161 @@ footer p {
   background-color: rgba(255, 255, 255, 0.9);
   transition: all 0.2s ease;
 }
+
+/* ApprovalComment */
   
+.comment-wrapper {
+  width: 100%;
+  min-height: 100px;
+  border-radius: 10px;
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.comment-wrapper h2 {
+  margin: 0;
+  
+}
+.comment-wrapper i {
+  margin-left: 10px;
+}
+.comment-wrapper hr {
+  width: 100%;
+  height: 1px;
+  background-color: #b8b8b8;
+}
+.comment-info-wrapper{
+  display: flex;
+  height: 50px;
+  align-items: center;
+}
+
+.comment-container{
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  margin: 20px 0px;
+  align-items: flex-start;
+}
+.comment-profile-usename{
+  display: flex;
+  width: 100%;
+  margin-left: 5px;
+  font-size: 11pt;
+  font-weight: 500;
+  letter-spacing: -1pt;
+  flex-direction: column;
+}
+.comment-profile-usename span:nth-child(2){
+  font-size: 9pt;
+}
+.comment-input-wrapper{
+  display: flex;
+  width: 100%;
+  height: calc(100% - 20px);
+}
+.comment-input-wrapper textarea {
+  width: 97%;
+  border: 1px solid #c9c5c5;
+  background-color: #ffffff;
+  border-radius: 5px;
+  resize: none;
+  height: 100%;
+  font-family: "Noto Sans KR", sans-serif;
+  padding: 10px;
+  white-space: pre-line;
+}
+.comment-profile-wrapper img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.comment-wrapper button {
+  display: flex;
+  width: 80px;
+  height: 100%;
+  font-size: 11pt;
+  margin-left: auto;
+  padding: 2px 10px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+.comment-list-item-container{
+  display: flex;
+  align-items: center;
+}
+.comment-info-wrapper{
+  width: 15%;
+}
+.comment-content{
+  width: 80%;
+}
+.comment-edit{
+  display: flex;
+  align-items: center;
+}
+.comment-edit input {
+  border: 1px solid #c9c5c5; 
+  width: 90%;
+}
+.comment-modDate {
+  font-size: 8pt !important;
+}
+.comment-button-box{
+  width: 5%;
+}
+.comment-button-box.fa-solid.fa-xmark {
+  color: red;
+}
+.comment-content textarea {
+  resize: none;
+  border: 1px solid #e4e4e4;
+  background-color: #ffffff;
+  width: 95%;
+  border-radius: 3px;
+  height: 100%;
+  margin-left: -5px;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  font-size: 9.5pt;
+  white-space: pre-line;
+}
+.comment-list-item-container p {
+  font-size: 11pt;
+  font-weight: 500;
+}
+.comment-content p{
+  font-size: 9.5pt;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.comment-content span {
+  font-size: 8pt;
+  color: #838383;
+}
+.comment-button-box{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.comment-item {
+  font-size: 9.5pt !important;
+  color: #000 !important;
+}
+.comment-date{
+  margin-right: 10px;
+}
+.checkIcon{
+  font-weight: 900;
+  font-size: 14pt;
+}
+.xmarkIcon{
+  color: #da0000;
+  font-weight: 900;
+  font-size: 14pt;
+}

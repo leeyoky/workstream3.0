@@ -8,7 +8,7 @@ const uiSlice = createSlice({
     draggingItem: null,
     dropTarget: null,
     selectMenu: null,
-    selectPageSize: 4,
+    selectPageSize: 10,
     selectPage: 0,
     totalItems: 0,
     searchInput: {
@@ -57,9 +57,14 @@ const uiSlice = createSlice({
     },
     // resetData
     resetPage (state) {
-      state.selectPageSize = 4;
+      state.selectPageSize = 10;
       state.selectPage = 0;
       state.totalItems = 0;
+      state.searchInput.title = '';
+      state.searchInput.deptCd = '';
+      state.searchInput.docType = '';
+      state.searchInput.regUsrNm = '';
+      state.searchInput.state = '';
     },
     // search
     searchInput(state, action) {

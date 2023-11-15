@@ -1,32 +1,43 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../store/Approval/approval-slice';
 import Modal from "../../Layout/Modal";
 import ApprovalDocumentType from './ApprovalModalDocument';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 interface ApprovalCreateProps {
   onClose: () => void; // 모달 닫기 핸들러
   isEdit?: boolean; // 편집
+  isCreate: boolean;
 }
 
 const ApprovalCreate: React.FC<ApprovalCreateProps> = (props) => {
   const [documentType, setDocumentType] = useState(''); // 부모 컴포넌트에서 상태를 관리
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isEditMode = useSelector((state:RootState) => state.approval.isEditMode);
+
+  // 결재라인 초기화
+  useEffect(()=>{
+    if(!isEditMode) {
+      dispatch(selectedActions.resetDocument());
+    }
+  },[isEditMode, dispatch])
   
   const closeModalHandler = () => {
     props.onClose();
   }
 
-  const goEdit = () => {
+  const goCreatePage = () => {
     if (documentType === '') {
       alert('작성할 문서가 선택되지 않았습니다.')
       return
     }
     dispatch(selectedActions.updateDocumentType(documentType));
     props.onClose();
-    navigate('/approval/edit');
+    navigate('approval/create' , {state : {isCreate : true}})
   }
 
   const handleDocumentTypeChange = (newDocumentType: string) => {
@@ -40,9 +51,9 @@ const ApprovalCreate: React.FC<ApprovalCreateProps> = (props) => {
           <ApprovalDocumentType onChange={handleDocumentTypeChange} />
         </div>
         <div className={classes['button--box']}>
-          <button className={classes['button--complete']} onClick={goEdit}>
-            완료
-          </button>
+        <button className={classes['button--complete']} onClick={() => goCreatePage()}>
+          완료
+        </button>
           <button className={classes['button--alt']} onClick={closeModalHandler}>
             닫기
           </button>

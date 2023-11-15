@@ -7,10 +7,12 @@ import { persistReducer, persistStore } from "redux-persist";
 import approvalSlice from "./Approval/approval-slice";
 import thunk from "redux-thunk";
 import textEditorSlice from "./textEditor-slice";
+import fileSlice from "./file-slice";
 
 const persistConfig = {
   key: "root",
   storage,
+  blacklist: ["err"],
 };
 
 // 1. authSlice.reducer를 직접 사용하는 대신 combineReducers를 사용하여 rootReducer를 생성합니다.
@@ -19,6 +21,7 @@ const rootReducer = combineReducers({
   ui: uiSlice.reducer,
   approval: approvalSlice.reducer,
   textEditor: textEditorSlice.reducer,
+  file: fileSlice.reducer,
 });
 
 

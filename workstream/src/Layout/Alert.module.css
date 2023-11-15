@@ -1,0 +1,45 @@
+
+.alertBox{
+  display: grid;
+  width: 100%;
+}
+.title{
+  display: flex;
+  align-items: center;
+  font-size: 15pt;
+}
+.message {
+  display: flex;
+  margin-left: 30px;
+  font-size: 11pt;
+}
+.alert{
+  display: grid;
+  align-content: center;
+  position: fixed;
+  top: 0%;
+  width: 10rem;
+  height: 100%;
+  background-color: #f15247;
+  /* background-color: #32b45e; */
+  color: #ffffff;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  animation: slide-down 300ms ease-out forwards;
+}
+.alert i {
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .alert {
+    width: 20rem;
+    height: 3rem;
+    right: 0%;
+  }
+}

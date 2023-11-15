@@ -9,8 +9,8 @@ interface ApprovalDocumentTypeProps {
 
 const ApprovalModalDocument: React.FC<ApprovalDocumentTypeProps> = (props) => {
   const documentTypes = [
-    { type: 'common', label: '기본 품의서' },
-    { type: 'resignation', label: '사직원' },
+    { type: 'APPROVAL_COMMON', label: '기본 품의서' },
+    { type: 'RESIGNATION', label: '사직원' },
   ];
 
   const documentType = useSelector((state:RootState)=> state.approval.documentType);

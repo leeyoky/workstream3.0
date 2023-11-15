@@ -26,14 +26,14 @@ export function AuthenticatedRoutes() {
           <Routes>
             <Route index element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
-            <Route path="/approval" element={<ApprovalPage />} />
+            <Route path="/approval/document" index element={<ApprovalPage />} />
             <Route path="/approval/temporary" element={<ApprovalPage />} />
-            <Route path="/approval/document" element={<ApprovalPage />} />
             <Route path="/approval/pending" element={<ApprovalPage />} />
             <Route path="/approval/in-progress" element={<ApprovalPage />} />
             <Route path="/approval/completed" element={<ApprovalPage />} />
             <Route path="/approval/rejected" element={<ApprovalPage />} />
-            <Route path="/approval/edit" element={<ApprovalEdit />} />
+            <Route path="/approval/create" element={<ApprovalEdit />} />
+            <Route path="/approval/detail/:id" element={<ApprovalEdit />} />
             <Route path="/address" element={<AddressPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
