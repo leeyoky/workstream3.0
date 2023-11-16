@@ -25,12 +25,7 @@ const useApprovalRequest = () => {
   },[isDetail])
 
   useEffect(()=> {
-    console.log('approvers!', approvers);
-
   },[approvers]);
-
-
-  
 
   const handleShowModal = () => { setIsModalOpen(true); }
   const handleCloseModal = () => { setIsModalOpen(false); }
@@ -147,18 +142,19 @@ const useApprovalRequest = () => {
 
     formData.append('docNumber' , documentId);
     formData.append('docType', 'APPROVAL');
-    console.log('첨부파일 api formData');
     
     try {
       const response = await fetchFileData(formData);
       const data = response.data;
-      console.log(data);
+      console.log('fileData',data);
       
     } catch (error) {
       console.log(error);
       
     }
   }
+
+
 
   // 임시저장
   const updateDocumentHandler = async() => {
@@ -180,14 +176,16 @@ const useApprovalRequest = () => {
         state: 'TEMP', 
       };
 
-      console.log('임시저장 formData', docData);
-
       try {
         const response = await updateDocument(docData);
-        console.log(response);
-        alert('임시저장 하였습니다')
-        navigate(`/approval/temporary`);
-        dispatch(selectedActions.resetArray());
+
+        if (response.status === 204) {
+          await fetchFileHandler(id);
+          alert('임시저장에 성공했습니다.');
+          setIsDetail(true);
+          navigate(`/approval/temporary`);
+          dispatch(selectedActions.resetArray());
+        }
       } catch (error) {
         console.log(error);
       }
@@ -198,7 +196,6 @@ const useApprovalRequest = () => {
 
   const deleteDocumentHandler = async(id: string) => {
     const confirmMsg = '문서를 삭제하시겠습니까?'
-    console.log("현재 문서의 ID : " , id);
 
     if(window.confirm(confirmMsg)){
       try {

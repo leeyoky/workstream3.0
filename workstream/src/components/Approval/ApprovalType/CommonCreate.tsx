@@ -9,6 +9,7 @@ import classes from '../../../pages/Approval/Approval.module.css';
 import TextEditor from '../../TextEditor';
 import Signature from './Signature';
 import ApprovalReference from '../ApprovalReference';
+import { fileActions } from './../../../store/file-slice';
 
 const CommonCreate = () => {
 
@@ -33,7 +34,9 @@ const CommonCreate = () => {
     if(executionDateRef.current) {
       executionDateRef.current.focus();
     }
+    dispatch(fileActions.resetFiles());
     dispatch(selectedActions.resetDocument());
+    dispatch(selectedActions.setIsEditMode(true));
     dispatch(selectedActions.setIsDetailMode(false));
     
   },[executionDateRef.current?.value]);

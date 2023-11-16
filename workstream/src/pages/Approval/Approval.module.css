@@ -498,12 +498,13 @@ footer p {
   display: flex;
   flex: 1;
   border-radius: 5px;
-  padding: 0px 10px;
-  display: none;
+  padding: 10px;
 }
 .file-list ul {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-start;
+
 }
 .file-list.active{
   display: block;

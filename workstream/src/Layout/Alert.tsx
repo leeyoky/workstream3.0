@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import classes from './Alert.module.css';
 
 interface AlertProps {
+  title?: ReactNode;
+  content?: ReactNode;
   message: string;
   onClose: () => void;
 }
@@ -27,8 +29,8 @@ const Alert:React.FC<AlertProps> = (props) => {
     <div className={classes.alertBox}>
       <div className={classes.alert}>
         <span className={classes.title}>
-          <i className="fa-solid fa-circle-xmark"></i>
-          <span>Alert</span>
+          <i className="fa-regular fa-circle-xmark"></i>
+          <span>{props.title} Alert</span>
         </span>
         <div className={classes.message}>
 {/*           {message} */}

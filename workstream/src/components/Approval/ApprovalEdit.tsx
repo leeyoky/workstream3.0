@@ -58,7 +58,7 @@ const ApprovalEdit = () => {
               
             <ApprovalAttachment />
             </div>
-            {!isCreate &&
+            {!isCreate && !temp &&
             <ApprovalComment />
             }
           </div>

@@ -42,9 +42,13 @@ export function fetchFileData(formData: FormData) {
 }
 
 // 첨부파일 다운로드
-
 export function getFileData(fileId: number) {
   return instance.get(`approval/file/${fileId}`)
+}
+
+// 첨부파일 삭제
+export function deleteFileData(fileId: number) {
+  return instance.delete(`file/${fileId}`)
 }
 
 /* Comment */

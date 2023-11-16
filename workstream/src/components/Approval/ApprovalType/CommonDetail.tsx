@@ -1,7 +1,7 @@
 import logoSmall from '../../../assets/img/logo.png';
 import classes from '../../../pages/Approval/Approval.module.css';
 import { useApprovalData } from '../../../hooks/Approval/useApprovalData';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
@@ -11,7 +11,7 @@ import SignatureEdit from './SignatureEdit';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { getToday } from './../../../helpers/formatDateTime';
-import Signature from './Signature';
+import ApprovalReference from '../ApprovalReference';
 
 type CommonDetailProps = {
   setTemp: (status: boolean) => void;
@@ -23,10 +23,9 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const titleInputRef = useRef<HTMLInputElement>(null);
-
   const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
-  const { id } = useParams<string>();
-  const data = useApprovalData(id);
+  const { id = ''} = useParams<string>();
+  const {data} = useApprovalData(id);
   const dispatch = useDispatch();
 
   // 데이터 초기화
@@ -39,9 +38,10 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
 
       if (isTempStorage(data)) {
         setTemp(true);
-        dispatch(selectedActions.setIsEditMode(false));
+        dispatch(selectedActions.setIsEditMode(true));
       } else {
         setTemp(false);
+        dispatch(selectedActions.setIsEditMode(false));
       }
 
       if (isSequentialOrParallel(data)) {
@@ -90,7 +90,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   }
 
   const renderTitleField = () => {
-    if (isEdit) {
+    if (!isEdit) {
       return (
         <span>{data?.approval.title}</span>
       );
@@ -109,7 +109,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   };
 
   const renderDateField = () => {
-    if (isEdit) {
+    if (!isEdit) {
       return (
         <span>{data?.approval.executeDate}</span>
       );
@@ -176,7 +176,8 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
             <SignatureEdit />
         </div>
       </header>
-      {isEdit  ? (
+      <ApprovalReference />
+      {!isEdit  ? (
         <h1>{data?.approval.contents}</h1>
       ) : (
         <TextEditor textValue={data?.approval.contents} />

@@ -3,7 +3,7 @@ import { getApprovalData } from '../../api/axios';
 import { ApprovalData } from '../../types/Approval/Approaval';
 
 export const useApprovalData = (id: string ) => {
-  const [data, setData] = useState<ApprovalData>();
+  const [data, setData] = useState<ApprovalData | undefined>();
 
   const fetchData = async (id: string) => {
     try {
@@ -14,6 +14,11 @@ export const useApprovalData = (id: string ) => {
       console.log(error);
     }
   };
+  // 상태업데이트
+  const updateData = (newData: ApprovalData) => {
+    setData(newData);
+  };
+
 
   useEffect(() => {
     if (id) {
@@ -21,5 +26,5 @@ export const useApprovalData = (id: string ) => {
     }
   }, [id]);
 
-  return data;
+  return { data, updateData };
 };

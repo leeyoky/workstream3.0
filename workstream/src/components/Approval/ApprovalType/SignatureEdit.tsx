@@ -27,12 +27,11 @@ const Signature = () => {
   };
   
   const { id = '' } = useParams<string>();
-  const data = useApprovalData(id);
+  const {data} = useApprovalData(id);
   const dispatch = useDispatch();
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
-  const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
   
   useEffect(() => {
     if (data && data.line) {
