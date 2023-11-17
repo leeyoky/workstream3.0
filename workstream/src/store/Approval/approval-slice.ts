@@ -12,6 +12,7 @@ const initialState: ApprovalState = {
   content:'',
   executeDate: '',
   comment: '',
+  pendingCnt: ''
 };
 // 결재자는 기안자와 최종결재권자 포함 최대 6명
 // 합의자는 최대 7명까지
@@ -20,6 +21,10 @@ const approvalSlice = createSlice({
   name: 'approval',
   initialState,
   reducers: {
+    // 결재대기 문서 갯수 셋팅
+    setPendingCnt(state, action) {
+      state.pendingCnt = action.payload;
+    },
     // 문서 종류
     updateDocumentType(state, action: PayloadAction<string>) {
       state.documentType = action.payload;

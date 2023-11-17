@@ -1,7 +1,7 @@
 import instance from "./interceptor";
 import { docData, commentData, fetchCommentData } from "../types/Approval/Approaval";
 
-export function login(userData: string) {
+export function login(userData: { loginId: string; password: string }) {
   return instance.post("login", userData);
 }
 
@@ -81,6 +81,11 @@ export function updateDocument(formData: docData) {
 /* Delete */
 export function deleteDocument(id:string) {
   return instance.delete(`approval/${id}`)
+}
+
+/* 결재건 개수 */
+export function countDoucumentType(){
+  return instance.get('approval/count')
 }
 
 export function getApprovalList(params: {

@@ -22,6 +22,7 @@ export interface ApprovalState {
   title: string;
   executeDate: string;
   comment: string;
+  pendingCnt: string;
 }
 
 /* -------------------- */

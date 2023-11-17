@@ -7,14 +7,17 @@ import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import Alert from '../../Layout/Alert';
 interface ApprovalCreateProps {
   onClose: () => void; // 모달 닫기 핸들러
   isEdit?: boolean; // 편집
   isCreate: boolean;
+  title?: React.ReactNode;
 }
 
 const ApprovalCreate: React.FC<ApprovalCreateProps> = (props) => {
   const [documentType, setDocumentType] = useState(''); // 부모 컴포넌트에서 상태를 관리
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isEditMode = useSelector((state:RootState) => state.approval.isEditMode);
@@ -32,7 +35,7 @@ const ApprovalCreate: React.FC<ApprovalCreateProps> = (props) => {
 
   const goCreatePage = () => {
     if (documentType === '') {
-      alert('작성할 문서가 선택되지 않았습니다.')
+      setAlertMessage('문서양식이 선택되지 않았습니다.')
       return
     }
     dispatch(selectedActions.updateDocumentType(documentType));
@@ -42,6 +45,10 @@ const ApprovalCreate: React.FC<ApprovalCreateProps> = (props) => {
 
   const handleDocumentTypeChange = (newDocumentType: string) => {
     setDocumentType(newDocumentType); // 자식 컴포넌트로부터 선택된 문서 양식 값을 받아서 상태 변경
+  }
+
+  const closeAlertHandler = () => {
+    setAlertMessage(null);
   }
 
   return (
@@ -59,6 +66,13 @@ const ApprovalCreate: React.FC<ApprovalCreateProps> = (props) => {
           </button>
         </div>
       </div>
+      {alertMessage && (
+        <Alert
+          message={alertMessage}
+          onClose={closeAlertHandler}
+          type="confirm"
+        />
+      )}
     </Modal>
   );
 }

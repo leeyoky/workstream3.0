@@ -11,19 +11,21 @@ export const useAuthActions = () => {
   const loginUser = async (username: string, password: string) => {
     try {
       const userData = {
-        username: username,
+        loginId: username,
         password: password,
       };
 
       const response = await login(userData); 
 
       if (response.status === 201) {
-        const bearerToken = response.headers.authorization;
-        const token = bearerToken.replace(/^Bearer\s+/, '');
+
+        // const bearerToken = response.headers.authorization;
+        // const token = bearerToken.replace(/^Bearer\s+/, '');
         dispatch(authActions.login());
-        dispatch(authActions.setToken(token));
-        localStorage.setItem('token', token);
+        // dispatch(authActions.setToken(token));
+        // localStorage.setItem('token', token);
         navigate('/main');
+
       }else{
         throw new Error('로그인 실패')
       }

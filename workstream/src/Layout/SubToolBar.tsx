@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { RootState } from "../store";
@@ -7,13 +7,40 @@ import { approvalMenuItems } from "../types/Menu/SubMenus";
 
 import ApprovalCreate from "../components/Approval/ApprovalCreate";
 import Button from "./Button";
+import { countDoucumentType } from "../api/axios";
+
+interface DocumentCounts {
+  tempCount: number;
+  rejectedCount: number;
+  pendingCount: number;
+  proceedingCount: number;
+  approvedCount: number;
+}
 
 const SubToolBar = () => {
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
-
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
+  const [documentCnt, setDocuemntCnt] = useState<DocumentCounts | undefined>();
+  
+  const fetchDocumentCount = async() => {
+    try {
+      const response = await countDoucumentType();
+      const data = response.data;
+      console.log(data);
+      setDocuemntCnt(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  useEffect(()=>{
+    console.log('documentCnt', documentCnt);
+    
+    fetchDocumentCount();
+  },[])
+  
 
   // 클릭한 메뉴 디스패치
   const menuClickHandler = (to: string | null) => {
@@ -34,21 +61,24 @@ const SubToolBar = () => {
     setIsModalOpen(false);
   }
 
-  const renderMenuItems = (items:{ to: string | null, label: string }[]) => {
+  const renderMenuItems = (items: { to: string | null, label: string }[]) => {
     return (
       <ul>
         {items.map((item, index) => (
           <li key={index}>
             {item.to ? (
-              <NavLink 
-                to={item.to} 
-                onClick={() => menuClickHandler(item.to)}
-                >
+              <NavLink to={item.to} onClick={() => menuClickHandler(item.to)}>
                 {item.label}
                 <span className="badge badge-accent">
-                  <span>15</span>
+                  <div className="badge badge-count-box">
+                  {getBadgeCountByLabel(item.label) !== undefined && (
+                    <span className={`badge-item ${item.type === 'document' && item.label === '결재예정문서' ? '' : 'zero-count'}`}>
+                    {getBadgeCountByLabel(item.label)}
+                    </span>
+                  )}
+                  </div>
                 </span>
-                </NavLink>
+              </NavLink>
             ) : (
               <span>{item.label}</span>
             )}
@@ -57,6 +87,20 @@ const SubToolBar = () => {
       </ul>
     );
   }
+
+  const getBadgeCountByLabel = (label: string ) => {
+    if (label === '반려문서함' && documentCnt) {
+      return documentCnt.rejectedCount;
+    } else if (label === '임시보관함' && documentCnt) {
+      return documentCnt.tempCount;
+    } else if (label === '결재예정문서' && documentCnt) {
+      return documentCnt.pendingCount;
+    } else if (label === '결재진행함' && documentCnt) {
+      return documentCnt.proceedingCount;
+    } else if (label === '완료문서함' && documentCnt) {
+      return documentCnt.approvedCount;
+    }
+  };
 
   return (
     <div className={`sub-toolbar-wrapper ${isSidebarOpen ? 'active' : ''}`}>

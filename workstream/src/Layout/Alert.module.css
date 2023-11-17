@@ -14,18 +14,19 @@
 }
 .message {
   display: flex;
-  margin-left: 30px;
+  margin-left: 31px;
   font-size: 10pt;
+  align-items: center;
 }
-.alert{
+.alert,
+.confirm{
   display: grid;
   align-content: center;
   position: fixed;
   top: 0%;
   width: 10rem;
   height: 100%;
-  background-color: #f15247;
-  /* background-color: #32b45e; */
+  background-color: #32b45ed3;
   color: #ffffff;
   padding: 1rem;
   border-radius: 5px;
@@ -33,12 +34,58 @@
   z-index: 9999;
   animation: slide-down 300ms ease-out forwards;
 }
-.alert i {
+.alert-info{
+  background-color: #3981aad3;
+}
+.alert-success{
+  background-color: #32b45ed3;
+}
+.alert-fail{
+  background-color: #f15247d3;
+}
+.alert-warning{
+  background-color: #ffae00d3;
+}
+.alert .message {
+  padding-bottom: 5px;
+}
+.alert i,
+.confirm i {
   width: 10%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 15pt;
+}
+.buttonBox{
+  display: flex;
+  justify-content: flex-end;
+}
+.confirmButton{
+  background-color: #ffae00;
+  font-weight: 600;
+  margin-right: 5px;
+}
+.cancelButton{
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+}
+.closeButton{
+  width: 4rem;
+  border-radius: 3px;
+  margin-top: 10px;
+}
+.messageBox .message{
+  margin-left: 0px;
+  padding: 10px 0px 0px 0px;
+  font-weight: 500;
+}
+.messageBox .message span{
+  margin-left: 10px;
+}
+.messageBox .message i {
+  color: #ffae00;
+  font-size: 25px;
 }
 
 @media (min-width: 768px) {
@@ -46,5 +93,17 @@
     width: 20rem;
     height: 3rem;
     right: 0%;
+  }
+  .confirm{
+    border: 1px solid #ffae00;
+    width: 20rem;
+    height: auto;
+    right: 50%;
+    left: 50%;
+    top: 2%;
+    transform: translate(-50%, 0%);
+    padding: 10px 20px 15px 10px;
+    color: black;
+    background-color: #ffffff;
   }
 }

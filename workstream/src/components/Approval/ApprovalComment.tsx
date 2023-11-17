@@ -1,13 +1,25 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { deleteComment, fetchComment, getApprovalData, updateComment } from '../../api/axios';
 import { formatDateOnly } from '../../helpers/formatDateTime';
 import classes from '../../pages/Approval/Approval.module.css';
 import { ApprovalData, CommentItem } from '../../types/Approval/Approaval';
+import Alert from '../../Layout/Alert';
+interface AlertProps {
+  title?: ReactNode;
+  content?: ReactNode;
+  message: string | null;
+  onClose: () => void;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  type: 'confirm' | 'alert'; // 추가: 확인/취소 버튼이 있는지 여부
+  response?: boolean; // 추가: API 응답 여부
+}
 
 const ApprovalComment = () => {
   const { id = '' } = useParams<string>();
   const [comment, setComment] = useState('');
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [listData, setListData] = useState<ApprovalData | null>(null);
   const [editCommentIndex, setEditCommentIndex] = useState<number | null>(null);
   const [commentStates, setCommentStates] = useState<string[]>([]); // 수정된 부분: 빈 배열로 초기화
@@ -76,7 +88,7 @@ const ApprovalComment = () => {
         if (response.status === 204) {
           setDataChanged(true);
           setEditCommentIndex(null);
-          alert('수정이 완료되었습니다.')
+          setAlertMessage('수정이 완료되었습니다.')
         }
       } catch (error) {
         console.log(error);
@@ -107,6 +119,10 @@ const ApprovalComment = () => {
       }
     }
   };
+
+  const closeAlertHandler = () => {
+    setAlertMessage(null);
+  }
 
   return (
     <div className={classes['comment-wrapper']}>
@@ -200,6 +216,14 @@ const ApprovalComment = () => {
           </div>
         </div>
       ))}
+      {alertMessage && (
+        <Alert 
+          message={alertMessage}
+          onClose={closeAlertHandler}
+          type="alert"
+          response={true}
+          />
+          )}
     </div>
   );
 };

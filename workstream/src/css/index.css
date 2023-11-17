@@ -688,6 +688,33 @@ i[name]:hover::after {
  font-weight: 800;
 }
 
+/* Badge */
+
+.badge-count-box {
+  display: flex;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+}
+.badge-item{
+  font-size: 10pt !important;
+  font-weight: 500 !important;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  background-color: #ff9900;
+  color: #ffffff;
+}
+.zero-count{
+  font-weight: 500 !important;
+  font-size: 9pt !important;
+  color: #2b2b2b;
+  background-color: #ffffff;
+}
+
 @media all and (min-width: 480px) and (max-width: 1023px) {
   .sub-toolbar-wrapper{
     margin-left: 3.5rem;

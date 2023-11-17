@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ApprovalListItem } from '../../types/Approval/Approaval';
 import { RootState } from '../../store';
 import { uiActions } from '../../store/ui-slice';
-import { getApprovalList } from '../../api/axios';
+import { countDoucumentType, getApprovalList } from '../../api/axios';
 import { selectedActions } from '../../store/Approval/approval-slice';
 
 export function useApprovalList(sortValue: string) {
   const [listData, setListData] = useState<ApprovalListItem[]>([]);
+  const [documentCnt, setDocuemntCnt] = useState();
   const [totalItems, setTotalItems] = useState(0);
   const selectMenu = useSelector((state: RootState) => state.ui.selectMenu);
   const getPageSize = useSelector((state: RootState) => state.ui.selectPageSize);
@@ -74,13 +75,27 @@ export function useApprovalList(sortValue: string) {
       console.log('Error fetching approval list:', error);
     }
   };
+  
+  const fetchDocumentCount = async() => {
+    try {
+      const response = await countDoucumentType();
+      const data = response.data;
+      console.log(data);
+      setDocuemntCnt(data);
+    } catch (error) {
+      console.error(error);
+      
+    }
+  }
 
   useEffect(() => {
     fetchApprovalList();
+    fetchDocumentCount();
   }, [getPage, getPageSize, selectMenu, getSearchInput, sortValue]);
 
   return {
     listData,
     totalItems,
+    documentCnt,
   };
 }

@@ -14,6 +14,7 @@ const ApprovalAttachment = () => {
 
   const [ selectedFiles, setSelectedFiles ] = useState<File[]>([]); // 새로 추가하는 로컬 파일
   const [ isFileSelected, setIsFileSelected ] = useState(false);
+  const [ showAlert, setShowAlert ] = useState(false);
   const isEditMode = useSelector((state:RootState) => state.approval.isEditMode);
   const isDetailMode = useSelector((state:RootState) => state.approval.isDetailMode);
   const { id = '' } = useParams();
@@ -24,9 +25,6 @@ const ApprovalAttachment = () => {
 
   useEffect(()=> {
     setIsServerFile(data);
-
-    console.log('isServerFile', isServerFile);
-    
   }, [data])
 
   const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>) => {
@@ -89,7 +87,6 @@ const ApprovalAttachment = () => {
     }
   }
 
-
   const fileDownloadHandler = (fileId: number, fileName: string) => {
     try {
       // 파일 다운로드 URL을 동적으로 생성
@@ -108,11 +105,6 @@ const ApprovalAttachment = () => {
       // 사용자에게 피드백 제공 등, 예를 들면 사용자에게 오류 메시지를 표시
     }
   };
-
-  useEffect(()=> {
-    console.log("데이터 바끼봐바 좀");
-    
-  },[data])
 
   return (
     <div className={classes["approval-create-wrapper"]}>
