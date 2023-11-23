@@ -35,6 +35,15 @@
 }
 
 .btn-primary { background-color: #ff9900; }
+
+.btn-secondary-line { 
+  border: 1px solid #99743D;
+  color: #99743D;
+  transition: all 0.3s ease; 
+  background-color: #ffffff;
+  padding: 2px 9px 2px 9px;
+}
+
 .btn-primary:hover { background-color: #e28800;
 }
 
@@ -56,14 +65,16 @@
 .btn-blue {
   background-color: #3979AA;
   color: white;
-    font-weight: 500;
+  font-weight: 500;
 }
+/* #332F29 */
 
-.btn-skyblue {
-  background-color: #1a74be;
-  color: white;
-}
-
+.btn-darken-2 { background-color: #CC8B29; color: #ffffff; font-weight: 500; }
+.btn-darken-4 { background-color: #66563D; color: #ffffff; font-weight: 500; }
+.btn-darken-5 { background-color: #332F29; color: #ffffff; font-weight: 500; }
+.btn-darken-4:hover { background-color: #4d412e; transition: all 0.5s ease; }
+.btn-darken-5:hover { background-color: #141311; transition: all 0.5s ease; }
+.btn-skyblue { background-color: #1a74be; color: white; }
 .btn-green-line {
   border: 1px solid #008a00;
   color: #008a00;
@@ -119,10 +130,13 @@
 }
 .badge-accent {
   background-color: #e94c7d;
-  color: #000000;
+  color: #ffffff;
 }
 .badge-temp {
-  color: #707070;
+}
+
+.badge-accent-2{
+  background-color: #00E2FF;
 }
 
 .badge-info{

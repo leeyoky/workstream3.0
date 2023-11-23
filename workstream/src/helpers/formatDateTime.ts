@@ -46,9 +46,21 @@ export function formatDateOnly(datetimeString: string): string {
   return formattedDate;
 }
 
-export function getToday() {
+export function getToday(format: 'hyphen' | 'dot' = 'hyphen') {
   const today = new Date();
-  const getDate = today.toISOString().slice(0,10);
+  const year = today.getFullYear();
+  const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  const day = today.getDate().toString().padStart(2, '0');
+
+  let separator: string;
+
+  if (format === 'dot') {
+    separator = '.';
+  } else {
+    separator = '-';
+  }
+
+  const getDate = `${year}${separator}${month}${separator}${day}`;
 
   return getDate;
 }

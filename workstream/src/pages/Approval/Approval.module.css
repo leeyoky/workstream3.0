@@ -10,7 +10,7 @@ th {
   border: 1px solid #000;
 }
 .approval-wrapper td{
-  font-size: 9.5pt;
+  font-size: 10pt;
   font-weight: 500;
 }
 .approval-wrapper p {
@@ -30,11 +30,24 @@ input[type="file"] {
     overflow: hidden;
     border: 0;
 }
+.RRnumber {
+  width: 23% !important;
+  font-weight: 500;
+}
+.RRnumber::placeholder {
+  text-align: center;
+  font-size: 6pt;
+}
+
+.hyphen {
+  margin: 0 5px;
+}
 .input-box{
   padding: 0 !important;
 }
 .input-box input {
   height: 90%;
+  margin: 0px 5px !important;
 }
 
 strong{
@@ -111,6 +124,7 @@ footer p {
   display: flex;
   justify-content: space-between;
   height: 200px;
+  margin-bottom: 15px;
 }
 .header__left{
   width: 49%;
@@ -166,10 +180,10 @@ footer p {
 
 .header-info{
   height: 140px;
+  text-align: center;
 }
 .header-info td {
   font-weight: 600;
-  padding: 0px 10px;
 }
 .header-info p {
   text-align: center;
@@ -199,6 +213,9 @@ footer p {
   height: 30px;
   border: 1px solid black;
   position: relative;
+  font-size: 10pt;
+  background-color: #f0f0f0;
+  font-weight: 700 !important;
 }
 .header-table__approval-td{
   width: 70%;
@@ -221,14 +238,16 @@ footer p {
 .body-table__150{
   width: 15%;
 }
-.body_table__100{
-  width: 10%;
+.body-table__100{
+  width: 50px;
 }
 .body-table__input{
-  height: inherit;
+  height: -webkit-fill-available;
   width: -webkit-fill-available;
   border: none;
   padding: 0;
+  text-align: center;
+  font-weight: 500;
 }
 
 .approver-content,
@@ -302,6 +321,9 @@ footer p {
 .text-wrapper div{
   margin-top: 10px;
 }
+.text-table {
+  width: 100%;
+}
 .text-table td {
   border: none;
 }
@@ -314,11 +336,7 @@ footer p {
   margin: 2px 0px;
 }
 
-.date_wrapper{
-  margin: 30px 0px;
-  text-align: center;
-  word-spacing: 15px;
-}
+
 .first-paragraph{
   margin-top: 8px !important;
 }
@@ -359,7 +377,40 @@ footer p {
   padding-top: 20px;
   padding-bottom: 40px;
 }
+.date_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13pt;
+  letter-spacing: 1pt;
+  margin: 50px 0px;
+  text-align: center;
+  word-spacing: 15px;
+}
 
+.user-sign {
+  display: flex;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+.user-sign-box{
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid;
+}
+.user-sign span:first-child {
+  font-size: 12pt;
+  width: 4rem;
+}
+.user-sign span:nth-child(2) {
+  width: 6rem;
+  font-size: 18pt;
+  letter-spacing: 2pt;
+}
+.user-sign span:nth-child(3) {
+  width: auto;
+  font-size: 9pt;
+}
 
 /* approval Create */
 .approval-create-wrapper{
@@ -468,8 +519,7 @@ footer p {
   display: flex;
   align-items: center;
 }
-.approval-attachment-item-download{
-}
+
 .approval-attachment-item label {
   display: inline-block;
   color: #a0a0a0;

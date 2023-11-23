@@ -8,11 +8,15 @@ const initialState: ApprovalState = {
   selectedOption: 'approval', /* 결재 / 합의 */
   agreementType: 'sequential',  /* 순차 / 병렬 */
   approvers: [],
+  isReference: false,
   title: '',
   content:'',
   executeDate: '',
   comment: '',
-  pendingCnt: ''
+  pendingCnt: '',
+  reasonRetire: '',
+  finalSign: false,
+  retireDate: '',
 };
 // 결재자는 기안자와 최종결재권자 포함 최대 6명
 // 합의자는 최대 7명까지
@@ -24,6 +28,9 @@ const approvalSlice = createSlice({
     // 결재대기 문서 갯수 셋팅
     setPendingCnt(state, action) {
       state.pendingCnt = action.payload;
+    },
+    setReference(state, action) {
+      state.isReference = action.payload;
     },
     // 문서 종류
     updateDocumentType(state, action: PayloadAction<string>) {
@@ -55,6 +62,7 @@ const approvalSlice = createSlice({
         }
       }
     },
+
     // 제목
     setTitle(state, action) {
       state.title = action.payload;
@@ -67,6 +75,18 @@ const approvalSlice = createSlice({
     setContent(state, action) {
       state.content = action.payload;
     },
+
+    /* 사직서 */
+    setReasonRitire(state, action) {
+      state.reasonRetire = action.payload;
+    },
+    setFinalSign(state, action) {
+      state.finalSign = action.payload;
+    },
+    setRetireDate(state, action) {
+      state.retireDate = action.payload;
+    },
+
     // 직원 중 결재직원 선택
     updateApprovers(state, action: PayloadAction<{ indexes: number[]; approvalType: string }>) {
       const { indexes, approvalType } = action.payload;

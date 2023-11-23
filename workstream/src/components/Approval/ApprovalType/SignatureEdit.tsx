@@ -3,13 +3,14 @@ import classes from '../../../pages/Approval/Approval.module.css';
 import { RootState } from '../../../store';
 import { useMemo, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useApprovalData } from '../../../hooks/Approval/useApprovalData';
 import { useDispatch } from 'react-redux';
 import { formatDateOnly } from '../../../helpers/formatDateTime';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-/* 임시저장 및 미리보기 */
-const Signature = () => {
-
+import useApprovalRequest from '../../../hooks/Approval/useApprovalRequest';
+import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
+import { ApprovalData, ResinationData } from '../../../types/Approval/Approaval';
+import { APPROVAL_STATUS, COLUMN_LIMITS } from '../../../constants/constants';
+const SignatureEdit = () => {
   const [newApprovers, setNewApprovers] = useState<{
     index: number;
     empNo: string;
@@ -19,21 +20,31 @@ const Signature = () => {
     approvalType: string;
     approvedYn: string;
   }[]>([]);
-
-  const ApprovalStatus = {
-    APPROVED: 'Y',
-    REJECTED: 'R',
-    PENDING: 'P',
-  };
   
   const { id = '' } = useParams<string>();
-  const {data} = useApprovalData(id);
+  const { approvedYn } = useApprovalRequest();
   const dispatch = useDispatch();
+  const documentType = useSelector((state: RootState) => state.approval.documentType);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
+  const data = useDocumentData(documentType, id)?.data;
+
+  // 타입가드
+  const isApprovalData = (data: any): data is ApprovalData => {
+    return data && 'approval' in data;
+  };
+
+  const isResinationData = (data: any): data is ResinationData => {
+    return data && 'resignation' in data;
+  };
+
+  useEffect(()=> {
+  },[approvedYn, data]);
   
-  useEffect(() => {
+  useEffect((
+    ) => {
+    console.log('useDocumentData Hook', data);
     if (data && data.line) {
       const updatedApprovers = data.line.map((employee) => ({
         index: employee.order,
@@ -47,8 +58,8 @@ const Signature = () => {
       }));
       setNewApprovers(updatedApprovers);
     }
-  }, [data]);
-
+  }, [data, data?.line ]);
+  
   useEffect(()=> {
     dispatch(selectedActions.setApprovers(newApprovers));
   },[newApprovers])
@@ -56,25 +67,31 @@ const Signature = () => {
   const memoizedApprovers = useMemo(() => {
     const approvalApprovers = approvers.filter((approver) => approver.approvalType === 'APPROVER');
     const agreementApprovers = approvers.filter((approver) => approver.approvalType === 'CONSENSUAL');
-    return { approvalApprovers, agreementApprovers };
+    
+    const specialName = documentType === 'APPROVAL_COMMON'
+      ? isApprovalData(data) ? data.approval.regUsrNm : ''
+      : isResinationData(data) ? data.resignation.regUsrNm : '';
+    
+    return { approvalApprovers, agreementApprovers, specialName };
   }, [approvers]);
 
   const { approvalApprovers, agreementApprovers } = memoizedApprovers;
 
-  const MIN_APPROVAL = 4;
-  const MIN_AGREEMENT = 4;
-  const MAX_APPROVAL = 6;
-  const MAX_AGREEMENT = 7;
+  const MIN_APPROVAL = COLUMN_LIMITS.MIN_APPROVAL;
+  const MAX_APPROVAL = COLUMN_LIMITS.MAX_APPROVAL;
+  const MIN_AGREEMENT = COLUMN_LIMITS.MIN_AGREEMENT;
+  const MAX_AGREEMENT = COLUMN_LIMITS.MAX_AGREEMENT;
 
   // 실제로 표시할 열의 수
   const approvalColumnCount = Math.min(MAX_APPROVAL, approvalApprovers.length + 1);
   const agreementColumnCount = Math.min(MAX_AGREEMENT, agreementApprovers.length);
 
   const getApprovalResultClass = (approvedYn:string) => {
-    switch (approvedYn) {
-      case ApprovalStatus.APPROVED:
+
+  switch (approvedYn) {
+      case APPROVAL_STATUS.APPROVED:
         return classes['approver-result-blue'];
-      case ApprovalStatus.REJECTED:
+      case APPROVAL_STATUS.REJECTED:
         return classes['approver-result-red'];
       default:
         return classes['approver-result-gray'];
@@ -92,14 +109,17 @@ const Signature = () => {
     </th>
   );
 
-
   const renderContent = (content: any, index: number) => {
     if (isDetailMode && content) {
       const { name, approvedYn, modDate, approvalType } = content;
   
       if (index === 0) {
-        const specialName = data?.approval.regUsrNm || ''; // userInfo의 empNm 사용
-        const specialModDate = formatDateOnly(data?.approval.regDate as string); // data의 regDate 사용
+        const specialName = documentType === 'APPROVAL_COMMON' ? 
+          isApprovalData(data) ? data.approval.regUsrNm : '' : 
+          isResinationData(data) ? data.resignation.regUsrNm : '';
+        const specialModDate = documentType === 'APPROVAL_COMMON' ? 
+          isApprovalData(data) ? formatDateOnly(data.approval.regDate as string) : '' : 
+          isResinationData(data) ? formatDateOnly(data.resignation.resignationDate as string) : '';
   
         return (
           <td className={classes['approver-content']} key={index}>
@@ -182,4 +202,4 @@ const Signature = () => {
   )
 }
 
-export default Signature
+export default SignatureEdit

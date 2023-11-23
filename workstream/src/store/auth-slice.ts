@@ -4,7 +4,7 @@ interface AuthState {
   isLogin : boolean;
   token: string;
   empNo: string;
-  userInfo: EmployeeItem[];
+  userInfo?: EmployeeItem;
 }
 // 한수진 "2022001454"
 // 김원봉 "2022001453"
@@ -12,7 +12,19 @@ const initialState: AuthState = {
   isLogin: false, 
   token: '',
   empNo: '202201453',
-  userInfo: [],
+  userInfo: {
+    boss: '',
+    deptCd: '',
+    deptNm: '',
+    email: '',
+    empNm: '',
+    empNo: '',
+    loginId: '',
+    officeDuty: '',
+    officeDutyNm: '',
+    rank: '',
+    rankNm: '',
+  },
 }
 const authSlice = createSlice({
   name: 'auth',

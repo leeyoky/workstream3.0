@@ -47,27 +47,27 @@ const Signature = () => {
     <div className={classes['header__right']}>
     <table className={classes['header-table']}>
       <tbody>
-        <tr>
+        <tr key='header-approval'>
           {renderHeader('결재', -1)}
           {Array.from({ length: Math.min(MAX_APPROVAL, Math.max(MIN_APPROVAL, approvalColumnCount)) - 1 }).map((_, index) => {
             const approverIndex = index < approvalApprovers.length ? approvers.indexOf(approvalApprovers[index]) : -1;
             return renderHeader('결재', approverIndex);
           })}
         </tr>
-        <tr>
+        <tr key="content-approval">
           {renderContent(userInfo?.empNm, 0)}
           {Array.from({ length: Math.min(MAX_APPROVAL, Math.max(MIN_APPROVAL, approvalColumnCount)) - 1 }).map((_, index) => (
             renderContent(index < approvalApprovers.length ? approvalApprovers[index].name : '', index + 1)
           ))}
         </tr>
         
-        <tr>
+        <tr key="header-agreement">
           {Array.from({ length: Math.min(MAX_AGREEMENT, Math.max(MIN_AGREEMENT, agreementColumnCount)) }).map((_, index) => {
             const approverIndex = index < agreementApprovers.length ? approvers.indexOf(agreementApprovers[index]) : -1;
             return renderHeader('합의', approverIndex);
           })}
         </tr>
-        <tr>
+        <tr key="content-agreement">
           {Array.from({ length: Math.min(MAX_AGREEMENT, Math.max(MIN_AGREEMENT, agreementColumnCount))}).map((_, index) => (
             renderContent(index < agreementApprovers.length ? agreementApprovers[index].name : '', index + 1)
           ))}

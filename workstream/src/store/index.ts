@@ -8,6 +8,7 @@ import approvalSlice from "./Approval/approval-slice";
 import thunk from "redux-thunk";
 import textEditorSlice from "./textEditor-slice";
 import fileSlice from "./file-slice";
+import userSlice from "./User/user-slice";
 
 const persistConfig = {
   key: "root",
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   approval: approvalSlice.reducer,
   textEditor: textEditorSlice.reducer,
   file: fileSlice.reducer,
+  user: userSlice.reducer,
 });
 
 

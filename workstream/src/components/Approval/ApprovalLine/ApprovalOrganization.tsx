@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { getEmployeeInfo } from '../../api/axios';
-import classes from '../../pages/Approval/ApprovalSelect.module.css';
-import OrganizationAccordion from '../Organization/OrganizationAccordion';
-import { EmployeeItem } from '../../types/Organization/OrganizationType';
+import { getEmployeeInfo } from '../../../api/axios';
+import classes from '../../../pages/Approval/ApprovalSelect.module.css';
+import OrganizationAccordion from '../../Organization/OrganizationAccordion';
+import { EmployeeItem } from '../../../types/Organization/OrganizationType';
 
 const ApprovalOrganization = () => {
   const [searchText, setSearchText] = useState('');

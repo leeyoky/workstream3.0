@@ -1,9 +1,9 @@
 import React, { useState, useRef, useCallback } from 'react';
-import classes from '../../pages/Approval/ApprovalSelect.module.css';
+import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { selectedActions } from '../../store/Approval/approval-slice';
-import { uiActions } from '../../store/ui-slice';
+import { RootState } from '../../../store';
+import { selectedActions } from '../../../store/Approval/approval-slice';
+import { uiActions } from '../../../store/ui-slice';
 import ApprovalTypeSelector from './ApprovalTypeSelector';
 import { useEffect } from 'react';
 interface ApprovalEmpResultProps {
@@ -14,6 +14,7 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
   const [isDragging, setIsDragging] = useState(false);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const approvalApprovers = approvers.filter((approver) => approver.approvalType === 'APPROVER');
+  const isReference = useSelector((state: RootState ) => state.approval.isReference)
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const dispatch = useDispatch();
 
@@ -106,6 +107,7 @@ useEffect(()=> {
   };
 
   const employeeElements: JSX.Element[] = [];
+
   approvers.forEach((employee, index) => {
     
     employeeElements.push(
@@ -127,9 +129,12 @@ useEffect(()=> {
             <span>{employee.duty}</span>
           </div>
           {/* 인덱스 값을 하위 컴포넌트에 전달 */}
-          <ApprovalTypeSelector
-            index={index}
-            name={employee.name} />
+          {isReference === false ? (
+            <ApprovalTypeSelector
+              index={index}
+              name={employee.name} 
+            />
+          ) : null}
         </div>
       </div>
     );
@@ -146,19 +151,21 @@ useEffect(()=> {
             <span>{userInfo.rankNm}</span>
             <span>{userInfo.officeDutyNm}</span>
           </div>
-          <div className={classes['button-box']}>
-            <div className={classes['button-box__buttons']}>
-              <button
-                className={classes['approval']}>
-                결재
-              </button>
-              <button
-                className={classes['active-button']}>
-              </button>
+          {!isReference &&  
+            <div className={classes['button-box']}>
+              <div className={classes['button-box__buttons']}>
+                <button
+                  className={classes['approval']}>
+                  결재
+                </button>
+                <button
+                  className={classes['active-button']}>
+                </button>
+              </div>
+              <span className={classes['button-delete']}>
+              </span>
             </div>
-            <span className={classes['button-delete']}>
-            </span>
-          </div>
+          }
           </div>
         </div>
         {approvers.length > 0 ? (

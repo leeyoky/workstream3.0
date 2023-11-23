@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import classes from '../../pages/Approval/ApprovalSelect.module.css';
+import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedActions } from './../../store/Approval/approval-slice';
-import { RootState } from '../../store';
-import { Employee } from '../../types/Approval/Approaval';
+import { selectedActions } from '../../../store/Approval/approval-slice';
+import { RootState } from '../../../store';
+import { Employee } from '../../../types/Approval/Approaval';
 
 interface ApprovalTypeSelectorProps{
   index: number;
@@ -14,7 +14,6 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
   // State
   const [isApproveActive, setIsApproveActive] = useState(true);
   const [isAgreeActive, setIsAgreeActive] = useState(false);
-
   const approverEmps = useSelector((state: RootState) =>
     state.approval.approvers);
   const dispatch = useDispatch();
@@ -128,7 +127,6 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
         <i className="fa-regular fa-trash-can"></i>
       </span>
     </div>
-)
-}
+)}
 
 export default ApprovalTypeSelector

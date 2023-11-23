@@ -6,6 +6,8 @@ import { OrganizationItem, EmployeeItem } from '../../types/Organization/Organiz
 
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import EmpItem from './EmpItem';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface OrganizationAccordionProps {
   empDeptCd?: string | null; // 선택된 부서 코드
@@ -18,6 +20,7 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ empDeptCd
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const [openDepth2, setOpenDepth2] = useState<number | null>(null);
   const [openDepth3, setOpenDepth3] = useState<number | null>(null);
+  const isReference = useSelector((state:RootState) => state.approval.isReference);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -137,6 +140,9 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ empDeptCd
         <div className={classes['accordion-header']} onClick={toggleFunction}>
           <i className={`fa-solid fa-folder${isOpen ? '-open' : ''}`}></i>
           <span>{item.deptNm}</span>
+          {isReference &&
+          <button>+</button>
+          }
         </div>
 
         {level === 0 && (

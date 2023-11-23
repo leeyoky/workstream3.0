@@ -46,6 +46,7 @@ export function AuthenticatedRoutes() {
 export function UnauthenticatedRoutes() {
   return (
     <Routes>
+      <Route path="/" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
     </Routes>
   );

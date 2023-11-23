@@ -1,5 +1,5 @@
 import instance from "./interceptor";
-import { docData, commentData, fetchCommentData } from "../types/Approval/Approaval";
+import { docData, commentData, fetchCommentData, approveResultData, resinationDocData } from "../types/Approval/Approaval";
 
 export function login(userData: { loginId: string; password: string }) {
   return instance.post("login", userData);
@@ -16,6 +16,10 @@ export function getDepartment() {
 export function getEmployeeInfo() {
   return instance.get("emp?size=300")
 }
+// 유저 입사정보 가져오기
+export function getEnteredDate(empNo: string) {
+  return instance.get(`emp/enter-date/${empNo}`);
+}
 /* Create */
 
 // 기본 품의서 등록
@@ -23,8 +27,8 @@ export function fetchApprovalData(formData: docData) {
   return instance.post("approval", formData)
 }
 // 사직원 등록
-export function fetchResinationData(formData: string) {
-  return instance.post("approval", formData)
+export function fetchResinationData(formData: resinationDocData) {
+  return instance.post("approval/resignation", formData)
 }
 
 /* Read */
@@ -32,6 +36,11 @@ export function fetchResinationData(formData: string) {
 // 품의서 정보 가져오기
 export function getApprovalData(id:string) {
   return instance.get(`approval/${id}`)
+}
+
+// 사직원 정보 가져오기
+export function getResignationData(id:string) {
+  return instance.get(`approval/resignation/${id}`)
 }
 
 /* File */
@@ -73,9 +82,15 @@ export function deleteComment(commentId: number) {
 export function fetchRecallDocument(id:string) {
   return instance.patch(`approval/cancel/${id}`)
 }
-// 임시저장상태에서 수정
+
+// 임시저장상태에서 수정 ( 기본 품의서 )
 export function updateDocument(formData: docData) {
   return instance.patch('approval', formData)
+}
+
+// 임시저장상태에서 수정 ( 사직원 )
+export function updateResignation(formData: resinationDocData) {
+  return instance.patch('approval/resignation', formData)
 }
 
 /* Delete */
@@ -86,6 +101,11 @@ export function deleteDocument(id:string) {
 /* 결재건 개수 */
 export function countDoucumentType(){
   return instance.get('approval/count')
+}
+
+/* 결재 승인/ 반려 */
+export function fetchApproveDocument(resultData: approveResultData){
+  return instance.patch('approval-line', resultData)
 }
 
 export function getApprovalList(params: {

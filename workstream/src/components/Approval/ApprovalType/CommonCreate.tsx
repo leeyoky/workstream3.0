@@ -52,50 +52,50 @@ const CommonCreate = () => {
           <div className={classes['header__left__common']}>
             <table className={classes['header-table__common']}>
               <tbody>
-                <tr>
-                  <th className={classes['header-table__approval-th']}>문서번호</th>
-                  <td className={classes['header-table__approval-td']}>
-                    <span>DS_품의서_{userInfo?.deptNm}_{getDateRemoveBar}_</span>
-                  </td>
-                </tr>
-                <tr>
-                  <th className={classes['header-table__approval-th']}>품의일자</th>
-                    <td>{getDate}</td>
-                </tr>
-                <tr>
-                  <th className={classes['header-table__approval-th']}>시행일자</th>
-                  <td>
-                    <input 
-                      type="text"
-                      name="executionDate"
-                      onChange={dataChangeHandler}
-                      ref={executionDateRef}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th className={classes['header-table__approval-th']}>부서명</th>
-                  <td>
-                    <span>{userInfo?.deptNm}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <th className={classes['header-table__approval-th']}>기안자</th>
-                  <td>
-                    <span>{userInfo?.empNm}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <th className={classes['header-table__approval-th']}>제목</th>
-                  <td>
-                    <input 
-                      type="text" 
-                      name="title"
-                      onChange={titleChangeHandler}
-                      ref={titleRef}
-                      />
-                  </td>
-                </tr>
+              <tr>
+                <td className={classes['header-table__approval-th']}>문서번호</td>
+                <td className={classes['header-table__approval-td']}>
+                  <span>DS_품의서_{userInfo?.deptNm}_{getDateRemoveBar}_</span>
+                </td>
+              </tr>
+              <tr>
+                <td className={classes['header-table__approval-th']}>품의일자</td>
+                <td>{getDate}</td>
+              </tr>
+              <tr>
+                <td className={classes['header-table__approval-th']}>시행일자</td>
+                <td>
+                  <input 
+                    type="text"
+                    name="executionDate"
+                    onChange={dataChangeHandler}
+                    ref={executionDateRef}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className={classes['header-table__approval-th']}>부서명</td>
+                <td>
+                  <span>{userInfo?.deptNm}</span>
+                </td>
+              </tr>
+              <tr>
+                <td className={classes['header-table__approval-th']}>기안자</td>
+                <td>
+                  <span>{userInfo?.empNm}</span>
+                </td>
+              </tr>
+              <tr>
+                <td className={classes['header-table__approval-th']}>제목</td>
+                <td>
+                  <input 
+                    type="text" 
+                    name="title"
+                    onChange={titleChangeHandler}
+                    ref={titleRef}
+                  />
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>

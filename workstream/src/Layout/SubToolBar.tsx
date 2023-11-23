@@ -36,8 +36,9 @@ const SubToolBar = () => {
   }
   
   useEffect(()=>{
-    console.log('documentCnt', documentCnt);
-    
+  },[documentCnt])
+
+  useEffect(()=>{
     fetchDocumentCount();
   },[])
   
@@ -99,8 +100,15 @@ const SubToolBar = () => {
       return documentCnt.proceedingCount;
     } else if (label === '완료문서함' && documentCnt) {
       return documentCnt.approvedCount;
+    } else if (label === '전체문서함' && documentCnt) {
+      return (
+        documentCnt.rejectedCount +
+        documentCnt.tempCount +
+        documentCnt.proceedingCount +
+        documentCnt.approvedCount
+      );
     }
-  };
+  }
 
   return (
     <div className={`sub-toolbar-wrapper ${isSidebarOpen ? 'active' : ''}`}>

@@ -1,15 +1,118 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from '../../../pages/Approval/Approval.module.css';
 import logoSmall from '../../../assets/img/logo.png';
-import Signature from './Signature';
 import { RootState } from '../../../store';
 import { useSelector } from 'react-redux';
+import SignatureEdit from './SignatureEdit';
+import { useParams } from 'react-router-dom';
+import { useResinationData } from '../../../hooks/Approval/useResinationData';
+import { useDispatch } from 'react-redux';
+import { selectedActions } from '../../../store/Approval/approval-slice';
+import { userAction } from '../../../store/User/user-slice';
 
-const ResinationDetail = () => {
+type ResinationDetailProps = {
+  setTemp: (status: boolean) => void;
+}
 
-  const today = new Date();
-  const getDate = today.toISOString().slice(0,10);
-  const userInfo = useSelector((state:RootState) => state.auth.userInfo);
+const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
+  
+  const { id = ''} = useParams<string>();
+  const { data } = useResinationData(id);
+  const [ dataState, setDataState] = useState(data);
+  const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
+  const dispatch = useDispatch();
+
+  const [ ssnFront, setSSNFront ] = useState('');
+  const [ ssnBack, setSSNBack ] = useState('');
+  const [ userAddress, setUserAddress ] = useState('');
+  const [ reasonRetirement, setReasonRetirement ] = useState(''); 
+  const [ homePhone, setHomePhone ] = useState('');
+  const [ mobilePhone, setMobilePhone ] = useState('');
+
+  const deleteHypenFront = data?.resignation.identityNo?.split('-')[0];
+  const deleteHypenBack = data?.resignation.identityNo?.split('-')[1];
+  const stateUserAddress = data?.resignation.address;
+  const stateReason = data?.resignation.reasons;
+  const stateHomeContact = data?.resignation.homeContact;
+  const stateMobileContact = data?.resignation.mobileContact;
+  // 임시저장 여부 확인
+  const isTempStorage = () => {
+    return dataState?.resignation.state === 'TEMP';
+  };
+
+  const initializeData = () => {
+    setDataState(data);
+    setSSNFront(deleteHypenFront || '');
+    setSSNBack(deleteHypenBack || '');
+    setUserAddress(stateUserAddress || '');
+    setReasonRetirement(stateReason || '');
+    setHomePhone(stateHomeContact || '');
+    setMobilePhone(stateMobileContact || '');
+
+    if (isTempStorage()) {
+      setTemp(true);
+      dispatch(selectedActions.setIsEditMode(true));
+    } else {
+      setTemp(false);
+      dispatch(selectedActions.setIsEditMode(false));
+    }
+  }
+  
+  useEffect(()=> {
+    initializeData();
+    dispatch(selectedActions.setIsDetailMode(true));
+  },[isEdit, data])
+
+  const userSSNchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const ssnFrontPattern = /^\d{0,6}$/;
+    const ssnBackPattern = /^\d{0,7}$/;
+  
+    if (name === 'ssnFront' && ssnFrontPattern.test(value)) {
+      setSSNFront(value);
+      dispatch(userAction.setSSN(`${value}-${ssnBack}`));
+    } else if (name === 'ssnBack' && ssnBackPattern.test(value)) {
+      setSSNBack(value);
+      dispatch(userAction.setSSN(`${ssnFront}-${value}`));
+    }
+  };
+
+  const addressChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const userAddress = e.target.value;
+    setUserAddress(userAddress)
+    dispatch(userAction.setAddress(userAddress));
+  }
+
+  const homePhoneChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const phoneValue = e.target.value;
+    setHomePhone(phoneValue);
+    dispatch(userAction.setHomePhone(phoneValue));
+  };
+
+  const mobilePhoneChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const phoneValue = e.target.value;
+    setMobilePhone(phoneValue);
+    dispatch(userAction.setMobilePhone(removeHyphen(phoneValue)));
+  }
+
+  const formatPhoneNumber = (phoneNumber: string) => {
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{3})(\d{4})(\d{4})$/);
+
+    if (match) {
+      return `${match[1]}-${match[2]}-${match[3]}`;
+    }
+
+    return phoneNumber;
+  };
+
+  const removeHyphen = (phoneNumber: string) => phoneNumber.replace(/-/g, '');
+
+  const exitChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const reasonRetirement = e.target.value;
+    setReasonRetirement(reasonRetirement)
+    dispatch(selectedActions.setReasonRitire(reasonRetirement));
+  }
 
   return (
     <React.Fragment>
@@ -23,57 +126,116 @@ const ResinationDetail = () => {
               <h1>사 직 원</h1>
               <p> - 그 동안의 노고에 감사드립니다 - </p>
             </div>
-            <Signature/>
+            <SignatureEdit/>
           </div>
           <table className={classes['header-info']}>
             <tbody>
               <tr>
                 <th className={classes['body-table__150']}>부 서 명</th>
                 <td colSpan={2} className={classes['body-table__300']}>
-                {userInfo?.deptNm}
+                {dataState?.resignation.regUsrDeptNm}
                 </td>
                 <th className={classes['body-table__150']}>직책/직위</th>
                 <td colSpan={2}>
-                {userInfo?.rankNm}
+                {dataState?.resignation.rankNm}
                 </td>
               </tr>
               <tr>
                 <th>성 명</th>
                 <td colSpan={2}>
-                {userInfo?.empNm}
+                {dataState?.resignation.regUsrNm}
                 </td>
                 <th>주민 번호</th>
                 <td colSpan={2}>
-                  <p>-</p>
+                  {isEdit? (
+                    <>
+                      <input 
+                      className={`${classes['body-table__input']} ${classes['RRnumber']}`} 
+                      type="text" 
+                      placeholder='●●●●●●'
+                      name='ssnFront'
+                      value={ssnFront}
+                      onChange={userSSNchangeHandler}
+                      />
+                      <span className={classes['hyphen']}> - </span> 
+                      <input 
+                        className={`${classes['body-table__input']} ${classes['RRnumber']}`} 
+                        type="text" 
+                        placeholder='●●●●●●●'
+                        name='ssnBack'
+                        value={ssnBack}
+                        onChange={userSSNchangeHandler}
+                        />
+                    </>
+                  ): (
+                    dataState?.resignation.identityNo
+                  )}
                 </td>
               </tr>
               <tr>
                 <th>입사 일자</th>
                 <td colSpan={2}>
-                  {/*datepicker */}
+                  {dataState?.resignation.enterDate}
                 </td>
                 <th>퇴사 일자</th>
                 <td colSpan={2}>
-                  {getDate}
+                  {dataState?.resignation.resignationDate}
                 </td>
               </tr>
               <tr>
                 <th>현재 주소</th>
-                <td colSpan={2}></td>
+                <td colSpan={2}>
+                  {isEdit? (
+                    <input 
+                    className={classes['body-table__input']} 
+                    type="text" 
+                    onChange={addressChangeHandler}
+                    value={userAddress}
+                    />
+                  ): (
+                  dataState?.resignation.address
+                  )}
+                </td>
                 <th rowSpan={2}>연 락 처</th>
                 <th className={classes['body-table__100']}>집</th>
                 <td>
-                  <input className={classes['body-table__input']} type="text" />
+                  {isEdit? (
+                    <input
+                    className={classes['body-table__input']}
+                    type="text"
+                    onChange={homePhoneChangeHandler}
+                    value={homePhone}
+                  />
+                  ): (
+                  dataState?.resignation.homeContact
+                  )}
                 </td>
               </tr>
               <tr>
                 <th>퇴직 사유</th>
                 <td colSpan={2}>
-                  <input className={classes['body-table__input']} type="text" />
+                  { isEdit? (
+                    <input 
+                    className={classes['body-table__input']} 
+                    type="text"
+                    onChange={exitChangeHandler}
+                    value={reasonRetirement} />
+                  ) : (
+                    dataState?.resignation.reasons
+                  )}
                 </td>
                 <th>휴대폰</th>
                 <td>
-                  <input className={classes['body-table__input']} type="text" />
+                  {isEdit? (
+                    <input
+                    className={classes['body-table__input']}
+                    type="text"
+                    onChange={mobilePhoneChangeHandler}
+                    value={formatPhoneNumber(mobilePhone)}
+                  />
+                  ): (
+                    dataState?.resignation.mobileContact
+                  )}
                 </td>
               </tr>
             </tbody>
@@ -106,10 +268,14 @@ const ResinationDetail = () => {
                 </div>
               </div>
               <div className={classes['date_wrapper']}>
-                <span id="year"></span>
-                <span id="month"></span>
-                <span id="date"></span>
-                <p>작성자: (서명)</p>
+                <span>{dataState?.resignation.resignationDate}</span>
+              </div>
+              <div className={classes['user-sign']}>
+                <div className={classes['user-sign-box']}>
+                  <span>작성자: </span>
+                  <span>{dataState?.resignation.regUsrNm}</span>
+                  <span>(서명)</span>
+                </div>
               </div>
               <div className={classes['attachment-warpper']}>
                 <div>첨부</div>

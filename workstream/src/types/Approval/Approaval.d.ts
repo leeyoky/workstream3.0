@@ -14,6 +14,7 @@ export interface Employee {
 export interface ApprovalState {
   isEditMode: boolean;
   isDetailMode: boolean;
+  isReference: boolean;
   documentType: string;   // 품의서 종류
   selectedOption: string;   // 결재방식 선택
   agreementType: string;    // 힙의방식 선택
@@ -23,6 +24,9 @@ export interface ApprovalState {
   executeDate: string;
   comment: string;
   pendingCnt: string;
+  reasonRetire: string;
+  finalSign: boolean;
+  retireDate: string;
 }
 
 /* -------------------- */
@@ -33,6 +37,7 @@ export type ApprovalListItem = {
   executeDate: null;
   id: string;
   lineType: string;
+  pendingApproval: string;
   modDate: string;
   regDate: string;
   regUsr: string;
@@ -64,6 +69,17 @@ export interface docData {
   docType: string;
   line: { apprType: string; approver: string; order: number; }[];
   contents: string;
+  state: string;
+}
+
+export interface resinationDocData{
+  address: string;
+  homeContact: string;
+  identityNo: number | null;
+  line: { apprType: string; approver: string; order: number; }[];
+  mobileContact: string;
+  reasons: string;
+  resignationDate: string;
   state: string;
 }
 
@@ -109,9 +125,57 @@ export interface ArrpovalLine {
   rankNm: string;
 }
 
-export type ApprovalData = {
+export interface approveResultData {
+  id: number,
+  approvedYn: string,
+}
+
+type CommonData = {
+  ccDept: { id: number; deptCd: string; deptNm: string }[];
+  ccUser: {
+    deptNm: string;
+    empNm: string;
+    empNo: string;
+    id: number;
+    officeDutyNm?: string | null;
+    rankNm: string;
+  }[];
+  comment: {
+    id: number;
+    comment: string;
+    regUsr: string;
+    regUsrNm: string;
+    deptNm: string;
+    rankNm: string;
+    officeDutyNm?: string | null;
+    modDate: string;
+    regDate: string;
+  }[];
+  files: {
+    docNumber: string;
+    docType: string;
+    fileExtension: string;
+    fileName: string;
+    fileSize: number;
+    id: number;
+  }[];
+  line: {
+    id: number;
+    order: number;
+    apprType: string;
+    approvedYn: string;
+    approver: string;
+    approverNm: string;
+    modDate: string;
+    deptNm: string;
+    officeDutyNm: string;
+    rankNm: string;
+  }[];
+};
+
+export type ApprovalData = CommonData & {
   approval: {
-    contents : string;
+    contents: string;
     docType: string;
     executeDate: null;
     id: string;
@@ -124,59 +188,26 @@ export type ApprovalData = {
     state: string;
     submitDate: null;
     title: string;
-  },
-  ccDept: [
-    {
-      id: number;
-      deptCd: string;
-      deptNm: string;
-    }
-  ],
-  ccUser: [
-    {
-      deptNm: string;
-      empNm: string;
-      empNo : string;
-      id: number;
-      officeDutyNm: null;
-      rankNm: string;
-    }
-  ],
-  comment: [
-    {
-      id: number;
-      comment: string;
-      regUsr: string;
-      regUsrNm : string;
-      deptNm: string;
-      rankNm: string;
-      officeDutyNm: null;
-      modDate: string;
-      regDate: string;
-    }
-  ],
-  line: [
-    {
-      id: number;
-      order: number;
-      apprType: string;
-      approvedYn: string;
-      approver: string;
-      approverNm: string;
-      modDate: string;
-      deptNm: string;
-      officeDutyNm: string;
-      rankNm: string;
-    }
-  ],
-  files: [
-    {
-      docNumber: string;
-      docType: string;
-      fileExtension: string;
-      fileName: string;
-      fileSize: number;
-      id: number;
-    }
-  ]
-}
+  };
+};
+
+export type ResinationData = CommonData & {
+  resignation: {
+    address: string;
+    docType: string;
+    enterDate: string;
+    homeContact: string;
+    id: string;
+    identityNo: string;
+    lineType: string;
+    mobileContact: string;
+    officeDutyNm: string;
+    rankNm: string;
+    reasons: string;
+    regUsr: string;
+    regUsrDeptNm: string;
+    regUsrNm: string;
+    resignationDate: string;
+    state: string;
+  };
+};

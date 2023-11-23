@@ -705,7 +705,7 @@ i[name]:hover::after {
   justify-content: center;
   align-items: center;
   border-radius: 30px;
-  background-color: #ff9900;
+  background-color: #ffc21c;
   color: #ffffff;
 }
 .zero-count{

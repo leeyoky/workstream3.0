@@ -1,8 +1,8 @@
 // ApprovalSelect.tsx
 import React from 'react';
-import classes from '../../pages/Approval/ApprovalSelect.module.css';
+import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 
 interface ApprovalSelectProps {
   selectedOption: string;
@@ -19,14 +19,14 @@ const ApprovalEmpLineSelect: React.FC<ApprovalSelectProps> = ({
   selectChangeAgreementHandler,
   removeAllHandler,
 }) => {
-
+  const isReference = useSelector((state: RootState ) => state.approval.isReference)
   const lineSelector = useSelector((state: RootState) => state.approval.selectedOption);
 
   return (
     <div className={classes['card-header']}>
       <p>결재라인 방식 선택</p>
       <hr />
-      <div className={classes['emp-list__result-select-wrapper']}>
+      <div className={`${classes['emp-list__result-select-wrapper']} ${isReference ? classes['emp-list__result-select-wrapper__ref'] : ''}`}>
         <div className={classes['line-select_select-box']}>
           <select
             className={classes['emp-list__result-select']}

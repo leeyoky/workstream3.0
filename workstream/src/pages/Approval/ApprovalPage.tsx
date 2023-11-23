@@ -7,6 +7,7 @@ import { columns, searchTags, progressSearchTags } from './ApprovalSearchTag';
 import { selectedActions } from '../../store/Approval/approval-slice';
 import { useApprovalList } from '../../hooks/Approval/useApprovalList';
 import IndexPage from '../IndexPage';
+import { DOCUMENT_TYPES, MENU_PATHS, STATUS_LABELS } from '../../constants/constants';
 
 const ApprovalPage: React.FC = () => {
   // sort 값 상태 관리 state
@@ -27,12 +28,12 @@ const ApprovalPage: React.FC = () => {
   // 메뉴 제목
   const getMenuTitle = (menuPath: string): string => {
     const menuTitles: Record<string, string> = {
-      '/approval/temporary': '임시보관함',
-      '/approval/document': '전체문서함',
-      '/approval/pending': '결재대기함',
-      '/approval/in-progress': '결재진행함',
-      '/approval/completed': '완료문서함',
-      '/approval/rejected': '반려문서함',
+      [MENU_PATHS.TEMPORARY]: '임시보관함',
+      [MENU_PATHS.DOCUMENT]: '전체문서함',
+      [MENU_PATHS.PENDING]: '결재대기함',
+      [MENU_PATHS.IN_PROGRESS]: '결재진행함',
+      [MENU_PATHS.COMPLETED]: '완료문서함',
+      [MENU_PATHS.REJECTED]: '반려문서함',
     };
     return menuTitles[menuPath] || '';
   };
@@ -75,6 +76,8 @@ const ApprovalPage: React.FC = () => {
 
   const goDetailPage = (isDetail: boolean, id: string, docType: string) => {
     navigate(`/approval/detail/${id}`, { state: { isDetail } });
+    console.log('docType', isDetail, id, docType);
+    
     dispatch(selectedActions.updateDocumentType(docType));
   };
 
@@ -99,38 +102,28 @@ const ApprovalPage: React.FC = () => {
           <tbody>
             {listData.length > 0 ? (
               listData.map((item, index) => {
-                const statusLabels: Record<string, string> = {
-                  'APPROVED': '완료',
-                  'PROCEEDING': '진행중',
-                  'REJECTED': '반려',
-                  'TEMP': '임시',
-                };
-                
-                const documentTypes: Record<string, string> = {
-                  'APPROVAL_COMMON': '품의서',
-                  'RESIGNATION': '사직서',
-                };
                 const regDate = new Date(item.regDate);
                 const formattedRegDate = regDate.toISOString().split('T')[0];
+                const documentType = DOCUMENT_TYPES[item.docType] || '';
+                const statusLabel = STATUS_LABELS[item.state] || '결재대기';
+                const isProceedingWithPending = item.state === 'PROCEEDING' && item.pendingApproval === 'Y';
 
-                const statusLabel = statusLabels[item.state] || '결재대기';
-                const documentType = documentTypes[item.docType] || '';
                 return (  
                   <tr 
                     className="table-hover" 
                     key={index} 
-                    >
+                  >
                     <td><span>{item.index}</span></td>
                     <td>
                       <span className="approval-list-title" onClick={() => goDetailPage(true, item.id, item.docType)}>
-                      {item.title}
+                        {item.title}
                       </span>
                     </td>
                     <td><span>{documentType}</span></td>
                     <td><span>{item.regUsrDeptNm}</span></td>
                     <td><span>{item.regUsrNm}</span></td>
                     <td><span>{formattedRegDate}</span></td>
-                    <td>{item.lineType === '순차' || item.lineType ==='병렬' ? (
+                    <td>{item.lineType === '순차' || item.lineType === '병렬' ? (
                       <span>결재+합의</span>
                     ) : (
                       <span>결재</span>
@@ -139,15 +132,15 @@ const ApprovalPage: React.FC = () => {
                       <div>
                         <span 
                           className={`status-badge ${
-                            statusLabel === '진행중' ? 'badge-info' : 
-                            statusLabel === '완료' ? 'badge-success' : 
-                            statusLabel === '반려' ? 'badge-warning' : 
-                            statusLabel === '결재대기' ? 'badge-primary' : 
+                            isProceedingWithPending ? 'badge-warning' : 
+                            statusLabel === '진행중' ? 'badge-success' : 
+                            statusLabel === '완료' ? 'badge-info' : 
+                            statusLabel === '반려' ? 'badge-accent' : 
                             statusLabel === '임시' ? 'badge-temp' : 
                             ''
                           }`}
                         >
-                          {statusLabel}
+                          {isProceedingWithPending ? '결재대기' : statusLabel}
                         </span>
                       </div>
                     </td>
@@ -157,7 +150,7 @@ const ApprovalPage: React.FC = () => {
             ) : (
               <tr className="table-not-exist">
                 <td colSpan={8}>
-                  작성 된 글이 없습니다.
+                  작성된 글이 없습니다.
                 </td>
               </tr>
             )}

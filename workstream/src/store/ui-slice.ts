@@ -17,7 +17,8 @@ const uiSlice = createSlice({
       docType: '',
       regUsrNm: '',
       state: '',
-    } 
+    },
+    date: '',
   },
   reducers: {
     // Side Bar 
@@ -69,6 +70,10 @@ const uiSlice = createSlice({
     // search
     searchInput(state, action) {
       state.searchInput = action.payload;
+    },
+    // date
+    setDate(state, action) {
+      state.date = action.payload;
     }
   }
 })

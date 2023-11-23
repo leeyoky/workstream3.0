@@ -5,23 +5,23 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { fileActions } from './../../store/file-slice';
-import { useApprovalData } from '../../hooks/Approval/useApprovalData';
 import { useParams } from 'react-router-dom';
 import { deleteFileData } from '../../api/axios';
-import { ApprovalData } from '../../types/Approval/Approaval';
+import { ApprovalData, CommonData } from '../../types/Approval/Approaval';
+import { useDocumentData } from '../../hooks/Approval/useDocumentData';
 
 const ApprovalAttachment = () => {
 
   const [ selectedFiles, setSelectedFiles ] = useState<File[]>([]); // 새로 추가하는 로컬 파일
   const [ isFileSelected, setIsFileSelected ] = useState(false);
-  const [ showAlert, setShowAlert ] = useState(false);
   const isEditMode = useSelector((state:RootState) => state.approval.isEditMode);
   const isDetailMode = useSelector((state:RootState) => state.approval.isDetailMode);
+  const documentType = useSelector((state: RootState) => state.approval.documentType);
   const { id = '' } = useParams();
-  const { data } = useApprovalData(id);
-  const [ isServerFile, setIsServerFile ] = useState< ApprovalData |undefined>();
+  const [ isServerFile, setIsServerFile ] = useState<CommonData  |undefined>();
   const [ drag, setDrag] = useState(false);
   const dispatch = useDispatch();
+  const { data } = useDocumentData(documentType, id);
 
   useEffect(()=> {
     setIsServerFile(data);

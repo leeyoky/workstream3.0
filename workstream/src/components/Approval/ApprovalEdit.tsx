@@ -1,17 +1,20 @@
 import React, { useEffect, useRef, useState } from "react"
 import classes from '../../pages/Approval/Approval.module.css';
-import ApprovalEditButtons from "./ApprovalEditButtons"
-import ApprovalAttachment from "./ApprovalAttachment"
-import BoardTitle from "../../Layout/BoardTitle"
-import Resination from "./ApprovalType/ResinationCreate"
+
 import { RootState } from "../../store";
 import { useDispatch } from "react-redux";
 import { selectedActions } from "../../store/Approval/approval-slice";
 import { useSelector } from "react-redux";
-import CommonCreate from "./ApprovalType/CommonCreate";
 import { useLocation } from "react-router-dom";
-import CommonDetail from "./ApprovalType/CommonDetail";
+
+import BoardTitle from "../../Layout/BoardTitle"
+import ApprovalEditButtons from "./ApprovalEditButtons"
+import ApprovalAttachment from "./ApprovalAttachment"
 import ApprovalComment from "./ApprovalComment";
+import CommonDetail from "./ApprovalType/CommonDetail";
+import CommonCreate from "./ApprovalType/CommonCreate";
+import ResinationCreate from "./ApprovalType/ResinationCreate";
+import ResinationDetail from "./ApprovalType/ResinationDetail";
 
 const ApprovalEdit = () => {
   const [temp, setTemp] = useState(false);
@@ -50,10 +53,20 @@ const ApprovalEdit = () => {
               {isCreate ? (
                 <>
                 {documentType === 'APPROVAL_COMMON' && <CommonCreate /> }
-                {documentType === 'RESIGNATION' && <Resination /> }
+                {documentType === 'RESIGNATION' && <ResinationCreate /> }
                 </>
               ):(
-                <CommonDetail temp={temp} setTemp={setTemp} setData={setData}/>
+                <>
+                {documentType === 'APPROVAL_COMMON' && 
+                  <CommonDetail 
+                    temp={temp} 
+                    setTemp={setTemp} 
+                    setData={setData}/> }
+                {documentType === 'RESIGNATION' && 
+                  <ResinationDetail 
+                    temp={temp}
+                    setTemp={setTemp} /> }    
+                </>
               )}
               
             <ApprovalAttachment />

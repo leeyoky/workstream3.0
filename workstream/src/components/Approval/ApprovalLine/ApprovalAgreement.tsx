@@ -1,6 +1,6 @@
 // ApprovalAgreement.tsx
 import React from 'react';
-import classes from '../../pages/Approval/ApprovalSelect.module.css';
+import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 
 interface ApprovalAgreementProps {
   agreementItems: string[];

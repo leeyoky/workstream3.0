@@ -1,20 +1,12 @@
 import React, { ChangeEvent, useState, useEffect, ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
-import { deleteComment, fetchComment, getApprovalData, updateComment } from '../../api/axios';
+import { deleteComment, fetchComment, getApprovalData, getResignationData, updateComment } from '../../api/axios';
 import { formatDateOnly } from '../../helpers/formatDateTime';
 import classes from '../../pages/Approval/Approval.module.css';
 import { ApprovalData, CommentItem } from '../../types/Approval/Approaval';
 import Alert from '../../Layout/Alert';
-interface AlertProps {
-  title?: ReactNode;
-  content?: ReactNode;
-  message: string | null;
-  onClose: () => void;
-  onConfirm?: () => void;
-  onCancel?: () => void;
-  type: 'confirm' | 'alert'; // 추가: 확인/취소 버튼이 있는지 여부
-  response?: boolean; // 추가: API 응답 여부
-}
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const ApprovalComment = () => {
   const { id = '' } = useParams<string>();
@@ -24,24 +16,40 @@ const ApprovalComment = () => {
   const [editCommentIndex, setEditCommentIndex] = useState<number | null>(null);
   const [commentStates, setCommentStates] = useState<string[]>([]); // 수정된 부분: 빈 배열로 초기화
   const [dataChanged, setDataChanged] = useState(false);
+  const documentType = useSelector((state:RootState) => state.approval.documentType);
 
   useEffect(() => {
     const fetchData = async (id: string) => {
       try {
-        const response = await getApprovalData(id);
-        const data = response.data;
-        setDataChanged(false);
-        setListData(data);
-        console.log('data', data);
-        
-        // 수정된 부분: 리스트 데이터가 변경되면 각 아이템에 대한 상태 초기화
-        setCommentStates(data?.comment.map((item: CommentItem) => item.comment) || []);
+        let response;
+        if (documentType === 'APPROVAL_COMMON') {
+          response = await getApprovalData(id);
+          console.log("기본품의서입니당");
+          
+        }
+        if (documentType === 'RESIGNATION') {
+          response = await getResignationData(id);
+          console.log("사직서입니당");
+          
+        }
+        if (response && response.data) {
+          const data = response.data;
+          setDataChanged(false);
+          setListData(data);
+          console.log('data', data);
+  
+          setCommentStates(data?.comment.map((item: CommentItem) => item.comment) || []);
+        } else {
+          console.error('Invalid response or response.data:', response?.data);
+        }
       } catch (error) {
         console.log(error);
       }
     };
+  
     fetchData(id);
-  }, [dataChanged, id]);
+  }, [dataChanged, id, documentType]); // documentType을 추가하여 이 값이 변경될 때마다 useEffect가 호출되도록 함
+  
 
   const commentChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>, index: number) => {
     const inputComment = e.target.value;
