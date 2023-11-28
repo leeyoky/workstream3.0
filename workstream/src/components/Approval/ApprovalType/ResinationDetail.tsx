@@ -9,9 +9,11 @@ import { useResinationData } from '../../../hooks/Approval/useResinationData';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { userAction } from '../../../store/User/user-slice';
+import ApprovalReference from '../ApprovalReference';
 
 type ResinationDetailProps = {
-  setTemp: (status: boolean) => void;
+  temp: boolean;
+  setTemp: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {

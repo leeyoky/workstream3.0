@@ -1,6 +1,7 @@
 export const searchTags = [
   {label:'문서명', name: 'title'},
   {label:'기안부서', name: 'deptCd', type: 'select', class:'col-4', options: [
+    {label:'전체'},
     {label:'영업본부' , name: "2009000005"},
     {label:'제품사업본부' , name: "2017002275"},
     {label:'사업전력본부' , name: "2023002349"},
@@ -13,7 +14,7 @@ export const searchTags = [
     {label: '품의서', value: 'APPROVAL_COMMON'},
     {label: '사직서', value: 'RESIGNATION'},
   ]},
-  {label:'등록일', name: 'regDate'},
+  {label:'등록일', name: 'regDate', type: 'date'},
 ]
 
 export const progressSearchTags = [

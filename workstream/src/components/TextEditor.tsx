@@ -1,55 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import React, { useEffect, useState } from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import '@ckeditor/ckeditor5-build-classic/build/translations/ko';
+import './TextEditor.css'
+
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../store/Approval/approval-slice';
-import 'quill-better-table/dist/quill-better-table.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 interface TextEditorProps {
   textValue?: string | undefined; // TextEditor에 전달되는 내용
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
-  const [text, setText] = useState(textValue || '');
+  const [editorData, setEditorData] = useState(textValue || '');
   const dispatch = useDispatch();
+  const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
 
-  useEffect(() => {
-    if (textValue !== undefined) {
-      setText(textValue);
+  useEffect(()=> {
+    if(textValue !== undefined ) {
+      setEditorData(textValue);
     }
-  }, [textValue]);
+  }, [textValue, dispatch]);
 
-  const textChangeHandler = (newText: string) => {
-    setText(newText);
-    dispatch(selectedActions.setContent(newText));
-  }
-
-  const modules = {
-    toolbar: {
-      container: [
-        [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-        ['bold', 'italic', 'underline', 'strike', 'align' ],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-        ['link', 'image'],
-        ['clean'],
-      ],
-    },
-
+  const handleChange = (event: any, editor: any) => {
+    const data = editor.getData();
+    dispatch(selectedActions.setContent(data));
   };
 
-  const formats = [
-    'header', 'font', 'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'indent', 'link', 'image', 'table',
-  ];
+  useEffect(() => {
+    setEditorData(textValue || ''); // CKEditor의 setData 메서드를 통해 초기값 업데이트
+  }, [textValue]);
+
+  const editorConfig = isEdit
+    ? {
+        language: 'ko',
+      }
+    : {
+        language: 'ko',
+        isReadOnly: true,
+        toolbar: [],
+      };
+
+  useEffect(() => {
+    const toolbarElement = document.querySelector('.ck.ck-toolbar') as HTMLElement;
+    if (toolbarElement && !isEdit) {
+      toolbarElement.style.border = 'none';
+    }
+  
+    // .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused)의 border를 없애기
+    const editableElement = document.querySelector('.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused)') as HTMLElement;
+    if (editableElement && !isEdit) {
+      editableElement.style.borderColor = 'transparent';
+    }
+  });
 
   return (
-    <ReactQuill
-      style={{ height: '600px' }}
-      value={text}
-      onChange={textChangeHandler}
-      modules={modules}
-      formats={formats}
-    />
+    <CKEditor
+      key={isEdit ? 'editable' : 'read-only'} // 여기서 key를 추가
+      editor={ClassicEditor}
+      data={editorData}
+      onChange={handleChange as any}
+      config={editorConfig}
+      disabled={isEdit? false : true}
+      />
   );
 }
 

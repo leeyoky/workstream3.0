@@ -128,15 +128,16 @@
 .badge-secondary {
   background-color: #3979AA;
 }
-.badge-accent {
+.badge-accent-2 {
   background-color: #e94c7d;
   color: #ffffff;
 }
 .badge-temp {
 }
 
-.badge-accent-2{
-  background-color: #00E2FF;
+.badge-accent{
+  background-color: #e94c4c;
+  color: #ffffff;
 }
 
 .badge-info{

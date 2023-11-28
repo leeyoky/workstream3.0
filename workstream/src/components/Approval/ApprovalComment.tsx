@@ -1,10 +1,10 @@
-import React, { ChangeEvent, useState, useEffect, ReactNode } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { deleteComment, fetchComment, getApprovalData, getResignationData, updateComment } from '../../api/axios';
 import { formatDateOnly } from '../../helpers/formatDateTime';
 import classes from '../../pages/Approval/Approval.module.css';
 import { ApprovalData, CommentItem } from '../../types/Approval/Approaval';
-import Alert from '../../Layout/Alert';
+import Alert from '../../Layout/Alert/Alert';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 

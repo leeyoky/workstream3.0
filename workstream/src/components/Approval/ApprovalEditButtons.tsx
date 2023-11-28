@@ -127,8 +127,8 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
             }
 
             {documentData.line.some(approval => approval.approver === userData) &&
-              documentData.line.find(approval => approval.order === documentData.line.find(a => a.approver === userData)?.order - 1)?.approvedYn === 'Y' &&
-              documentData.line.find(approval => approval.order === documentData.line.find(a => a.approver === userData)?.order + 1)?.approvedYn === 'N' &&
+              documentData.line.find(approval => approval.order === documentData.line.find(a => a.approver === userData)?.order || 0 - 1)?.approvedYn === 'Y' &&
+              documentData.line.find(approval => approval.order === documentData.line.find(a => a.approver === userData)?.order || 0 + 1)?.approvedYn === 'N' &&
               renderApprovalButtons()
             }
           </>

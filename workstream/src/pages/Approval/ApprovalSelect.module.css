@@ -171,7 +171,6 @@ input:focus{
   flex-direction: column;
   margin-top: 10px;
   padding: 5px;
-  padding-left: 10px;
   border: 1px solid #e0e0e0;
   border-radius: 3px;
   height: 180px;
@@ -192,7 +191,11 @@ input:focus{
   align-items: center;
   cursor: pointer;
   transition:  max-height 0.2 ease;
-  line-height: 20px;
+  line-height: 18px;
+  padding-left: 7px;
+}
+.accordion-header__toggle{
+  width: 100%;
 }
 .accordion-header button {
   margin-left: auto;
@@ -205,7 +208,9 @@ input:focus{
 }
 .accordion-item{
   letter-spacing: -1px;
+  width: 100%;
 }
+
 
 .accordion-item.active {
   font-weight: 900;
@@ -225,6 +230,7 @@ input:focus{
 .accordion-content {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 
@@ -327,10 +333,16 @@ input:focus{
   border-radius: 3px;
   color: #5f5f5f;
 }
-.emp-index{
-  cursor: grab;
+.emp-index,
+.emp-index--ref{
   display: flex;
   flex: 1;
+}
+.emp-index{ 
+  cursor: grab;
+}
+.emp-index--ref{
+  cursor: default;
 }
 
 .emp-index-default{
@@ -359,6 +371,30 @@ input:focus{
   text-align: center;
 }
 
+.reference-item span:first-child{
+  width: 35%;
+  padding-left: 5px;
+}
+.reference-item span:nth-child(2){
+  width: 20%;
+}
+.reference-item span:nth-child(3){
+  width: 15%;
+}
+.reference-item span:nth-child(4){
+  width: 30%;
+}
+.reference-item--dept span,
+.reference-item--emp span {
+  margin:2px 3px;
+  padding: 1px 7px;
+  border-radius: 30px;
+  background-color: #ffeaba;
+  font-weight: 500 !important;
+}
+.reference-item--emp span{
+  background-color: #d9ebf3;
+}
 
 .button-delete {
   padding-left: 10px;
@@ -385,7 +421,10 @@ input:focus{
   background-color: #b9b9b9;
   color: #1f1f1f;
 }
-.approver-item{
+.approver-item,
+.reference-item,
+.reference-item--dept,
+.reference-item--emp{
   display: grid;
   align-items: center;
   border-bottom: 1px solid #d8d8d8;
@@ -394,10 +433,37 @@ input:focus{
   height: 20px;
   grid-template-columns: 3fr 1fr;
 }
+.reference-item--dept,
+.reference-item--emp {
+  grid-template-columns: 1fr;
+  height: auto;
+  min-height: 20px;
+}
+.reference-item--dept i {
+  color: #e3ac5b !important;
+}
+.reference-item--dept button,
+.reference-item--emp button {
+  background-color: #ffffff00;
+  margin-left: 2px;
+  padding: 0;
+}
+.reference-item--dept button>i,
+.reference-item--emp button>i {
+  color: #a80000 !important;
+}
+.reference-item--emp i {
+  color: #6d8c99 !important; 
+}
 .approver-item__items{
   display: flex;
   width: 100%;
-  align-items: center
+  align-items: center;
+  flex-wrap: wrap;
+}
+.approver-item__items i {
+  font-size: 10pt !important;
+  padding-right: 3px;
 }
 .approver-item__default{
 background-color: #5f5f5f;
@@ -414,8 +480,10 @@ background-color: #5f5f5f;
   margin-top: 30%;
 }
 .emp-item__drag{
+  font-size: 9.5pt;
   font-weight: 400;
-  color: #707070;
+  text-align: center;
+  color: #8a8a8a;
 }
 .emp-item__drag i {
   font-size: 12pt !important;
@@ -464,6 +532,7 @@ background-color: #5f5f5f;
 .approver-item:hover{
   background-color: #f3f3f3;
 }
+
 .emp-list i{
   font-size: 15pt;
   color: #5f5f5f;
@@ -505,7 +574,9 @@ background-color: #5f5f5f;
   font-weight: 500;
   font-size: 10pt;
 }
-
+.accordion-header.search-result {
+  background-color: #d9f1fc;
+}
 /* selectBox */
 
 .emp-list__result-select{

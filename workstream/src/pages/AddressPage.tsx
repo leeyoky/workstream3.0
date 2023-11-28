@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+/* import { useState, useEffect } from "react"
 import {getUsersInfo} from "../api/axios"
 import IndexPage from "./IndexPage"
 
@@ -53,7 +53,7 @@ const AddressPage = () => {
   },[])
 
   return (
-    <IndexPage boardTitle="연락처" searchForm="이름">
+    <IndexPage boardTitle="연락처" searchForm="">
       <div className="board-wrapper">
         <table className="table-board">
           <thead>
@@ -96,4 +96,4 @@ const AddressPage = () => {
   )
 }
 
-export default AddressPage
+export default AddressPage */

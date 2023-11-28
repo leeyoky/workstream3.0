@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SearchBoxOption } from '../types/Approval/Approaval';
-import { getDepartment } from '../api/axios';
+import { SearchBoxOption } from '../../../types/Approval/Approaval';
+import { getDepartment } from '../../../api/axios';
 
 const SelectBox: React.FC<{
   tag: {
@@ -21,6 +21,8 @@ const SelectBox: React.FC<{
 
     setShowOptions(!showOptions);
     console.log(tag.name);
+    console.log(isLoading);
+    
 
     setIsLoading(true);
 
@@ -47,11 +49,10 @@ const SelectBox: React.FC<{
     }
   };
 
-  const handleOptionClick = (option: string) => {
-    // 디스패치할 때 option의 value를 사용
+  const handleOptionClick = (option: SearchBoxOption) => {
     setLocalSearchInput((prevSearchInput) => ({ 
       ...prevSearchInput, 
-      [tag.name]: option,
+      [tag.name]: option.value,
     }));
     setShowOptions(false);
   };
@@ -83,7 +84,7 @@ const SelectBox: React.FC<{
       </label>
       <ul className={`options ${showOptions ? "show" : ""}`}>
         <li
-          onClick={() => handleOptionClick('')}
+          onClick={() => handleOptionClick({ label: '전체', value: '' })}
           className={localSearchInput[tag.name] === '' ? 'active' : ''}
         >
           전체
@@ -91,7 +92,7 @@ const SelectBox: React.FC<{
         {tag.options?.map((option) => (
           <li
             key={option.label}
-            onClick={() => handleOptionClick(option.value)}
+            onClick={() => handleOptionClick(option)}
             className={localSearchInput[tag.name] === option.value ? 'active' : ''}
           >
             {option.label}

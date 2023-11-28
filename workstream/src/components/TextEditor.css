@@ -1,0 +1,16 @@
+.ck-editor__toolbar {
+  background-color: #f00; /* 예시로 빨간색 배경을 지정 */
+}
+
+.ck.ck-editor{
+  height: 600px !important;
+}
+
+.ck.ck-editor__main>.ck-editor__editable {
+  height: 600px !important;
+  font-size: 10pt;
+}
+
+.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused){
+  border-color: transparent;
+}

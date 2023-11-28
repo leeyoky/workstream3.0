@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import { RootState } from "../store";
-import { uiActions } from "../store/ui-slice";
-import { approvalMenuItems } from "../types/Menu/SubMenus";
+import { RootState } from "../../store";
+import { uiActions } from "../../store/ui-slice";
+import { approvalMenuItems } from "../../types/Menu/SubMenus";
 
-import ApprovalCreate from "../components/Approval/ApprovalCreate";
-import Button from "./Button";
-import { countDoucumentType } from "../api/axios";
+import ApprovalCreate from "../../components/Approval/ApprovalCreate";
+import Button from "../Button";
+import { countDoucumentType } from "../../api/axios";
 
 interface DocumentCounts {
   tempCount: number;
@@ -73,7 +73,7 @@ const SubToolBar = () => {
                 <span className="badge badge-accent">
                   <div className="badge badge-count-box">
                   {getBadgeCountByLabel(item.label) !== undefined && (
-                    <span className={`badge-item ${item.type === 'document' && item.label === '결재예정문서' ? '' : 'zero-count'}`}>
+                    <span className={`badge-item ${item.label === '결재예정문서' ? '' : 'zero-count'}`}>
                     {getBadgeCountByLabel(item.label)}
                     </span>
                   )}
@@ -91,22 +91,22 @@ const SubToolBar = () => {
 
   const getBadgeCountByLabel = (label: string ) => {
     if (label === '반려문서함' && documentCnt) {
-      return documentCnt.rejectedCount;
+      return documentCnt.rejectedCount !== 0 ? documentCnt.rejectedCount : undefined;
     } else if (label === '임시보관함' && documentCnt) {
-      return documentCnt.tempCount;
+      return documentCnt.tempCount !== 0 ? documentCnt.tempCount : undefined;
     } else if (label === '결재예정문서' && documentCnt) {
-      return documentCnt.pendingCount;
+      return documentCnt.pendingCount !== 0 ? documentCnt.pendingCount : undefined;
     } else if (label === '결재진행함' && documentCnt) {
-      return documentCnt.proceedingCount;
+      return documentCnt.proceedingCount !== 0 ? documentCnt.proceedingCount : undefined;
     } else if (label === '완료문서함' && documentCnt) {
-      return documentCnt.approvedCount;
+      return documentCnt.approvedCount !== 0 ? documentCnt.approvedCount : undefined;
     } else if (label === '전체문서함' && documentCnt) {
-      return (
+      const totalCount =
         documentCnt.rejectedCount +
         documentCnt.tempCount +
         documentCnt.proceedingCount +
-        documentCnt.approvedCount
-      );
+        documentCnt.approvedCount;
+      return totalCount !== 0 ? totalCount : undefined;
     }
   }
 

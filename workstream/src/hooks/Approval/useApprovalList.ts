@@ -23,8 +23,8 @@ export function useApprovalList(sortValue: string) {
 
   const fetchApprovalList = async () => {
     try {
-      const { title, deptCd, docType, regUsrNm, state } = getSearchInput;
-
+      const { title, deptCd, docType, regUsrNm, state, regDateGoe, regDateLoe } = getSearchInput;
+      
       let pendingApproval = '';
       let selectedState = state;
 
@@ -56,7 +56,9 @@ export function useApprovalList(sortValue: string) {
         deptCd: deptCd,
         docType: docType,
         regUsrNm: regUsrNm,
-        sort: sortValue + 'regDate,desc'
+        sort: sortValue + 'regDate,desc',
+        regDateGoe: regDateGoe,
+        regDateLoe: regDateLoe,
       });
 
       const data = response.data.content.map((item: any, index: number) => {

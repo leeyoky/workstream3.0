@@ -1,6 +1,6 @@
 import dsValue from '../assets/img/dsvalue.png'
 import DocumentCard from '../components/Main/DocumentCard';
-import Leadership from '../components/Main/LeaderShip';
+import Leadership from '../components/Main/Leadership';
 import NewestEmp from '../components/Main/NewestEmp';
 import NoticeCard from '../components/Main/NoticeCard';
 const MainPage = () => {

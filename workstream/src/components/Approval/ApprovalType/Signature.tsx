@@ -28,12 +28,16 @@ const Signature = () => {
   // 열의 헤더
   const renderHeader = (label: string, approverIndex: number) => (
     <th className={classes['header-table__approval-th']}>
+      <div>
       <span className={classes['approver-index']}>
         {approverIndex !== -1 ? (
           <div>{approverIndex + 2}</div>
           ): ''}
       </span>
+      <span>
         {label}
+      </span>
+      </div>
     </th>
   );
   // 셀 헤더

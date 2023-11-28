@@ -768,7 +768,6 @@ i[name]:hover::after {
   line-height: 20px;
 }
 .table-title-header{
-  margin-left: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -832,6 +831,11 @@ i[name]:hover::after {
 .approval-list-title {
   font-weight: 400;
   cursor: pointer;
+  text-align: left;
+}
+
+.approval-page-wrapper td:nth-child(2){
+  text-align: left;
 }
 
 /* button style */
@@ -928,6 +932,19 @@ i[name]:hover::after {
   display: flex;
   align-items: center;
   padding-right: 0.5rem;
+  font-weight: 400;
+}
+
+.datepicker-searchbox__wrapper {
+  display: flex;
+  align-items: center;
+}
+.datepicker-searchbox__wrapper>span{
+  padding: 0px 10px;
+}
+.datepicker-searchbox__wrapper input {
+  width: 5rem !important;
+  font-weight: 400 !important;
 }
 
 /* selectBox 커스텀 */
@@ -1082,7 +1099,7 @@ i[name]:hover::after {
 .board-search-wrapper input::placeholder {
   color: #5e5e5e;
   font-weight: 500;
-  font-size: 9.5pt;
+  font-size: 9pt;
 }
 
 .board-search-wrapper label {

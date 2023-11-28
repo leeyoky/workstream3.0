@@ -21,6 +21,12 @@ const userSlice = createSlice ({
     },
     setMobilePhone(state, action) {
       state.mobilePhone = action.payload;
+    },
+    resetArray(state){
+      state.userSSN = null,
+      state.address = '',
+      state.homePhone = '',
+      state.mobilePhone = ''
     }
 }
 })

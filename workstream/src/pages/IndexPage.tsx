@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react"
-import Pagination from "../Layout/Pagination"
-import SearchBox from "../Layout/SearchBox"
-import BoardTitle from "../Layout/BoardTitle";
-import PageSizing from "../Layout/PageSizing";
+import SearchBox from "../Layout/BoardLayout/SearchBox/SearchBox"
+import BoardTitle from "../Layout/BoardLayout/BoardTitle";
+import PageSizing from "../Layout/BoardLayout/Pagination/PageSizing";
+import Pagination from "../Layout/BoardLayout/Pagination/Pagination";
 interface SearchTag {
   label: string;
   name: string;

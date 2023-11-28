@@ -8,20 +8,61 @@ import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import EmpItem from './EmpItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { selectedActions } from '../../store/Approval/approval-slice';
 
 interface OrganizationAccordionProps {
-  empDeptCd?: string | null; // 선택된 부서 코드
   searchText?: string
 }
 
-const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ empDeptCd , searchText }) => {
+const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchText }) => {
   const [deptData, setDeptData] = useState<OrganizationItem[]>([]);
   const [employeeData, setEmployeeData] = useState<EmployeeItem[]>([]);
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const [openDepth2, setOpenDepth2] = useState<number | null>(null);
   const [openDepth3, setOpenDepth3] = useState<number | null>(null);
   const isReference = useSelector((state:RootState) => state.approval.isReference);
+  const ccDeptArr = useSelector((state:RootState) => state.approval.ccDept);
+  const searchResultDept = employeeData.find((emp) => emp.empNm === searchText);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // 검색어에 해당하는 사원이 있다면
+    if (searchResultDept) {
+      const deptItem = deptData.find((item) => item.deptCd === searchResultDept.deptCd);
+      console.log('deptItem', deptItem);
+
+      let deptArr = [];
+      let cd: string | undefined = searchResultDept.deptCd;
+
+      deptArr.push(deptItem);
+
+      while(true){
+        if(cd === '2009000001') break;
+        const dept = deptData.find((item) => item.deptCd === cd);
+        const upDept = deptData.find((item) => item.deptCd === dept?.upDeptCd);
+        cd = dept?.upDeptCd;
+        deptArr.push(upDept);
+      }
+
+      deptArr.forEach((dept)=> {
+        if(dept?.deptCd !== '2009000001') {
+          const levelDept = deptData.filter((item) => item.level === dept?.level && item.upDeptCd === dept.upDeptCd);
+          const index = levelDept.findIndex((item) => item.deptCd === dept?.deptCd);
+          const level = dept?.level;
+
+          if(level === 1){
+            setOpenAccordion(index + 1)
+          }else if(level === 2){
+            setOpenDepth2(index)
+          }else if (level === 3) {
+            setOpenDepth3(index)
+          }
+        }
+      });
+    }else{
+      setOpenAccordion(null);
+    }
+  }, [searchText, deptData, employeeData]);
 
   useEffect(() => {
     const fetchOrganization = async () => {
@@ -50,21 +91,6 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ empDeptCd
     };
     fetchEmployee();
   }, []);
-
-  useEffect(() => {
-    console.log('useEffect' , empDeptCd);
-    
-    if (empDeptCd) {
-      const deptItem = deptData.find((item) => item.deptCd === empDeptCd);
-      console.log('deptItem', deptItem);
-      
-      if (deptItem) {
-        setOpenAccordion(deptItem.level as number);
-        setOpenDepth2(deptItem.level === 1 ? parseInt(deptItem.deptCd, 10) : null);
-        setOpenDepth3(deptItem.level === 2 ? parseInt(deptItem.deptCd, 10) : null);
-      }
-    }
-  }, [empDeptCd, deptData]);
 
   const toggleAccordion = (index: number | null) => {
     if (openAccordion === index) {
@@ -109,6 +135,21 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ empDeptCd
     dispatch(uiActions.setDraggingItem(empNm));
   };
 
+  const addReference = (deptCd: string, deptNm: string) => {
+    if (ccDeptArr.length < 10) {
+
+      console.log(deptCd);
+      const ccDept = {
+        deptCd,
+        deptNm,
+      }
+      dispatch(selectedActions.addRefDepCd(ccDept));
+      console.log('ccDeptArr', ccDeptArr);
+    } else {
+      alert('참조부서는 최대 10개 까지 추가 가능합니다.')
+    }
+  }
+
   const createAccordionItem = (item: OrganizationItem, index: number, level: number) => {
     const isOpen = openAccordion === index;
     const isDepth2Open = openDepth2 === index;
@@ -135,14 +176,20 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ empDeptCd
       }
     };
 
+
+
     return (
       <div key={index} className={itemClass}>
-        <div className={classes['accordion-header']} onClick={toggleFunction}>
-          <i className={`fa-solid fa-folder${isOpen ? '-open' : ''}`}></i>
-          <span>{item.deptNm}</span>
-          {isReference &&
-          <button>+</button>
-          }
+        <div className={classes['accordion-header']}>
+          <div className={classes['accordion-header__toggle']} onClick={toggleFunction}>
+            <i className={`fa-solid fa-folder${isOpen ? '-open' : ''}`}></i>
+            <span>{item.deptNm}</span>
+          </div>
+          <div>
+            {isReference &&
+            <button onClick={()=>addReference(item.deptCd, item.deptNm)}>+</button>
+            }
+          </div>
         </div>
 
         {level === 0 && (
@@ -173,6 +220,7 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ empDeptCd
                 rankNm={employee.rankNm}
                 officeDutyNm={employee.officeDutyNm}
                 handleDragStart={handleDragStart}
+                searchResultEmpNm={searchResultDept?.empNm || ''}
               />
             ))}
           </div>

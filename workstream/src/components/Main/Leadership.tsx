@@ -1,5 +1,3 @@
-import profile from '../../assets/img/profile.png'
-
 const Leadership = () => {
 
   /* 부서 받아오기 */

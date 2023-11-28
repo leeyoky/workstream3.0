@@ -1,13 +1,13 @@
-import profile from '../assets/img/guriman.jpg';
+import profile from '../../assets/img/guriman.jpg';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { uiActions } from '../store/ui-slice';
+import { RootState } from '../../store';
+import { uiActions } from '../../store/ui-slice';
 import SubToolBar from './SubToolBar';
 import { useEffect, useState } from 'react';
-import { authActions } from '../store/auth-slice';
-import { EmployeeItem } from '../types/Organization/OrganizationType';
-import { getEmployeeInfo } from '../api/axios';
+import { authActions } from '../../store/auth-slice';
+import { EmployeeItem } from '../../types/Organization/OrganizationType';
+import { getEmployeeInfo } from '../../api/axios';
 
 const SideToolBar = () => {
   const [employeeData, setEmployeeData] = useState<EmployeeItem[]>([]);
@@ -27,6 +27,8 @@ const SideToolBar = () => {
       const response = await getEmployeeInfo();
       const data = response.data.content;
       console.log(data);
+      console.log(employeeData);
+      
       
 
       const foundEmployee = data.find((item: EmployeeItem) => item.empNo === getUserNo);

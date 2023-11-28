@@ -12,6 +12,7 @@
   grid-template-columns: 8fr 3fr;
   grid-template-rows: auto;
   position: relative;
+  overflow: hidden;
 }
 .login-wrapper{
   font-weight: bolder;

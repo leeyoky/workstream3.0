@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../store/Approval/approval-slice';
-import Modal from "../../Layout/Modal";
+import Modal from "../../Layout/Modal/Modal";
 import ApprovalDocumentType from './ApprovalModalDocument';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import Alert from '../../Layout/Alert';
+import Alert from '../../Layout/Alert/Alert';
 interface ApprovalCreateProps {
   onClose: () => void; // 모달 닫기 핸들러
   isEdit?: boolean; // 편집

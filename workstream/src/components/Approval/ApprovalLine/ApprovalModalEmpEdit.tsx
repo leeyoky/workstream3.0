@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from "../../../Layout/Modal";
+import Modal from "../../../Layout/Modal/Modal";
 import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import ApprovalEmpSelector from './ApprovalEmpSelector';
 import ApprovalOrganization from './ApprovalOrganization';

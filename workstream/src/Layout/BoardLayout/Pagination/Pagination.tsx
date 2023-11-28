@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
-import { uiActions } from '../store/ui-slice';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { uiActions } from '../../../store/ui-slice';
+import { RootState } from '../../../store';
 
 const Pagination = () => {
   const activePage = useSelector((state: RootState) => state.ui.selectPage);

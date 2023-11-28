@@ -124,7 +124,6 @@ footer p {
   display: flex;
   justify-content: space-between;
   height: 200px;
-  margin-bottom: 15px;
 }
 .header__left{
   width: 49%;
@@ -169,16 +168,35 @@ footer p {
 }
 .reference-table{
   width: 100%;
+  display: flex;
+  font-size: 10pt;
+  font-weight: 500;
+  justify-content: flex-start;
 }
-.reference-table th{
-  width: 113px;
-  height: 30px;
+.reference-table-th{
+  width: 115px;
+  min-width: 115px;
+  border-right: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  background-color: #f0f0f0;
+  min-height: 30px;
 }
-.reference-table div {
-  padding: 5px 0px;
+.reference-table-td{
+  padding: 8px 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.reference-table-td span {
+  padding-left: 3px;
 }
 
 .header-info{
+  margin-top: 15px;
   height: 140px;
   text-align: center;
 }
@@ -207,6 +225,9 @@ footer p {
 }
 .reference-table input{
   text-align: left;
+}
+.reference-table span{
+  margin-right: 1px;
 }
 .header-table__approval-th{
   width: 140px;
@@ -276,15 +297,16 @@ footer p {
 }
 .approver-index {
   border-radius: 50%;
-  background-color: #332F29;
-  color: #ffffff;
+  background-color: #ffc21c;
   display: inline-block;
   position: absolute;
-  left: 5%;
+  left: calc(100% - 18px);
+  width: 18px;
+  top:0%;
+  font-weight: 900;
 }
 .approver-index div {
-  width: 15px;
-  font-size: 8pt;
+  font-size: 9pt;
 }
 .approver-table-header{
   text-align: center;

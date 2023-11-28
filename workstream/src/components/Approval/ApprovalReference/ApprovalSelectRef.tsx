@@ -1,8 +1,11 @@
+import { useDispatch } from 'react-redux';
 import classes from '../../../pages/Approval/ApprovalSelect.module.css';
+import { selectedActions } from '../../../store/Approval/approval-slice';
 
 const ApprovalSelectRef = () => {
-  
+  const dispatch = useDispatch();
   const removeAllHandler = () => {
+    dispatch(selectedActions.removeRef())
   };
 
   return (

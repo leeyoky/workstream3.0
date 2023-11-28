@@ -20,6 +20,8 @@ const Alert: React.FC<AlertProps> = (props) => {
   
   const handleConfirm = () => {
     setIsModalOpen(false);
+    console.log(isModalOpen);
+    
     onConfirm && onConfirm(); // onConfirm이 존재하면 호출
   };
 

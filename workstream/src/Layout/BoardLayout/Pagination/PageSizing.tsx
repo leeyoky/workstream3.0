@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux";
 import React from "react"
-import { uiActions } from "../store/ui-slice";
+import { uiActions } from "../../../store/ui-slice";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "../../../store";
 
 const PageSizing:React.FC = () => {
   const pageSize = useSelector((state: RootState) => state.ui.selectPageSize);

@@ -7,7 +7,7 @@ import { selectedActions } from "../../store/Approval/approval-slice";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
-import BoardTitle from "../../Layout/BoardTitle"
+import BoardTitle from "../../Layout/BoardLayout/BoardTitle"
 import ApprovalEditButtons from "./ApprovalEditButtons"
 import ApprovalAttachment from "./ApprovalAttachment"
 import ApprovalComment from "./ApprovalComment";
@@ -15,10 +15,11 @@ import CommonDetail from "./ApprovalType/CommonDetail";
 import CommonCreate from "./ApprovalType/CommonCreate";
 import ResinationCreate from "./ApprovalType/ResinationCreate";
 import ResinationDetail from "./ApprovalType/ResinationDetail";
+import { ApprovalData } from "../../types/Approval/Approaval";
 
 const ApprovalEdit = () => {
   const [temp, setTemp] = useState(false);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<ApprovalData | undefined>(undefined);
 
   const documentType = useSelector((state : RootState) => state.approval.documentType);
   const dispatch = useDispatch();
@@ -33,6 +34,8 @@ const ApprovalEdit = () => {
 
   useEffect(() => {
     if (prevDocumentType.current !== documentType) {
+      console.log(data);
+      
       // 이전 documentType와 현재 documentType이 다른 경우에만 실행
       dispatch(selectedActions.resetArray());
       prevDocumentType.current = documentType; // 이전 documentType 업데이트

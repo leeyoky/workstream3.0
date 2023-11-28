@@ -1,4 +1,3 @@
-import profile from '../../assets/img/test1.jpg'
 const NewestEmp = () => {
   return (
     <div className='newestEmp-wrapper _card'>

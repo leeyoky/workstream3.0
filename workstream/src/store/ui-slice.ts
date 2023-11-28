@@ -17,6 +17,8 @@ const uiSlice = createSlice({
       docType: '',
       regUsrNm: '',
       state: '',
+      regDateGoe: '',
+      regDateLoe: '',
     },
     date: '',
   },
@@ -66,6 +68,8 @@ const uiSlice = createSlice({
       state.searchInput.docType = '';
       state.searchInput.regUsrNm = '';
       state.searchInput.state = '';
+      state.searchInput.regDateGoe = '',
+      state.searchInput.regDateLoe = ''
     },
     // search
     searchInput(state, action) {

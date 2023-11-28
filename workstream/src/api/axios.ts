@@ -118,6 +118,8 @@ export function getApprovalList(params: {
   docType?: string;
   regUsrNm?: string;
   sort?: string;
+  regDateGoe: string; /* 시작일 */
+  regDateLoe: string; /* 종료일 */
 }) {
 
   const queryString = Object.keys(params as Record<string, any>)

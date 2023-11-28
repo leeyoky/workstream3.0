@@ -10,6 +10,10 @@ export interface Employee {
   approvedYn?: string;
 }
 
+export interface ccDept {
+  deptCd: string,
+  deptNm: string,
+}
 
 export interface ApprovalState {
   isEditMode: boolean;
@@ -19,6 +23,8 @@ export interface ApprovalState {
   selectedOption: string;   // 결재방식 선택
   agreementType: string;    // 힙의방식 선택
   approvers: Employee[];
+  ccDept: ccDept[],
+  ccUser: Employee[],
   content: string;
   title: string;
   executeDate: string;
@@ -64,12 +70,14 @@ export interface SearchBoxProps {
 }
 
 export interface docData {
-  title: string;
-  executeDate: string;
-  docType: string;
-  line: { apprType: string; approver: string; order: number; }[];
+  ccDept: string[];
+  ccUser: string[];
   contents: string;
+  docType: string;
+  executeDate: string;
+  line: { apprType: string; approver: string; order: number; }[];
   state: string;
+  title: string;
 }
 
 export interface resinationDocData{

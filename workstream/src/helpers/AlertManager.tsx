@@ -1,6 +1,6 @@
 // AlertManager.tsx
 import React, { ReactNode, useState } from 'react';
-import Alert from '../Layout/Alert';
+import Alert from '../Layout/Alert/Alert';
 
 interface AlertManagerProps {
   children?: ReactNode;
@@ -20,6 +20,9 @@ const AlertManager: React.FC<AlertManagerProps> = ({ children }) => {
   const closeAlert = () => {
     setShowAlert(false);
   };
+
+  console.log('showAlertMessage', showAlertMessage);
+  
 
   return (
     <>

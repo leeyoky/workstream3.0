@@ -1,13 +1,12 @@
 // routes.js
 import { Route, Routes } from 'react-router-dom';
 import React from 'react';
-import Header from '../Layout/Header';
-import SideToolBar from '../Layout/SideToolBar';
+import Header from '../Layout/BoardLayout/Header';
+import SideToolBar from '../Layout/ToolBar/SideToolBar';
 import MainPage from '../pages/MainPage';
 import ApprovalPage from '../pages/Approval/ApprovalPage';
 import ApprovalEdit from '../components/Approval/ApprovalEdit';
 import NotFoundPage from '../pages/NotFoundPage';
-import AddressPage from '../pages/AddressPage';
 import LoginPage from '../pages/LoginPage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -34,7 +33,6 @@ export function AuthenticatedRoutes() {
             <Route path="/approval/rejected" element={<ApprovalPage />} />
             <Route path="/approval/create" element={<ApprovalEdit />} />
             <Route path="/approval/detail/:id" element={<ApprovalEdit />} />
-            <Route path="/address" element={<AddressPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </main>

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import logoSmall from '../assets/img/logo.png'
-import favicon from '../assets/img/favicon.png'
-import { useAuthActions } from '../store/actions/authActions';
+import logoSmall from '../../assets/img/logo.png'
+import favicon from '../../assets/img/favicon.png'
+import { useAuthActions } from '../../store/actions/authActions';
 
 const Header = () => {
 

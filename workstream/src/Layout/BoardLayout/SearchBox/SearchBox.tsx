@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { uiActions } from '../store/ui-slice';
-import { SearchBoxProps } from '../types/Approval/Approaval'; 
+import { uiActions } from '../../../store/ui-slice';
+import { SearchBoxProps } from '../../../types/Approval/Approaval'; 
 import SelectBox from './SelectBox';
+import DatePickerSearch from './DatePickerSearch';
 
 const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
   const [localSearchInput, setLocalSearchInput] = useState<{ [key: string]: string }>({});
@@ -23,6 +24,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
     }
     // 수정된 검색어 객체를 사용하여 쿼리를 서버로 보냄
     dispatch(uiActions.searchInput(updatedSearchInput));
+    dispatch(uiActions.selectPage(0));
   }
 
   return (
@@ -35,6 +37,12 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
             <label>{tag.label}</label>
             {tag.type === 'select' ? (
               <SelectBox tag={tag} localSearchInput={localSearchInput} setLocalSearchInput={setLocalSearchInput} />
+            ) : tag.type === 'date' ? (
+              <DatePickerSearch
+                tag={tag}
+                localSearchInput={localSearchInput}
+                setLocalSearchInput={setLocalSearchInput}
+              />
             ) : (
               <input
                 type="text"

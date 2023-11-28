@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './DatePick.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -7,8 +7,13 @@ import { ko } from 'date-fns/locale';
 import { useDispatch } from 'react-redux';
 import { uiActions } from '../store/ui-slice';
 
-const DatePick: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+interface DatePickProps {
+  placeholderText: string;
+  selected: Date | null;
+  onChange: (date: Date | null) => void;
+}
+
+const DatePick: React.FC<DatePickProps> = ({ placeholderText, selected, onChange }) => {
   const dispatch = useDispatch();
   const formatDate = (date: Date | null) => {
     if (!date) {
@@ -22,39 +27,38 @@ const DatePick: React.FC = () => {
     return `${year}${month}${day}`;
   };
 
-  
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+    onChange(date);
   };
-  
-  useEffect(()=>{
-    const formattedDate = formatDate(selectedDate);
+
+  const customHeader = ({ date, decreaseMonth, increaseMonth }: any) => {
+    return (
+      <div className="custom-header">
+        <button onClick={decreaseMonth}>
+          <i className="fa-solid fa-angle-left"></i>
+        </button>
+        <span>{date.toLocaleDateString(ko, { month: 'long', year: 'numeric' })}</span>
+        <button onClick={increaseMonth}>
+          <i className="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    const formattedDate = formatDate(selected);
     dispatch(uiActions.setDate(formattedDate));
-  },[selectedDate])
-
-
-  const isPrevMonthDay = (date: Date) => {
-    const today = new Date();
-    return date.getMonth() < today.getMonth() || date.getFullYear() < today.getFullYear();
-  };
-
-  const isNextMonthDay = (date: Date) => {
-    const today = new Date();
-    return date.getMonth() > today.getMonth() || date.getFullYear() > today.getFullYear();
-  };
-
+  }, [selected]);
 
   return (
     <DatePicker
-      selected={selectedDate}
+      selected={selected}
       onChange={handleDateChange}
       dateFormat="yyyy-MM-dd"
       isClearable
-      placeholderText="Select a date"
+      placeholderText={placeholderText}
       locale={ko}
-      dayClassName={(date) =>
-        `${isPrevMonthDay(date) ? 'prev-month-day' : ''} ${isNextMonthDay(date) ? 'next-month-day' : ''}`
-      }
+      renderCustomHeader={customHeader}
     />
   );
 };

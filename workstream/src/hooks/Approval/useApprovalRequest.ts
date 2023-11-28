@@ -5,6 +5,7 @@ import { selectedActions } from '../../store/Approval/approval-slice';
 import { RootState } from '../../store';
 import { deleteDocument, fetchApprovalData, fetchApproveDocument, fetchFileData, fetchRecallDocument, fetchResinationData, updateDocument, updateResignation } from '../../api/axios';
 import { AxiosError } from 'axios';
+import { userAction } from '../../store/User/user-slice';
 
 const useApprovalRequest = () => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
@@ -37,6 +38,8 @@ const useApprovalRequest = () => {
 
   useEffect(()=> { 
     setIsDetail(false);
+    console.log('',documentData);
+    
   },[isDetail]);
 
   // 문서함 이동
@@ -123,6 +126,8 @@ const useApprovalRequest = () => {
   
       try {
         const formData = {
+          ccDept: data.ccDept.map((dept) => dept.deptCd),
+          ccUser: data.ccUser.map((emp) => emp.empNo),
           title: data.title,
           executeDate: data.executeDate,
           docType: data.documentType,
@@ -144,6 +149,7 @@ const useApprovalRequest = () => {
           setIsDetail(true);
           navigate(`/approval/detail/${responseData.id}`);
           dispatch(selectedActions.resetArray());
+          dispatch(userAction.resetArray());
         }
       } catch (error) {
         console.log(error);
@@ -187,6 +193,8 @@ const useApprovalRequest = () => {
   
       try {
         const docData = {
+          ccDept: data.ccDept.map((dept) => dept.deptCd),
+          ccUser: data.ccUser.map((emp) => emp.empNo),
           address: userData.address,
           homeContact: userData.homePhone,
           identityNo: userData.userSSN,
@@ -263,6 +271,8 @@ const useApprovalRequest = () => {
       
       const docData = {
         id,
+        ccDept: data.ccDept.map((dept) => dept.deptCd),
+        ccUser: data.ccUser.map((emp) => emp.empNo),
         title: data.title,
         executeDate: data.executeDate,
         docType: data.documentType,

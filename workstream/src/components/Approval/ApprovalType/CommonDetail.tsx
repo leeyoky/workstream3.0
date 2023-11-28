@@ -14,7 +14,8 @@ import { getToday } from './../../../helpers/formatDateTime';
 import ApprovalReference from '../ApprovalReference';
 
 type CommonDetailProps = {
-  setTemp: (status: boolean) => void;
+  temp: boolean;
+  setTemp: React.Dispatch<React.SetStateAction<boolean>>;
   setData:  React.Dispatch<React.SetStateAction<ApprovalData | undefined>>;
 };
 
@@ -177,11 +178,8 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
         </div>
       </header>
       <ApprovalReference />
-      {!isEdit  ? (
-        <h1>{data?.approval.contents}</h1>
-      ) : (
-        <TextEditor textValue={data?.approval.contents} />
-      )}
+        <TextEditor textValue={data?.approval.contents}
+        />
       <footer>
         <div className={classes['footer-text']}>
           <span>위와 같이 품의하오니 검토 후 재가바랍니다.</span>

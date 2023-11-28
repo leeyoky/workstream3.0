@@ -147,9 +147,9 @@ useEffect(()=> {
           <div className={classes['approver-item']}>
             <div className={classes['approver-item__items']}>
             <span>{1}</span>
-            <span>{userInfo.empNm}</span>
-            <span>{userInfo.rankNm}</span>
-            <span>{userInfo.officeDutyNm}</span>
+            <span>{userInfo?.empNm}</span>
+            <span>{userInfo?.rankNm}</span>
+            <span>{userInfo?.officeDutyNm}</span>
           </div>
           {!isReference &&  
             <div className={classes['button-box']}>
