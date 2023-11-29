@@ -10,7 +10,7 @@ th {
   border: 1px solid #000;
 }
 .approval-wrapper td{
-  font-size: 10pt;
+  font-size: 9.5pt;
   font-weight: 500;
 }
 .approval-wrapper p {
@@ -217,7 +217,7 @@ footer p {
   border: none;
   display: flex;
   height: -webkit-fill-available;
-  width: 97%;
+  width: 96%;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   font-size: 9.5pt;

@@ -12,10 +12,22 @@ export function getUsersInfo() {
 export function getDepartment() {
   return instance.get("dept");
 }
+
 // 모든 유저 정보 
 export function getEmployeeInfo() {
   return instance.get("emp?size=300")
 }
+
+// 특정 유저 정보
+export function getUserInfo(empNo: string) {
+  return instance.get(`emp?empNo=${empNo}`)
+}
+
+// 로그인한 유저 정보 가져오기
+export function getLoginUserInfo() {
+  return instance.get('user')
+}
+
 // 유저 입사정보 가져오기
 export function getEnteredDate(empNo: string) {
   return instance.get(`emp/enter-date/${empNo}`);

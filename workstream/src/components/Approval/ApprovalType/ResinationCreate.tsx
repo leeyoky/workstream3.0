@@ -22,8 +22,9 @@ const ResinationCreate = () => {
   const [ mobilePhone, setMobilePhone ] = useState('');
   const [ complete, setComplete ] = useState(false);
 
-  const userInfo = useSelector((state:RootState) => state.auth.userInfo);
-  const userId = useSelector((state:RootState) => state.auth.empNo);
+  const userLoginInfo = useSelector((state:RootState) => state.auth.userInfo);
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userId = useSelector((state:RootState) => state.auth.userInfo?.empNo);
   
   const today = new Date();
   const getDate = today.toISOString().slice(0,10);
@@ -31,7 +32,7 @@ const ResinationCreate = () => {
   const getDateHyphen = getToday('hyphen')
 
   const dispatch = useDispatch();
-  const employeeName = userInfo?.empNm || '';
+  const employeeName = userLoginInfo?.empNm || '';
 
   const onSign = () => {
     setSign(employeeName);
@@ -43,19 +44,20 @@ const ResinationCreate = () => {
     try {
       const response = await getEnteredDate(userId);
       const data = response.data.enterDate;
-      console.log('data', data);
       setEnterDate(data);
 
     } catch (error) {
       console.log(error);
     }
   }
-
+  
   useEffect(()=> {
-    fetchEnterDate(userId);
-    dispatch(selectedActions.setFinalSign(false));
-    dispatch(selectedActions.setIsDetailMode(false));
-    dispatch(selectedActions.setRetireDate(getDateHyphen));
+    if(userId) {
+      fetchEnterDate(userId);
+      dispatch(selectedActions.setFinalSign(false));
+      dispatch(selectedActions.setIsDetailMode(false));
+      dispatch(selectedActions.setRetireDate(getDateHyphen));
+    }
   },[])
 
   const userSSNchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,17 +122,17 @@ const ResinationCreate = () => {
               <tr>
                 <th className={classes['body-table__150']}>부 서 명</th>
                 <td colSpan={2} className={classes['body-table__300']}>
-                {userInfo?.deptNm}
+                {userLoginInfo?.deptNm}
                 </td>
                 <th className={classes['body-table__150']}>직책/직위</th>
                 <td colSpan={2}>
-                {userInfo?.rankNm}
+                {userInfo.rankNm}
                 </td>
               </tr>
               <tr>
                 <th>성 명</th>
                 <td colSpan={2}>
-                {userInfo?.empNm}
+                {userLoginInfo?.empNm}
                 </td>
                 <th>주민 번호</th>
                 <td colSpan={2}>

@@ -41,7 +41,6 @@ const SubToolBar = () => {
   useEffect(()=>{
     fetchDocumentCount();
   },[])
-  
 
   // 클릭한 메뉴 디스패치
   const menuClickHandler = (to: string | null) => {
@@ -111,7 +110,7 @@ const SubToolBar = () => {
   }
 
   return (
-    <div className={`sub-toolbar-wrapper ${isSidebarOpen ? 'active' : ''}`}>
+    <div className={`sub-toolbar-wrapper ${!isSidebarOpen ? 'active' : ''}`}>
       <div className='sub-toolbar-menu-wrapper'>
         <div className="sub-toolbar-menu-box">
           <Button onShowModal={handleShowModal}>

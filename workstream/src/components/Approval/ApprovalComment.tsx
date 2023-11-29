@@ -24,13 +24,9 @@ const ApprovalComment = () => {
         let response;
         if (documentType === 'APPROVAL_COMMON') {
           response = await getApprovalData(id);
-          console.log("기본품의서입니당");
-          
         }
         if (documentType === 'RESIGNATION') {
           response = await getResignationData(id);
-          console.log("사직서입니당");
-          
         }
         if (response && response.data) {
           const data = response.data;

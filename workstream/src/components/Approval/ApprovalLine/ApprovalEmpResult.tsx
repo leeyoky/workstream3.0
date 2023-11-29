@@ -15,7 +15,8 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const approvalApprovers = approvers.filter((approver) => approver.approvalType === 'APPROVER');
   const isReference = useSelector((state: RootState ) => state.approval.isReference)
-  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const userLoginInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
 
 useEffect(()=> {
@@ -67,7 +68,10 @@ useEffect(()=> {
     e.preventDefault();
 
     if (!isDragging) {
-      console.log('draggedData: ', draggedData);
+      /* 자기 자신을 드롭할때  */
+      if(draggedData.empNo === userLoginInfo?.empNo){
+        return;
+      }
       
       if(approvalApprovers.length < 5){
         // Accordion에서 가져온 드래그 앤 드롭
@@ -84,22 +88,28 @@ useEffect(()=> {
       
       if (dropTarget) {
         const dropIndex = parseInt(dropTarget.getAttribute('data-index') || '-1', 10); // data-index 속성을 구문 분석합니다.
-        console.log('dropIndex', dropIndex);
         
         if (startIndex !== dropIndex) {
-          console.log(startIndex, '번째에서', dropIndex, '번째로 이동');
-    
           // 배열에서 요소 재배열
           const reorderedApprovers = [...approvers];
-          
           // 드래그한 요소를 배열에서 제거
           const [draggedItem] = reorderedApprovers.splice(startIndex, 1);
-          
           // 드래그한 요소를 드롭한 위치로 삽입
           reorderedApprovers.splice(dropIndex, 0, draggedItem);
+
+          const isLastIndex = dropIndex === reorderedApprovers.length - 1;
           
+          // 만약 합의인 사람을 마지막 결재권자로 지정했을때
+          const updatedApprovers = reorderedApprovers.map((approver, index) => {
+            if (isLastIndex && index === dropIndex) {
+              alert('마지막 결재자는 결재만 선택 가능합니다.')
+              return { ...approver, approvalType: 'APPROVER' };
+            } else {
+              return approver;
+            }
+          });
           // 새로운 순서로 업데이트
-          dispatch(selectedActions.setApprovers(reorderedApprovers));
+          dispatch(selectedActions.setApprovers(updatedApprovers));
         }
       }
     }
@@ -147,7 +157,7 @@ useEffect(()=> {
           <div className={classes['approver-item']}>
             <div className={classes['approver-item__items']}>
             <span>{1}</span>
-            <span>{userInfo?.empNm}</span>
+            <span>{userLoginInfo?.empNm}</span>
             <span>{userInfo?.rankNm}</span>
             <span>{userInfo?.officeDutyNm}</span>
           </div>

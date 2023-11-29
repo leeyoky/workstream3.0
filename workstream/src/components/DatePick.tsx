@@ -11,6 +11,7 @@ interface DatePickProps {
   placeholderText: string;
   selected: Date | null;
   onChange: (date: Date | null) => void;
+  dateFormat: string;
 }
 
 const DatePick: React.FC<DatePickProps> = ({ placeholderText, selected, onChange }) => {

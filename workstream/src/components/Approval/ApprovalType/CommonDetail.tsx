@@ -19,7 +19,7 @@ type CommonDetailProps = {
   setData:  React.Dispatch<React.SetStateAction<ApprovalData | undefined>>;
 };
 
-const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
+const CommonDetail: React.FC<CommonDetailProps> = ({ temp, setTemp, setData }) => {
   const [executeDate, setExecuteDate] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -31,6 +31,8 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
 
   // 데이터 초기화
   const initializeData = () => {
+    console.log('temp', temp);
+    
     if (data) {
       setData(data);
       setTitle(data.approval.title || '');

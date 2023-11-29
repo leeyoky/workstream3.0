@@ -59,12 +59,14 @@ const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ setLocalSearchInput
         placeholderText='시작일'
         selected={startDate}
         onChange={(date) => handleStartDateChange(date)}
+        dateFormat="yyyy-MM-dd"
       />
       <span>~</span>
       <DatePick
         placeholderText='종료일'
         selected={endDate}
         onChange={(date) => handleEndDateChange(date)}
+        dateFormat="yyyy-MM-dd"
       />
     </div>
   );

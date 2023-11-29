@@ -19,6 +19,10 @@
   border-left-color: #ffffff; 
   color: #ffffff;
 }
+
+.react-datepicker-popper {
+  z-index: 2 !important;
+}
 .react-datepicker{
   font-family: "Noto Sans KR", sans-serif !important;
 }

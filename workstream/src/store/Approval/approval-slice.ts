@@ -169,7 +169,7 @@ const approvalSlice = createSlice({
       state.comment = action.payload;
     },
     resetArray(state) {
-      state.documentType = '';
+      /* detail에서 title받기 위해서 코드 삭제 2023.11.29 */
       state.selectedOption = '';
       state.agreementType = '';
       state.approvers = [];

@@ -1,5 +1,7 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
+import { createLogger } from "redux-logger";
+
 import authSlice from "./auth-slice";
 import uiSlice from "./ui-slice";
 import storage from "redux-persist/lib/storage";
@@ -26,18 +28,25 @@ const rootReducer = combineReducers({
   user: userSlice.reducer,
 });
 
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
-  // 사이트 최초 접근 시 로딩 시간이 오래걸리는 문제
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware({
-      serializableCheck: false, // 직렬화 체크를 비활성화합니다.
-    }).concat(thunk);
+    const middleware = getDefaultMiddleware({
+      serializableCheck: false, // 직렬화 체크 비활성화
+    });
+
+    if (isDevelopment) {
+      // 개발 모드에서만 사용할 미들웨어 추가
+      middleware.push(createLogger()); 
+    }
+
+    return middleware.concat(thunk);
   },
-  devTools: true,
+  devTools: isDevelopment,
 });
 
 const persistor = persistStore(store);

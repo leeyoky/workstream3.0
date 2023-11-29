@@ -44,7 +44,18 @@ const ApprovalPage: React.FC = () => {
     if (column === '문서명') {
       newSortValue = sortDirections[column] === 'asc' ? 'title,asc&' : 'title,desc&';
     }
-    // 나머지 열에 대한 정렬 값 설정...
+    if (column === '문서종류') {
+      newSortValue = sortDirections[column] === 'asc' ? 'docType,desc&' : 'docType,asc&';
+    }
+    if (column === '기안자') {
+      newSortValue = sortDirections[column] === 'asc' ? 'regUsr,desc&' : 'regUsr,asc&';
+    }
+    if (column === '등록일') {
+      newSortValue = sortDirections[column] === 'asc' ? 'regDate,desc&' : 'regDate,asc&';
+    }
+    if (column === '진행현황') {
+      newSortValue = sortDirections[column] === 'asc' ? 'state,desc&' : 'state,asc&';
+    }
     setSortValue(newSortValue);
     toggleSortDirection(column);
   };

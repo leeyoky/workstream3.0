@@ -9,18 +9,17 @@ import { useResinationData } from '../../../hooks/Approval/useResinationData';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { userAction } from '../../../store/User/user-slice';
-import ApprovalReference from '../ApprovalReference';
 
 type ResinationDetailProps = {
   temp: boolean;
   setTemp: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
+const ResinationDetail: React.FC<ResinationDetailProps> = ({ temp, setTemp }) => {
   
   const { id = ''} = useParams<string>();
   const { data } = useResinationData(id);
-  const [ dataState, setDataState] = useState(data);
+  const [ dataState, setDataState] = useState(data); 
   const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
   const dispatch = useDispatch();
 
@@ -37,33 +36,43 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   const stateReason = data?.resignation.reasons;
   const stateHomeContact = data?.resignation.homeContact;
   const stateMobileContact = data?.resignation.mobileContact;
-  // 임시저장 여부 확인
-  const isTempStorage = () => {
-    return dataState?.resignation.state === 'TEMP';
-  };
+
 
   const initializeData = () => {
-    setDataState(data);
-    setSSNFront(deleteHypenFront || '');
-    setSSNBack(deleteHypenBack || '');
-    setUserAddress(stateUserAddress || '');
-    setReasonRetirement(stateReason || '');
-    setHomePhone(stateHomeContact || '');
-    setMobilePhone(stateMobileContact || '');
+    console.log('temp', temp);
 
-    if (isTempStorage()) {
-      setTemp(true);
-      dispatch(selectedActions.setIsEditMode(true));
-    } else {
-      setTemp(false);
-      dispatch(selectedActions.setIsEditMode(false));
+    if(data) {
+      setDataState(data);
+      setSSNFront(deleteHypenFront || '');
+      setSSNBack(deleteHypenBack || '');
+      setUserAddress(stateUserAddress || '');
+      setReasonRetirement(stateReason || '');
+      setHomePhone(stateHomeContact || '');
+      setMobilePhone(stateMobileContact || '');
+  
+      if (isTempStorage()) {
+        setTemp(true);
+        dispatch(selectedActions.setIsEditMode(true));
+      } else {
+        setTemp(false);
+        dispatch(selectedActions.setIsEditMode(false));
+      }
+
     }
   }
   
   useEffect(()=> {
     initializeData();
-    dispatch(selectedActions.setIsDetailMode(true));
   },[isEdit, data])
+  
+  useEffect(()=> {
+    dispatch(selectedActions.setIsDetailMode(true));
+  }, [dataState, dispatch])
+
+    // 임시저장 여부 확인
+    const isTempStorage = () => {
+      return dataState?.resignation.state === 'TEMP';
+    };
 
   const userSSNchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

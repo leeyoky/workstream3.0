@@ -7,7 +7,7 @@ import { selectedActions } from '../../../store/Approval/approval-slice';
 const ApprovalResultRef = () => {
   const referenceDept = useSelector((state:RootState) => state.approval.ccDept);
   const referenceEmp = useSelector((state:RootState) => state.approval.ccUser);
-  const userInfo = useSelector((state:RootState) => state.auth.empNo);
+  const userInfo = useSelector((state:RootState) => state.auth.userInfo?.empNo);
   const dispatch = useDispatch();
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {

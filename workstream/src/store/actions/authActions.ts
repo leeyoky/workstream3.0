@@ -1,7 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { authActions } from "../auth-slice";
-import { login } from '../../api/axios' 
+import { getLoginUserInfo, getUserInfo, login } from '../../api/axios' 
 import { useNavigate } from 'react-router-dom';
+import { userAction } from '../User/user-slice';
 
 export const useAuthActions = () => {
   const dispatch = useDispatch();
@@ -19,13 +20,10 @@ export const useAuthActions = () => {
 
       if (response.status === 201) {
 
-        // const bearerToken = response.headers.authorization;
-        // const token = bearerToken.replace(/^Bearer\s+/, '');
         dispatch(authActions.login());
-        // dispatch(authActions.setToken(token));
-        // localStorage.setItem('token', token);
         navigate('/main');
-
+        console.log('로긴 성공');
+        fetchEmployee();
       }else{
         throw new Error('로그인 실패')
       }
@@ -41,5 +39,32 @@ export const useAuthActions = () => {
     localStorage.removeItem('token');
   };
 
-  return { login: loginUser, logout };
+  /* GET LOGINUSER INFO */
+  
+  const fetchEmployee = async () => {
+    try {
+      const response = await getLoginUserInfo();
+      const data = response.data;
+      dispatch(authActions.setUserInfo(data));
+
+      fetchUserInfo(response.data.empNo);
+      
+    } catch (error) {
+      console.log("서버 통신 오류", error);
+    }
+  };
+
+  const fetchUserInfo = async(userId: string) => {
+    try {
+      const response = await getUserInfo(userId);
+      const data = response.data.content[0];
+      dispatch(userAction.setUserInfo(data));
+      console.log('fetchUserInfo');
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return { login: loginUser, logout, fetchEmployee };
 };

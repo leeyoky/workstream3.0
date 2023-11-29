@@ -5,6 +5,7 @@ import { RootState } from '../../store';
 import { uiActions } from '../../store/ui-slice';
 import { countDoucumentType, getApprovalList } from '../../api/axios';
 import { selectedActions } from '../../store/Approval/approval-slice';
+import { useNavigate } from 'react-router-dom';
 
 export function useApprovalList(sortValue: string) {
   const [listData, setListData] = useState<ApprovalListItem[]>([]);
@@ -15,6 +16,7 @@ export function useApprovalList(sortValue: string) {
   const getPage = useSelector((state: RootState) => state.ui.selectPage);
   const getSearchInput = useSelector((state: RootState) => state.ui.searchInput);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(uiActions.resetPage());
@@ -86,7 +88,6 @@ export function useApprovalList(sortValue: string) {
       setDocuemntCnt(data);
     } catch (error) {
       console.error(error);
-      
     }
   }
 
@@ -95,9 +96,18 @@ export function useApprovalList(sortValue: string) {
     fetchDocumentCount();
   }, [getPage, getPageSize, selectMenu, getSearchInput, sortValue]);
 
+  const menuClickHandler = (to: string | null) => {
+    dispatch(uiActions.selectMenu(to));
+    dispatch(uiActions.resetPage());
+    if (to) {
+      navigate(to);
+    }
+  };
+
   return {
     listData,
     totalItems,
     documentCnt,
+    menuClickHandler,
   };
 }

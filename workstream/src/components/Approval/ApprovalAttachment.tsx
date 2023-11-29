@@ -91,7 +91,7 @@ const ApprovalAttachment = () => {
     try {
       // 파일 다운로드 URL을 동적으로 생성
       const downloadUrl = `${import.meta.env.VITE_REACT_APP_API_BASE_URL}approval/file/${fileId}`;
-  
+
       // 파일 다운로드
       const a = document.createElement('a');
       a.href = downloadUrl;

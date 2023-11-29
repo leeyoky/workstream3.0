@@ -16,13 +16,13 @@ const AlertManager: React.FC<AlertManagerProps> = ({ children }) => {
     setAlertType(type);
     setShowAlert(true);
   };
+  console.log(showAlertMessage);
+  
 
   const closeAlert = () => {
     setShowAlert(false);
   };
 
-  console.log('showAlertMessage', showAlertMessage);
-  
 
   return (
     <>

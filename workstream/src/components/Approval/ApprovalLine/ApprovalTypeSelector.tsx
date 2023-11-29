@@ -14,23 +14,15 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
   // State
   const [isApproveActive, setIsApproveActive] = useState(true);
   const [isAgreeActive, setIsAgreeActive] = useState(false);
-  const approverEmps = useSelector((state: RootState) =>
-    state.approval.approvers);
+
+  const approverEmps = useSelector((state: RootState) =>  state.approval.approvers);
   const dispatch = useDispatch();
-  const approvers = useSelector((state: RootState) => 
-    state.approval.approvers.filter(
-      (employee:Employee) => employee.approvalType === 'APPROVER').length
-      );
-  const agreements = useSelector((state: RootState) => 
-    state.approval.approvers.filter(
-      employee => employee.approvalType === 'CONSENSUAL').length
-      );
-  const selectedOpton = useSelector((state: RootState) => 
-    state.approval.selectedOption
-    );
-  const initialApprovalType = useSelector((state: RootState) => 
-    state.approval.approvers[index].approvalType
-    );
+  const approvers = useSelector((state: RootState) => state.approval.approvers.filter(
+      (employee:Employee) => employee.approvalType === 'APPROVER').length);
+  const agreements = useSelector((state: RootState) => state.approval.approvers.filter(
+      employee => employee.approvalType === 'CONSENSUAL').length);
+  const selectedOpton = useSelector((state: RootState) => state.approval.selectedOption);
+  const initialApprovalType = useSelector((state: RootState) => state.approval.approvers[index].approvalType);
 
   // Effect
 
@@ -38,11 +30,11 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
     const isLastIndex = index === approverEmps.length - 1;
   
     if (isLastIndex) {
-      setIsApproveActive(true);     // Always set to true
-      setIsAgreeActive(false);      // Always set to false
+      setIsApproveActive(true);     
+      setIsAgreeActive(false);      
       dispatch(selectedActions.updateApprovers({ 
         indexes: [index], 
-        approvalType: 'APPROVER'   // Set approvalType to 'APPROVER'
+        approvalType: 'APPROVER'   
       }));
     }
   

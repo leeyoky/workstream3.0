@@ -4,48 +4,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { uiActions } from '../../store/ui-slice';
 import SubToolBar from './SubToolBar';
-import { useEffect, useState } from 'react';
-import { authActions } from '../../store/auth-slice';
-import { EmployeeItem } from '../../types/Organization/OrganizationType';
-import { getEmployeeInfo } from '../../api/axios';
+import { useEffect } from 'react';
+import { useAuthActions } from '../../store/actions/authActions';
 
 const SideToolBar = () => {
-  const [employeeData, setEmployeeData] = useState<EmployeeItem[]>([]);
-  const [foundData, setFoundData] = useState<EmployeeItem | null>(null);
+  const { fetchEmployee } = useAuthActions();
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const dispatch = useDispatch();
   const location = useLocation();   // 현재 경로 가져오기
   const isMainActive = location.pathname === '/' || location.pathname === '/main' ;
   const isSubToolBarActive = location.pathname.startsWith('/approval')
-  
-  // 유저 사번 하드코딩
-  
-  const getUserNo = useSelector((state: RootState) => state.auth.empNo);
+  const loginUserInfo = useSelector((state:RootState) => state.auth.userInfo);
 
-  const fetchEmployee = async () => {
-    try {
-      const response = await getEmployeeInfo();
-      const data = response.data.content;
-      console.log(data);
-      console.log(employeeData);
-      
-      
-
-      const foundEmployee = data.find((item: EmployeeItem) => item.empNo === getUserNo);
-      setFoundData(foundEmployee);
-      dispatch(authActions.setUserInfo(foundEmployee));
-      dispatch(authActions.setEmpNo())
-
-      setEmployeeData(data);
-    } catch (error) {
-      console.log("서버 통신 오류", error);
+  useEffect(() => {
+    if (!loginUserInfo || Object.keys(loginUserInfo).length === 0) {
+      fetchEmployee();
     }
-  };
+  }, [loginUserInfo]);
 
-  useEffect(()=> {
-    fetchEmployee();
-  },[dispatch, getUserNo])
-  
   
   const toggleSideBar = () => {
     dispatch(uiActions.toggle());
@@ -65,11 +41,11 @@ const SideToolBar = () => {
   
 
   const classNames = {
-    wrapper: `side-bar-wrapper ${isSidebarOpen ? 'active' : ''}`,
-    container: `side-bar-container ${isSidebarOpen ? 'active' : ''}`,
-    menus: `side-bar-menus ${isSidebarOpen ? 'active' : ''}`,
-    listWrapper: `side-bar-list-wrapper ${isSidebarOpen ? 'active' : ''}`,
-    menuIcon: `menu-icon ${isSidebarOpen ? 'active' : ''}`,
+    wrapper: `side-bar-wrapper ${!isSidebarOpen ? 'active' : ''}`,
+    container: `side-bar-container ${!isSidebarOpen ? 'active' : ''}`,
+    menus: `side-bar-menus ${!isSidebarOpen ? 'active' : ''}`,
+    listWrapper: `side-bar-list-wrapper ${!isSidebarOpen ? 'active' : ''}`,
+    menuIcon: `menu-icon ${!isSidebarOpen ? 'active' : ''}`,
   };
 
   const menuItems = [
@@ -90,16 +66,16 @@ const SideToolBar = () => {
             <i className="fa-solid fa-bars"></i>
           </button>
         </div>
-        <div className={`side-bar-1200 ${isSidebarOpen ? 'active' : ''}`}>
+        <div className={`side-bar-1200 ${!isSidebarOpen ? 'active' : ''}`}>
           <div className="side-bar-profile-wrapper side-sm">
             <img src={profile} alt="Profile" />
           </div>
           <div className="side-bar-profile">
             <h3>
-              <span>{foundData?.empNm}</span>
+              <span>{loginUserInfo?.empNm}</span>
               <span>사원</span>
             </h3>
-            <p>{foundData?.deptNm}</p>
+            <p>{loginUserInfo?.deptNm}</p>
           </div>
         </div>
         <div className={classNames.listWrapper}>

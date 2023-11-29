@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectedActions } from '../../store/Approval/approval-slice';
@@ -6,11 +6,11 @@ import { RootState } from '../../store';
 import { deleteDocument, fetchApprovalData, fetchApproveDocument, fetchFileData, fetchRecallDocument, fetchResinationData, updateDocument, updateResignation } from '../../api/axios';
 import { AxiosError } from 'axios';
 import { userAction } from '../../store/User/user-slice';
+import { pdfjs } from 'react-pdf';
 
 const useApprovalRequest = () => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ isRefModalOpen, setIsRefModalOpen ] = useState(false);
-  const [ documentData, setDocumentData] = useState<any>(null);
   const [ approvedYn, setApprovedYn ] = useState('');
   const [isDetail, setIsDetail] = useState(true);
   const { id = '' } = useParams<string>();
@@ -38,7 +38,6 @@ const useApprovalRequest = () => {
 
   useEffect(()=> { 
     setIsDetail(false);
-    console.log('',documentData);
     
   },[isDetail]);
 
@@ -141,13 +140,15 @@ const useApprovalRequest = () => {
         const response = await fetchApprovalData(formData);
         const responseData = response.data;
         console.log(response);
-        setDocumentData(responseData);
+        console.log(responseData);
   
         if (response.status === 201) {
-          await fetchFileHandler(responseData.id);
+          if (fileData.length > 0) { // 파일 데이터가 있는 경우에만 실행
+            await fetchFileHandler(responseData.id);
+          }
           alert('결재요청에 성공했습니다.');
-          setIsDetail(true);
           navigate(`/approval/detail/${responseData.id}`);
+          setIsDetail(true);
           dispatch(selectedActions.resetArray());
           dispatch(userAction.resetArray());
         }
@@ -210,7 +211,9 @@ const useApprovalRequest = () => {
         console.log('responseData', responseData);
   
         if (response.status === 201) {
-          await fetchFileHandler(responseData.id);
+          if (fileData.length > 0) { // 파일 데이터가 있는 경우에만 실행
+            await fetchFileHandler(responseData.id);
+          }
           alert("결재 성공")
           setIsDetail(true);
           navigate(`/approval/detail/${responseData.id}`);
@@ -285,7 +288,9 @@ const useApprovalRequest = () => {
         const response = await updateDocument(docData);
 
         if (response.status === 204) {
-          await fetchFileHandler(id);
+          if (fileData.length > 0) { // 파일 데이터가 있는 경우에만 실행
+            await fetchFileHandler(id);
+          }
           alert(`${requestType === 'PROCEEDING' ? '결재 요청' : '임시 저장'}에 성공했습니다.`);
           setIsDetail(true);
           navigate(`/approval/temporary`);
@@ -383,6 +388,13 @@ const useApprovalRequest = () => {
     }
   }
 
+  /* PDF 다운 기능 */
+
+
+  const pdfDownloadHandler = async() => {
+
+  }
+
 
   return {
     id,
@@ -402,7 +414,8 @@ const useApprovalRequest = () => {
     approveDocumentHandler,
     requestApprovalType,
     requestTempDocument,
-    recallDocument
+    recallDocument,
+    pdfDownloadHandler
   } 
 };
 

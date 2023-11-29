@@ -25,8 +25,6 @@ export const useDocumentData = (documentType: string, id: string) => {
   useEffect(() => {
     if (id) {
       fetchData();
-      console.log("훅 : " , data);
-      
     }
   }, [documentType, id]);
 

@@ -7,6 +7,19 @@ const userSlice = createSlice ({
     address: '',
     homePhone: '',
     mobilePhone: '',
+    userInfo: {
+      boss: '',
+      deptCd: '',
+      deptNm: '',
+      email: '',
+      empNm: '',
+      empNo: '',
+      loginId: '',
+      officeDuty: '',
+      officeDutyNm: '',
+      rank: '',
+      rankNm: '',
+    },
   },
   reducers: {
     // 주민번호
@@ -21,6 +34,9 @@ const userSlice = createSlice ({
     },
     setMobilePhone(state, action) {
       state.mobilePhone = action.payload;
+    },
+    setUserInfo(state, action) {
+      state.userInfo = action.payload;
     },
     resetArray(state){
       state.userSSN = null,

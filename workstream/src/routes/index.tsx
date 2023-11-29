@@ -21,7 +21,7 @@ export function AuthenticatedRoutes() {
       <Header />
       <div className='test'>
         <SideToolBar />
-        <main className={`index-wrapper ${isSidebarOpen ? 'active' : ''} ${isSubBarOpen ? 'sub-bar' : ''}`}>
+        <main className={`index-wrapper ${!isSidebarOpen ? 'active' : ''} ${isSubBarOpen ? 'sub-bar' : ''}`}>
           <Routes>
             <Route index element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />

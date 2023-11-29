@@ -25,3 +25,10 @@ export type EmployeeItem = {
   rank: string;
   rankNm: string;
 }
+
+export type loginUserItem = {
+  deptCd: string;
+  deptNm: string;
+  empNm: string;
+  empNo: string;
+}

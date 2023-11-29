@@ -3,7 +3,7 @@ import ApprovalModalEmpEdit from './ApprovalLine/ApprovalModalEmpEdit';
 import useApprovalRequest from '../../hooks/Approval/useApprovalRequest';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
 import { ApprovalData, ResinationData } from '../../types/Approval/Approaval';
 
@@ -25,17 +25,15 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     approveDocumentHandler,
     requestApprovalType,
     requestTempDocument,
-    recallDocument
+    recallDocument,
+    pdfDownloadHandler
   } = useApprovalRequest();
 
   const isDetail = useSelector((state: RootState) => state.approval.isDetailMode);
   const selectMenu = useSelector((state: RootState) => state.ui.selectMenu);
-  const userData = useSelector((state: RootState) => state.auth.empNo);
+  const userData = useSelector((state: RootState) => state.auth.userInfo?.empNo);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const documentData = useDocumentData(documentType, id)?.data;
-
-  useEffect(() => {
-  }, [documentData]);
 
   const memoizedValues = useMemo(() => {
     return { isDetail, selectMenu, userData };
@@ -106,7 +104,9 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
         >
           <span>문서회수</span>
         </button>
-        <button className="btn btn-green-line">
+        <button 
+          className="btn btn-green-line"
+          onClick={pdfDownloadHandler}>
           <span>PDF다운</span>
           <i className="fa-solid fa-file-pdf"></i>
         </button>
@@ -117,7 +117,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
         documentData.line && (
           <>
             {documentData.line.some(approval => approval.approver === userData) &&
-              documentData.line.find(approval => approval.order === 2)?.approvedYn === 'N' &&
+              documentData.line.find(approval => approval.order === 1)?.approvedYn === 'N' &&
               renderApprovalButtons()
             }
 
