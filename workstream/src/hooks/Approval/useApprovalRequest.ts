@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectedActions } from '../../store/Approval/approval-slice';
@@ -6,7 +6,9 @@ import { RootState } from '../../store';
 import { deleteDocument, fetchApprovalData, fetchApproveDocument, fetchFileData, fetchRecallDocument, fetchResinationData, updateDocument, updateResignation } from '../../api/axios';
 import { AxiosError } from 'axios';
 import { userAction } from '../../store/User/user-slice';
-import { pdfjs } from 'react-pdf';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
 
 const useApprovalRequest = () => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
@@ -83,6 +85,7 @@ const useApprovalRequest = () => {
       alert('시행일자를 입력하지 않았습니다.');
       return;
     }
+
     if (data.title === '') {
       alert('문서의 제목을 입력하지 않았습니다.');
       return;
@@ -153,7 +156,7 @@ const useApprovalRequest = () => {
           dispatch(userAction.resetArray());
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };
@@ -167,6 +170,11 @@ const useApprovalRequest = () => {
       alert('서명을 하지 않았습니다.');
       return;
     }
+    // 결재자
+    // 현재 주소
+    // 퇴사일자가 ?...?
+    // 퇴직 사유
+    // 전화번호 하이픈 뺌 
 
     if(window.confirm(confirmMsg)) {
       let order = 0;
@@ -208,7 +216,6 @@ const useApprovalRequest = () => {
 
         const response = await fetchResinationData(docData);
         const responseData = response.data;
-        console.log('responseData', responseData);
   
         if (response.status === 201) {
           if (fileData.length > 0) { // 파일 데이터가 있는 경우에만 실행
@@ -271,6 +278,25 @@ const useApprovalRequest = () => {
         approver: employee.empNo,
         order: index + 1,
       }));
+
+      const currentDate = new Date();
+      
+      console.log('시행일자 ㅣ:', data.executeDate);
+      console.log('currentDate ㅣ:', currentDate);
+      
+
+      if (data.title === '') {
+        alert('문서의 제목을 입력하지 않았습니다.');
+        return;
+      }
+      if (data.content === '') {
+        alert('내용이 비어있습니다.');
+        return;
+      }
+      if (data.approvers.length === 0) {
+        alert('결재자가 선택되지 않았습니다');
+        return;
+      }
       
       const docData = {
         id,
@@ -292,8 +318,16 @@ const useApprovalRequest = () => {
             await fetchFileHandler(id);
           }
           alert(`${requestType === 'PROCEEDING' ? '결재 요청' : '임시 저장'}에 성공했습니다.`);
-          setIsDetail(true);
-          navigate(`/approval/temporary`);
+          if(requestType === 'PROCEEDING'){
+            alert('임시저장에 성공했습니다.')
+            setIsDetail(true);
+          }else{
+            alert('결재요청에 성공했습니다')
+            setIsDetail(true);
+            dispatch(selectedActions.setIsEditMode(false));
+          }
+          
+          navigate(`/approval/detail/${id}`);
           dispatch(selectedActions.resetArray());
         }
       } catch (error) {
@@ -390,10 +424,23 @@ const useApprovalRequest = () => {
 
   /* PDF 다운 기능 */
 
-
-  const pdfDownloadHandler = async() => {
-
-  }
+  const pdfDownloadHandler = () => {
+    const element: HTMLElement = document.getElementById('approval')!;
+  
+    html2canvas(element, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        format: 'a4',
+        orientation: 'portrait',
+      });
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+      pdf.save('DS품의서.pdf');
+    });
+  };
+  
+  
+  
 
 
   return {

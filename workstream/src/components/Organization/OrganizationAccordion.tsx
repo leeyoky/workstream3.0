@@ -22,6 +22,7 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
   const [openDepth3, setOpenDepth3] = useState<number | null>(null);
   const isReference = useSelector((state:RootState) => state.approval.isReference);
   const ccDeptArr = useSelector((state:RootState) => state.approval.ccDept);
+  const loginUserInfo = useSelector((state:RootState) => state.auth.userInfo)
   const searchResultDept = employeeData.find((emp) => emp.empNm === searchText);
   const dispatch = useDispatch();
 
@@ -29,7 +30,6 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
     // 검색어에 해당하는 사원이 있다면
     if (searchResultDept) {
       const deptItem = deptData.find((item) => item.deptCd === searchResultDept.deptCd);
-      console.log('deptItem', deptItem);
 
       let deptArr = [];
       let cd: string | undefined = searchResultDept.deptCd;
@@ -138,15 +138,31 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
   const addReference = (deptCd: string, deptNm: string) => {
     if (ccDeptArr.length < 10) {
 
-      console.log(deptCd);
       const ccDept = {
         deptCd,
         deptNm,
       }
       dispatch(selectedActions.addRefDepCd(ccDept));
-      console.log('ccDeptArr', ccDeptArr);
     } else {
       alert('참조부서는 최대 10개 까지 추가 가능합니다.')
+    }
+  }
+
+  /* 더블 클릭으로 직원 추가 */
+  const addEmpHandler = (employee: any, index: any) => {
+    const empData = {
+      empNo: employee.empNo,
+      name: employee.empNm,
+      rankName:employee.rankNm,
+      duty:employee.officeDutyNm,
+      approvalType: 'APPROVER',
+      index,
+    }
+    // 자기 자신일 경우 추가할 수 없음.
+    if(employee.empNo !== loginUserInfo?.empNo){
+      dispatch(selectedActions.addEmp(empData));
+    }else{
+      return;
     }
   }
 
@@ -175,8 +191,6 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
         toggleDepth3(index);
       }
     };
-
-
 
     return (
       <div key={index} className={itemClass}>
@@ -221,6 +235,7 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
                 officeDutyNm={employee.officeDutyNm}
                 handleDragStart={handleDragStart}
                 searchResultEmpNm={searchResultDept?.empNm || ''}
+                addEmpHandler={()=>addEmpHandler(employee, index)}
               />
             ))}
           </div>

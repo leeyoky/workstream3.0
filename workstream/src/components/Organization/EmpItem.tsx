@@ -7,21 +7,25 @@ const EmpItem = ({
   rankNm, 
   officeDutyNm, 
   handleDragStart, 
-  searchResultEmpNm 
+  searchResultEmpNm,
+  addEmpHandler
 }: { 
   empNo: string, 
   empNm: string, 
   rankNm: string, 
   officeDutyNm: string, 
   handleDragStart: Function, 
-  searchResultEmpNm: string 
+  searchResultEmpNm: string,
+  addEmpHandler: () => void
+
 }) => {
+
   const isSearchResult = empNm === searchResultEmpNm;
   const accordionHeaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // 검색 시, 해당 직원의 위치만큼 스크롤 해주는 코드
     if (isSearchResult && accordionHeaderRef.current) {
-      // 스크롤 위치를 조절하는 코드
       accordionHeaderRef.current.scrollIntoView({ behavior: 'auto', block: 'center', inline:'center' });
     }
   }, [isSearchResult]);
@@ -35,6 +39,7 @@ const EmpItem = ({
         onDragStart={(e) =>
           handleDragStart(e, empNo, empNm, rankNm, officeDutyNm)
         }
+        onClick={addEmpHandler}
       >
         <i className="fa-solid fa-user" style={{ color: '#607485', fontSize: '13pt', paddingLeft: '5px' }}></i>
         <span style={{ fontSize: '10pt', fontWeight: '500' }}>

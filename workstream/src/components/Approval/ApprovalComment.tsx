@@ -85,7 +85,6 @@ const ApprovalComment = () => {
         id: commentId,
         comment: commentStates[index] || '',
       };
-      console.log('commentData', commentData);
       
       try {
         const response = await updateComment(commentData);

@@ -1,44 +1,29 @@
-import { useSelector } from 'react-redux';
-import { useRef, useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useRef, useEffect } from 'react';
 import { RootState } from '../../../store';
-import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-
+import { fileActions } from './../../../store/file-slice';
 import logoSmall from '../../../assets/img/logo.png';
 import classes from '../../../pages/Approval/Approval.module.css';
 import TextEditor from '../../TextEditor';
 import Signature from './Signature';
 import ApprovalReference from '../ApprovalReference';
-import { fileActions } from './../../../store/file-slice';
 import DatePick from '../../DatePick';
-import { formatDateOnly } from '../../../helpers/formatDateTime';
+import useDateValidation from '../../../hooks/Validation/useDateValidation';
 
 const CommonCreate = () => {
-
   const today = new Date();
   const getDate = today.toISOString().slice(0,10);
-  const [executeDate, setExecuteDate] = useState<Date | null>(null);
+
+  const { validatedDate, validateDate } = useDateValidation(null);
   const userInfo = useSelector((state:RootState) => state.auth.userInfo);
   const executionDateRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement | null>(null);
-
   const dispatch = useDispatch();
   
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     dispatch(selectedActions.setTitle(newTitle));
-  }
-  const dataChangeHandler = (date: Date | null) => {
-
-    const currentDate = new Date();
-
-    // 현재 날짜보다 앞선 경우
-    if (date && date < currentDate) {
-      alert("과거 날짜를 선택할 수 없습니다.");
-    } else {
-      setExecuteDate(date);
-      dispatch(selectedActions.setDate(formatDateOnly(date?.toISOString() || '')));
-    }
   }
 
   useEffect(()=>{
@@ -51,7 +36,6 @@ const CommonCreate = () => {
     dispatch(selectedActions.setIsDetailMode(false));
     
   },[executionDateRef.current?.value]);
-
   
   return (
     <form>
@@ -78,8 +62,8 @@ const CommonCreate = () => {
                 <td>
                   <DatePick
                     placeholderText='시행일자'
-                    selected={executeDate}
-                    onChange={(date) => dataChangeHandler(date)}
+                    selected={validatedDate}
+                    onChange={(date) => validateDate(date)}
                     dateFormat="yyyy-MM-dd"
                     />
                 </td>

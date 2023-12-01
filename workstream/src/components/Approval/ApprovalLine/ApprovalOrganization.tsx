@@ -6,7 +6,6 @@ const ApprovalOrganization = () => {
   const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
-    performSearch();
   }, [searchText]);
 
   const performSearch = () => {

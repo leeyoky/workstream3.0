@@ -1,3 +1,5 @@
+import jsPDF from 'jspdf';
+
 export interface serverFile {
   id: number,
   docNumber: string,
@@ -5,4 +7,10 @@ export interface serverFile {
   fileExtension: string,
   fileName: string,
   fileSize: number,
+}
+
+declare global {
+  interface Window {
+    jsPDF: typeof jsPDF;
+  }
 }

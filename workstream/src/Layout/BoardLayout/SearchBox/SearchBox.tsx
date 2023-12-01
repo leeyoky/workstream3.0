@@ -27,6 +27,13 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
     dispatch(uiActions.selectPage(0));
   }
 
+  /* 엔터키로 검색 */
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => {
+    if (e.key === 'Enter') {
+      searchHandler();
+    }
+  }
+
   return (
     <div className="board-search-wrapper">
       <div className="board-search">
@@ -50,6 +57,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
                 placeholder={tag.label}
                 value={localSearchInput[tag.name] || ''}
                 onChange={(e) => inputChangeHandler(e, tag.name)}
+                onKeyDown={handleKeyPress}
               />
             )}
           </div>

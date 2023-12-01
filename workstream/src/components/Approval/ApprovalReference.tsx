@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import classes from '../../pages/Approval/Approval.module.css';
 import { RootState } from '../../store';
-import { Employee } from '../../types/Approval/Approaval';
+import { Employee, ccDept } from '../../types/Approval/Approaval';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
 import { useParams } from 'react-router-dom';
 
@@ -17,6 +17,10 @@ const ApprovalReference = () => {
 
   // 마지막 요소에서 콤마 제거
   const addComma = (item: string, index: number, array: Employee[]) => {
+    return index === array.length - 1 ? item : `${item}, `;
+  };
+
+  const addCommaForDept = (item: string, index: number, array: ccDept[]) => {
     return index === array.length - 1 ? item : `${item}, `;
   };
 
@@ -43,12 +47,12 @@ const ApprovalReference = () => {
           </>
         ) : (
           <>
-            {referenceDept.map((dept, index) => (
-              <span key={index}>{dept.deptNm},</span>
-            ))}
-            {referenceEmp.map((emp, index) => (
-              <span key={index}>{addComma(emp.name, index, referenceEmp)}</span>
-            ))}
+          {referenceDept.map((dept, index) => (
+            <span key={index}>{addCommaForDept(dept.deptNm, index, referenceDept)}</span>
+          ))}
+          {referenceEmp.map((emp, index) => (
+            <span key={index}>{addComma(emp.name, index, referenceEmp)}</span>
+          ))}
           </>
         )}
       </div>

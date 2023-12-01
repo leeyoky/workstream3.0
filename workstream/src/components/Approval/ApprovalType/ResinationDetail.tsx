@@ -15,7 +15,7 @@ type ResinationDetailProps = {
   setTemp: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ResinationDetail: React.FC<ResinationDetailProps> = ({ temp, setTemp }) => {
+const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   
   const { id = ''} = useParams<string>();
   const { data } = useResinationData(id);
@@ -39,7 +39,6 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ temp, setTemp }) =>
 
 
   const initializeData = () => {
-    console.log('temp', temp);
 
     if(data) {
       setDataState(data);

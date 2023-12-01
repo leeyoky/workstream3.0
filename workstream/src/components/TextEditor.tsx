@@ -24,8 +24,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
     }
   }, [textValue, dispatch]);
 
-  const handleChange = (event: any, editor: any) => {
-    console.log(event);
+  const handleChange = (_event: any, editor: any) => {
     const data = editor.getData();
     dispatch(selectedActions.setContent(data));
   };

@@ -39,7 +39,6 @@ const SelectBox: React.FC<{
 
           tag.options = deptOptions;
           
-          console.log('옵션 : ' , deptOptions);
           setIsLoading(false);
           
         } catch (error) {

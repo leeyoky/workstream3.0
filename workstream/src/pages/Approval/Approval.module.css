@@ -97,9 +97,7 @@ footer p {
 .approval-wrapper form {
   width: 21cm;
   min-height: 29.7cm;
-  padding: 1.5cm 1.5cm 2cm 1.5cm;
 }
-
 .approval-wrapper form {
   border: 1px solid #000;
   padding: 20px;
@@ -107,6 +105,26 @@ footer p {
   flex-direction: column;
   justify-content: space-between;
 }
+
+@media print {
+  .approval-wrapper form {
+    width: 21cm;
+    min-height: 29.7cm;
+    padding: 1.5cm 1.5cm 2cm 1.5cm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .approver-index{
+    display: none !important;
+  }
+}
+
+.hidden-for-pdf {
+  display: none !important;
+}
+
+
 
 
 /* Header */

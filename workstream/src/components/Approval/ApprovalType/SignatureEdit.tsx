@@ -100,7 +100,7 @@ const SignatureEdit = () => {
 
   const renderHeader = (label: string, approverIndex: number) => (
     <th className={classes['header-table__approval-th']}>
-      <span className={classes['approver-index']}>
+      <span className={classes['approver-index']} data-html2canvas-ignore="true">
         {approverIndex !== -1 ? (
           <div>{approverIndex + 2}</div>
           ): ''}

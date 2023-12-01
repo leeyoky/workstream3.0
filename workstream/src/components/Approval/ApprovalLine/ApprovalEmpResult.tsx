@@ -5,7 +5,6 @@ import { RootState } from '../../../store';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { uiActions } from '../../../store/ui-slice';
 import ApprovalTypeSelector from './ApprovalTypeSelector';
-import { useEffect } from 'react';
 interface ApprovalEmpResultProps {
   selectedOption: string;
 }
@@ -16,12 +15,9 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
   const approvalApprovers = approvers.filter((approver) => approver.approvalType === 'APPROVER');
   const isReference = useSelector((state: RootState ) => state.approval.isReference)
   const userLoginInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const selectedOption = useSelector((state: RootState) => state.approval.selectedOption);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
-
-useEffect(()=> {
-  console.log('approvers' , approvers);
-},[])
 
   // dragStartIndex를 ref로 관리
   const dragStartIndex = useRef(-1);
@@ -46,7 +42,6 @@ useEffect(()=> {
 
       // 시작 인덱스 업데이트
       dragStartIndex.current = index;
-      console.log('dragStartIndex', dragStartIndex);
       
       setIsDragging(true);
       const empInfoString = JSON.stringify(empInfo);
@@ -101,7 +96,7 @@ useEffect(()=> {
           
           // 만약 합의인 사람을 마지막 결재권자로 지정했을때
           const updatedApprovers = reorderedApprovers.map((approver, index) => {
-            if (isLastIndex && index === dropIndex) {
+            if (isLastIndex && index === dropIndex && selectedOption === "addAgreement") {
               alert('마지막 결재자는 결재만 선택 가능합니다.')
               return { ...approver, approvalType: 'APPROVER' };
             } else {
@@ -156,26 +151,11 @@ useEffect(()=> {
         <div className ={classes['emp-index-default']}> 
           <div className={classes['approver-item']}>
             <div className={classes['approver-item__items']}>
-            <span>{1}</span>
-            <span>{userLoginInfo?.empNm}</span>
-            <span>{userInfo?.rankNm}</span>
-            <span>{userInfo?.officeDutyNm}</span>
-          </div>
-          {!isReference &&  
-            <div className={classes['button-box']}>
-              <div className={classes['button-box__buttons']}>
-                <button
-                  className={classes['approval']}>
-                  결재
-                </button>
-                <button
-                  className={classes['active-button']}>
-                </button>
-              </div>
-              <span className={classes['button-delete']}>
-              </span>
+              <span>{1}</span>
+              <span>{userLoginInfo?.empNm}</span>
+              <span>{userInfo?.rankNm}</span>
+              <span>{userInfo?.officeDutyNm || ''}</span>
             </div>
-          }
           </div>
         </div>
         {approvers.length > 0 ? (

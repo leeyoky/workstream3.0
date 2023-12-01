@@ -22,7 +22,6 @@ export const useAuthActions = () => {
 
         dispatch(authActions.login());
         navigate('/main');
-        console.log('로긴 성공');
         fetchEmployee();
       }else{
         throw new Error('로그인 실패')

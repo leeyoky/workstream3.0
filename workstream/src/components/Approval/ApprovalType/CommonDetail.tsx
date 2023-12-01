@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { getToday } from './../../../helpers/formatDateTime';
 import ApprovalReference from '../ApprovalReference';
+import DatePick from '../../DatePick';
+import useDateValidation from '../../../hooks/Validation/useDateValidation';
 
 type CommonDetailProps = {
   temp: boolean;
@@ -19,8 +21,8 @@ type CommonDetailProps = {
   setData:  React.Dispatch<React.SetStateAction<ApprovalData | undefined>>;
 };
 
-const CommonDetail: React.FC<CommonDetailProps> = ({ temp, setTemp, setData }) => {
-  const [executeDate, setExecuteDate] = useState('');
+const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
+  const [executeDate, setExecuteDate] = useState<Date | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const titleInputRef = useRef<HTMLInputElement>(null);
@@ -28,15 +30,26 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ temp, setTemp, setData }) =
   const { id = ''} = useParams<string>();
   const {data} = useApprovalData(id);
   const dispatch = useDispatch();
+  const { validateDate } = useDateValidation(null);
+
+  useEffect(() => {
+    initializeData();
+  }, [isEdit, data]);
+
+  useEffect(() => {
+    dispatch(selectedActions.setTitle(title));
+    dispatch(selectedActions.setDate(executeDate));
+    dispatch(selectedActions.setContent(content));
+    dispatch(selectedActions.setIsDetailMode(true));
+  }, [title, executeDate]);
 
   // 데이터 초기화
   const initializeData = () => {
-    console.log('temp', temp);
-    
+
     if (data) {
       setData(data);
       setTitle(data.approval.title || '');
-      setExecuteDate(data.approval.executeDate || '');
+      setExecuteDate(data.approval.executeDate ? new Date(data.approval.executeDate) : null);
       setContent(data.approval.contents || '');
 
       if (isTempStorage(data)) {
@@ -46,27 +59,14 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ temp, setTemp, setData }) =
         setTemp(false);
         dispatch(selectedActions.setIsEditMode(false));
       }
-
       if (isSequentialOrParallel(data)) {
         dispatch(selectedActions.updateSelectedOption('addAgreement'));
       }
-
       if (!isEdit && titleInputRef.current) {
         titleInputRef.current.focus();
       }
     }
   };
-
-  useEffect(() => {
-    initializeData();
-  }, [isEdit, data]);
-  
-  useEffect(() => {
-    dispatch(selectedActions.setTitle(title));
-    dispatch(selectedActions.setDate(executeDate));
-    dispatch(selectedActions.setContent(content));
-    dispatch(selectedActions.setIsDetailMode(true));
-  }, [title, executeDate]);
 
   // 임시저장 여부 확인
   const isTempStorage = (data: ApprovalData) => {
@@ -86,11 +86,10 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ temp, setTemp, setData }) =
   }
   
   // 시행일자 변경 핸들러
-  const dataChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newDate = e.target.value;
-    setExecuteDate(newDate)
-    dispatch(selectedActions.setDate(newDate));
-  }
+  const dataChangeHandler = (date: Date | null) => {
+    validateDate(date);
+    setExecuteDate(date);
+  };
 
   const renderTitleField = () => {
     if (!isEdit) {
@@ -114,23 +113,26 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ temp, setTemp, setData }) =
   const renderDateField = () => {
     if (!isEdit) {
       return (
-        <span>{data?.approval.executeDate}</span>
+        <td>
+          <span>{data?.approval.executeDate}</span>
+        </td>
       );
     } else {
       return (
-        <input
-          className={classes['update-input']}
-          type="text"
-          name="executionDate"
-          value={executeDate}
-          onChange={dataChangeHandler}
+        <td className={classes['update-input']}>
+        <DatePick
+        placeholderText='시행일자'
+        selected={executeDate}
+        onChange={(date) => dataChangeHandler(date)}
+        dateFormat="yyyy-MM-dd"
         />
+        </td>
       );
     }
   };
 
   return (
-    <form>
+    <form id='approval'>
       <header className={classes['header-type']}>
         <div className={classes['header-logo']}>
           <img src={logoSmall} alt="Logo" />
@@ -151,9 +153,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ temp, setTemp, setData }) =
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>시행일자</th>
-                    <td>
                     {renderDateField()}
-                  </td>
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>부서명</th>

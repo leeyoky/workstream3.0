@@ -12,9 +12,10 @@ interface DatePickProps {
   selected: Date | null;
   onChange: (date: Date | null) => void;
   dateFormat: string;
+  ref?: React.RefObject<DatePicker>;
 }
 
-const DatePick: React.FC<DatePickProps> = ({ placeholderText, selected, onChange }) => {
+const DatePick: React.FC<DatePickProps> = ({ placeholderText, selected, onChange, ref }) => {
   const dispatch = useDispatch();
   const formatDate = (date: Date | null) => {
     if (!date) {
@@ -35,11 +36,11 @@ const DatePick: React.FC<DatePickProps> = ({ placeholderText, selected, onChange
   const customHeader = ({ date, decreaseMonth, increaseMonth }: any) => {
     return (
       <div className="custom-header">
-        <button onClick={decreaseMonth}>
+        <button type="button" onClick={decreaseMonth}>
           <i className="fa-solid fa-angle-left"></i>
         </button>
         <span>{date.toLocaleDateString(ko, { month: 'long', year: 'numeric' })}</span>
-        <button onClick={increaseMonth}>
+        <button type="button" onClick={increaseMonth}>
           <i className="fa-solid fa-angle-right"></i>
         </button>
       </div>
@@ -53,6 +54,7 @@ const DatePick: React.FC<DatePickProps> = ({ placeholderText, selected, onChange
 
   return (
     <DatePicker
+      ref={ref}
       selected={selected}
       onChange={handleDateChange}
       dateFormat="yyyy-MM-dd"

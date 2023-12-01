@@ -6,12 +6,17 @@
   text-align: center;
   font-weight: 500;
   font-size: 9pt;
+  background-color: #ffffff00;
 }
+
 .react-datepicker__input-container button::after {
   display: none;
   background-color: #da0000;
   width: 12px;
   height: 12px;
+}
+.react-datepicker-wrapper {
+  max-height: 20px !important;
 }
 .react-datepicker__navigation,
 .react-datepicker__navigation--previous,
