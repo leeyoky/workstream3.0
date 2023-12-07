@@ -90,4 +90,14 @@ export function getToday(format: 'hyphen' | 'dot' = 'hyphen') {
   return getDate;
 }
 
+/**
+ * @description 하이픈 제거 함수
+ * @param dateString 
+ * @returns 
+ */
+
+export const removeHyphens = (dateString: string): string => {
+  return dateString.replace(/-/g, '');
+}
+
 export default formatDateTime;

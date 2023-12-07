@@ -9,7 +9,7 @@ const Button: React.FC<ButtonProps> = (props) => {
   
   return (
     <div className="button-box">
-      <button className="write-btn" onClick={props.onShowModal}>
+      <button className="btn-primary btn-create" onClick={props.onShowModal}>
         {props.children} {/* 버튼 내용을 props.children으로 출력 */}
       </button>
     </div>

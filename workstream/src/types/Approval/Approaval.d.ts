@@ -10,12 +10,20 @@ export interface Employee {
   approvedYn?: string;
 }
 
+export interface DocumentCounts {
+  tempCount: number;
+  rejectedCount: number;
+  pendingCount: number;
+  proceedingCount: number;
+  approvedCount: number;
+}
 export interface ccDept {
   deptCd: string,
   deptNm: string,
 }
 
 export interface ApprovalState {
+  documentCnt: string;
   isEditMode: boolean;
   isDetailMode: boolean;
   isReference: boolean;

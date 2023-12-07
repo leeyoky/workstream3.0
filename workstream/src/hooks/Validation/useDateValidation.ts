@@ -9,7 +9,6 @@ import { formatDateOnly, getToday } from '../../helpers/formatDateTime';
 
 function useDateValidation(initialDate: Date | null) {
   const [validatedDate, setValidatedDate] = useState<Date | null>(initialDate);
-
   const validateDate = (date: Date | null) => {
     const formattedDate = date ? formatDateOnly(date.toISOString()) : '';
     const today = getToday();

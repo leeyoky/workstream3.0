@@ -55,7 +55,7 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
     const currentApproversCount = approvers;
   
     if (index === approverEmps.length - 1) {
-      alert('마지막 결재자는 결재만 선택할 수 있습니다.');
+      alert('최종결재권자는 결재권한만 행사할 수 있습니다.');
     } else if (currentApproversCount >= 6) {
       alert('결재자는 기안자와 최종결재자가 포함된 최대 6명까지 선택 가능합니다.');
     } else {
@@ -72,7 +72,7 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
     const currentAgreementsCount = agreements;
   
     if (index === approverEmps.length - 1) {
-      alert('마지막 결재자는 결재만 선택할 수 있습니다.');
+      alert('최종결재권자는 결재권한만 행사할 수 있습니다.');
     } else if (currentAgreementsCount >= 7) {
       alert('합의는 최대 7명까지 선택 가능합니다.');
     } else {
@@ -91,9 +91,12 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
 
   let approveButtons = null;
 
-  if (selectedOpton === 'addAgreement') {
+    const visibilityStyle = selectedOpton === 'approval' || index === approverEmps.length - 1 ? 'hidden' : 'visible';
     approveButtons = (
-      <div className={classes['button-box__buttons']}>
+      <div 
+        className={classes['button-box__buttons']}
+        style={{ visibility: visibilityStyle }}
+        >
         <button
           className={`${classes['active-button']} ${isApproveActive ? 
             classes.active : ''}`}
@@ -108,7 +111,6 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
         </button>
       </div>
     );
-  }
   return (
     <div className={classes['button-box']}>
       {approveButtons}

@@ -83,6 +83,7 @@ export function useApprovalList(sortValue: string) {
       const data = response.data;
       console.log(data);
       setDocuemntCnt(data);
+      dispatch(selectedActions.setDocumentCnt(data));
     } catch (error) {
       console.error(error);
     }
@@ -91,7 +92,7 @@ export function useApprovalList(sortValue: string) {
   useEffect(() => {
     fetchApprovalList();
     fetchDocumentCount();
-  }, [getPage, getPageSize, selectMenu, getSearchInput, sortValue]);
+  }, [getPage, getPageSize, selectMenu, getSearchInput, sortValue, location.pathname]);
 
   const menuClickHandler = (to: string | null) => {
     dispatch(uiActions.selectMenu(to));

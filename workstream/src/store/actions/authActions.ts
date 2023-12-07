@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import { authActions } from "../auth-slice";
 import { getLoginUserInfo, getUserInfo, login } from '../../api/axios' 
 import { useNavigate } from 'react-router-dom';
-import { userAction } from '../User/user-slice';
+import { userActions } from '../User/user-slice';
 
 export const useAuthActions = () => {
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ export const useAuthActions = () => {
     try {
       const response = await getUserInfo(userId);
       const data = response.data.content[0];
-      dispatch(userAction.setUserInfo(data));
+      dispatch(userActions.setUserInfo(data));
       console.log('fetchUserInfo');
       
     } catch (error) {

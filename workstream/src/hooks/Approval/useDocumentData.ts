@@ -1,4 +1,3 @@
-// useDocumentData.ts
 import { useEffect, useState } from 'react';
 import { ApprovalData, ResinationData } from '../../types/Approval/Approaval';
 import { getApprovalData, getResignationData } from '../../api/axios';

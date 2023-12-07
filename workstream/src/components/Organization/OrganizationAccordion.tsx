@@ -20,8 +20,11 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const [openDepth2, setOpenDepth2] = useState<number | null>(null);
   const [openDepth3, setOpenDepth3] = useState<number | null>(null);
+  const approvers = useSelector((state: RootState) => state.approval.approvers);
+  const approvalApprovers = approvers.filter((approver) => approver.approvalType === 'APPROVER');
   const isReference = useSelector((state:RootState) => state.approval.isReference);
   const ccDeptArr = useSelector((state:RootState) => state.approval.ccDept);
+  const ccEmpArr = useSelector((state:RootState) => state.approval.ccUser);
   const loginUserInfo = useSelector((state:RootState) => state.auth.userInfo)
   const searchResultDept = employeeData.find((emp) => emp.empNm === searchText);
   const dispatch = useDispatch();
@@ -129,8 +132,6 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
 
     // 객체를 문자열로 직렬화 
     const empInfoString = JSON.stringify(empInfo);
-    console.log('empInfoString', empInfoString);
-
     e.dataTransfer.setData('empName', empInfoString);
     dispatch(uiActions.setDraggingItem(empNm));
   };
@@ -158,12 +159,27 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
       approvalType: 'APPROVER',
       index,
     }
-    // 자기 자신일 경우 추가할 수 없음.
-    if(employee.empNo !== loginUserInfo?.empNo){
-      dispatch(selectedActions.addEmp(empData));
-    }else{
-      return;
-    }
+      // 자기 자신인 경우 추가할 수 없음.
+      if (employee.empNo === loginUserInfo?.empNo) {
+        return;
+      }
+      // 참조자 추가 여부 확인
+      if (!isReference) {
+        // 승인자 추가
+        if(approvalApprovers.length < 5){
+          dispatch(selectedActions.addEmp(empData));
+        }else{
+          alert('결재자는 기안자와 최종결재자를 포함한 최대 6명까지 선택 가능합니다.) ')
+        }
+
+      } else {
+        if (ccEmpArr.length < 10) {
+          dispatch(selectedActions.addRefEmp(empData));
+        }else{
+          alert('참조자는 10명 이상 추가할 수 없습니다.');
+          return;
+        }
+      }
   }
 
   const createAccordionItem = (item: OrganizationItem, index: number, level: number) => {
@@ -214,6 +230,7 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
                 draggable="true"
                 onDragStart={(e) => handleDragStart(
                   e, boss[0].empNo, boss[0].empNm, boss[0].officeDutyNm, boss[0].rankNm, index)}
+                onClick={() => addEmpHandler(boss[0], index)}
               >
                 <i className="fa-solid fa-user" style={{ color: '#607485', fontSize: '13pt' }}></i>
                 <span style={{ fontSize: '10pt', fontWeight: '500' }}>

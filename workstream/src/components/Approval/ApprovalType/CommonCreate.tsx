@@ -10,6 +10,7 @@ import Signature from './Signature';
 import ApprovalReference from '../ApprovalReference';
 import DatePick from '../../DatePick';
 import useDateValidation from '../../../hooks/Validation/useDateValidation';
+import { formatDateOnly } from '../../../helpers/formatDateTime';
 
 const CommonCreate = () => {
   const today = new Date();
@@ -25,18 +26,28 @@ const CommonCreate = () => {
     const newTitle = e.target.value;
     dispatch(selectedActions.setTitle(newTitle));
   }
+  useEffect(()=> {
+    dispatch(selectedActions.resetDocument());
+  }, [])
+
+  useEffect(() => {
+    const formattedDate = formatDateOnly(validatedDate?.toISOString() || '');
+    dispatch(selectedActions.setDate(formattedDate));
+  }, [validatedDate])
 
   useEffect(()=>{
     if(executionDateRef.current) {
       executionDateRef.current.focus();
     }
     dispatch(fileActions.resetFiles());
-    dispatch(selectedActions.resetDocument());
     dispatch(selectedActions.setIsEditMode(true));
     dispatch(selectedActions.setIsDetailMode(false));
     
-  },[executionDateRef.current?.value]);
-  
+  },[]);
+
+
+
+
   return (
     <form>
       <header className={classes['header-type']}>
@@ -84,6 +95,7 @@ const CommonCreate = () => {
                 <td className={classes['header-table__approval-th']}>제목</td>
                 <td>
                   <input 
+                    placeholder='제목을 입력해주세요.'
                     type="text" 
                     name="title"
                     onChange={titleChangeHandler}

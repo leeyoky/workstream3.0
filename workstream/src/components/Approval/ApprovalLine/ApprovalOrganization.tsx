@@ -9,7 +9,7 @@ const ApprovalOrganization = () => {
   }, [searchText]);
 
   const performSearch = () => {
-    console.log('Searching for:', searchText);
+    // console.log('Searching for:', searchText);
   };
 
   return (

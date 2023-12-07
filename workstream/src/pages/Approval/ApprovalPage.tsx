@@ -19,7 +19,7 @@ const ApprovalPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {}, [location.pathname]);
+  useEffect(() => {}, [location.pathname, selectMenu]);
 
   const getMenuTitle = (menuPath: string): string => {
     const menuTitles: Record<string, string> = {
@@ -57,6 +57,7 @@ const ApprovalPage: React.FC = () => {
       newSortValue = sortDirections[column] === 'asc' ? 'state,desc&' : 'state,asc&';
     }
     setSortValue(newSortValue);
+    
     toggleSortDirection(column);
   };
 
@@ -81,8 +82,11 @@ const ApprovalPage: React.FC = () => {
       return (
         <tr className="table-hover" key={index}>
           <td><span>{item.index}</span></td>
-          <td>
-            <span className="approval-list-title" onClick={() => goDetailPage(true, item.id, item.docType)}>
+          <td 
+            className="approval-list-title" 
+            onClick={() => goDetailPage(true, item.id, item.docType)}
+            >
+            <span>
               {item.title}
             </span>
           </td>
@@ -102,8 +106,8 @@ const ApprovalPage: React.FC = () => {
                   isProceedingWithPending ? 'badge-warning' :
                     statusLabel === '진행중' ? 'badge-success' :
                       statusLabel === '완료' ? 'badge-info' :
-                        statusLabel === '반려' ? 'badge-accent' :
-                          statusLabel === '임시' ? 'badge-temp' :
+                        statusLabel === '반려' ? 'badge-denger' :
+                          statusLabel === '임시저장' ? 'badge-temp' :
                             ''
                 }`}
               >

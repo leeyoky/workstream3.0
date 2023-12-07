@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedActions } from '../../store/Approval/approval-slice';
 import { RootState } from '../../store';
+import { selectedActions } from './../../store/Approval/approval-slice';
 import { deleteDocument, fetchApprovalData, fetchApproveDocument, fetchFileData, fetchRecallDocument, fetchResinationData, updateDocument, updateResignation } from '../../api/axios';
 import { AxiosError } from 'axios';
-import { userAction } from '../../store/User/user-slice';
+import { userActions } from '../../store/User/user-slice';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { uiActions } from '../../store/ui-slice';
+import { formatDateOnly } from '../../helpers/formatDateTime';
 
 
 const useApprovalRequest = () => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ isRefModalOpen, setIsRefModalOpen ] = useState(false);
   const [ approvedYn, setApprovedYn ] = useState('');
-  const [isDetail, setIsDetail] = useState(true);
+  const [ isDetail, setIsDetail] = useState(true);
   const { id = '' } = useParams<string>();
 
   const data = useSelector((state: RootState) => state.approval);
@@ -59,7 +61,9 @@ const useApprovalRequest = () => {
         try {
           const response = await fetchRecallDocument(id);
           if(response.status === 204){
-          navigate(`/approval/detail/${id}`)
+          alert('문서 회수에 성공했습니다.')
+          navigate('/approval/temporary');
+          dispatch(uiActions.selectMenu('/approval/temporary'));
         }
       } catch (error: any) {
         if((error as AxiosError).response?.status === 400){
@@ -153,7 +157,7 @@ const useApprovalRequest = () => {
           navigate(`/approval/detail/${responseData.id}`);
           setIsDetail(true);
           dispatch(selectedActions.resetArray());
-          dispatch(userAction.resetArray());
+          dispatch(userActions.resetArray());
         }
       } catch (error) {
         console.error(error);
@@ -166,15 +170,36 @@ const useApprovalRequest = () => {
     // 임시저장, 결재요청의 여부
     const confirmMsg = `${requestType === 'PROCEEDING' ? '결재 요청하시겠습니까?' : '임시 저장하시겠습니까?'}`;
     
+    
+    if (data.approvers.length === 0) {
+      alert('결재자가 선택되지 않았습니다');
+      return;
+    }
+    if(userData.userSSN === null) {
+      alert('주민번호가 입력되지 않았습니다.')
+    }
+    
+    if (data.retireDate === '') {
+      alert('퇴사일자를 입력하지 않았습니다.');
+      return;
+    }
+    if (userData.address === '') {
+      alert('주소가 입력되지 않았습니다');
+      return;
+    }
+
+    if(userData.mobilePhone === '') {
+      alert('휴대폰 연락처가 입력되지 않았습니다.')
+    }
+
+    if(data.reasonRetire === '') {
+      alert('퇴직 사유를 입력해 주십시오.')
+    }
+    
     if(data.finalSign === false){
       alert('서명을 하지 않았습니다.');
       return;
     }
-    // 결재자
-    // 현재 주소
-    // 퇴사일자가 ?...?
-    // 퇴직 사유
-    // 전화번호 하이픈 뺌 
 
     if(window.confirm(confirmMsg)) {
       let order = 0;
@@ -221,10 +246,15 @@ const useApprovalRequest = () => {
           if (fileData.length > 0) { // 파일 데이터가 있는 경우에만 실행
             await fetchFileHandler(responseData.id);
           }
-          alert("결재 성공")
+          if(requestType === 'PROCEEDING'){
+            alert('결재요청에 성공했습니다.')
+          }else{
+            alert('임시저장에 성공했습니다')
+          }
           setIsDetail(true);
           navigate(`/approval/detail/${responseData.id}`);
           dispatch(selectedActions.resetArray());
+          dispatch(selectedActions.resetResination());
         }
 
       } catch (error) {
@@ -254,7 +284,6 @@ const useApprovalRequest = () => {
       
     } catch (error) {
       console.log(error);
-      
     }
   }
 
@@ -279,12 +308,6 @@ const useApprovalRequest = () => {
         order: index + 1,
       }));
 
-      const currentDate = new Date();
-      
-      console.log('시행일자 ㅣ:', data.executeDate);
-      console.log('currentDate ㅣ:', currentDate);
-      
-
       if (data.title === '') {
         alert('문서의 제목을 입력하지 않았습니다.');
         return;
@@ -297,6 +320,20 @@ const useApprovalRequest = () => {
         alert('결재자가 선택되지 않았습니다');
         return;
       }
+
+      const currentDate = new Date();
+      const formatCurrentDate = formatDateOnly(currentDate.toISOString())
+      console.log('currentDate' ,formatCurrentDate);
+      
+      const executeDate = data.executeDate;
+      console.log('executeDate' , executeDate);
+  
+      // 현재 날짜와 비교
+      if (formatDateOnly(executeDate) < formatCurrentDate) {
+        alert('시행 일자는 품의일 이전 날짜로 지정할 수 없습니다.');
+        return;
+      }
+
       
       const docData = {
         id,
@@ -317,21 +354,22 @@ const useApprovalRequest = () => {
           if (fileData.length > 0) { // 파일 데이터가 있는 경우에만 실행
             await fetchFileHandler(id);
           }
-          alert(`${requestType === 'PROCEEDING' ? '결재 요청' : '임시 저장'}에 성공했습니다.`);
           if(requestType === 'PROCEEDING'){
-            alert('임시저장에 성공했습니다.')
+            alert('결재요청에 성공했습니다.')
             setIsDetail(true);
+            navigate('/approval/document');
+            dispatch(uiActions.selectMenu('/approval/document'));
           }else{
-            alert('결재요청에 성공했습니다')
-            setIsDetail(true);
-            dispatch(selectedActions.setIsEditMode(false));
+            alert('임시저장에 성공했습니다')
+            navigate('/approval/temporary');
+            dispatch(uiActions.selectMenu('/approval/temporary'));
           }
-          
-          navigate(`/approval/detail/${id}`);
-          dispatch(selectedActions.resetArray());
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        dispatch(selectedActions.resetArray());
+        dispatch(selectedActions.resetResination());
       }
     }
   }
@@ -364,11 +402,16 @@ const useApprovalRequest = () => {
         const response = await updateResignation(docData);
 
         if (response.status === 204) {
-          await fetchFileHandler(id);
+          if (fileData.length > 0) { // 파일 데이터가 있는 경우에만 실행
+            await fetchFileHandler(id);
+          }
           alert(`${requestType === 'PROCEEDING' ? '결재 요청' : '임시 저장'}에 성공했습니다.`);
           setIsDetail(true);
-          navigate(`/approval/temporary`);
+          navigate(`/approval/document`);
+          dispatch(uiActions.selectMenu('/approval/document'));
           dispatch(selectedActions.resetArray());
+          dispatch(userActions.resetArray());
+          dispatch(selectedActions.resetResination());
         }
       } catch (error) {
         console.log(error);
@@ -397,6 +440,7 @@ const useApprovalRequest = () => {
 
   /* 결재 승인/반려 */
   const approveDocumentHandler = async( approverId: number, result: 'Y' | 'R') => {
+    
     const confirmMsg = `${result === 'Y' ? '승인하시겠습니까?' : '반려하시겠습니까?'}`;
     if(window.confirm(confirmMsg)){
       try {
@@ -406,18 +450,17 @@ const useApprovalRequest = () => {
         }
         const response = await fetchApproveDocument(approveData);
         console.log(response);
-        console.log('approveData', approveData);
         if(response.status === 403) {
           alert ('권한이 없습니다.')
         }
         if(response.status === 204) {
           setApprovedYn(result)
           alert(`${result === 'Y' ? '결재를 승인하였습니다.' : '결재를 반려하였습니다.'}`);
+          navigate('/approval/pending');
+          dispatch(uiActions.selectMenu('/approval/pending'));
         }
-        
       } catch (error) {
         console.error(error);
-        
       }
     }
   }
@@ -427,14 +470,19 @@ const useApprovalRequest = () => {
   const pdfDownloadHandler = () => {
     const element: HTMLElement = document.getElementById('approval')!;
   
-    html2canvas(element, { scale: 2 }).then((canvas) => {
+    html2canvas(element, { scale: 3 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         format: 'a4',
         orientation: 'portrait',
+        unit: 'mm',
       });
+
+      const padding = 10; // You can adjust the padding value as needed
+      const pdfWidth = 210 - 2 * padding;
+      const pdfHeight = 297 - 2 * padding;
       
-      pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+      pdf.addImage(imgData, 'PNG', padding, padding, pdfWidth, pdfHeight);
       pdf.save('DS품의서.pdf');
     });
   };

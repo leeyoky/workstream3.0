@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { formatDateOnly, getToday } from '../../../helpers/formatDateTime';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-import { userAction } from '../../../store/User/user-slice';
+import { userActions } from '../../../store/User/user-slice';
 import { getEnteredDate } from '../../../api/axios';
 import DatePick from '../../DatePick';
 import useSSNValidation from '../../../hooks/Validation/useSSNValidation';
@@ -94,7 +94,7 @@ const ResinationCreate = () => {
       ...prevData,
       userAddress: userAddress
     }));
-    dispatch(userAction.setAddress(userAddress));
+    dispatch(userActions.setAddress(userAddress));
   };
 
   /* 퇴직 사유 입력 */
@@ -113,7 +113,10 @@ const ResinationCreate = () => {
       ...prevData,
       retireDate: date
     }));
-    dispatch(selectedActions.setDate(formatDateOnly(date?.toISOString() || '')));
+    
+    const formattedDate = formatDateOnly(date?.toISOString() || '');
+
+    dispatch(selectedActions.setRetireDate(formattedDate));
   }
 
   const DatePickMemoized = useMemo(() => (
@@ -191,6 +194,7 @@ const ResinationCreate = () => {
                 <th>현재 주소</th>
                 <td colSpan={2}>
                   <input 
+                    placeholder='주소를 입력해주세요.'
                     className={classes['body-table__input']} 
                     type="text" 
                     onChange={addressChangeHandler}
@@ -201,6 +205,7 @@ const ResinationCreate = () => {
                 <th className={classes['body-table__100']}>집</th>
                 <td>
                 <input
+                  placeholder='연락처를 입력해주세요'
                   className={classes['body-table__input']}
                   type="text"
                   onChange={homePhoneChangeHandler}
@@ -212,6 +217,7 @@ const ResinationCreate = () => {
                 <th>퇴직 사유</th>
                 <td colSpan={2}>
                   <input 
+                    placeholder='퇴직 사유를 입력해주세요.'
                     className={classes['body-table__input']} 
                     type="text"
                     onChange={exitChangeHandler}
@@ -220,6 +226,7 @@ const ResinationCreate = () => {
                 <th className={classes['body-table__100']}>휴대폰</th>
                 <td>
                 <input
+                  placeholder='휴대폰 번호를 입력해주세요.'
                   className={classes['body-table__input']}
                   type="text"
                   onChange={mobilePhoneChangeHandler}

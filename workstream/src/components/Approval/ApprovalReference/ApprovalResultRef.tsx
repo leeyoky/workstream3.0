@@ -26,7 +26,6 @@ const ApprovalResultRef = () => {
     
     if(referenceEmp.length < 10) {
       dispatch(selectedActions.addRefEmp(draggedData));
-      console.log('draggedData', draggedData);
     } else {
       alert('참조자는 최대 10명까지 추가 가능합니다.')
     }

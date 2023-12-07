@@ -27,7 +27,7 @@ const ApprovalCreate: React.FC<ApprovalCreateProps> = (props) => {
     if(!isEditMode) {
       dispatch(selectedActions.resetDocument());
     }
-  },[isEditMode, dispatch])
+  },[isEditMode])
   
   const closeModalHandler = () => {
     props.onClose();

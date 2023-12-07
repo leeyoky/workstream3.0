@@ -7,40 +7,19 @@ import { approvalMenuItems } from "../../types/Menu/SubMenus";
 
 import ApprovalCreate from "../../components/Approval/ApprovalCreate";
 import Button from "../Button";
-import { countDoucumentType } from "../../api/axios";
-
-interface DocumentCounts {
-  tempCount: number;
-  rejectedCount: number;
-  pendingCount: number;
-  proceedingCount: number;
-  approvedCount: number;
-}
+import { DocumentCounts } from "../../types/Approval/Approaval";
 
 const SubToolBar = () => {
-  const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
+  const [documentCnt, setDocumentCnt] = useState<DocumentCounts | undefined>();
+  const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
+  const getDocumentCnt = useSelector((state:RootState) => state.approval.documentCnt) as any;
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
-  const [documentCnt, setDocuemntCnt] = useState<DocumentCounts | undefined>();
   
-  const fetchDocumentCount = async() => {
-    try {
-      const response = await countDoucumentType();
-      const data = response.data;
-      console.log(data);
-      setDocuemntCnt(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  
-  useEffect(()=>{
-  },[documentCnt])
-
-  useEffect(()=>{
-    fetchDocumentCount();
-  },[])
+  useEffect(()=> {
+    setDocumentCnt(getDocumentCnt);
+  },[getDocumentCnt, dispatch])
 
   // 클릭한 메뉴 디스패치
   const menuClickHandler = (to: string | null) => {
@@ -67,12 +46,15 @@ const SubToolBar = () => {
         {items.map((item, index) => (
           <li key={index}>
             {item.to ? (
-              <NavLink to={item.to} onClick={() => menuClickHandler(item.to)}>
+              <NavLink 
+                to={item.to} 
+                onClick={() => menuClickHandler(item.to)}
+                >
                 {item.label}
                 <span className="badge badge-accent">
                   <div className="badge badge-count-box">
                   {getBadgeCountByLabel(item.label) !== undefined && (
-                    <span className={`badge-item ${item.label === '결재예정문서' ? '' : 'zero-count'}`}>
+                    <span className={`badge-item ${'sub'}`}>
                     {getBadgeCountByLabel(item.label)}
                     </span>
                   )}
@@ -101,13 +83,14 @@ const SubToolBar = () => {
       return documentCnt.approvedCount !== 0 ? documentCnt.approvedCount : undefined;
     } else if (label === '전체문서함' && documentCnt) {
       const totalCount =
-        documentCnt.rejectedCount +
-        documentCnt.tempCount +
-        documentCnt.proceedingCount +
-        documentCnt.approvedCount;
+      documentCnt.rejectedCount +
+      documentCnt.tempCount +
+      documentCnt.proceedingCount +
+      documentCnt.approvedCount;
       return totalCount !== 0 ? totalCount : undefined;
     }
   }
+  
 
   return (
     <div className={`sub-toolbar-wrapper ${!isSidebarOpen ? 'active' : ''}`}>
@@ -126,10 +109,10 @@ const SubToolBar = () => {
           <strong>문서함</strong>
           {renderMenuItems(approvalMenuItems.slice(0, 6))}
         </div>
-        <div className="sub-toolbar-menu-box">
+{/*         <div className="sub-toolbar-menu-box">
           <strong>관리</strong>
           {renderMenuItems(approvalMenuItems.slice(6))}
-        </div>
+        </div> */}
       </div>
     </div>
   )

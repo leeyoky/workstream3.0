@@ -4,7 +4,7 @@ import { RootState } from '../../../store';
 import { useMemo, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { formatDateOnly } from '../../../helpers/formatDateTime';
+import { formatDateMinutes, formatDateOnly } from '../../../helpers/formatDateTime';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import useApprovalRequest from '../../../hooks/Approval/useApprovalRequest';
 import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
@@ -44,7 +44,6 @@ const SignatureEdit = () => {
   
   useEffect((
     ) => {
-    console.log('useDocumentData Hook', data);
     if (data && data.line) {
       const updatedApprovers = data.line.map((employee) => ({
         index: employee.order,
@@ -105,7 +104,9 @@ const SignatureEdit = () => {
           <div>{approverIndex + 2}</div>
           ): ''}
       </span>
+      <span>
         {label}
+      </span>
     </th>
   );
 
@@ -118,8 +119,8 @@ const SignatureEdit = () => {
           isApprovalData(data) ? data.approval.regUsrNm : '' : 
           isResinationData(data) ? data.resignation.regUsrNm : '';
         const specialModDate = documentType === 'APPROVAL_COMMON' ? 
-          isApprovalData(data) ? formatDateOnly(data.approval.regDate as string) : '' : 
-          isResinationData(data) ? formatDateOnly(data.resignation.resignationDate as string) : '';
+          isApprovalData(data) ? formatDateMinutes(data.approval.regDate as string) : '' : 
+          isResinationData(data) ? formatDateMinutes(data.resignation.resignationDate as string) : '';
   
         return (
           <td className={classes['approver-content']} key={index}>

@@ -11,6 +11,13 @@
 .btn-border{
   background-color: #ffffff;
   border: 1px solid #c7c7c7;
+  color: #383838;
+}
+
+.btn-border-black{
+  background-color: #ffffff;
+  border: 1px solid #686868;
+  color: #383838;
 }
 
 .btn-red {
@@ -18,6 +25,7 @@
   color: white;
   font-weight: 500;
 }
+
 .btn-red:hover{
   background-color: rgb(179, 0, 0);
   transition: all 0.3s ease; 
@@ -34,7 +42,21 @@
   color: #ffffff;
 }
 
-.btn-primary { background-color: #ff9900; }
+.btn-primary { 
+  background-color: #ff9900; 
+  color: #ffffff; 
+}
+.btn-create {
+  padding: 3px 15px;
+  font-size: 12pt;
+}
+
+.btn-primary:hover { 
+  background-color: #e08702;
+  transition: all 0.3s ease;
+}
+
+.btn-
 
 .btn-secondary-line { 
   border: 1px solid #99743D;
@@ -44,8 +66,6 @@
   padding: 2px 9px 2px 9px;
 }
 
-.btn-primary:hover { background-color: #e28800;
-}
 
 .btn-secondary {
   background-color: #99743D;
@@ -119,7 +139,7 @@
   border-radius: 50%;
   width: 20px;
   height: 0px;
-  right: 7%;
+  right: 8%;
 }
 
 .badge-primary {
@@ -133,10 +153,16 @@
   color: #ffffff;
 }
 .badge-temp {
+  background-color: #c9c9c9;
+  color: #ffffff;
 }
 
-.badge-accent{
+.badge-denger{
   background-color: #e94c4c;
+  color: #ffffff;
+}
+.badge-accent{
+  background-color: #2B3499;
   color: #ffffff;
 }
 
@@ -151,6 +177,6 @@
 }
 
 .badge-warning{
-  background-color: #ffc21c;
+  background-color: #ffb820;
   color: #ffffff;
 }

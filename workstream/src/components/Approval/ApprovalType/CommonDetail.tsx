@@ -5,12 +5,12 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import TextEditor from '../../TextEditor';
 import { ApprovalData } from '../../../types/Approval/Approaval';
-import SignatureEdit from './SignatureEdit';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-import { getToday } from './../../../helpers/formatDateTime';
+import { formatDateOnly, getToday } from './../../../helpers/formatDateTime';
+import TextEditor from '../../TextEditor';
+import SignatureEdit from './SignatureEdit';
 import ApprovalReference from '../ApprovalReference';
 import DatePick from '../../DatePick';
 import useDateValidation from '../../../hooks/Validation/useDateValidation';
@@ -29,18 +29,21 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
   const { id = ''} = useParams<string>();
   const {data} = useApprovalData(id);
+  const { validatedDate, validateDate } = useDateValidation(null);
   const dispatch = useDispatch();
-  const { validateDate } = useDateValidation(null);
 
   useEffect(() => {
     initializeData();
   }, [isEdit, data]);
 
   useEffect(() => {
+    const formattedDate = formatDateOnly(executeDate?.toISOString() || '');
+
     dispatch(selectedActions.setTitle(title));
-    dispatch(selectedActions.setDate(executeDate));
+    dispatch(selectedActions.setDate(formattedDate));
     dispatch(selectedActions.setContent(content));
     dispatch(selectedActions.setIsDetailMode(true));
+    
   }, [title, executeDate]);
 
   // 데이터 초기화
@@ -51,6 +54,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
       setTitle(data.approval.title || '');
       setExecuteDate(data.approval.executeDate ? new Date(data.approval.executeDate) : null);
       setContent(data.approval.contents || '');
+      
 
       if (isTempStorage(data)) {
         setTemp(true);
@@ -88,7 +92,10 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   // 시행일자 변경 핸들러
   const dataChangeHandler = (date: Date | null) => {
     validateDate(date);
+    const formattedDate = formatDateOnly(validatedDate?.toISOString() || '');
     setExecuteDate(date);
+
+    dispatch(selectedActions.setDate(formattedDate));
   };
 
   const renderTitleField = () => {
@@ -99,6 +106,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
     } else {
       return (
         <input
+          placeholder='제목을 입력해주세요.'
           className={classes['update-input']}
           type="text"
           name="title"

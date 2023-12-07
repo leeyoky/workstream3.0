@@ -32,8 +32,6 @@ const ApprovalComment = () => {
           const data = response.data;
           setDataChanged(false);
           setListData(data);
-          console.log('data', data);
-  
           setCommentStates(data?.comment.map((item: CommentItem) => item.comment) || []);
         } else {
           console.error('Invalid response or response.data:', response?.data);

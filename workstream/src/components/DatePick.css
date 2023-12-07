@@ -4,8 +4,8 @@
   height: auto;
   padding-right: 5px;
   text-align: center;
-  font-weight: 500;
-  font-size: 9pt;
+  font-weight: 600;
+  font-size: 9.5pt;
   background-color: #ffffff00;
 }
 
@@ -15,8 +15,10 @@
   width: 12px;
   height: 12px;
 }
-.react-datepicker-wrapper {
-  max-height: 20px !important;
+.index-box td .react-datepicker-wrapper{
+  max-height: 20px !important; 
+  display: flex;
+  align-items: center;
 }
 .react-datepicker__navigation,
 .react-datepicker__navigation--previous,

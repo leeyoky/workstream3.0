@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { userAction } from '../../store/User/user-slice';
+import { userActions } from '../../store/User/user-slice';
 
 /**
  * @description 전화번호 유효성 검사를 위한 커스텀 훅
@@ -42,7 +42,7 @@ const usePhoneValidation = () => {
     const formattedPhone = formatPhoneNumber(phoneFilterNumber);
   
     setMobilePhone(formattedPhone)
-    dispatch(userAction.setMobilePhone(formattedPhone));
+    dispatch(userActions.setMobilePhone(phoneFilterNumber));
   };
 
   /* 집 전화번호 정규식 */
@@ -56,10 +56,8 @@ const usePhoneValidation = () => {
       alert('전화번호부 양식이 맞지 않습니다.')
       return phoneValue.substring(0, 11).replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
     }
-  
     setHomePhone(phoneFilterNumber)
-  
-    dispatch(userAction.setHomePhone(phoneFilterNumber));
+    dispatch(userActions.setHomePhone(phoneFilterNumber.replace(/-/g, ''))); // 하이픈 제거 후 dispatch
   };
 
   return {

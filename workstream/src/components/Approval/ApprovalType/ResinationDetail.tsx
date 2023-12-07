@@ -8,7 +8,11 @@ import { useParams } from 'react-router-dom';
 import { useResinationData } from '../../../hooks/Approval/useResinationData';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-import { userAction } from '../../../store/User/user-slice';
+import { userActions } from '../../../store/User/user-slice';
+import DatePick from '../../DatePick';
+import { formatDateOnly } from '../../../helpers/formatDateTime';
+import useSSNValidation from '../../../hooks/Validation/useSSNValidation';
+import usePhoneValidation from '../../../hooks/Validation/usePhoneValidation';
 
 type ResinationDetailProps = {
   temp: boolean;
@@ -23,24 +27,42 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
   const dispatch = useDispatch();
 
+  const { ssnFront:validationSSNFront, ssnBack:validationSSNBack, handleSSNChange } = useSSNValidation();
+  const { mobilePhone:MBPhone, 
+          homePhone:HPhone,
+          mobilePhoneChangeHandler: MBPhoneHandler, 
+          homePhoneChangeHandler:HPhoneHandler } = usePhoneValidation();
+  const [ retireDate, setRetireDate ] = useState<Date | null>(null);
   const [ ssnFront, setSSNFront ] = useState('');
   const [ ssnBack, setSSNBack ] = useState('');
   const [ userAddress, setUserAddress ] = useState('');
   const [ reasonRetirement, setReasonRetirement ] = useState(''); 
   const [ homePhone, setHomePhone ] = useState('');
   const [ mobilePhone, setMobilePhone ] = useState('');
-
+  const [ userSSN , setUserSSN ] = useState('');
   const deleteHypenFront = data?.resignation.identityNo?.split('-')[0];
   const deleteHypenBack = data?.resignation.identityNo?.split('-')[1];
   const stateUserAddress = data?.resignation.address;
   const stateReason = data?.resignation.reasons;
   const stateHomeContact = data?.resignation.homeContact;
   const stateMobileContact = data?.resignation.mobileContact;
+  
+  useEffect(()=> { initializeData(); },[isEdit, data])
+
+  useEffect(()=> {
+    const formattedDate = formatDateOnly(retireDate?.toISOString() || '');
+    dispatch(userActions.setSSN(userSSN));
+    dispatch(selectedActions.setRetireDate(formattedDate));
+    dispatch(userActions.setAddress(stateUserAddress));
+    dispatch(selectedActions.setReasonRitire(stateReason));
+    dispatch(userActions.setHomePhone(stateHomeContact));
+    dispatch(userActions.setMobilePhone(stateMobileContact));
+  },[userSSN, stateUserAddress])
 
 
   const initializeData = () => {
-
     if(data) {
+      setRetireDate(data.resignation.resignationDate?  new Date(data.resignation.resignationDate) : null );
       setDataState(data);
       setSSNFront(deleteHypenFront || '');
       setSSNBack(deleteHypenBack || '');
@@ -48,7 +70,9 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
       setReasonRetirement(stateReason || '');
       setHomePhone(stateHomeContact || '');
       setMobilePhone(stateMobileContact || '');
-  
+      setUserSSN(data.resignation.identityNo || '');
+      
+      dispatch(userActions.setSSN(`${ssnFront}-${ssnBack}`));
       if (isTempStorage()) {
         setTemp(true);
         dispatch(selectedActions.setIsEditMode(true));
@@ -56,16 +80,23 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
         setTemp(false);
         dispatch(selectedActions.setIsEditMode(false));
       }
-
     }
   }
+
+  useEffect(()=> { setSSNFront(validationSSNFront)}, [validationSSNFront])
+  
+  useEffect(()=> { setSSNBack(validationSSNBack)}, [validationSSNBack])
+
+  useEffect(()=> { setMobilePhone(MBPhone)}, [MBPhone])
+
+  useEffect(()=> { setHomePhone(HPhone) },[HPhone])
+  
+  
   
   useEffect(()=> {
-    initializeData();
-  },[isEdit, data])
-  
-  useEffect(()=> {
+
     dispatch(selectedActions.setIsDetailMode(true));
+
   }, [dataState, dispatch])
 
     // 임시저장 여부 확인
@@ -73,50 +104,21 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
       return dataState?.resignation.state === 'TEMP';
     };
 
-  const userSSNchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const ssnFrontPattern = /^\d{0,6}$/;
-    const ssnBackPattern = /^\d{0,7}$/;
+
+    // 퇴직일자 변경 핸들러
+    const dataChangeHandler = (date: Date | null) => {
+      setRetireDate(date);
+      
+      const formattedDate = formatDateOnly(date?.toISOString() || '');
   
-    if (name === 'ssnFront' && ssnFrontPattern.test(value)) {
-      setSSNFront(value);
-      dispatch(userAction.setSSN(`${value}-${ssnBack}`));
-    } else if (name === 'ssnBack' && ssnBackPattern.test(value)) {
-      setSSNBack(value);
-      dispatch(userAction.setSSN(`${ssnFront}-${value}`));
-    }
-  };
+      dispatch(selectedActions.setRetireDate(formattedDate));
+    };
 
   const addressChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const userAddress = e.target.value;
     setUserAddress(userAddress)
-    dispatch(userAction.setAddress(userAddress));
+    dispatch(userActions.setAddress(userAddress));
   }
-
-  const homePhoneChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const phoneValue = e.target.value;
-    setHomePhone(phoneValue);
-    dispatch(userAction.setHomePhone(phoneValue));
-  };
-
-  const mobilePhoneChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const phoneValue = e.target.value;
-    setMobilePhone(phoneValue);
-    dispatch(userAction.setMobilePhone(removeHyphen(phoneValue)));
-  }
-
-  const formatPhoneNumber = (phoneNumber: string) => {
-    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
-    const match = cleaned.match(/^(\d{3})(\d{4})(\d{4})$/);
-
-    if (match) {
-      return `${match[1]}-${match[2]}-${match[3]}`;
-    }
-
-    return phoneNumber;
-  };
-
-  const removeHyphen = (phoneNumber: string) => phoneNumber.replace(/-/g, '');
 
   const exitChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reasonRetirement = e.target.value;
@@ -165,7 +167,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                       placeholder='●●●●●●'
                       name='ssnFront'
                       value={ssnFront}
-                      onChange={userSSNchangeHandler}
+                      onChange={(e) => handleSSNChange(e.target.name, e.target.value)}
                       />
                       <span className={classes['hyphen']}> - </span> 
                       <input 
@@ -174,7 +176,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                         placeholder='●●●●●●●'
                         name='ssnBack'
                         value={ssnBack}
-                        onChange={userSSNchangeHandler}
+                        onChange={(e) => handleSSNChange(e.target.name, e.target.value)}
                         />
                     </>
                   ): (
@@ -189,7 +191,17 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 </td>
                 <th>퇴사 일자</th>
                 <td colSpan={2}>
-                  {dataState?.resignation.resignationDate}
+                {isEdit? (
+                  <DatePick
+                    placeholderText='퇴사일자'
+                    selected={retireDate}
+                    onChange={(date) => dataChangeHandler(date)}
+                    dateFormat="yyyy-MM-dd"
+                  />
+                ): (
+                  dataState?.resignation.resignationDate
+                )
+                }
                 </td>
               </tr>
               <tr>
@@ -197,6 +209,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 <td colSpan={2}>
                   {isEdit? (
                     <input 
+                    placeholder='주소를 입력해주세요.'
                     className={classes['body-table__input']} 
                     type="text" 
                     onChange={addressChangeHandler}
@@ -211,9 +224,10 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 <td>
                   {isEdit? (
                     <input
+                    placeholder='연락처를 입력해주세요.'
                     className={classes['body-table__input']}
                     type="text"
-                    onChange={homePhoneChangeHandler}
+                    onChange={HPhoneHandler}
                     value={homePhone}
                   />
                   ): (
@@ -226,6 +240,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 <td colSpan={2}>
                   { isEdit? (
                     <input 
+                    placeholder='퇴직 사유를 입력해주세요.'
                     className={classes['body-table__input']} 
                     type="text"
                     onChange={exitChangeHandler}
@@ -238,10 +253,11 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 <td>
                   {isEdit? (
                     <input
+                    placeholder='휴대폰 번호를 입력해주세요'
                     className={classes['body-table__input']}
                     type="text"
-                    onChange={mobilePhoneChangeHandler}
-                    value={formatPhoneNumber(mobilePhone)}
+                    onChange={MBPhoneHandler}
+                    value={mobilePhone}
                   />
                   ): (
                     dataState?.resignation.mobileContact

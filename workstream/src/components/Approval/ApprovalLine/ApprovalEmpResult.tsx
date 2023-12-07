@@ -97,7 +97,7 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
           // 만약 합의인 사람을 마지막 결재권자로 지정했을때
           const updatedApprovers = reorderedApprovers.map((approver, index) => {
             if (isLastIndex && index === dropIndex && selectedOption === "addAgreement") {
-              alert('마지막 결재자는 결재만 선택 가능합니다.')
+              alert('최종결재권자는 [결재]로 자동선택 됩니다')
               return { ...approver, approvalType: 'APPROVER' };
             } else {
               return approver;

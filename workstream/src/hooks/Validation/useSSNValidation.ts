@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { userAction } from '../../store/User/user-slice';
+import { userActions } from '../../store/User/user-slice';
 
 /**
  * @description 주민등록 번호 유효성 검사 커스텀 훅
@@ -14,7 +14,7 @@ const useSSNValidation = () => {
   const [ssnBack, setSSNBack] = useState('');
 
   useEffect(() => {
-    dispatch(userAction.setSSN(`${ssnFront}-${ssnBack}`));
+    dispatch(userActions.setSSN(`${ssnFront}-${ssnBack}`));
   }, [dispatch, ssnFront, ssnBack]);
 
   const handleSSNChange = (name: string, value: string) => {

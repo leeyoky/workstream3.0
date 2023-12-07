@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ApprovalState, ccDept, Employee } from "../../types/Approval/Approaval";
 
 const initialState: ApprovalState = { 
+  documentCnt: '',
   isEditMode: true,
   isDetailMode: true,
   documentType: '',
@@ -27,6 +28,11 @@ const approvalSlice = createSlice({
   name: 'approval',
   initialState,
   reducers: {
+    // 결재 문서함 갯수
+    setDocumentCnt(state, action){
+      state.documentCnt = action.payload;
+    }
+    ,
     // 결재대기 문서 갯수 셋팅
     setPendingCnt(state, action) {
       state.pendingCnt = action.payload;
@@ -186,6 +192,11 @@ const approvalSlice = createSlice({
       state.executeDate = '';
       state.ccDept = [];
       state.ccUser = [];
+    },
+    resetResination(state){
+      state.reasonRetire = '';
+      state.retireDate = '';
+      state.finalSign = false;
     }
   },
 });

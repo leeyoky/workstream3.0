@@ -1,4 +1,4 @@
-import profile from '../../assets/img/guriman.jpg';
+/* import profile from '../../assets/img/test1.jpg'; */
 import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -6,9 +6,11 @@ import { uiActions } from '../../store/ui-slice';
 import SubToolBar from './SubToolBar';
 import { useEffect } from 'react';
 import { useAuthActions } from '../../store/actions/authActions';
+import useApprovalDocumentCnt from '../../hooks/Approval/useApprovalDocumentCnt';
 
 const SideToolBar = () => {
   const { fetchEmployee } = useAuthActions();
+  const { documentCnt } = useApprovalDocumentCnt();
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const dispatch = useDispatch();
   const location = useLocation();   // 현재 경로 가져오기
@@ -20,7 +22,13 @@ const SideToolBar = () => {
     if (!loginUserInfo || Object.keys(loginUserInfo).length === 0) {
       fetchEmployee();
     }
+    
   }, [loginUserInfo]);
+  
+  useEffect(()=> {
+    console.log('documentCnt', documentCnt);
+
+  },[])
 
   
   const toggleSideBar = () => {
@@ -68,7 +76,8 @@ const SideToolBar = () => {
         </div>
         <div className={`side-bar-1200 ${!isSidebarOpen ? 'active' : ''}`}>
           <div className="side-bar-profile-wrapper side-sm">
-            <img src={profile} alt="Profile" />
+            {/* <img src={profile} alt="Profile" /> */}
+            <i className="fa-solid fa-user-tie"></i>
           </div>
           <div className="side-bar-profile">
             <h3>
@@ -96,6 +105,11 @@ const SideToolBar = () => {
                     className={classNames.menuIcon}>
                       {item.label}
                   </span>
+                  {item.label === '전자결재' && (
+                  <span className={`badge-item ${documentCnt?.pendingCount === null || documentCnt?.pendingCount === 0  ? 'none' : 'main'}`}>
+                    {documentCnt?.pendingCount}
+                  </span>
+                  )}
                 </NavLink>
               </li>
             ))}

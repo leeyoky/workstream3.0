@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { createLogger } from "redux-logger";
+/* import { createLogger } from "redux-logger"; */
 
 import authSlice from "./auth-slice";
 import uiSlice from "./ui-slice";
@@ -41,7 +41,7 @@ const store = configureStore({
 
     if (isDevelopment) {
       // 개발 모드에서만 사용할 미들웨어 추가
-      middleware.push(createLogger()); 
+      // middleware.push(createLogger()); 
     }
 
     return middleware.concat(thunk);
