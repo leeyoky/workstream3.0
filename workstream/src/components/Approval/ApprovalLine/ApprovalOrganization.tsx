@@ -31,7 +31,7 @@ const ApprovalOrganization = () => {
           </button>
         </div>
 
-        <OrganizationAccordion searchText={searchText}/>
+        <OrganizationAccordion searchText={searchText} setSearchText={setSearchText}/>
       </div>
     </div>
   );

@@ -11,10 +11,11 @@ import { RootState } from '../../store';
 import { selectedActions } from '../../store/Approval/approval-slice';
 
 interface OrganizationAccordionProps {
-  searchText?: string
+  searchText?: string;
+  setSearchText? : any;
 }
 
-const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchText }) => {
+const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchText, setSearchText }) => {
   const [deptData, setDeptData] = useState<OrganizationItem[]>([]);
   const [employeeData, setEmployeeData] = useState<EmployeeItem[]>([]);
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
@@ -25,10 +26,18 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
   const isReference = useSelector((state:RootState) => state.approval.isReference);
   const ccDeptArr = useSelector((state:RootState) => state.approval.ccDept);
   const ccEmpArr = useSelector((state:RootState) => state.approval.ccUser);
-  const loginUserInfo = useSelector((state:RootState) => state.auth.userInfo)
-  const searchResultDept = employeeData.find((emp) => emp.empNm === searchText);
+  const loginUserInfo = useSelector((state:RootState) => state.auth.userInfo);
   const dispatch = useDispatch();
+  const searchResultDept = employeeData.find((emp) => emp.empNm === searchText);
 
+  useEffect(() => {
+    setSearchText(loginUserInfo?.empNm || ''); 
+    console.log(searchText, 'searchText');
+  }, []); 
+
+
+
+  
   useEffect(() => {
     // 검색어에 해당하는 사원이 있다면
     if (searchResultDept) {
@@ -73,7 +82,6 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
         const response = await getDepartment();
         const data = response.data;
         setDeptData(data);
-        console.log(data);
       } catch (error) {
         console.error("서버 통신 오류", error);
       }
@@ -86,7 +94,6 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
       try {
         const response = await getEmployeeInfo();
         const data = response.data.content;
-        console.log(data);
         setEmployeeData(data);
       } catch (error) {
         console.log("서버 통신 오류", error);
@@ -212,7 +219,7 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
       <div key={index} className={itemClass}>
         <div className={classes['accordion-header']}>
           <div className={classes['accordion-header__toggle']} onClick={toggleFunction}>
-            <i className={`fa-solid fa-folder${isOpen ? '-open' : ''}`}></i>
+            <i className={`fa-solid fa-folder${isOpen || isDepth2Open || isDepth3Open ? '-open' : ''}`}></i>
             <span>{item.deptNm}</span>
           </div>
           <div>

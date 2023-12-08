@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ResinationData } from '../../types/Approval/Approaval';
+import { ResignationData } from '../../types/Approval/Approaval';
 import { getResignationData } from '../../api/axios';
 
-export const useResinationData = (id: string) => {
-  const [data, setData] = useState<ResinationData>();
+export const useResignationData = (id: string) => {
+  const [data, setData] = useState<ResignationData | undefined>();
 
-  const fetchResinationData = async (id: string) => {
+  const fetchResignationData = async (id: string) => {
     try {
       const response = await getResignationData(id);
       const data = response.data;
@@ -17,12 +17,16 @@ export const useResinationData = (id: string) => {
       
     }
   };
+    // 상태업데이트
+    const updateData = (newData: ResignationData) => {
+      setData(newData);
+    };
 
   useEffect(()=> {
     if(id){
-      fetchResinationData(id);
+      fetchResignationData(id);
     }
   },[id]);
 
-  return { data };
+  return { data, updateData };
 }

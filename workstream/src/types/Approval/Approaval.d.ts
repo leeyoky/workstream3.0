@@ -207,7 +207,7 @@ export type ApprovalData = CommonData & {
   };
 };
 
-export type ResinationData = CommonData & {
+export type ResignationData = CommonData & {
   resignation: {
     address: string;
     docType: string;

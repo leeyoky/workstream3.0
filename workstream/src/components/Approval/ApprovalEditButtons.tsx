@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import React, { useEffect, useMemo } from 'react';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
-import { ApprovalData, ResinationData } from '../../types/Approval/Approaval';
+import { ApprovalData, ResignationData } from '../../types/Approval/Approaval';
+import ApprovalModalInstruction from './ApprovalInstruction/ApprovalModalInstruction';
 
 type ApprovalEditButtonsProps = {
   temp: boolean;
@@ -16,26 +17,39 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     id,
     isModalOpen,
     isRefModalOpen,
+    isInstModalOpen,
     approvedYn,
     setApprovedYn,
     handleShowModal,
     handleCloseModal,
     handleCloseRefModal,
     handleShowRefModal,
+    handleShowInstModal,
+    handleCloseInstModal,
     goBackPage,
     deleteDocumentHandler,
     approveDocumentHandler,
     requestApprovalType,
     requestTempDocument,
     recallDocument,
-    pdfDownloadHandler
+    pdfDownloadHandler,
   } = useApprovalRequest();
 
   const isDetail = useSelector((state: RootState) => state.approval.isDetailMode);
+  const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
   const selectMenu = useSelector((state: RootState) => state.ui.selectMenu);
   const userData = useSelector((state: RootState) => state.auth.userInfo?.empNo);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const documentData = useDocumentData(documentType, id)?.data;
+
+    // 타입가드
+    const isApprovalData = (data: any): data is ApprovalData => {
+      return data && 'approval' in data;
+    };
+  
+    const isResignationData = (data: any): data is ResignationData => {
+      return data && 'resignation' in data;
+    };
 
   const memoizedValues = useMemo(() => {
     return { isDetail, selectMenu, userData, approvedYn };
@@ -51,20 +65,29 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
   const renderApprovalButtons = () => {
     const isApprover = documentData?.line.some(approval => approval.approver === userData);
     const userOrder = documentData?.line.find(a => a.approver === userData)?.order!;
+    
+    const nextApprover = documentData?.line.find(approval => approval.order === userOrder + 1);
+    
+    const isNextApprover = nextApprover?.approvedYn === 'N';
+    
+    const previousApprover = documentData?.line.find(approval => approval.order === userOrder - 1);
+    const isPreviousApproved = !(previousApprover?.approvedYn === 'N');
+    
+    const isApproved = documentData ? (
+      documentType === 'APPROVAL_COMMON' ? (
+        isApprovalData(documentData) ? documentData.approval.state : ''
+      ) : (
+        isResignationData(documentData) ? documentData.resignation.state : ''
+      )
+    ) : '';
+    
+    
+    
+    if (isApprover && !isEdit) {
+      const isLastApprover = !nextApprover;
   
-    if (isApprover) {
-      /* 첫번째 결재자 일때 */
-      const isFirstApprover =
-        userOrder === 1 &&
-        documentData?.line.find(approval => approval.order === 1)?.approvedYn === 'N';
-      /* 자기 뒤의 결재자가 아직 승인 하지 않았고 */
-      const isLastApprover =
-        documentData?.line.find(approval => approval.order === documentData.line.length)?.approvedYn === 'N';
-      /* 자기 앞의 결재자가 승인했을때 */
-      const isPreviousApproved =
-      documentData?.line.find(approval => approval.order === userOrder - 1)?.approvedYn === 'Y';
-  
-      if (isFirstApprover || (isLastApprover && isPreviousApproved)) {
+      if ((isNextApprover || isPreviousApproved ) &&
+        isApproved !== 'APPROVED' && isApproved !== 'REJECTED') {
         return (
           <>
             <button className="btn btn-blue" onClick={() => approveDocumentHandler(matchingId, 'Y')}>
@@ -75,6 +98,16 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
             </button>
           </>
         );
+      }
+      if(isLastApprover && isPreviousApproved &&         
+        isApproved !== 'APPROVED' &&
+        isApproved !== 'REJECTED'){
+          return(
+          <button className="btn btn-blue" onClick={() => handleShowInstModal()}>
+            <span>최종결재</span>
+            {isInstModalOpen && <ApprovalModalInstruction onClose={handleCloseInstModal}/>}
+          </button>
+          )
       }
     }
   
@@ -87,6 +120,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
         <span>결재자지정</span>
         <i className="fa-solid fa-user-pen"></i>
       </button>
+      {isModalOpen && <ApprovalModalEmpEdit onClose={handleCloseModal} isEdit={true} />}
       {!(documentType === 'RESIGNATION') &&
         <button className='btn'
         onClick={handleShowRefModal}>
@@ -94,7 +128,6 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
           <i className="fa-solid fa-users"></i>
         </button>}
       {isRefModalOpen && <ApprovalModalEmpEdit onClose={handleCloseRefModal} isEdit={true}/>}
-      {isModalOpen && <ApprovalModalEmpEdit onClose={handleCloseModal} isEdit={true} />}
       <button className="btn" onClick={() => requestApprovalType(documentType, 'TEMP')}>
         <span>임시저장</span>
         <i className="fa-solid fa-floppy-disk"></i>
@@ -107,14 +140,6 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     </>
   );
 
-  const isApprovalData = (data: any): data is ApprovalData => {
-    return data && 'approval' in data;
-  };
-  
-  const isResinationData = (data: any): data is ResinationData => {
-    return data && 'resignation' in data;
-  };
-
   
 
   /* 문서별 작성자의 no를 가져옴 */
@@ -122,7 +147,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     documentType === 'APPROVAL_COMMON'
       ? isApprovalData(documentData)? documentData.approval.regUsr
       : documentData?.resignation.regUsr || '' 
-      : isResinationData(documentData)? documentData.resignation.regUsr: '';
+      : isResignationData(documentData)? documentData.resignation.regUsr: '';
 
   /* 결재자가 Y가 있는지 */
   const approverYn = documentType === 'APPROVAL_COMMON'
@@ -152,6 +177,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
               <span>참조자/부서</span>
               <i className="fa-solid fa-users"></i>
             </button>}
+            {isRefModalOpen && <ApprovalModalEmpEdit onClose={handleCloseRefModal} isEdit={true}/>}
             <button className="btn" onClick={() => requestTempDocument(documentType, 'TEMP')}>
               <span>임시저장</span>
               <i className="fa-solid fa-floppy-disk"></i>

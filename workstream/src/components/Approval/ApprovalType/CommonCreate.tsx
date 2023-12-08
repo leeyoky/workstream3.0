@@ -8,15 +8,12 @@ import classes from '../../../pages/Approval/Approval.module.css';
 import TextEditor from '../../TextEditor';
 import Signature from './Signature';
 import ApprovalReference from '../ApprovalReference';
-import DatePick from '../../DatePick';
-import useDateValidation from '../../../hooks/Validation/useDateValidation';
-import { formatDateOnly } from '../../../helpers/formatDateTime';
+import ApprovalInstructions from '../ApprovalInstruction/ApprovalInstructions';
 
 const CommonCreate = () => {
   const today = new Date();
   const getDate = today.toISOString().slice(0,10);
 
-  const { validatedDate, validateDate } = useDateValidation(null);
   const userInfo = useSelector((state:RootState) => state.auth.userInfo);
   const executionDateRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement | null>(null);
@@ -30,11 +27,6 @@ const CommonCreate = () => {
     dispatch(selectedActions.resetDocument());
   }, [])
 
-  useEffect(() => {
-    const formattedDate = formatDateOnly(validatedDate?.toISOString() || '');
-    dispatch(selectedActions.setDate(formattedDate));
-  }, [validatedDate])
-
   useEffect(()=>{
     if(executionDateRef.current) {
       executionDateRef.current.focus();
@@ -44,9 +36,6 @@ const CommonCreate = () => {
     dispatch(selectedActions.setIsDetailMode(false));
     
   },[]);
-
-
-
 
   return (
     <form>
@@ -70,14 +59,7 @@ const CommonCreate = () => {
               </tr>
               <tr>
                 <td className={classes['header-table__approval-th']}>시행일자</td>
-                <td>
-                  <DatePick
-                    placeholderText='시행일자'
-                    selected={validatedDate}
-                    onChange={(date) => validateDate(date)}
-                    dateFormat="yyyy-MM-dd"
-                    />
-                </td>
+                <td></td>
               </tr>
               <tr>
                 <td className={classes['header-table__approval-th']}>부서명</td>
@@ -95,6 +77,7 @@ const CommonCreate = () => {
                 <td className={classes['header-table__approval-th']}>제목</td>
                 <td>
                   <input 
+                    className={classes['update-input']}
                     placeholder='제목을 입력해주세요.'
                     type="text" 
                     name="title"
@@ -110,6 +93,7 @@ const CommonCreate = () => {
         </div>
       </header>
         <ApprovalReference />
+        <ApprovalInstructions />
         <TextEditor />
       <footer>
         <div className={classes['footer-text']}>

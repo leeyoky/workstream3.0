@@ -133,9 +133,6 @@ footer p {
   display: none !important;
 }
 
-
-
-
 /* Header */
 
 .header-logo{
@@ -201,8 +198,8 @@ footer p {
   justify-content: flex-start;
 }
 .reference-table-th{
-  width: 115px;
-  min-width: 115px;
+  width: 117px;
+  min-width: 117px;
   border-right: 1px solid;
   display: flex;
   justify-content: center;
@@ -244,11 +241,16 @@ footer p {
   border: none;
   display: flex;
   height: -webkit-fill-available;
-  width: 96%;
+  width: 98%;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   font-size: 9.5pt;
   text-align: center;
+}
+.header-table__common input::placeholder {
+  font-size: 9.5pt;
+  font-weight: 400;
+  color: #8f8f8f;
 }
 .reference-table input{
   text-align: left;
@@ -257,13 +259,14 @@ footer p {
   margin-right: 1px;
 }
 .header-table__approval-th{
-  width: 140px;
-  height: 30px;
+  width: 90px;
+  height: 25px;
   border: 1px solid black;
   position: relative;
   font-size: 10pt;
   background-color: #f0f0f0;
   font-weight: 700 !important;
+  text-align: center
 }
 
 .header-table__approval-td{
@@ -321,7 +324,7 @@ footer p {
   margin: 0 auto;
 }
 .approver-complete-container {
-  height: 55px;
+  /* height: 55px; */
 }
 .approver-index {
   border-radius: 50%;
@@ -331,13 +334,12 @@ footer p {
   left: 5%;
 }
 .approver-index div {
-  font-size: 9pt;
   display: flex;
   justify-content: center;
   align-items: center;
   align-content: center;
-  padding: 0px 4px;
   height: 14px;
+  width: 14px;
 }
 .approver-table-header{
   text-align: center;
@@ -494,7 +496,7 @@ footer p {
   flex-direction: row;
 }
 .update-input {
-  background-color: #e9f4fd;
+  background-color: #eff7fc;
 }
 
 /* approval Attachment */

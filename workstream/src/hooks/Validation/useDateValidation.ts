@@ -17,6 +17,7 @@ function useDateValidation(initialDate: Date | null) {
     // 현재 날짜보다 앞선 경우
     if (formattedDate < formattedToday) {
       alert("과거 날짜를 선택할 수 없습니다.");
+      return;
     } else {
       setValidatedDate(date);
     }

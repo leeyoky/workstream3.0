@@ -39,7 +39,7 @@ export function fetchApprovalData(formData: docData) {
   return instance.post("approval", formData)
 }
 // 사직원 등록
-export function fetchResinationData(formData: resinationDocData) {
+export function fetchResignationData(formData: resinationDocData) {
   return instance.post("approval/resignation", formData)
 }
 

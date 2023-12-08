@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { selectedActions } from './../../store/Approval/approval-slice';
-import { deleteDocument, fetchApprovalData, fetchApproveDocument, fetchFileData, fetchRecallDocument, fetchResinationData, updateDocument, updateResignation } from '../../api/axios';
+import { deleteDocument, fetchApprovalData, fetchApproveDocument, fetchComment, fetchFileData, fetchRecallDocument, fetchResignationData, updateDocument, updateResignation } from '../../api/axios';
 import { AxiosError } from 'axios';
 import { userActions } from '../../store/User/user-slice';
 import html2canvas from 'html2canvas';
@@ -15,6 +15,7 @@ import { formatDateOnly } from '../../helpers/formatDateTime';
 const useApprovalRequest = () => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ isRefModalOpen, setIsRefModalOpen ] = useState(false);
+  const [ isInstModalOpen, setIsInstModalOpen ] = useState(false);
   const [ approvedYn, setApprovedYn ] = useState('');
   const [ isDetail, setIsDetail] = useState(true);
   const { id = '' } = useParams<string>();
@@ -24,7 +25,7 @@ const useApprovalRequest = () => {
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const fileData = useSelector((state: RootState) => state.file.files);
   const agreementType = useSelector((state: RootState) => state.approval.agreementType);
-
+  const instructionComment = useSelector((state: RootState) => state.approval.comment); 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -40,6 +41,12 @@ const useApprovalRequest = () => {
   }
   const handleCloseRefModal = () => setIsRefModalOpen(false);
 
+  const handleShowInstModal = () => {
+    setIsInstModalOpen(true);
+  }
+  const handleCloseInstModal = () => {
+    setIsInstModalOpen(false);
+  }
   useEffect(()=> { 
     setIsDetail(false);
     
@@ -142,12 +149,8 @@ const useApprovalRequest = () => {
           state: requestType, // 이 부분을 requestType에 따라 설정
         };
   
-        console.log('formData', formData);
-  
         const response = await fetchApprovalData(formData);
         const responseData = response.data;
-        console.log(response);
-        console.log(responseData);
   
         if (response.status === 201) {
           if (fileData.length > 0) { // 파일 데이터가 있는 경우에만 실행
@@ -175,8 +178,10 @@ const useApprovalRequest = () => {
       alert('결재자가 선택되지 않았습니다');
       return;
     }
+
     if(userData.userSSN === null) {
       alert('주민번호가 입력되지 않았습니다.')
+      return;
     }
     
     if (data.retireDate === '') {
@@ -190,10 +195,12 @@ const useApprovalRequest = () => {
 
     if(userData.mobilePhone === '') {
       alert('휴대폰 연락처가 입력되지 않았습니다.')
+      return;
     }
 
     if(data.reasonRetire === '') {
       alert('퇴직 사유를 입력해 주십시오.')
+      return;
     }
     
     if(data.finalSign === false){
@@ -239,7 +246,7 @@ const useApprovalRequest = () => {
           state: requestType, // 이 부분을 requestType에 따라 설정
         };
 
-        const response = await fetchResinationData(docData);
+        const response = await fetchResignationData(docData);
         const responseData = response.data;
   
         if (response.status === 201) {
@@ -323,10 +330,8 @@ const useApprovalRequest = () => {
 
       const currentDate = new Date();
       const formatCurrentDate = formatDateOnly(currentDate.toISOString())
-      console.log('currentDate' ,formatCurrentDate);
       
       const executeDate = data.executeDate;
-      console.log('executeDate' , executeDate);
   
       // 현재 날짜와 비교
       if (formatDateOnly(executeDate) < formatCurrentDate) {
@@ -465,6 +470,45 @@ const useApprovalRequest = () => {
     }
   }
 
+  /* 최종결재 */
+  const instructionHandler = async(approverId: number, result: 'Y' | 'R') => {
+    const confirmMsg = `${result === 'Y' ? '승인하시겠습니까?' : '반려하시겠습니까?'}`;
+    
+    /* 승인 할때 */
+    if(window.confirm(confirmMsg)){
+      const commentData = {
+        apprId: id,
+        comment: instructionComment,
+      }
+      const approveData = {
+        id: approverId,
+        approvedYn: result
+      }
+      try{
+        const response = await fetchComment(commentData);
+        if(response.status === 201) {
+          dispatch(selectedActions.setComment(''));
+          /* 승인/ 반려 업데이트 */
+          const response = await fetchApproveDocument(approveData);
+          console.log(response);
+          if(response.status === 403) {
+            alert ('권한이 없습니다.')
+          }
+          if(response.status === 204) {
+            setApprovedYn(result)
+            alert(`${result === 'Y' ? '결재를 승인하였습니다.' : '결재를 반려하였습니다.'}`);
+            navigate('/approval/pending');
+            dispatch(uiActions.selectMenu('/approval/pending'));
+          }
+        }
+      }catch(error){
+        console.error(error);
+      }
+    }
+  
+  }
+
+
   /* PDF 다운 기능 */
 
   const pdfDownloadHandler = () => {
@@ -495,12 +539,15 @@ const useApprovalRequest = () => {
     id,
     isModalOpen,
     isRefModalOpen,
+    isInstModalOpen,
     approvedYn,
     setApprovedYn,
     handleShowModal,
     handleCloseModal,
     handleShowRefModal,
     handleCloseRefModal,
+    handleShowInstModal,
+    handleCloseInstModal,
     goBackPage,
     requestApprovalHandler,
     updateDocumentHandler,
@@ -510,7 +557,8 @@ const useApprovalRequest = () => {
     requestApprovalType,
     requestTempDocument,
     recallDocument,
-    pdfDownloadHandler
+    pdfDownloadHandler,
+    instructionHandler,
   } 
 };
 

@@ -35,7 +35,6 @@ const ApprovalEdit = () => {
   useEffect(() => {
     if (prevDocumentType.current !== documentType) {
       console.log(data);
-      
       // 이전 documentType와 현재 documentType이 다른 경우에만 실행
       dispatch(selectedActions.resetArray());
       prevDocumentType.current = documentType; // 이전 documentType 업데이트

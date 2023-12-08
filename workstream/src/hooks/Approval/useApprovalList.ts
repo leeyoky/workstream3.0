@@ -70,6 +70,8 @@ export function useApprovalList(sortValue: string) {
       const getTotalElements = response.data.totalElements;
 
       setListData(data);
+      console.log(data);
+      
       setTotalItems(getTotalElements);
       dispatch(uiActions.setTotalItems(getTotalElements));
     } catch (error) {

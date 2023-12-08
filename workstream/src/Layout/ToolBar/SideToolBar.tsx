@@ -12,11 +12,11 @@ const SideToolBar = () => {
   const { fetchEmployee } = useAuthActions();
   const { documentCnt } = useApprovalDocumentCnt();
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
+  const loginUserInfo = useSelector((state:RootState) => state.user.userInfo)
   const dispatch = useDispatch();
   const location = useLocation();   // 현재 경로 가져오기
   const isMainActive = location.pathname === '/' || location.pathname === '/main' ;
   const isSubToolBarActive = location.pathname.startsWith('/approval')
-  const loginUserInfo = useSelector((state:RootState) => state.auth.userInfo);
 
   useEffect(() => {
     if (!loginUserInfo || Object.keys(loginUserInfo).length === 0) {
@@ -82,7 +82,7 @@ const SideToolBar = () => {
           <div className="side-bar-profile">
             <h3>
               <span>{loginUserInfo?.empNm}</span>
-              <span>사원</span>
+              <span>{loginUserInfo.rankNm}</span>
             </h3>
             <p>{loginUserInfo?.deptNm}</p>
           </div>

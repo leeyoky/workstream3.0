@@ -5,7 +5,6 @@ import { RootState } from '../../../store';
 import { useSelector } from 'react-redux';
 import SignatureEdit from './SignatureEdit';
 import { useParams } from 'react-router-dom';
-import { useResinationData } from '../../../hooks/Approval/useResinationData';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { userActions } from '../../../store/User/user-slice';
@@ -13,6 +12,8 @@ import DatePick from '../../DatePick';
 import { formatDateOnly } from '../../../helpers/formatDateTime';
 import useSSNValidation from '../../../hooks/Validation/useSSNValidation';
 import usePhoneValidation from '../../../hooks/Validation/usePhoneValidation';
+import { useResignationData } from './../../../hooks/Approval/useResinationData';
+import { ResignationData } from '../../../types/Approval/Approaval';
 
 type ResinationDetailProps = {
   temp: boolean;
@@ -22,8 +23,7 @@ type ResinationDetailProps = {
 const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   
   const { id = ''} = useParams<string>();
-  const { data } = useResinationData(id);
-  const [ dataState, setDataState] = useState(data); 
+  const { data } = useResignationData(id);
   const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
   const dispatch = useDispatch();
 
@@ -47,7 +47,9 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   const stateHomeContact = data?.resignation.homeContact;
   const stateMobileContact = data?.resignation.mobileContact;
   
-  useEffect(()=> { initializeData(); },[isEdit, data])
+  useEffect(()=> { 
+    initializeData(); 
+  },[isEdit, data?.resignation.state])
 
   useEffect(()=> {
     const formattedDate = formatDateOnly(retireDate?.toISOString() || '');
@@ -57,13 +59,20 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
     dispatch(selectedActions.setReasonRitire(stateReason));
     dispatch(userActions.setHomePhone(stateHomeContact));
     dispatch(userActions.setMobilePhone(stateMobileContact));
+
+    dispatch(selectedActions.setIsDetailMode(true));
+
   },[userSSN, stateUserAddress])
 
+  // 임시저장 여부 확인
+  const isTempStorage = (data: ResignationData) => {
+    return data.resignation.state === 'TEMP';
+  };
 
   const initializeData = () => {
+
     if(data) {
       setRetireDate(data.resignation.resignationDate?  new Date(data.resignation.resignationDate) : null );
-      setDataState(data);
       setSSNFront(deleteHypenFront || '');
       setSSNBack(deleteHypenBack || '');
       setUserAddress(stateUserAddress || '');
@@ -73,7 +82,8 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
       setUserSSN(data.resignation.identityNo || '');
       
       dispatch(userActions.setSSN(`${ssnFront}-${ssnBack}`));
-      if (isTempStorage()) {
+      
+      if (isTempStorage(data)) {
         setTemp(true);
         dispatch(selectedActions.setIsEditMode(true));
       } else {
@@ -84,26 +94,9 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   }
 
   useEffect(()=> { setSSNFront(validationSSNFront)}, [validationSSNFront])
-  
   useEffect(()=> { setSSNBack(validationSSNBack)}, [validationSSNBack])
-
   useEffect(()=> { setMobilePhone(MBPhone)}, [MBPhone])
-
   useEffect(()=> { setHomePhone(HPhone) },[HPhone])
-  
-  
-  
-  useEffect(()=> {
-
-    dispatch(selectedActions.setIsDetailMode(true));
-
-  }, [dataState, dispatch])
-
-    // 임시저장 여부 확인
-    const isTempStorage = () => {
-      return dataState?.resignation.state === 'TEMP';
-    };
-
 
     // 퇴직일자 변경 핸들러
     const dataChangeHandler = (date: Date | null) => {
@@ -145,21 +138,21 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
               <tr>
                 <th className={classes['body-table__150']}>부 서 명</th>
                 <td colSpan={2} className={classes['body-table__300']}>
-                {dataState?.resignation.regUsrDeptNm}
+                {data?.resignation.regUsrDeptNm}
                 </td>
                 <th className={classes['body-table__150']}>직책/직위</th>
                 <td colSpan={2}>
-                {dataState?.resignation.rankNm}
+                {data?.resignation.rankNm}
                 </td>
               </tr>
               <tr>
                 <th>성 명</th>
                 <td colSpan={2}>
-                {dataState?.resignation.regUsrNm}
+                {data?.resignation.regUsrNm}
                 </td>
                 <th>주민 번호</th>
-                <td colSpan={2}>
                   {isEdit? (
+                  <td colSpan={2} className={classes['update-input']}>
                     <>
                       <input 
                       className={`${classes['body-table__input']} ${classes['RRnumber']}`} 
@@ -179,35 +172,39 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                         onChange={(e) => handleSSNChange(e.target.name, e.target.value)}
                         />
                     </>
+                  </td>
                   ): (
-                    dataState?.resignation.identityNo
+                    <td colSpan={2}>
+                    {data?.resignation.identityNo}
+                    </td>
                   )}
-                </td>
               </tr>
               <tr>
                 <th>입사 일자</th>
                 <td colSpan={2}>
-                  {dataState?.resignation.enterDate}
+                  {data?.resignation.enterDate}
                 </td>
                 <th>퇴사 일자</th>
-                <td colSpan={2}>
                 {isEdit? (
+                <td colSpan={2} className={classes['update-input']}>
                   <DatePick
                     placeholderText='퇴사일자'
                     selected={retireDate}
                     onChange={(date) => dataChangeHandler(date)}
                     dateFormat="yyyy-MM-dd"
                   />
+                </td>
                 ): (
-                  dataState?.resignation.resignationDate
+                  <td colSpan={2}>
+                    {data?.resignation.resignationDate}
+                  </td>
                 )
                 }
-                </td>
               </tr>
               <tr>
                 <th>현재 주소</th>
-                <td colSpan={2}>
                   {isEdit? (
+                  <td colSpan={2} className={classes['update-input']}>
                     <input 
                     placeholder='주소를 입력해주세요.'
                     className={classes['body-table__input']} 
@@ -215,54 +212,62 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                     onChange={addressChangeHandler}
                     value={userAddress}
                     />
-                  ): (
-                  dataState?.resignation.address
+                  </td>
+                  ) : (
+                    <td colSpan={2}>
+                    {data?.resignation.address}
+                    </td>
                   )}
-                </td>
                 <th rowSpan={2}>연 락 처</th>
                 <th className={classes['body-table__100']}>집</th>
-                <td>
                   {isEdit? (
-                    <input
-                    placeholder='연락처를 입력해주세요.'
-                    className={classes['body-table__input']}
-                    type="text"
-                    onChange={HPhoneHandler}
-                    value={homePhone}
-                  />
+                    <td className={classes['update-input']}>
+                      <input
+                      placeholder='연락처를 입력해주세요.'
+                      className={classes['body-table__input']}
+                      type="text"
+                      onChange={HPhoneHandler}
+                      value={homePhone}
+                      />
+                    </td>
                   ): (
-                  dataState?.resignation.homeContact
+                    <td>
+                      {data?.resignation.homeContact}
+                    </td>
                   )}
-                </td>
               </tr>
               <tr>
                 <th>퇴직 사유</th>
-                <td colSpan={2}>
                   { isEdit? (
-                    <input 
-                    placeholder='퇴직 사유를 입력해주세요.'
-                    className={classes['body-table__input']} 
-                    type="text"
-                    onChange={exitChangeHandler}
-                    value={reasonRetirement} />
+                    <td colSpan={2} className={classes['update-input']}>
+                      <input 
+                      placeholder='퇴직 사유를 입력해주세요.'
+                      className={classes['body-table__input']} 
+                      type="text"
+                      onChange={exitChangeHandler}
+                      value={reasonRetirement} />
+                    </td>
                   ) : (
-                    dataState?.resignation.reasons
+                    <td colSpan={2}>
+                    {data?.resignation.reasons}
+                    </td>
                   )}
-                </td>
                 <th>휴대폰</th>
-                <td>
                   {isEdit? (
+                  <td className={classes['update-input']}>
                     <input
                     placeholder='휴대폰 번호를 입력해주세요'
                     className={classes['body-table__input']}
                     type="text"
                     onChange={MBPhoneHandler}
                     value={mobilePhone}
-                  />
+                    />
+                  </td>
                   ): (
-                    dataState?.resignation.mobileContact
+                    <td>
+                    {data?.resignation.mobileContact}
+                    </td>
                   )}
-                </td>
               </tr>
             </tbody>
           </table>
@@ -294,12 +299,12 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 </div>
               </div>
               <div className={classes['date_wrapper']}>
-                <span>{dataState?.resignation.resignationDate}</span>
+                <span>{data?.resignation.resignationDate}</span>
               </div>
               <div className={classes['user-sign']}>
                 <div className={classes['user-sign-box']}>
                   <span>작성자: </span>
-                  <span>{dataState?.resignation.regUsrNm}</span>
+                  <span>{data?.resignation.regUsrNm}</span>
                   <span>(서명)</span>
                 </div>
               </div>

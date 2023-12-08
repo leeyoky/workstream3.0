@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { ApprovalData, ResinationData } from '../../types/Approval/Approaval';
+import { ApprovalData, ResignationData } from '../../types/Approval/Approaval';
 import { getApprovalData, getResignationData } from '../../api/axios';
 
-type DocumentData = ApprovalData | ResinationData;
+type DocumentData = ApprovalData | ResignationData;
 
 export const useDocumentData = (documentType: string, id: string) => {
   const [data, setData] = useState<DocumentData | undefined>();

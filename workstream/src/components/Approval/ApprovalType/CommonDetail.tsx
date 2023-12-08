@@ -12,8 +12,7 @@ import { formatDateOnly, getToday } from './../../../helpers/formatDateTime';
 import TextEditor from '../../TextEditor';
 import SignatureEdit from './SignatureEdit';
 import ApprovalReference from '../ApprovalReference';
-import DatePick from '../../DatePick';
-import useDateValidation from '../../../hooks/Validation/useDateValidation';
+import ApprovalInstructions from '../ApprovalInstruction/ApprovalInstructions';
 
 type CommonDetailProps = {
   temp: boolean;
@@ -29,8 +28,9 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
   const { id = ''} = useParams<string>();
   const {data} = useApprovalData(id);
-  const { validatedDate, validateDate } = useDateValidation(null);
   const dispatch = useDispatch();
+  const formattedDate = formatDateOnly(data?.approval.regDate!);
+  
 
   useEffect(() => {
     initializeData();
@@ -88,15 +88,6 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
     setTitle(newTitle)
     dispatch(selectedActions.setTitle(newTitle));
   }
-  
-  // 시행일자 변경 핸들러
-  const dataChangeHandler = (date: Date | null) => {
-    validateDate(date);
-    const formattedDate = formatDateOnly(validatedDate?.toISOString() || '');
-    setExecuteDate(date);
-
-    dispatch(selectedActions.setDate(formattedDate));
-  };
 
   const renderTitleField = () => {
     if (!isEdit) {
@@ -114,27 +105,6 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
           onChange={titleChangeHandler}
           ref={titleInputRef}
         />
-      );
-    }
-  };
-
-  const renderDateField = () => {
-    if (!isEdit) {
-      return (
-        <td>
-          <span>{data?.approval.executeDate}</span>
-        </td>
-      );
-    } else {
-      return (
-        <td className={classes['update-input']}>
-        <DatePick
-        placeholderText='시행일자'
-        selected={executeDate}
-        onChange={(date) => dataChangeHandler(date)}
-        dateFormat="yyyy-MM-dd"
-        />
-        </td>
       );
     }
   };
@@ -157,11 +127,15 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>품의일자</th>
+                  {isEdit? (
                     <td>{getToday()}</td>
+                  ) : (
+                    <td>{formattedDate}</td>
+                  )}
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>시행일자</th>
-                    {renderDateField()}
+                  <td></td>
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>부서명</th>
@@ -188,6 +162,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
         </div>
       </header>
       <ApprovalReference />
+      <ApprovalInstructions />
         <TextEditor textValue={data?.approval.contents}
         />
       <footer>

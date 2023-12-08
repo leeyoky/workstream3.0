@@ -10,6 +10,7 @@ export const useApprovalData = (id: string ) => {
       const response = await getApprovalData(id);
       const data = response.data;
       setData(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }

@@ -4,11 +4,11 @@ import { RootState } from '../../../store';
 import { useMemo, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { formatDateMinutes, formatDateOnly } from '../../../helpers/formatDateTime';
+import { formatDateMinutes } from '../../../helpers/formatDateTime';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import useApprovalRequest from '../../../hooks/Approval/useApprovalRequest';
 import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
-import { ApprovalData, ResinationData } from '../../../types/Approval/Approaval';
+import { ApprovalData, ResignationData } from '../../../types/Approval/Approaval';
 import { APPROVAL_STATUS, COLUMN_LIMITS } from '../../../constants/constants';
 const SignatureEdit = () => {
   const [newApprovers, setNewApprovers] = useState<{
@@ -29,13 +29,14 @@ const SignatureEdit = () => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
   const data = useDocumentData(documentType, id)?.data;
+  const isEditMode = useSelector((state:RootState) => state.approval.isEditMode)
 
   // 타입가드
   const isApprovalData = (data: any): data is ApprovalData => {
     return data && 'approval' in data;
   };
 
-  const isResinationData = (data: any): data is ResinationData => {
+  const isResignationData = (data: any): data is ResignationData => {
     return data && 'resignation' in data;
   };
 
@@ -69,7 +70,7 @@ const SignatureEdit = () => {
     
     const specialName = documentType === 'APPROVAL_COMMON'
       ? isApprovalData(data) ? data.approval.regUsrNm : ''
-      : isResinationData(data) ? data.resignation.regUsrNm : '';
+      : isResignationData(data) ? data.resignation.regUsrNm : '';
     
     return { approvalApprovers, agreementApprovers, specialName };
   }, [approvers]);
@@ -97,42 +98,31 @@ const SignatureEdit = () => {
     }
   };
 
-  const renderHeader = (label: string, approverIndex: number) => (
-    <th className={classes['header-table__approval-th']}>
-      <span className={classes['approver-index']} data-html2canvas-ignore="true">
-        {approverIndex !== -1 ? (
-          <div>{approverIndex + 2}</div>
-          ): ''}
-      </span>
-      <span>
-        {label}
-      </span>
-    </th>
-  );
-
   const renderContent = (content: any, index: number) => {
     if (isDetailMode && content) {
-      const { name, approvedYn, modDate, approvalType } = content;
+      const { approvedYn, modDate, approvalType } = content;
   
       if (index === 0) {
-        const specialName = documentType === 'APPROVAL_COMMON' ? 
-          isApprovalData(data) ? data.approval.regUsrNm : '' : 
-          isResinationData(data) ? data.resignation.regUsrNm : '';
+
+      
         const specialModDate = documentType === 'APPROVAL_COMMON' ? 
           isApprovalData(data) ? formatDateMinutes(data.approval.regDate as string) : '' : 
-          isResinationData(data) ? formatDateMinutes(data.resignation.resignationDate as string) : '';
+          isResignationData(data) ? formatDateMinutes(data.resignation.resignationDate as string) : ''; 
   
         return (
           <td className={classes['approver-content']} key={index}>
             <div className={classes['approver-content-item-container']}>
               <div className={classes['approver-complete-container']}>
-                <span>{specialName}</span>
+              {!isEditMode &&  
+                <>
                 <span className={getApprovalResultClass('Y')}>
                   승 인
                 </span>
                 <span className={classes['approver-complete-date']}>
                   {specialModDate}
                 </span>
+                </>
+                }
               </div>
             </div>
           </td>
@@ -141,18 +131,19 @@ const SignatureEdit = () => {
       const resultText = approvalType === 'CONSENSUAL'
       ? (approvedYn === 'Y' ? '찬 성' : approvedYn === 'R' ? '반 대' : '대 기')
       : (approvedYn === 'Y' ? '승 인' : approvedYn === 'R' ? '반 려' : '대 기');
-  
+
       return (
         <td className={classes['approver-content']} key={index}>
           <div className={classes['approver-content-item-container']}>
             <div className={classes['approver-complete-container']}>
-              <span>{name}</span>
+            {!isEditMode &&  
               <span className={getApprovalResultClass(approvedYn)}>
                 {resultText}
               </span>
+              }
               {(approvedYn === 'Y' || approvedYn === 'R') && (
                 <span className={classes['approver-complete-date']}>
-                  {formatDateOnly(modDate)}
+                  {formatDateMinutes(modDate)}
                 </span>
               )}
             </div>
@@ -168,16 +159,51 @@ const SignatureEdit = () => {
     }
   };
 
+  const renderHeader = (content: any, approverIndex: number) => {
+    if (isDetailMode && content) {
+      const { name } = content;
+  
+      if (approverIndex === 0) {
+        const specialName = documentType === 'APPROVAL_COMMON' ? 
+          isApprovalData(data) ? data.approval.regUsrNm : '' : 
+          isResignationData(data) ? data.resignation.regUsrNm : '';
+        
+        return (
+          <th className={classes['header-table__approval-th']} key={approverIndex}>
+            <div>
+              <span>{specialName}</span>
+            </div>
+          </th>
+        );
+      }
+      return (
+        <th className={classes['header-table__approval-th']} key={approverIndex}>
+          <div>
+            <span>{name}</span>
+          </div>
+        </th>
+      );
+    } else {
+      return (
+        <th className={classes['header-table__approval-th']} key={approverIndex}>
+          <div>
+            <span>{content}</span>
+          </div>
+        </th>
+      );
+    }
+  };
+
   return (
     <div className={classes['header__right']}>
     <table className={classes['header-table']}>
       <tbody>
         <tr>
-          {renderHeader('결재', -1)}
-          {Array.from({ length: Math.min(MAX_APPROVAL, Math.max(MIN_APPROVAL, approvalColumnCount)) - 1 }).map((_, index) => {
-            const approverIndex = index < approvalApprovers.length ? approvers.indexOf(approvalApprovers[index]) : -1;
-            return renderHeader('결재', approverIndex);
-          })}
+          <th rowSpan={2}>결재</th>
+          {renderHeader(userInfo?.empNm, 0)}
+          {Array.from({ length: Math.min(MAX_APPROVAL, Math.max(MIN_APPROVAL, approvalColumnCount)) - 1}).map((_, index) => (
+            renderHeader(index < approvalApprovers.length ? approvalApprovers[index] : '', index + 1)
+          ))}
         </tr>
         <tr>
           {renderContent(userInfo?.empNm, 0)}
@@ -187,10 +213,10 @@ const SignatureEdit = () => {
         </tr>
         
         <tr>
-          {Array.from({ length: Math.min(MAX_AGREEMENT, Math.max(MIN_AGREEMENT, agreementColumnCount)) }).map((_, index) => {
-            const approverIndex = index < agreementApprovers.length ? approvers.indexOf(agreementApprovers[index]) : -1;
-            return renderHeader('합의', approverIndex);
-          })}
+          <th rowSpan={2}>합의</th>
+          {Array.from({ length: Math.min(MAX_AGREEMENT, Math.max(MIN_AGREEMENT, agreementColumnCount))}).map((_, index) => (
+            renderHeader(index < agreementApprovers.length ? agreementApprovers[index] : null, index + 1)
+          ))}
         </tr>
         <tr>
           {Array.from({ length: Math.min(MAX_AGREEMENT, Math.max(MIN_AGREEMENT, agreementColumnCount))}).map((_, index) => (

@@ -91,11 +91,11 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
 
   let approveButtons = null;
 
-    const visibilityStyle = selectedOpton === 'approval' || index === approverEmps.length - 1 ? 'hidden' : 'visible';
+    const displayStyle = selectedOpton === 'approval' || index === approverEmps.length - 1 ? 'none' : '';
     approveButtons = (
       <div 
         className={classes['button-box__buttons']}
-        style={{ visibility: visibilityStyle }}
+        style={{ display: displayStyle }}
         >
         <button
           className={`${classes['active-button']} ${isApproveActive ? 
@@ -111,15 +111,36 @@ const ApprovalTypeSelector:React.FC<ApprovalTypeSelectorProps> = ({ index, name 
         </button>
       </div>
     );
+
+    let lastApproveButtons = null;
+    if (index === approverEmps.length - 1) {
+      lastApproveButtons = (
+        <div  className={classes['button-box__buttons']}>
+          <button className={classes['last']}>
+            최종 결재
+          </button>
+        </div>
+      );
+    }
+
+    let deleteButton: JSX.Element | null = (
+      <span 
+      className={classes['button-delete']}
+      onClick={deleteEmp}
+    >
+      <i className="fa-regular fa-trash-can"></i>
+    </span>
+    );
+
+    if (index === approverEmps.length - 1) {
+      deleteButton = null;
+    }
+
   return (
     <div className={classes['button-box']}>
       {approveButtons}
-      <span 
-        className={classes['button-delete']}
-        onClick={deleteEmp}
-      >
-        <i className="fa-regular fa-trash-can"></i>
-      </span>
+      {lastApproveButtons}
+      {deleteButton}
     </div>
 )}
 

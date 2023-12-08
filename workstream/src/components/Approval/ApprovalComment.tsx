@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom';
 import { deleteComment, fetchComment, getApprovalData, getResignationData, updateComment } from '../../api/axios';
 import { formatDateOnly } from '../../helpers/formatDateTime';
 import classes from '../../pages/Approval/Approval.module.css';
-import { ApprovalData, CommentItem } from '../../types/Approval/Approaval';
+import { ApprovalData, CommentItem, ResignationData } from '../../types/Approval/Approaval';
 import Alert from '../../Layout/Alert/Alert';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { useDocumentData } from '../../hooks/Approval/useDocumentData';
 
 const ApprovalComment = () => {
   const { id = '' } = useParams<string>();
@@ -17,6 +18,28 @@ const ApprovalComment = () => {
   const [commentStates, setCommentStates] = useState<string[]>([]); // 수정된 부분: 빈 배열로 초기화
   const [dataChanged, setDataChanged] = useState(false);
   const documentType = useSelector((state:RootState) => state.approval.documentType);
+  
+  const data = useDocumentData(documentType, id)?.data;
+
+  // 타입가드
+  const isApprovalData = (data: any): data is ApprovalData => {
+    return data && 'approval' in data;
+  };
+
+  const isResignationData = (data: any): data is ResignationData => {
+    return data && 'resignation' in data;
+  };
+
+  const getState = data ? (
+    documentType === 'APPROVAL_COMMON' ? (
+      isApprovalData(data) ? data.approval.state : ''
+    ) : (
+      isResignationData(data) ? data.resignation.state : ''
+    )
+  ) : '';
+
+  const isFinal = getState !== 'REJECTED' && getState !== 'APPROVED'
+
 
   useEffect(() => {
     const fetchData = async (id: string) => {
@@ -132,6 +155,8 @@ const ApprovalComment = () => {
         <i className="fa-regular fa-comment"></i>
       </h2>
       <hr />
+      {isFinal &&
+      (
       <div className={classes['comment-container']}>
         <div className={classes['comment-input-wrapper']}>
           <textarea
@@ -147,6 +172,8 @@ const ApprovalComment = () => {
           의견등록
         </button>
       </div>
+      )
+      }
       {/* 반복할 item */}
       {listData?.comment.map((item, index) => (
         <div className={classes['comment-list-item-container']} key={item.id}>
@@ -190,6 +217,7 @@ const ApprovalComment = () => {
               </p>
             )}
           </div>
+          {isFinal && (
           <div className={classes['comment-button-box']}>
             {editCommentIndex !== index ? (
               <>
@@ -215,6 +243,7 @@ const ApprovalComment = () => {
               </>
             )}
           </div>
+          )}
         </div>
       ))}
       {alertMessage && (

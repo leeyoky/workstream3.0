@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux';
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux';
 import { uiActions } from '../../../store/ui-slice';
 import { RootState } from '../../../store';
@@ -22,7 +23,7 @@ const Pagination = () => {
   }
 
   // 페이지 버튼을 동적으로 생성
-  const pages = Array.from({ length: totalPages }, (_, index) => index);
+  const pages = useMemo(() => Array.from({ length: totalPages }, (_, index) => index), [totalPages]);
 
   return (
     <div className="pagination">

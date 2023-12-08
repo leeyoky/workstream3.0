@@ -160,7 +160,7 @@ const ResinationCreate = () => {
                 {userLoginInfo?.empNm}
                 </td>
                 <th>주민 번호</th>
-                <td colSpan={2}>
+                <td colSpan={2} className={classes['update-input']}>
                   <input 
                     className={`${classes['body-table__input']} ${classes['RRnumber']}`} 
                     type="text" 
@@ -186,13 +186,13 @@ const ResinationCreate = () => {
                   {formData.enterDate}
                 </td>
                 <th>퇴사 일자</th>
-                <td colSpan={2}>
+                <td colSpan={2} className={classes['update-input']}>
                   {DatePickMemoized}
                 </td>
               </tr>
               <tr>
                 <th>현재 주소</th>
-                <td colSpan={2}>
+                <td colSpan={2} className={classes['update-input']}>
                   <input 
                     placeholder='주소를 입력해주세요.'
                     className={classes['body-table__input']} 
@@ -203,19 +203,19 @@ const ResinationCreate = () => {
                 </td>
                 <th rowSpan={2}>연 락 처</th>
                 <th className={classes['body-table__100']}>집</th>
-                <td>
-                <input
-                  placeholder='연락처를 입력해주세요'
-                  className={classes['body-table__input']}
-                  type="text"
-                  onChange={homePhoneChangeHandler}
-                  value={memoizedHomePhone}
-                />
+                <td className={classes['update-input']}>
+                  <input
+                    placeholder='연락처를 입력해주세요'
+                    className={classes['body-table__input']}
+                    type="text"
+                    onChange={homePhoneChangeHandler}
+                    value={memoizedHomePhone}
+                  />
                 </td>
               </tr>
               <tr>
                 <th>퇴직 사유</th>
-                <td colSpan={2}>
+                <td colSpan={2} className={classes['update-input']}>
                   <input 
                     placeholder='퇴직 사유를 입력해주세요.'
                     className={classes['body-table__input']} 
@@ -224,14 +224,14 @@ const ResinationCreate = () => {
                     value={formData.reasonRetirement} />
                 </td>
                 <th className={classes['body-table__100']}>휴대폰</th>
-                <td>
-                <input
-                  placeholder='휴대폰 번호를 입력해주세요.'
-                  className={classes['body-table__input']}
-                  type="text"
-                  onChange={mobilePhoneChangeHandler}
-                  value={memoizedMobilePhone}
-                />
+                <td className={classes['update-input']}>
+                  <input
+                    placeholder='휴대폰 번호를 입력해주세요.'
+                    className={classes['body-table__input']}
+                    type="text"
+                    onChange={mobilePhoneChangeHandler}
+                    value={memoizedMobilePhone}
+                  />
                 </td>
               </tr>
             </thead>
