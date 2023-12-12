@@ -132,14 +132,9 @@
   letter-spacing: 0pt;
 }
 .badge {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border-radius: 50%;
   width: 20px;
   height: 0px;
-  right: 8%;
 }
 
 .badge-primary {

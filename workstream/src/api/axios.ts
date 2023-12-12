@@ -121,6 +121,7 @@ export function fetchApproveDocument(resultData: approveResultData){
 }
 
 export function getApprovalList(params: {
+  id: string;
   page?: number;
   size?: number;
   state?: string;
@@ -139,7 +140,7 @@ export function getApprovalList(params: {
     .map((key) => `${key}=${(params as Record<string, any>)[key]}`)
     .join('&');
 
-  // console.log('queryString', queryString);
+  console.log('queryString', queryString);
   
   return instance.get(`approval?${queryString}`);
 }

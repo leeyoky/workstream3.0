@@ -12,6 +12,7 @@ const uiSlice = createSlice({
     selectPage: 0,
     totalItems: 0,
     searchInput: {
+      id: '',
       title: '',
       deptCd: '',
       docType: '',
@@ -63,6 +64,7 @@ const uiSlice = createSlice({
       state.selectPageSize = 10;
       state.selectPage = 0;
       state.totalItems = 0;
+      state.searchInput.id = '';
       state.searchInput.title = '';
       state.searchInput.deptCd = '';
       state.searchInput.docType = '';

@@ -25,7 +25,7 @@ const ApprovalPage: React.FC = () => {
     const menuTitles: Record<string, string> = {
       [MENU_PATHS.TEMPORARY]: '임시보관함',
       [MENU_PATHS.DOCUMENT]: '전체문서함',
-      [MENU_PATHS.PENDING]: '결재대기함',
+      [MENU_PATHS.PENDING]: '결재대기중',
       [MENU_PATHS.IN_PROGRESS]: '결재진행함',
       [MENU_PATHS.COMPLETED]: '완료문서함',
       [MENU_PATHS.REJECTED]: '반려문서함',
@@ -41,6 +41,9 @@ const ApprovalPage: React.FC = () => {
 
   const sortHandler = (column: string) => {
     let newSortValue = '';
+    if  (column === '문서번호') {
+      newSortValue = sortDirections[column] === 'asc' ? 'id,asc&' : 'id,desc&';
+    }
     if (column === '문서명') {
       newSortValue = sortDirections[column] === 'asc' ? 'title,asc&' : 'title,desc&';
     }
@@ -82,6 +85,7 @@ const ApprovalPage: React.FC = () => {
       return (
         <tr className="table-hover" key={index}>
           <td><span>{item.index}</span></td>
+          <td><span>{item.id}</span></td>
           <td 
             className="approval-list-title" 
             onClick={() => goDetailPage(true, item.id, item.docType)}

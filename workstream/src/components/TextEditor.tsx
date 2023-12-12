@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ko';
-import './TextEditor.css'
 
+import './TextEditor.css'
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../store/Approval/approval-slice';
 import { useSelector } from 'react-redux';

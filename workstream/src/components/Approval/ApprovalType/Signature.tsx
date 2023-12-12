@@ -2,19 +2,22 @@ import { useSelector } from 'react-redux';
 import classes from '../../../pages/Approval/Approval.module.css';
 import { RootState } from '../../../store';
 import { useEffect, useMemo, useState } from 'react';
+import { COLUMN_LIMITS } from '../../../constants/constants';
 /* 최초 create */
 const Signature = () => {
   // Redux 결재자 정보 및 사용자 정보
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
-  
+
+  const getApproverIndex = (approver: any) => approvers.indexOf(approver);
+
   // Memoizaion 최적화
   const memoizedApprovers = useMemo(() => {
-    const approvalApprovers = approvers.filter((approver) => approver.approvalType === 'APPROVER');
-    const agreementApprovers = approvers.filter((approver) => approver.approvalType === 'CONSENSUAL');
+    const approvalApprovers = approvers.filter(approver => approver.approvalType === 'APPROVER');
+    const agreementApprovers = approvers.filter(approver => approver.approvalType === 'CONSENSUAL');
     return { approvalApprovers, agreementApprovers };
   }, [approvers]);
-  
+
   const { approvalApprovers, agreementApprovers } = memoizedApprovers;
   const [renderedEmpNm, setRenderedEmpNm] = useState<string | undefined>('');
 
@@ -25,74 +28,94 @@ const Signature = () => {
     }
   }, [approvalApprovers, agreementApprovers]);
 
-  const MIN_APPROVAL = 4;
-  const MIN_AGREEMENT = 4;
-  const MAX_APPROVAL = 6;
-  const MAX_AGREEMENT = 7;
-
   // 실제로 표시할 열의 수
-  const approvalColumnCount = Math.min(MAX_APPROVAL, approvalApprovers.length + 1);
-  const agreementColumnCount = Math.min(MAX_AGREEMENT, agreementApprovers.length);
+  const approvalColumnCount = Math.min(COLUMN_LIMITS.MAX_APPROVAL, approvalApprovers.length + 1);
+  const agreementColumnCount = Math.min(COLUMN_LIMITS.MAX_AGREEMENT, agreementApprovers.length);
 
-  // 셀 헤더 
-  const renderHeader = (content: any, index: number) => (
+  // 셀 헤더
+  const renderHeader = (content: any, index: number, approverIndex: number) => (
     <th key={index} className={classes['header-table__approval-th']}>
-      {content}
+      <div>
+        <span className={classes['approver-index']}>
+          {approverIndex !== -1 ? <div>{approverIndex + 2}</div> : ''}
+        </span>
+        {content}
+      </div>
     </th>
   );
 
-  // 열의 헤더  
-  const renderContent = (label: string, approverIndex: number) => (
+  // 콘텐츠
+  const renderContent = () => (
     <td className={classes['approver-content']}>
       <div>
-      <span className={classes['approver-index']}>
-        {approverIndex !== -1 ? (
-          <div>{approverIndex + 2}</div>
-          ): ''}
-      </span>
-      <span>
-        {label}
-      </span>
+        <span className={classes['approver-index']}></span>
       </div>
     </td>
   );
 
-
   return (
     <div className={classes['header__right']}>
-    <table className={classes['header-table']}>
-      <tbody>
-        <tr key='header-approval'>
-          <th rowSpan={2}>결재</th>
-          {renderHeader(renderedEmpNm, 0)}
-          {Array.from({ length: Math.min(MAX_APPROVAL, Math.max(MIN_APPROVAL, approvalColumnCount)) - 1 }).map((_, index) => (
-            renderHeader(index < approvalApprovers.length ? approvalApprovers[index].name : '', index + 1)
-          ))}
-        </tr>
-        <tr key="content-approval">
-          {renderContent('', -1)}
-          {Array.from({ length: Math.min(MAX_APPROVAL, Math.max(MIN_APPROVAL, approvalColumnCount)) - 1 }).map((_, index) => {
-            const approverIndex = index < approvalApprovers.length ? approvers.indexOf(approvalApprovers[index]) : -1;
-            return renderContent('', approverIndex);
-          })}
-        </tr>
-        
-        <tr key="header-agreement">
-          <th rowSpan={2}>합의</th>
-          {Array.from({ length: Math.min(MAX_AGREEMENT, Math.max(MIN_AGREEMENT, agreementColumnCount))}).map((_, index) => (
-            renderHeader(index < agreementApprovers.length ? agreementApprovers[index].name : '', index + 1)
-          ))}
-        </tr>
-        <tr key="content-agreement">
-          {Array.from({ length: Math.min(MAX_AGREEMENT, Math.max(MIN_AGREEMENT, agreementColumnCount)) }).map((_, index) => {
-            const approverIndex = index < agreementApprovers.length ? approvers.indexOf(agreementApprovers[index]) : -1;
-            return renderContent('', approverIndex);
-          })}
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  )
-}
+      <table className={classes['header-table']}>
+        <tbody>
+          <tr key="header-approval">
+            <th rowSpan={2}>결재</th>
+            {renderHeader(renderedEmpNm, 0, -1)}
+            {Array.from({
+              length:
+                Math.min(
+                  COLUMN_LIMITS.MAX_APPROVAL,
+                  Math.max(COLUMN_LIMITS.MIN_APPROVAL, approvalColumnCount),
+                ) - 1,
+            }).map((_, index) =>
+              renderHeader(
+                index < approvalApprovers.length ? approvalApprovers[index].name : '',
+                index + 1,
+                getApproverIndex(approvalApprovers[index]),
+              ),
+            )}
+          </tr>
+          <tr key="content-approval">
+            {renderContent()}
+            {Array.from({
+              length:
+                Math.min(
+                  COLUMN_LIMITS.MAX_APPROVAL,
+                  Math.max(COLUMN_LIMITS.MIN_APPROVAL, approvalColumnCount),
+                ) - 1,
+            }).map(() => {
+              return renderContent();
+            })}
+          </tr>
 
-export default Signature
+          <tr key="header-agreement">
+            <th rowSpan={2}>합의</th>
+            {Array.from({
+              length: Math.min(
+                COLUMN_LIMITS.MAX_AGREEMENT,
+                Math.max(COLUMN_LIMITS.MIN_AGREEMENT, agreementColumnCount),
+              ),
+            }).map((_, index) =>
+              renderHeader(
+                index < agreementApprovers.length ? agreementApprovers[index].name : '',
+                index + 1,
+                getApproverIndex(agreementApprovers[index]),
+              ),
+            )}
+          </tr>
+          <tr key="content-agreement">
+            {Array.from({
+              length: Math.min(
+                COLUMN_LIMITS.MAX_AGREEMENT,
+                Math.max(COLUMN_LIMITS.MIN_AGREEMENT, agreementColumnCount),
+              ),
+            }).map(() => {
+              return renderContent();
+            })}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Signature;

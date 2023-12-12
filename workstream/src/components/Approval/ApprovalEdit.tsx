@@ -27,7 +27,7 @@ const ApprovalEdit = () => {
   const isCreate = location.state?.isCreate;
   
   const boardTitle = {
-    title: isCreate? '전자결재 > 새 결재 작성' : '전자결재 > 문서 상세보기'
+    title: isCreate? '전자결재 > 새 문서 작성' : '전자결재 > 문서 상세보기'
   }
   // useRef를 사용하여 이전 documentType 저장
   const prevDocumentType = useRef(documentType);

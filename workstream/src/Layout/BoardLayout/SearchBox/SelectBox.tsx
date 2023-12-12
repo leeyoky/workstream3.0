@@ -20,10 +20,7 @@ const SelectBox: React.FC<{
   const toggleOptions = async() => {
 
     setShowOptions(!showOptions);
-    console.log(tag.name);
     console.log(isLoading);
-    
-
     setIsLoading(true);
 
     if (tag.name === 'deptCd') {
@@ -73,7 +70,7 @@ const SelectBox: React.FC<{
   return (
     <div 
       ref={selectBoxRef} 
-      className={`select-box ${tag.class === 'col-4' ? 'col-4' : ''}`} 
+      className={`select-box ${tag.class}`} 
       onClick={toggleOptions}
       >
       <label className={`${showOptions ? "setData" : ""}`}>

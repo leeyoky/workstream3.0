@@ -5,12 +5,7 @@ import OrganizationAccordion from '../../Organization/OrganizationAccordion';
 const ApprovalOrganization = () => {
   const [searchText, setSearchText] = useState<string>('');
 
-  useEffect(() => {
-  }, [searchText]);
-
-  const performSearch = () => {
-    // console.log('Searching for:', searchText);
-  };
+  useEffect(() => {}, [searchText]);
 
   return (
     <div className={classes['organization-selector__input-wrapper']}>
@@ -24,14 +19,14 @@ const ApprovalOrganization = () => {
             type="text"
             placeholder="사원을 검색해주세요"
             value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={e => setSearchText(e.target.value)}
           />
-          <button onClick={performSearch}>
+          <button>
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
 
-        <OrganizationAccordion searchText={searchText} setSearchText={setSearchText}/>
+        <OrganizationAccordion searchText={searchText} setSearchText={setSearchText} />
       </div>
     </div>
   );

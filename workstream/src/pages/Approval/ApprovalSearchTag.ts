@@ -1,6 +1,7 @@
 export const searchTags = [
-  {label:'문서명', name: 'title'},
-  {label:'기안부서', name: 'deptCd', type: 'select', class:'col-4', options: [
+  {label:'문서번호', name: 'id', class: 'col-5'},
+  {label:'문서명', name: 'title', class: 'col-6'},
+  {label:'기안부서', name: 'deptCd', type: 'select', class:'col-8', options: [
     {label:'전체'},
     {label:'영업본부' , name: "2009000005"},
     {label:'제품사업본부' , name: "2017002275"},
@@ -9,11 +10,11 @@ export const searchTags = [
     {label:'기술연구소' , name: "2011000627"},
     {label:'혁신경영본부' , name: "2013002118"},
   ]},
-  {label:'기안자', name: 'regUsrNm'},
   {label:'문서종류', name: 'docType', type: 'select', options: [
     {label: '품의서', value: 'APPROVAL_COMMON'},
     {label: '사직서', value: 'RESIGNATION'},
   ]},
+  {label:'기안자', name: 'regUsrNm'},
   {label:'등록일', name: 'regDate', type: 'date'},
 ]
 
@@ -29,6 +30,7 @@ export const progressSearchTags = [
 
 export const columns = [
   '구분',
+  '문서번호',
   '문서명',
   '문서종류',
   '기안부서',

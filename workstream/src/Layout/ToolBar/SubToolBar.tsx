@@ -7,7 +7,7 @@ import { approvalMenuItems } from "../../types/Menu/SubMenus";
 
 import ApprovalCreate from "../../components/Approval/ApprovalCreate";
 import Button from "../Button";
-import { DocumentCounts } from "../../types/Approval/Approaval";
+import { DocumentCounts, SubMenu } from "../../types/Approval/Approaval";
 
 const SubToolBar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
@@ -40,27 +40,51 @@ const SubToolBar = () => {
     setIsModalOpen(false);
   }
 
-  const renderMenuItems = (items: { to: string | null, label: string }[]) => {
+  const renderSubMenu = (subMenus: SubMenu[]) => {
+    return (
+      <ul className="submenu">
+        {subMenus.map((submenu, index) => (
+          <li key={index}>
+            <NavLink to={submenu.to} onClick={() => menuClickHandler(submenu.to)}>
+              <span>
+                <i className="fa-solid fa-chevron-right"></i>
+                <span className="submenu-sub-title">{submenu.label}</span>
+              </span>
+              <span className="badge badge-accent">
+                <div className="badge badge-count-box">
+                  {getBadgeCountByLabel(submenu.label) !== undefined && (
+                    <span className={`badge-item ${"sub"} ${submenu.state?.toLowerCase()}`}>{getBadgeCountByLabel(submenu.label)}</span>
+                  )}
+                </div>
+              </span>
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  const renderMenuItems = (items: SubMenu[]) => {
     return (
       <ul>
         {items.map((item, index) => (
           <li key={index}>
             {item.to ? (
-              <NavLink 
-                to={item.to} 
-                onClick={() => menuClickHandler(item.to)}
-                >
-                {item.label}
-                <span className="badge badge-accent">
-                  <div className="badge badge-count-box">
-                  {getBadgeCountByLabel(item.label) !== undefined && (
-                    <span className={`badge-item ${'sub'}`}>
-                    {getBadgeCountByLabel(item.label)}
-                    </span>
-                  )}
-                  </div>
-                </span>
-              </NavLink>
+              <>
+                <NavLink to={item.to} onClick={() => menuClickHandler(item.to)}>
+                  <span>
+                  {item.label}
+                  </span>
+                  <span className="badge badge-accent">
+                    <div className="badge badge-count-box">
+                      {getBadgeCountByLabel(item.label) !== undefined && (
+                        <span className={`badge-item ${"sub"}`}>{getBadgeCountByLabel(item.label)}</span>
+                      )}
+                    </div>
+                  </span>
+                </NavLink>
+                {item.subMenus && renderSubMenu(item.subMenus)}
+              </>
             ) : (
               <span>{item.label}</span>
             )}
@@ -68,14 +92,14 @@ const SubToolBar = () => {
         ))}
       </ul>
     );
-  }
+  };
 
   const getBadgeCountByLabel = (label: string ) => {
     if (label === '반려문서함' && documentCnt) {
       return documentCnt.rejectedCount !== 0 ? documentCnt.rejectedCount : undefined;
     } else if (label === '임시보관함' && documentCnt) {
       return documentCnt.tempCount !== 0 ? documentCnt.tempCount : undefined;
-    } else if (label === '결재예정문서' && documentCnt) {
+    } else if (label === '결재대기중' && documentCnt) {
       return documentCnt.pendingCount !== 0 ? documentCnt.pendingCount : undefined;
     } else if (label === '결재진행함' && documentCnt) {
       return documentCnt.proceedingCount !== 0 ? documentCnt.proceedingCount : undefined;
@@ -107,7 +131,7 @@ const SubToolBar = () => {
         </div> */}
         <div className="sub-toolbar-menu-box">
           <strong>문서함</strong>
-          {renderMenuItems(approvalMenuItems.slice(0, 6))}
+          {renderMenuItems(approvalMenuItems.slice(0, 5))}
         </div>
 {/*         <div className="sub-toolbar-menu-box">
           <strong>관리</strong>

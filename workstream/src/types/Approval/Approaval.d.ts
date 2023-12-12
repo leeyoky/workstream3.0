@@ -1,12 +1,22 @@
+/* Menus */
+export type SubMenu = {
+  to: string;
+  label: string;
+  title: string;
+  type?: string;
+  state?: string;
+  subMenus?: SubMenu[];
+};
+
 /* approval-slice */
 export interface Employee {
-  empNo: string; /* approver */
-  name: string; /* approverNm */
-  duty: string; /* officeDutyNm */
-  rankName: string; /* rankNm */
-  approvalType: string; /* apprType */
+  empNo: string /* approver */;
+  name: string /* approverNm */;
+  duty: string /* officeDutyNm */;
+  rankName: string /* rankNm */;
+  approvalType: string /* apprType */;
   modDate?: string;
-  index: number;  /* order */
+  index: number /* order */;
   approvedYn?: string;
 }
 
@@ -18,8 +28,8 @@ export interface DocumentCounts {
   approvedCount: number;
 }
 export interface ccDept {
-  deptCd: string,
-  deptNm: string,
+  deptCd: string;
+  deptNm: string;
 }
 
 export interface ApprovalState {
@@ -27,12 +37,12 @@ export interface ApprovalState {
   isEditMode: boolean;
   isDetailMode: boolean;
   isReference: boolean;
-  documentType: string;   // 품의서 종류
-  selectedOption: string;   // 결재방식 선택
-  agreementType: string;    // 힙의방식 선택
+  documentType: string; // 품의서 종류
+  selectedOption: string; // 결재방식 선택
+  agreementType: string; // 힙의방식 선택
   approvers: Employee[];
-  ccDept: ccDept[],
-  ccUser: Employee[],
+  ccDept: ccDept[];
+  ccUser: Employee[];
   content: string;
   title: string;
   executeDate: string;
@@ -61,7 +71,7 @@ export type ApprovalListItem = {
   submitDate: null;
   title: string;
   index: number;
-}
+};
 
 export interface SearchBoxOption {
   label: string;
@@ -69,11 +79,11 @@ export interface SearchBoxOption {
 }
 
 export interface SearchBoxProps {
-  tags: { 
-    label: string; 
-    name: string; 
-    type?: string; 
-    options?: SearchBoxOption[] 
+  tags: {
+    label: string;
+    name: string;
+    type?: string;
+    options?: SearchBoxOption[];
   }[];
 }
 
@@ -83,16 +93,16 @@ export interface docData {
   contents: string;
   docType: string;
   executeDate: string;
-  line: { apprType: string; approver: string; order: number; }[];
+  line: { apprType: string; approver: string; order: number }[];
   state: string;
   title: string;
 }
 
-export interface resinationDocData{
+export interface resinationDocData {
   address: string;
   homeContact: string;
   identityNo: number | null;
-  line: { apprType: string; approver: string; order: number; }[];
+  line: { apprType: string; approver: string; order: number }[];
   mobileContact: string;
   reasons: string;
   resignationDate: string;
@@ -100,8 +110,8 @@ export interface resinationDocData{
 }
 
 export interface fetchCommentData {
-  apprId : string;
-  comment : string;
+  apprId: string;
+  comment: string;
 }
 
 export interface CommentItem {
@@ -114,8 +124,8 @@ export interface CommentItem {
 }
 
 export interface commentData {
-  id : number;
-  comment : string;
+  id: number;
+  comment: string;
 }
 
 export interface editApprovalLine {
@@ -129,21 +139,21 @@ export interface editApprovalLine {
 }
 
 export interface ArrpovalLine {
-  id: number,
-  approver : string,
-  approverNm: string,
-  apprType: string,
-  approvedYn: string,
+  id: number;
+  approver: string;
+  approverNm: string;
+  apprType: string;
+  approvedYn: string;
   modDate: string;
   deptNm: string;
-  officeDutyNm: string,
-  order: 1,
+  officeDutyNm: string;
+  order: 1;
   rankNm: string;
 }
 
 export interface approveResultData {
-  id: number,
-  approvedYn: string,
+  id: number;
+  approvedYn: string;
 }
 
 type CommonData = {

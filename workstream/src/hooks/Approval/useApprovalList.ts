@@ -25,7 +25,7 @@ export function useApprovalList(sortValue: string) {
 
   const fetchApprovalList = async () => {
     try {
-      const { title, deptCd, docType, regUsrNm, state, regDateGoe, regDateLoe } = getSearchInput;
+      const { id, title, deptCd, docType, regUsrNm, state, regDateGoe, regDateLoe } = getSearchInput;
       
       let pendingApproval = '';
       let selectedState = state;
@@ -50,6 +50,7 @@ export function useApprovalList(sortValue: string) {
       }
 
       const response = await getApprovalList({
+        id,
         page: getPage,
         size: getPageSize,
         state: selectedState,

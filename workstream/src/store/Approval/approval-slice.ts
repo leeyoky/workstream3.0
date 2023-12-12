@@ -1,19 +1,19 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ApprovalState, ccDept, Employee } from "../../types/Approval/Approaval";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ApprovalState, ccDept, Employee } from '../../types/Approval/Approaval';
 
-const initialState: ApprovalState = { 
+const initialState: ApprovalState = {
   documentCnt: '',
   isEditMode: true,
   isDetailMode: true,
   documentType: '',
-  selectedOption: 'approval', /* 결재 / 합의 */
-  agreementType: 'sequential',  /* 순차 / 병렬 */
+  selectedOption: 'approval' /* 결재 / 합의 */,
+  agreementType: 'sequential' /* 순차 / 병렬 */,
   approvers: [],
-  ccDept:[],
-  ccUser:[],
+  ccDept: [],
+  ccUser: [],
   isReference: false,
   title: '',
-  content:'',
+  content: '',
   executeDate: '',
   comment: '',
   pendingCnt: '',
@@ -29,10 +29,9 @@ const approvalSlice = createSlice({
   initialState,
   reducers: {
     // 결재 문서함 갯수
-    setDocumentCnt(state, action){
+    setDocumentCnt(state, action) {
       state.documentCnt = action.payload;
-    }
-    ,
+    },
     // 결재대기 문서 갯수 셋팅
     setPendingCnt(state, action) {
       state.pendingCnt = action.payload;
@@ -59,13 +58,13 @@ const approvalSlice = createSlice({
     // 결재 직원을 추가
     addEmp(state, action: PayloadAction<Employee & { index: number }>) {
       const { empNo, name, rankName, duty, approvalType, index } = action.payload;
-      const isDuplicate = state.approvers.find((emp) => emp.name === name);
-    
+      const isDuplicate = state.approvers.find(emp => emp.name === name);
+
       if (!isDuplicate) {
         state.approvers.push({ empNo, name, rankName, duty, approvalType, index });
       } else {
         // 이미 추가된 직원이 있을 때 index를 업데이트
-        const existingEmpIndex = state.approvers.findIndex((emp) => emp.name === name);
+        const existingEmpIndex = state.approvers.findIndex(emp => emp.name === name);
         if (existingEmpIndex !== -1) {
           state.approvers[existingEmpIndex].index = index;
         }
@@ -75,43 +74,41 @@ const approvalSlice = createSlice({
     // 참조 부서 추가
     addRefDepCd(state, action: PayloadAction<ccDept>) {
       const { deptCd, deptNm } = action.payload;
-      
+
       // 이미 추가된 부서 코드가 아닌 경우에만 배열에 추가
-      const isDuplicate = state.ccDept.some((dept) => dept.deptCd === deptCd);
+      const isDuplicate = state.ccDept.some(dept => dept.deptCd === deptCd);
       if (!isDuplicate) {
         state.ccDept.push({ deptCd, deptNm });
       }
     },
 
     // 참조직원 추가
-    addRefEmp(state, action:PayloadAction<Employee>){
+    addRefEmp(state, action: PayloadAction<Employee>) {
       const { empNo, name, rankName, duty, approvalType, index } = action.payload;
-      const isDuplicate = state.ccUser.some((emp) => emp.empNo === empNo);
-      
+      const isDuplicate = state.ccUser.some(emp => emp.empNo === empNo);
+
       if (!isDuplicate) {
         state.ccUser.push({ empNo, name, rankName, duty, approvalType, index });
-      } 
-    
+      }
     },
     // 전체 참조자/부서 삭제
-    removeRef(state){
-      const confirmDelete = window.confirm('전체삭제 하시겠습니까?')
-      if(confirmDelete) {
-        state.ccDept = [],
-        state.ccUser = []
+    removeRef(state) {
+      const confirmDelete = window.confirm('전체삭제 하시겠습니까?');
+      if (confirmDelete) {
+        (state.ccDept = []), (state.ccUser = []);
       }
     },
     // 참조부서 개별 삭제
-    removeRefDept(state, action: PayloadAction<string>){
+    removeRefDept(state, action: PayloadAction<string>) {
       const confirmDelete = window.confirm('삭제하시겠습니까?');
-      if(confirmDelete){
+      if (confirmDelete) {
         state.ccDept = state.ccDept.filter(dept => dept.deptCd !== action.payload);
       }
     },
     // 참조자 개별 삭제
-    removeRefEmp(state, action: PayloadAction<string>){
+    removeRefEmp(state, action: PayloadAction<string>) {
       const confirmDelete = window.confirm('삭제하시겠습니까?');
-      if(confirmDelete){
+      if (confirmDelete) {
         state.ccUser = state.ccUser.filter(dept => dept.empNo !== action.payload);
       }
     },
@@ -120,7 +117,7 @@ const approvalSlice = createSlice({
       state.title = action.payload;
     },
     // 시행날짜
-    setDate(state, action){
+    setDate(state, action) {
       state.executeDate = action.payload;
     },
     // 내용
@@ -154,7 +151,7 @@ const approvalSlice = createSlice({
       state.approvers = action.payload;
     },
     // 개별 삭제
-    removeEmp(state, action: PayloadAction<string>){
+    removeEmp(state, action: PayloadAction<string>) {
       const confirmDelete = window.confirm('삭제하시겠습니까?');
       if (confirmDelete) {
         state.approvers = state.approvers.filter(employee => employee.name !== action.payload);
@@ -171,7 +168,7 @@ const approvalSlice = createSlice({
       state.isDetailMode = action.payload;
     },
     // 댓글
-    setComment(state,action) {
+    setComment(state, action) {
       state.comment = action.payload;
     },
     resetArray(state) {
@@ -183,7 +180,7 @@ const approvalSlice = createSlice({
       state.ccDept = [];
       state.ccUser = [];
     },
-    resetDocument(state){
+    resetDocument(state) {
       state.selectedOption = '';
       state.agreementType = '';
       state.approvers = [];
@@ -193,11 +190,11 @@ const approvalSlice = createSlice({
       state.ccDept = [];
       state.ccUser = [];
     },
-    resetResination(state){
+    resetResination(state) {
       state.reasonRetire = '';
       state.retireDate = '';
       state.finalSign = false;
-    }
+    },
   },
 });
 

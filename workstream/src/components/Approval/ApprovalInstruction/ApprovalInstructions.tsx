@@ -10,8 +10,10 @@ const ApprovalInstructions = () => {
   const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
   const { id = '' } = useParams<string>();
   const data = useDocumentData(documentType, id)?.data;
-  const lastComment = data?.comment[data?.comment.length - 1]?.comment || '';
-
+  const lastApprover = data?.line[data?.line.length - 1]?.approver || '';
+  const lastCommentObj = data?.comment.find(comment => comment.regUsr === lastApprover);
+  const lastComment = lastCommentObj ? lastCommentObj.comment : '';
+  
   return (
     <div className={classes['reference-table']}>
       <div className={classes['reference-table-th']}>
