@@ -3,7 +3,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/ko';
 
-import './TextEditor.css'
+import './TextEditor.css';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../store/Approval/approval-slice';
 import { useSelector } from 'react-redux';
@@ -16,10 +16,10 @@ interface TextEditorProps {
 const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
   const [editorData, setEditorData] = useState(textValue || '');
   const dispatch = useDispatch();
-  const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
+  const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
 
-  useEffect(()=> {
-    if(textValue !== undefined ) {
+  useEffect(() => {
+    if (textValue !== undefined) {
       setEditorData(textValue);
     }
   }, [textValue, dispatch]);
@@ -27,6 +27,15 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
   const handleChange = (_event: any, editor: any) => {
     const data = editor.getData();
     dispatch(selectedActions.setContent(data));
+    const editable = editor.ui.view.editable;
+
+    if (editable && editable.clientHeight > 500) {
+      // 에디터에서 마지막 엔터를 찾아서 제거
+      editor.model.change((writer: any) => {
+        const lastPosition = editor.model.document.selection.getLastPosition();
+        writer.remove(writer.createRangeOn(lastPosition), 'end');
+      });
+    }
   };
 
   useEffect(() => {
@@ -48,9 +57,11 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
     if (toolbarElement && !isEdit) {
       toolbarElement.style.border = 'none';
     }
-  
+
     // .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused)의 border를 없애기
-    const editableElement = document.querySelector('.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused)') as HTMLElement;
+    const editableElement = document.querySelector(
+      '.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused)',
+    ) as HTMLElement;
     if (editableElement && !isEdit) {
       editableElement.style.borderColor = 'transparent';
     }
@@ -63,9 +74,20 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
       data={editorData}
       onChange={handleChange as any}
       config={editorConfig}
-      disabled={isEdit? false : true}
-      />
+      disabled={isEdit ? false : true}
+      onReady={editor => {
+        const editable = editor.ui.view.editable;
+
+        if (editable && editable.clientHeight > 500) {
+          // 에디터에서 마지막 엔터를 찾아서 제거
+          editor.model.change((writer: any) => {
+            const lastPosition = editor.model.document.selection.getLastPosition();
+            writer.remove(writer.createRangeOn(lastPosition), 'end');
+          });
+        }
+      }}
+    />
   );
-}
+};
 
 export default TextEditor;

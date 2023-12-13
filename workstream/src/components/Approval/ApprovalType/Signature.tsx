@@ -34,7 +34,7 @@ const Signature = () => {
 
   // 셀 헤더
   const renderHeader = (content: any, index: number, approverIndex: number) => (
-    <th key={index} className={classes['header-table__approval-th']}>
+    <th className={classes['header-table__approval-th']}>
       <div>
         <span className={classes['approver-index']}>
           {approverIndex !== -1 ? <div>{approverIndex + 2}</div> : ''}

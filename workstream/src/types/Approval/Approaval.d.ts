@@ -184,6 +184,7 @@ type CommonData = {
     fileName: string;
     fileSize: number;
     id: number;
+    pdfUrl?: string;
   }[];
   line: {
     id: number;

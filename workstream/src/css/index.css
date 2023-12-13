@@ -1366,3 +1366,44 @@ i[name]:hover::after {
   font-size: 8pt;
   background-color: #ffffff;
 }
+
+/* PDF */
+
+.pdf-viewer__wrapper {
+  width: 750px;
+  height: 850px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.modal .pdfViewer__modal{
+  width: 100px;
+}
+.pdf-viewer__tools,
+.pdf-viewer__xmark {
+  width: 100%;
+  display: flex;
+}
+.pdf-viewer__tools{
+  justify-content: center;
+  padding-bottom: 10px;
+  gap: 10px;
+}
+.pdf-viewer__xmark i {
+  margin-left: auto;
+}
+.core__inner-pages {
+  height: 750px !important;
+}
+.rpv-core__viewer .rpv-core__viewer--light {
+  height: 750px !important;
+
+}
+
+@media (min-width: 768px) {
+  .pdfViewer_modal{
+    width: auto;
+    left: calc(50% - 23rem);
+    top: 1%;
+  }
+}

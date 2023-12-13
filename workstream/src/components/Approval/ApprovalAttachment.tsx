@@ -8,9 +8,12 @@ import { useParams } from 'react-router-dom';
 import { deleteFileData } from '../../api/axios';
 import { ApprovalData, CommonData } from '../../types/Approval/Approaval';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
+import PdfViewerModal from '../../common/PdfViewerModal';
 
 const ApprovalAttachment = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // 새로 추가하는 로컬 파일
+  const [selectedFile, setSelectedFile] = useState<CommonData['files'][0] | null>(null); // Track the selected file
+  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
   const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
@@ -115,6 +118,16 @@ const ApprovalAttachment = () => {
     }
   };
 
+  const openPdfViewer = (file: CommonData['files'][0]) => {
+    setSelectedFile(file);
+    setIsPdfViewerOpen(true);
+  };
+
+  const closePdfViewer = () => {
+    setSelectedFile(null);
+    setIsPdfViewerOpen(false);
+  };
+
   return (
     <div className={classes['approval-create-wrapper']}>
       {/* 문서 새작성 및 임시저장 상태 */}
@@ -195,9 +208,10 @@ const ApprovalAttachment = () => {
           <div className={classes['approval-attachment-item-download']}>
             <div className={classes['file-download']}>
               <ul>
+                {/* <li key={index} onClick={() => fileDownloadHandler(item.id, item.fileName)}> */}
                 {data?.files && data?.files.length > 0 ? (
                   data.files.map((item, index) => (
-                    <li key={index} onClick={() => fileDownloadHandler(item.id, item.fileName)}>
+                    <li key={index} onClick={() => openPdfViewer(item)}>
                       <span>{item.fileName}</span>
                       <button>
                         <i className="fa-solid fa-angle-down"></i>
@@ -211,6 +225,9 @@ const ApprovalAttachment = () => {
             </div>
           </div>
         </div>
+      )}
+      {isPdfViewerOpen && selectedFile && (
+        <PdfViewerModal isOpen={isPdfViewerOpen} onClose={closePdfViewer} file={selectedFile} />
       )}
     </div>
   );

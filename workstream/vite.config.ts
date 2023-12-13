@@ -5,10 +5,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
 export default defineConfig({
-  plugins: [
-    react(),
-    ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') }),
-  ],
+  plugins: [react(), ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') })],
   server: {
     port: 5173,
     proxy: {

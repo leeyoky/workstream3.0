@@ -11,6 +11,7 @@ import {
   fetchFileData,
   fetchRecallDocument,
   fetchResignationData,
+  updateApproveDocument,
   updateDocument,
   updateResignation,
 } from '../../api/axios';
@@ -19,7 +20,6 @@ import { userActions } from '../../store/User/user-slice';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { uiActions } from '../../store/ui-slice';
-import PdfViewer from './../../common/PdfViewer';
 
 const useApprovalRequest = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +38,8 @@ const useApprovalRequest = () => {
   const instructionComment = useSelector((state: RootState) => state.approval.comment);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {}, [navigate]);
 
   const handleShowModal = () => {
     setIsModalOpen(true);
@@ -507,6 +509,24 @@ const useApprovalRequest = () => {
     }
   };
 
+  /* 결재 승인/취소 */
+  const updateApprovalHandler = async (id: number) => {
+    const confirmMsg = '기존의 결재를 회수하시겠습니까?';
+    if (window.confirm(confirmMsg)) {
+      try {
+        const response = await updateApproveDocument(id);
+        console.log(response);
+        if (response.status === 204) {
+          alert('결재회수 하였습니다.');
+          navigate('/approval/in-progress');
+          dispatch(uiActions.selectMenu('/approval/in-progress'));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   /**
    *  @description PDF 다운 기능
    *  @access 등록자만 가능
@@ -559,6 +579,7 @@ const useApprovalRequest = () => {
     updateResignationHandler,
     deleteDocumentHandler,
     approveDocumentHandler,
+    updateApprovalHandler,
     requestApprovalType,
     requestTempDocument,
     recallDocument,

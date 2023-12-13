@@ -118,7 +118,7 @@ const SignatureEdit = () => {
             : '';
 
         return (
-          <td className={classes['approver-content']} key={index}>
+          <td className={classes['approver-content']}>
             <div className={classes['approver-content-item-container']}>
               <div className={classes['approver-complete-container']}>
                 {!isEditMode && (
@@ -146,7 +146,7 @@ const SignatureEdit = () => {
           : '대 기';
 
       return (
-        <td className={classes['approver-content']} key={index}>
+        <td className={classes['approver-content']}>
           <div className={classes['approver-content-item-container']}>
             <div className={classes['approver-complete-container']}>
               {!isEditMode && (
@@ -162,11 +162,7 @@ const SignatureEdit = () => {
         </td>
       );
     } else {
-      return (
-        <td className={classes['approver-content']} key={index}>
-          {content}
-        </td>
-      );
+      return <td className={classes['approver-content']}>{content}</td>;
     }
   };
 
@@ -185,7 +181,7 @@ const SignatureEdit = () => {
             : '';
 
         return (
-          <th key={index} className={classes['header-table__approval-th']}>
+          <th className={classes['header-table__approval-th']}>
             <div>
               <span className={classes['approver-index']}>
                 {approverIndex !== -1 ? <div>{approverIndex + 2}</div> : <div>1</div>}
@@ -196,7 +192,7 @@ const SignatureEdit = () => {
         );
       }
       return (
-        <th className={classes['header-table__approval-th']} key={approverIndex}>
+        <th className={classes['header-table__approval-th']}>
           <div>
             <span className={classes['approver-index']}>
               {approverIndex !== -1 ? <div>{approverIndex + 2}</div> : ''}
@@ -207,7 +203,7 @@ const SignatureEdit = () => {
       );
     } else {
       return (
-        <th className={classes['header-table__approval-th']} key={index}>
+        <th className={classes['header-table__approval-th']}>
           <div>
             <span>{content}</span>
           </div>
@@ -228,7 +224,7 @@ const SignatureEdit = () => {
             }).map((_, index) =>
               renderHeader(
                 index < approvalApprovers.length ? approvalApprovers[index] : '',
-                index - 1,
+                index + 1,
                 getApproverIndex(approvalApprovers[index]),
               ),
             )}

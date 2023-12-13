@@ -4,13 +4,23 @@
 
 .ck.ck-editor{
   height: 620px !important;
+  max-height: 600px !important;
 }
 
 .ck.ck-editor__main>.ck-editor__editable {
   height: 600px !important;
+  max-height: 600px !important;
   font-size: 10pt;
+}
+
+.ck.ck-editor__editable_inline {
+  overflow: hidden !important;
 }
 
 .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused){
   border-color: transparent;
+}
+
+.ck-editor__editable p {
+  margin-bottom: 0;
 }

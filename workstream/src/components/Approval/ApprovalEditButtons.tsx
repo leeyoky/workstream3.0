@@ -29,6 +29,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     goBackPage,
     deleteDocumentHandler,
     approveDocumentHandler,
+    updateApprovalHandler,
     requestApprovalType,
     requestTempDocument,
     recallDocument,
@@ -51,12 +52,15 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     return data && 'resignation' in data;
   };
 
-  const memoizedValues = useMemo(() => {
-    return { isDetail, selectMenu, userData, approvedYn };
-  }, [isDetail, selectMenu, userData, approvedYn]);
+  const memoizedValues = useMemo(
+    () => ({ isDetail, selectMenu, userData, approvedYn }),
+    [isDetail, selectMenu, userData, approvedYn],
+  );
 
   useEffect(() => {
     setApprovedYn(approvedYn);
+    console.log('ApprovalEditButtons 컴포넌트가 리렌더링되었습니다.');
+    console.log('approvedYn', approvedYn);
   }, [approvedYn, setApprovedYn, documentData]);
 
   const matchingId = documentData?.line?.find(approval => approval.approver === userData)?.id || 0;
@@ -89,9 +93,6 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
      */
     if (isApprover && !isEdit && approvedYn === 'N') {
       const isLastApprover = !nextApprover;
-      /*       console.log('isLastApprover', isLastApprover);
-      console.log('isPreviousApproved', isPreviousApproved);
-      console.log('isApproved', isApproved); */
 
       /* 마지막 결재자이며, 앞 사람이 결재를 했고, 상태가 완료이거나 반려상태가 아닐 때 */
       if (
@@ -122,6 +123,25 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
             </button>
             <button className="btn btn-red" onClick={() => approveDocumentHandler(matchingId, 'R')}>
               <span>반려</span>
+            </button>
+          </>
+        );
+      }
+    }
+
+    if ((isApprover && !isEdit && approvedYn === 'R') || approvedYn === 'Y') {
+      if (
+        (!isNextApprover || isPreviousApproved) &&
+        isApproved !== 'APPROVED' &&
+        isApproved !== 'REJECTED'
+      ) {
+        return (
+          /* 결재 취소 / 합의 취소 */
+          <>
+            <button
+              className="btn btn-red"
+              onClick={() => userLineData && updateApprovalHandler(userLineData.id)}>
+              <span>{userLineData?.apprType === 'APPROVER' ? '결재 취소' : '합의 취소'}</span>
             </button>
           </>
         );
@@ -180,7 +200,6 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     <>
       {/* 임시 저장이 아닐 때 */}
 
-      {/* renderApprovalButtons 호출 */}
       {matchingId !== 0 && documentData && documentData.line && renderApprovalButtons()}
 
       {temp && memoizedValues.isDetail && (
