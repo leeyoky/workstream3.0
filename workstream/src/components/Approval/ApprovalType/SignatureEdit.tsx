@@ -28,11 +28,12 @@ const SignatureEdit = () => {
   const dispatch = useDispatch();
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
+  const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
+  const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
+  const isRevise = useSelector((state: RootState) => state.approval.isReviseMode);
   const getApproverIndex = (approver: any) => approvers.indexOf(approver);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
-  const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
   const data = useDocumentData(documentType, id)?.data;
-  const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
 
   // 타입가드
   const isApprovalData = (data: any): data is ApprovalData => {
@@ -149,10 +150,10 @@ const SignatureEdit = () => {
         <td className={classes['approver-content']}>
           <div className={classes['approver-content-item-container']}>
             <div className={classes['approver-complete-container']}>
-              {!isEditMode && (
+              {!isEditMode && !isRevise && (
                 <span className={getApprovalResultClass(approvedYn)}>{resultText}</span>
               )}
-              {(approvedYn === 'Y' || approvedYn === 'R') && (
+              {(approvedYn === 'Y' || approvedYn === 'R') && !isRevise && (
                 <span className={classes['approver-complete-date']}>
                   {formatDateMinutes(modDate)}
                 </span>

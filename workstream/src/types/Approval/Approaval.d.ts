@@ -32,10 +32,15 @@ export interface ccDept {
   deptNm: string;
 }
 
+export interface ccUser {
+  empNm: string;
+  empNo: string;
+}
 export interface ApprovalState {
   documentCnt: string;
   isEditMode: boolean;
   isDetailMode: boolean;
+  isReviseMode: boolean;
   isReference: boolean;
   documentType: string; // 품의서 종류
   selectedOption: string; // 결재방식 선택

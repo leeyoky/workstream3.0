@@ -5,6 +5,7 @@ const initialState: ApprovalState = {
   documentCnt: '',
   isEditMode: true,
   isDetailMode: true,
+  isReviseMode: false,
   documentType: '',
   selectedOption: 'approval' /* 결재 / 합의 */,
   agreementType: 'sequential' /* 순차 / 병렬 */,
@@ -150,6 +151,34 @@ const approvalSlice = createSlice({
     setApprovers(state, action: PayloadAction<Employee[]>) {
       state.approvers = action.payload;
     },
+    setRefDepCd(state, action: PayloadAction<ccDept[]>) {
+      state.ccDept = action.payload;
+    },
+    setRefEmp(
+      state,
+      action: PayloadAction<
+        {
+          deptNm: string;
+          empNm: string;
+          empNo: string;
+          id: number;
+          officeDutyNm: string | null | undefined;
+          rankNm: string;
+        }[]
+      >,
+    ) {
+      state.ccUser = action.payload.map(emp => ({
+        empNo: emp.empNo,
+        name: emp.empNm,
+        duty: emp.officeDutyNm || '', // 적절한 기본값 사용
+        rankName: emp.rankNm,
+        approvalType: '', // 적절한 기본값 사용
+        modDate: '', // 적절한 기본값 사용
+        index: 0, // 적절한 기본값 사용
+        approvedYn: '', // 적절한 기본값 사용
+      }));
+    },
+
     // 개별 삭제
     removeEmp(state, action: PayloadAction<string>) {
       const confirmDelete = window.confirm('삭제하시겠습니까?');
@@ -167,6 +196,9 @@ const approvalSlice = createSlice({
     setIsDetailMode(state, action) {
       state.isDetailMode = action.payload;
     },
+    setIsReviseMode(state, action) {
+      state.isReviseMode = action.payload;
+    },
     // 댓글
     setComment(state, action) {
       state.comment = action.payload;
@@ -177,6 +209,7 @@ const approvalSlice = createSlice({
       state.agreementType = '';
       state.approvers = [];
       state.isEditMode = true;
+      state.isReviseMode = false;
       state.ccDept = [];
       state.ccUser = [];
     },

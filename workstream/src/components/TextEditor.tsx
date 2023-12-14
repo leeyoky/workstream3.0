@@ -75,7 +75,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
       onChange={handleChange as any}
       config={editorConfig}
       disabled={isEdit ? false : true}
-      onReady={editor => {
+      /*  onReady={editor => {
         const editable = editor.ui.view.editable;
 
         if (editable && editable.clientHeight > 500) {
@@ -85,7 +85,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
             writer.remove(writer.createRangeOn(lastPosition), 'end');
           });
         }
-      }}
+      }} */
     />
   );
 };

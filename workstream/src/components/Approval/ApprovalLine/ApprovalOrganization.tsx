@@ -26,7 +26,7 @@ const ApprovalOrganization = () => {
           </button>
         </div>
 
-        <OrganizationAccordion searchText={searchText} setSearchText={setSearchText} />
+        <OrganizationAccordion searchText={searchText} />
       </div>
     </div>
   );

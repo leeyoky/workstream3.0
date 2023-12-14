@@ -12,30 +12,29 @@ import ApprovalInstructions from '../ApprovalInstruction/ApprovalInstructions';
 
 const CommonCreate = () => {
   const today = new Date();
-  const getDate = today.toISOString().slice(0,10);
+  const getDate = today.toISOString().slice(0, 10);
 
-  const userInfo = useSelector((state:RootState) => state.auth.userInfo);
+  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const executionDateRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
-  
+
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     dispatch(selectedActions.setTitle(newTitle));
-  }
-  useEffect(()=> {
+  };
+  useEffect(() => {
     dispatch(selectedActions.resetDocument());
-  }, [])
+  }, []);
 
-  useEffect(()=>{
-    if(executionDateRef.current) {
+  useEffect(() => {
+    if (executionDateRef.current) {
       executionDateRef.current.focus();
     }
     dispatch(fileActions.resetFiles());
     dispatch(selectedActions.setIsEditMode(true));
     dispatch(selectedActions.setIsDetailMode(false));
-    
-  },[]);
+  }, []);
 
   return (
     <form>
@@ -47,62 +46,62 @@ const CommonCreate = () => {
           <div className={classes['header__left__common']}>
             <table className={classes['header-table__common']}>
               <tbody>
-              <tr>
-                <td className={classes['header-table__approval-th']}>문서번호</td>
-                <td className={classes['header-table__approval-td']}>
-                  <span>DS_새품의서_</span>
-                </td>
-              </tr>
-              <tr>
-                <td className={classes['header-table__approval-th']}>품의일자</td>
-                <td>{getDate}</td>
-              </tr>
-              <tr>
-                <td className={classes['header-table__approval-th']}>시행일자</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td className={classes['header-table__approval-th']}>부서명</td>
-                <td>
-                  <span>{userInfo?.deptNm}</span>
-                </td>
-              </tr>
-              <tr>
-                <td className={classes['header-table__approval-th']}>기안자</td>
-                <td>
-                  <span>{userInfo?.empNm}</span>
-                </td>
-              </tr>
-              <tr>
-                <td className={classes['header-table__approval-th']}>제목</td>
-                <td>
-                  <input 
-                    className={classes['update-input']}
-                    placeholder='제목을 입력해주세요.'
-                    type="text" 
-                    name="title"
-                    onChange={titleChangeHandler}
-                    ref={titleRef}
-                  />
-                </td>
-              </tr>
+                <tr>
+                  <td className={classes['header-table__approval-th']}>문서번호</td>
+                  <td className={classes['header-table__approval-td']}>
+                    <span>DS_새품의서_</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td className={classes['header-table__approval-th']}>품의일자</td>
+                  <td>{getDate}</td>
+                </tr>
+                <tr>
+                  <td className={classes['header-table__approval-th']}>시행일자</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td className={classes['header-table__approval-th']}>부서명</td>
+                  <td>
+                    <span>{userInfo?.deptNm}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td className={classes['header-table__approval-th']}>기안자</td>
+                  <td>
+                    <span>{userInfo?.empNm}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td className={classes['header-table__approval-th']}>제목</td>
+                  <td>
+                    <input
+                      className={classes['update-input']}
+                      placeholder="제목을 입력해주세요."
+                      type="text"
+                      name="title"
+                      onChange={titleChangeHandler}
+                      ref={titleRef}
+                    />
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
           <Signature />
         </div>
       </header>
-        <ApprovalReference />
-        <ApprovalInstructions />
-        <TextEditor />
+      <ApprovalReference />
+      <ApprovalInstructions />
+      <TextEditor />
       <footer>
         <div className={classes['footer-text']}>
           <span>위와 같이 품의하오니 검토 후 재가바랍니다.</span>
         </div>
         <p className={classes['footer']}>주식회사 데이터스트림즈</p>
       </footer>
-  </form>
-  )
-}
+    </form>
+  );
+};
 
-export default CommonCreate
+export default CommonCreate;

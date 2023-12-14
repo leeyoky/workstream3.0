@@ -30,6 +30,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     deleteDocumentHandler,
     approveDocumentHandler,
     updateApprovalHandler,
+    changeTempModeHandler,
     requestApprovalType,
     requestTempDocument,
     recallDocument,
@@ -38,6 +39,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
 
   const isDetail = useSelector((state: RootState) => state.approval.isDetailMode);
   const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
+  const isRevise = useSelector((state: RootState) => state.approval.isReviseMode);
   const selectMenu = useSelector((state: RootState) => state.ui.selectMenu);
   const userData = useSelector((state: RootState) => state.auth.userInfo?.empNo);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
@@ -52,6 +54,16 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     return data && 'resignation' in data;
   };
 
+  const isApproved = documentData
+    ? documentType === 'APPROVAL_COMMON'
+      ? isApprovalData(documentData)
+        ? documentData.approval.state
+        : ''
+      : isResignationData(documentData)
+      ? documentData.resignation.state
+      : ''
+    : '';
+
   const memoizedValues = useMemo(
     () => ({ isDetail, selectMenu, userData, approvedYn }),
     [isDetail, selectMenu, userData, approvedYn],
@@ -59,9 +71,19 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
 
   useEffect(() => {
     setApprovedYn(approvedYn);
-    console.log('ApprovalEditButtons 컴포넌트가 리렌더링되었습니다.');
-    console.log('approvedYn', approvedYn);
   }, [approvedYn, setApprovedYn, documentData]);
+
+  /* 문서별 작성자의 no를 가져옴 */
+  const regUsrNo =
+    documentType === 'APPROVAL_COMMON'
+      ? isApprovalData(documentData)
+        ? documentData.approval.regUsr
+        : documentData?.resignation.regUsr || ''
+      : isResignationData(documentData)
+      ? documentData.resignation.regUsr
+      : '';
+
+  const isFinishedDocumnt = isApproved === 'APPROVED' || isApproved === 'REJECTED';
 
   const matchingId = documentData?.line?.find(approval => approval.approver === userData)?.id || 0;
 
@@ -77,16 +99,6 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     const previousApprover = documentData?.line.find(approval => approval.order === userOrder - 1);
     const isPreviousApproved = !(previousApprover?.approvedYn === 'N');
 
-    const isApproved = documentData
-      ? documentType === 'APPROVAL_COMMON'
-        ? isApprovalData(documentData)
-          ? documentData.approval.state
-          : ''
-        : isResignationData(documentData)
-        ? documentData.resignation.state
-        : ''
-      : '';
-
     /**
      * @description
      * 결재라인에 본인이 있고, 편집상태가 아니며, 결재를 진행하지 않은 상태.
@@ -95,12 +107,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
       const isLastApprover = !nextApprover;
 
       /* 마지막 결재자이며, 앞 사람이 결재를 했고, 상태가 완료이거나 반려상태가 아닐 때 */
-      if (
-        isLastApprover &&
-        isPreviousApproved &&
-        isApproved !== 'APPROVED' &&
-        isApproved !== 'REJECTED'
-      ) {
+      if (isLastApprover && isPreviousApproved && !isFinishedDocumnt) {
         return (
           <button className="btn btn-blue" onClick={() => handleShowInstModal()}>
             <span>최종결재</span>
@@ -109,11 +116,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
         );
       }
 
-      if (
-        (isNextApprover || isPreviousApproved) &&
-        isApproved !== 'APPROVED' &&
-        isApproved !== 'REJECTED'
-      ) {
+      if ((isNextApprover || isPreviousApproved) && !isFinishedDocumnt) {
         return (
           <>
             <button
@@ -130,11 +133,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     }
 
     if ((isApprover && !isEdit && approvedYn === 'R') || approvedYn === 'Y') {
-      if (
-        (!isNextApprover || isPreviousApproved) &&
-        isApproved !== 'APPROVED' &&
-        isApproved !== 'REJECTED'
-      ) {
+      if ((!isNextApprover || isPreviousApproved) && !isFinishedDocumnt) {
         return (
           /* 결재 취소 / 합의 취소 */
           <>
@@ -178,30 +177,19 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     </>
   );
 
-  /* 문서별 작성자의 no를 가져옴 */
-  const regUsrNo =
-    documentType === 'APPROVAL_COMMON'
-      ? isApprovalData(documentData)
-        ? documentData.approval.regUsr
-        : documentData?.resignation.regUsr || ''
-      : isResignationData(documentData)
-      ? documentData.resignation.regUsr
-      : '';
-
   /* 결재자가 Y가 있는지 */
   const approverYn =
     documentType === 'APPROVAL_COMMON'
       ? isApprovalData(documentData)
-        ? documentData.line.some(approval => approval.approvedYn === 'Y')
-        : documentData?.line.some(approval => approval.approvedYn === 'Y')
-      : documentData?.line.some(approval => approval.approvedYn === 'Y');
+        ? documentData.line.some(approval => approval.approvedYn === 'N')
+        : documentData?.line.some(approval => approval.approvedYn === 'N')
+      : documentData?.line.some(approval => approval.approvedYn === 'N');
 
   const renderDetailButtons = () => (
     <>
       {/* 임시 저장이 아닐 때 */}
 
       {matchingId !== 0 && documentData && documentData.line && renderApprovalButtons()}
-
       {temp && memoizedValues.isDetail && (
         <>
           <button className="btn" onClick={handleShowModal}>
@@ -216,26 +204,39 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
             </button>
           )}
           {isRefModalOpen && <ApprovalModalEmpEdit onClose={handleCloseRefModal} isEdit={true} />}
-          <button className="btn" onClick={() => requestTempDocument(documentType, 'TEMP')}>
-            <span>임시저장</span>
-            <i className="fa-solid fa-floppy-disk"></i>
-          </button>
+          {!isRevise && (
+            <button className="btn" onClick={() => requestTempDocument(documentType, 'TEMP')}>
+              <span>임시저장</span>
+              <i className="fa-solid fa-floppy-disk"></i>
+            </button>
+          )}
           <button
             className="btn btn-blue"
-            onClick={() => requestTempDocument(documentType, 'PROCEEDING')}>
+            onClick={() =>
+              isRevise
+                ? requestApprovalType(documentType, 'PROCEEDING')
+                : requestTempDocument(documentType, 'PROCEEDING')
+            }>
             <span>결재요청</span>
             <i className="fa-solid fa-pen-nib"></i>
           </button>
-          <button className="btn btn-red" onClick={() => deleteDocumentHandler(id)}>
-            <span>문서삭제</span>
-            <i className="fa-solid fa-xmark"></i>
-          </button>
+          {isRevise ? (
+            <button className="btn btn-red" onClick={() => changeTempModeHandler('N')}>
+              <span>재기안취소</span>
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          ) : (
+            <button className="btn btn-red" onClick={() => deleteDocumentHandler(id)}>
+              <span>문서삭제</span>
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          )}
         </>
       )}
       {!temp && (
         <>
           {/* 결재 프로세스가 진행되지 않았고, 작성자 본인 일때 */}
-          {!approverYn && regUsrNo === memoizedValues.userData && (
+          {approverYn && regUsrNo === memoizedValues.userData && (
             <button
               className="btn"
               onClick={() => {
@@ -243,6 +244,11 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
               }}>
               <span>문서회수</span>
               <i className="fa-solid fa-rotate-left"></i>
+            </button>
+          )}
+          {isFinishedDocumnt && regUsrNo === memoizedValues.userData && (
+            <button className="btn btn-green" onClick={() => changeTempModeHandler('Y')}>
+              <span>재기안</span>
             </button>
           )}
           <button className="btn btn-green-line" onClick={pdfDownloadHandler}>

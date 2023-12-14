@@ -26,6 +26,7 @@ const ApprovalAttachment = () => {
 
   useEffect(() => {
     setIsServerFile(data);
+    console.log('data', data);
   }, [data]);
 
   const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>) => {
@@ -99,7 +100,7 @@ const ApprovalAttachment = () => {
     }
   };
 
-  const fileDownloadHandler = (fileId: number, fileName: string) => {
+  /*   const fileDownloadHandler = (fileId: number, fileName: string) => {
     try {
       // 파일 다운로드 URL을 동적으로 생성
       const downloadUrl = `${import.meta.env.VITE_REACT_APP_API_BASE_URL}approval/file/${fileId}`;
@@ -116,7 +117,7 @@ const ApprovalAttachment = () => {
       console.error('다운로드 실패:', error);
       // 사용자에게 피드백 제공 등, 예를 들면 사용자에게 오류 메시지를 표시
     }
-  };
+  }; */
 
   const openPdfViewer = (file: CommonData['files'][0]) => {
     setSelectedFile(file);

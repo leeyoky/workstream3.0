@@ -12,15 +12,13 @@ import { selectedActions } from '../../store/Approval/approval-slice';
 
 interface OrganizationAccordionProps {
   searchText?: string;
-  setSearchText?: any;
 }
 
-const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({
-  searchText,
-  setSearchText,
-}) => {
+const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchText }) => {
   const [deptData, setDeptData] = useState<OrganizationItem[]>([]); /* 부서정보 */
   const [employeeData, setEmployeeData] = useState<EmployeeItem[]>([]); /* 직원정보 */
+  const [userDeptData, setUserDeptData] =
+    useState<OrganizationItem>(); /* 로그인 유저의 부서 정보 */
   const [openAccordion, setOpenAccordion] = useState<number | null>(null); /* 1레벨 아코디언 */
   const [openDepth2, setOpenDepth2] = useState<number | null>(null); /* 2레벨 아코디언 */
   const [openDepth3, setOpenDepth3] = useState<number | null>(null); /* 3레벨 아코디언 */
@@ -33,45 +31,59 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({
   const dispatch = useDispatch();
   const searchResultDept = employeeData.find(emp => emp.empNm === searchText);
 
-  useEffect(() => {
-    setSearchText(loginUserInfo?.empNm || '');
-    console.log(searchText, 'searchText');
-  }, []);
+  /**
+   * @description 직원의 deptCd를 구해 아코디언을 열어주는 함수
+   * @param criteria
+   * @param userDept
+   */
 
-  useEffect(() => {
-    // 검색어에 해당하는 사원이 있다면
-    if (searchResultDept) {
-      const deptItem = deptData.find(item => item.deptCd === searchResultDept.deptCd);
+  const processDeptInfo = (criteria: string, userDept: boolean) => {
+    const deptItem = deptData.find(item => item.deptCd === criteria);
 
-      const deptArr = [];
-      let cd: string | undefined = searchResultDept.deptCd;
+    const deptArr = [];
+    let cd: string | undefined = criteria;
 
-      deptArr.push(deptItem);
+    deptArr.push(deptItem);
 
-      while (cd !== '2009000001') {
-        const dept = deptData.find(item => item.deptCd === cd);
-        const upDept = deptData.find(item => item.deptCd === dept?.upDeptCd);
-        cd = dept?.upDeptCd;
-        deptArr.push(upDept);
-      }
+    while (cd !== '2009000001') {
+      const dept = deptData.find(item => item.deptCd === cd);
+      const upDept = deptData.find(item => item.deptCd === dept?.upDeptCd);
+      cd = dept?.upDeptCd;
+      deptArr.push(upDept);
+    }
 
-      deptArr.forEach(dept => {
-        if (dept?.deptCd !== '2009000001') {
-          const levelDept = deptData.filter(
-            item => item.level === dept?.level && item.upDeptCd === dept.upDeptCd,
-          );
-          const index = levelDept.findIndex(item => item.deptCd === dept?.deptCd);
-          const level = dept?.level;
+    deptArr.forEach(dept => {
+      if (dept?.deptCd !== '2009000001') {
+        const levelDept = deptData.filter(
+          item => item.level === dept?.level && item.upDeptCd === dept.upDeptCd,
+        );
+        const index = levelDept.findIndex(item => item.deptCd === dept?.deptCd);
+        const level = dept?.level;
 
-          if (level === 1) {
-            setOpenAccordion(index + 1);
-          } else if (level === 2) {
-            setOpenDepth2(index);
-          } else if (level === 3) {
-            setOpenDepth3(index);
-          }
+        if (level === 1) {
+          setOpenAccordion(index + 1);
+        } else if (level === 2) {
+          setOpenDepth2(index);
+        } else if (level === 3) {
+          setOpenDepth3(index);
         }
-      });
+      }
+    });
+
+    if (userDept) {
+      setUserDeptData(deptItem);
+    }
+  };
+
+  useEffect(() => {
+    if (userDeptData) {
+      processDeptInfo(userDeptData.deptCd, true);
+    }
+  }, [userDeptData]);
+
+  useEffect(() => {
+    if (searchResultDept) {
+      processDeptInfo(searchResultDept.deptCd, false);
     } else {
       setOpenAccordion(null);
     }
@@ -89,6 +101,16 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({
     };
     fetchOrganization();
   }, []);
+
+  useEffect(() => {
+    const deptItem = deptData.find(item => item.deptCd === loginUserInfo?.deptCd);
+    if (deptItem) {
+      setUserDeptData(deptItem);
+      console.log('userDeptData', userDeptData);
+    } else {
+      console.log('로그인한 유저의 deptItem이 없습니다.');
+    }
+  }, [deptData, loginUserInfo?.deptCd]);
 
   useEffect(() => {
     const fetchEmployee = async () => {

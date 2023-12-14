@@ -98,6 +98,23 @@ const useApprovalRequest = () => {
       }
     }
   };
+  /**
+   * @description 완료, 반려 문서를 재기안 하는 기능
+   * isEdit = true, isDetail = false
+   */
+  const changeTempModeHandler = (reqestType: 'Y' | 'N') => {
+    if (reqestType === 'Y') {
+      dispatch(selectedActions.setIsReviseMode(true));
+    } else {
+      dispatch(selectedActions.setIsReviseMode(false));
+    }
+  };
+
+  /**
+   *
+   * @param documentType
+   * @param requestType
+   */
 
   // 결재요청(문서종류)
   const requestApprovalType = (documentType: string, requestType: 'PROCEEDING' | 'TEMP') => {
@@ -580,6 +597,7 @@ const useApprovalRequest = () => {
     deleteDocumentHandler,
     approveDocumentHandler,
     updateApprovalHandler,
+    changeTempModeHandler,
     requestApprovalType,
     requestTempDocument,
     recallDocument,

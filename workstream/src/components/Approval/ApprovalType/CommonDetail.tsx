@@ -17,7 +17,7 @@ import ApprovalInstructions from '../ApprovalInstruction/ApprovalInstructions';
 type CommonDetailProps = {
   temp: boolean;
   setTemp: React.Dispatch<React.SetStateAction<boolean>>;
-  setData:  React.Dispatch<React.SetStateAction<ApprovalData | undefined>>;
+  setData: React.Dispatch<React.SetStateAction<ApprovalData | undefined>>;
 };
 
 const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
@@ -25,43 +25,48 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const isEdit = useSelector((state:RootState) => state.approval.isEditMode);
-  const { id = ''} = useParams<string>();
-  const {data} = useApprovalData(id);
+  const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
+  const isRevise = useSelector((state: RootState) => state.approval.isReviseMode);
+  const { id = '' } = useParams<string>();
+  const { data } = useApprovalData(id);
   const dispatch = useDispatch();
   const formattedDate = formatDateOnly(data?.approval.regDate!);
-  
+
+  useEffect(() => {
+    dispatch(selectedActions.setIsReviseMode(false));
+  }, []);
 
   useEffect(() => {
     initializeData();
-  }, [isEdit, data]);
+  }, [isEdit, data, isRevise]);
 
   useEffect(() => {
     const formattedDate = formatDateOnly(executeDate?.toISOString() || '');
-
     dispatch(selectedActions.setTitle(title));
     dispatch(selectedActions.setDate(formattedDate));
     dispatch(selectedActions.setContent(content));
     dispatch(selectedActions.setIsDetailMode(true));
-    
   }, [title, executeDate]);
 
   // 데이터 초기화
   const initializeData = () => {
-
     if (data) {
       setData(data);
       setTitle(data.approval.title || '');
       setExecuteDate(data.approval.executeDate ? new Date(data.approval.executeDate) : null);
       setContent(data.approval.contents || '');
-      
 
       if (isTempStorage(data)) {
         setTemp(true);
         dispatch(selectedActions.setIsEditMode(true));
       } else {
-        setTemp(false);
-        dispatch(selectedActions.setIsEditMode(false));
+        if (isRevise) {
+          setTemp(true);
+          dispatch(selectedActions.setIsEditMode(true));
+        } else {
+          setTemp(false);
+          dispatch(selectedActions.setIsEditMode(false));
+        }
       }
       if (isSequentialOrParallel(data)) {
         dispatch(selectedActions.updateSelectedOption('addAgreement'));
@@ -85,19 +90,17 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   // 제목 변경 핸들러
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
-    setTitle(newTitle)
+    setTitle(newTitle);
     dispatch(selectedActions.setTitle(newTitle));
-  }
+  };
 
   const renderTitleField = () => {
     if (!isEdit) {
-      return (
-        <span>{data?.approval.title}</span>
-      );
+      return <span>{data?.approval.title}</span>;
     } else {
       return (
         <input
-          placeholder='제목을 입력해주세요.'
+          placeholder="제목을 입력해주세요."
           className={classes['update-input']}
           type="text"
           name="title"
@@ -110,7 +113,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   };
 
   return (
-    <form id='approval'>
+    <form id="approval">
       <header className={classes['header-type']}>
         <div className={classes['header-logo']}>
           <img src={logoSmall} alt="Logo" />
@@ -122,16 +125,12 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
                 <tr>
                   <th className={classes['header-table__approval-th']}>문서번호</th>
                   <td className={classes['header-table__approval-td']}>
-                    <span>{id}</span>
+                    <span>{isRevise ? '' : id}</span>
                   </td>
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>품의일자</th>
-                  {isEdit? (
-                    <td>{getToday()}</td>
-                  ) : (
-                    <td>{formattedDate}</td>
-                  )}
+                  {isEdit ? <td>{getToday()}</td> : <td>{formattedDate}</td>}
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>시행일자</th>
@@ -151,28 +150,25 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>제목</th>
-                  <td>
-                    {renderTitleField()}
-                  </td>
+                  <td>{renderTitleField()}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-            <SignatureEdit />
+          <SignatureEdit />
         </div>
       </header>
       <ApprovalReference />
       <ApprovalInstructions />
-        <TextEditor textValue={data?.approval.contents}
-        />
+      <TextEditor textValue={data?.approval.contents} />
       <footer>
         <div className={classes['footer-text']}>
           <span>위와 같이 품의하오니 검토 후 재가바랍니다.</span>
         </div>
         <p className={classes['footer']}>주식회사 데이터스트림즈</p>
       </footer>
-  </form>
-  )
-}
+    </form>
+  );
+};
 
-export default CommonDetail
+export default CommonDetail;
