@@ -12,42 +12,39 @@ const SelectBox: React.FC<{
   localSearchInput: { [key: string]: string };
   setLocalSearchInput: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 }> = ({ tag, localSearchInput, setLocalSearchInput }) => {
-
   const [showOptions, setShowOptions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const selectBoxRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleOptions = async() => {
-
+  const toggleOptions = async () => {
     setShowOptions(!showOptions);
     console.log(isLoading);
     setIsLoading(true);
 
     if (tag.name === 'deptCd') {
-        try {
-          const response = await getDepartment();
-          const data = response.data;
+      try {
+        const response = await getDepartment();
+        const data = response.data;
 
-          // API에서 받은 데이터를 옵션으로 설정합니다.
-          const deptOptions = data.map((dept: any) => ({
-            label: dept.deptNm,
-            value: dept.deptCd,
-          }));
+        // API에서 받은 데이터를 옵션으로 설정합니다.
+        const deptOptions = data.map((dept: any) => ({
+          label: dept.deptNm,
+          value: dept.deptCd,
+        }));
 
-          tag.options = deptOptions;
-          
-          setIsLoading(false);
-          
-        } catch (error) {
-          console.log(error);
-          setIsLoading(false);
-        }
+        tag.options = deptOptions;
+
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
     }
   };
 
   const handleOptionClick = (option: SearchBoxOption) => {
-    setLocalSearchInput((prevSearchInput) => ({ 
-      ...prevSearchInput, 
+    setLocalSearchInput(prevSearchInput => ({
+      ...prevSearchInput,
       [tag.name]: option.value,
     }));
     setShowOptions(false);
@@ -57,7 +54,7 @@ const SelectBox: React.FC<{
     if (selectBoxRef.current && !selectBoxRef.current.contains(e.target as Node)) {
       setShowOptions(false);
     }
-  }
+  };
 
   // 모달 외부를 클릭할 때 이벤트 리스너를 추가
   useEffect(() => {
@@ -68,29 +65,25 @@ const SelectBox: React.FC<{
   }, []);
 
   return (
-    <div 
-      ref={selectBoxRef} 
-      className={`select-box ${tag.class}`} 
-      onClick={toggleOptions}
-      >
-      <label className={`${showOptions ? "setData" : ""}`}>
-        <span>{tag.options?.find((option) => option.value === localSearchInput[tag.name])?.label || "전체"}</span>
-        <i className={`fa-solid ${showOptions ? "fa-caret-up" : "fa-caret-down"}`}>
-        </i>
+    <div ref={selectBoxRef} className={`select-box ${tag.class}`} onClick={toggleOptions}>
+      <label className={`${showOptions ? 'setData' : ''}`}>
+        <span>
+          {tag.options?.find(option => option.value === localSearchInput[tag.name])?.label ||
+            '전체'}
+        </span>
+        <i className={`fa-solid ${showOptions ? 'fa-caret-up' : 'fa-caret-down'}`}></i>
       </label>
-      <ul className={`options ${showOptions ? "show" : ""}`}>
+      <ul className={`options ${showOptions ? 'show' : ''}`}>
         <li
           onClick={() => handleOptionClick({ label: '전체', value: '' })}
-          className={localSearchInput[tag.name] === '' ? 'active' : ''}
-        >
+          className={localSearchInput[tag.name] === '' ? 'active' : ''}>
           전체
         </li>
-        {tag.options?.map((option) => (
+        {tag.options?.map(option => (
           <li
             key={option.label}
             onClick={() => handleOptionClick(option)}
-            className={localSearchInput[tag.name] === option.value ? 'active' : ''}
-          >
+            className={localSearchInput[tag.name] === option.value ? 'active' : ''}>
             {option.label}
           </li>
         ))}

@@ -1,34 +1,34 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from 'react';
 import classes from '../../pages/Approval/Approval.module.css';
 
-import { RootState } from "../../store";
-import { useDispatch } from "react-redux";
-import { selectedActions } from "../../store/Approval/approval-slice";
-import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { RootState } from '../../store';
+import { useDispatch } from 'react-redux';
+import { selectedActions } from '../../store/Approval/approval-slice';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import BoardTitle from "../../Layout/BoardLayout/BoardTitle"
-import ApprovalEditButtons from "./ApprovalEditButtons"
-import ApprovalAttachment from "./ApprovalAttachment"
-import ApprovalComment from "./ApprovalComment";
-import CommonDetail from "./ApprovalType/CommonDetail";
-import CommonCreate from "./ApprovalType/CommonCreate";
-import ResinationCreate from "./ApprovalType/ResinationCreate";
-import ResinationDetail from "./ApprovalType/ResinationDetail";
-import { ApprovalData } from "../../types/Approval/Approaval";
+import BoardTitle from '../../Layout/BoardLayout/BoardTitle';
+import ApprovalEditButtons from './ApprovalEditButtons';
+import ApprovalAttachment from './ApprovalAttachment';
+import ApprovalComment from './ApprovalComment';
+import CommonDetail from './ApprovalType/CommonDetail';
+import CommonCreate from './ApprovalType/CommonCreate';
+import ResinationCreate from './ApprovalType/ResinationCreate';
+import ResinationDetail from './ApprovalType/ResinationDetail';
+import { ApprovalData } from '../../types/Approval/Approaval';
 
 const ApprovalEdit = () => {
   const [temp, setTemp] = useState(false);
   const [data, setData] = useState<ApprovalData | undefined>(undefined);
 
-  const documentType = useSelector((state : RootState) => state.approval.documentType);
+  const documentType = useSelector((state: RootState) => state.approval.documentType);
   const dispatch = useDispatch();
   const location = useLocation();
   const isCreate = location.state?.isCreate;
-  
+
   const boardTitle = {
-    title: isCreate? '전자결재 > 새 문서 작성' : '전자결재 > 문서 상세보기'
-  }
+    title: isCreate ? '전자결재 > 새 문서 작성' : '전자결재 > 문서 상세보기',
+  };
   // useRef를 사용하여 이전 documentType 저장
   const prevDocumentType = useRef(documentType);
 
@@ -40,12 +40,11 @@ const ApprovalEdit = () => {
       prevDocumentType.current = documentType; // 이전 documentType 업데이트
       dispatch(selectedActions.updateDocumentType(documentType));
     }
-  }, [documentType, dispatch])
-
+  }, [documentType, dispatch]);
 
   return (
     <React.Fragment>
-      <BoardTitle title={boardTitle.title}/>
+      <BoardTitle title={boardTitle.title} />
       <div className="index-box">
         <div className={classes['inner-container']}>
           <div className={classes['approval__document']}>
@@ -54,33 +53,28 @@ const ApprovalEdit = () => {
             <div className={classes['approval-wrapper']}>
               {isCreate ? (
                 <>
-                {documentType === 'APPROVAL_COMMON' && <CommonCreate /> }
-                {documentType === 'RESIGNATION' && <ResinationCreate /> }
+                  {documentType === 'APPROVAL_COMMON' && <CommonCreate />}
+                  {documentType === 'RESIGNATION' && <ResinationCreate />}
                 </>
-              ):(
+              ) : (
                 <>
-                {documentType === 'APPROVAL_COMMON' && 
-                  <CommonDetail 
-                    temp={temp} 
-                    setTemp={setTemp} 
-                    setData={setData}/> }
-                {documentType === 'RESIGNATION' && 
-                  <ResinationDetail 
-                    temp={temp}
-                    setTemp={setTemp} /> }    
+                  {documentType === 'APPROVAL_COMMON' && (
+                    <CommonDetail temp={temp} setTemp={setTemp} setData={setData} />
+                  )}
+                  {documentType === 'RESIGNATION' && (
+                    <ResinationDetail temp={temp} setTemp={setTemp} />
+                  )}
                 </>
               )}
-              
-            <ApprovalAttachment />
+
+              <ApprovalAttachment />
             </div>
-            {!isCreate && !temp &&
-            <ApprovalComment />
-            }
+            {!isCreate && !temp && <ApprovalComment />}
           </div>
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ApprovalEdit
+export default ApprovalEdit;

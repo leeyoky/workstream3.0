@@ -13,14 +13,18 @@ import ApprovalInstructions from '../ApprovalInstruction/ApprovalInstructions';
 const CommonCreate = () => {
   const today = new Date();
   const getDate = today.toISOString().slice(0, 10);
-
+  const getTitle = useSelector((state: RootState) => state.approval.title);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const executionDateRef = useRef<HTMLInputElement>(null);
-  const titleRef = useRef<HTMLInputElement | null>(null);
+  const titleRef = useRef<HTMLTextAreaElement | null>(null);
   const dispatch = useDispatch();
 
-  const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
+  const titleChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    let newTitle = e.target.value.slice(0, 50);
+    if (e.target.value.length > 50) {
+      alert('제목은 50자를 초과할 수 없습니다.');
+      newTitle = newTitle.slice(0, 50);
+    }
     dispatch(selectedActions.setTitle(newTitle));
   };
   useEffect(() => {
@@ -75,13 +79,13 @@ const CommonCreate = () => {
                 <tr>
                   <td className={classes['header-table__approval-th']}>제목</td>
                   <td>
-                    <input
+                    <textarea
                       className={classes['update-input']}
                       placeholder="제목을 입력해주세요."
-                      type="text"
                       name="title"
                       onChange={titleChangeHandler}
                       ref={titleRef}
+                      value={getTitle}
                     />
                   </td>
                 </tr>

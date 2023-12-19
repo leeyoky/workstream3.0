@@ -24,24 +24,28 @@ const usePhoneValidation = () => {
 
     if (cleaned.length > 11) {
       alert('휴대폰 번호는 11자리 이하로 입력해주세요.');
-      return phoneNumber.substring(0, 11)
-      .replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);;
-
+      return phoneNumber.substring(0, 11).replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
     } else if (cleaned.length === 11) {
       if (match) {
         return `${match[1]}-${match[2]}-${match[3]}`;
       }
     }
-      return phoneNumber;
+    return phoneNumber;
   };
 
   const mobilePhoneChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const phoneValue = e.target.value;
     const phoneFilterNumber = phoneValue.replace(/\D/g, '');
-  
+    const containsNonDigit = /\D/.test(phoneValue);
+
+    if (containsNonDigit) {
+      alert('숫자 이외의 문자는 입력할 수 없습니다.');
+      return;
+    }
+
     const formattedPhone = formatPhoneNumber(phoneFilterNumber);
-  
-    setMobilePhone(formattedPhone)
+
+    setMobilePhone(formattedPhone);
     dispatch(userActions.setMobilePhone(phoneFilterNumber));
   };
 
@@ -49,14 +53,21 @@ const usePhoneValidation = () => {
 
   const homePhoneChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const phoneValue = e.target.value;
-    const phoneFilterNumber = phoneValue.replace(/\D/g, '')
-    .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+    const phoneFilterNumber = phoneValue
+      .replace(/\D/g, '')
+      .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+    const containsNonDigit = /\D/.test(phoneValue);
 
-    if(getLengthWithoutHyphen(phoneFilterNumber) > 11){
-      alert('전화번호부 양식이 맞지 않습니다.')
+    if (containsNonDigit) {
+      alert('숫자 이외의 문자는 입력할 수 없습니다.');
+      return;
+    }
+
+    if (getLengthWithoutHyphen(phoneFilterNumber) > 11) {
+      alert('전화번호부 양식이 맞지 않습니다.');
       return phoneValue.substring(0, 11).replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
     }
-    setHomePhone(phoneFilterNumber)
+    setHomePhone(phoneFilterNumber);
     dispatch(userActions.setHomePhone(phoneFilterNumber.replace(/-/g, ''))); // 하이픈 제거 후 dispatch
   };
 

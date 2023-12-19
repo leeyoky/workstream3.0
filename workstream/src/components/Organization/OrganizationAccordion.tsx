@@ -106,9 +106,6 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
     const deptItem = deptData.find(item => item.deptCd === loginUserInfo?.deptCd);
     if (deptItem) {
       setUserDeptData(deptItem);
-      console.log('userDeptData', userDeptData);
-    } else {
-      console.log('로그인한 유저의 deptItem이 없습니다.');
     }
   }, [deptData, loginUserInfo?.deptCd]);
 

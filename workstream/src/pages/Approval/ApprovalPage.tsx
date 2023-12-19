@@ -10,10 +10,15 @@ import { DOCUMENT_TYPES, MENU_PATHS, STATUS_LABELS } from '../../constants/const
 
 const ApprovalPage: React.FC = () => {
   const [sortValue, setSortValue] = useState<string>('');
-  const [sortDirections, setSortDirections] = useState<Record<string, 'asc' | 'desc'>>(columns.reduce((acc, column) => {
-    acc[column] = 'asc';
-    return acc;
-  }, {} as Record<string, 'asc' | 'desc'>));
+  const [sortDirections, setSortDirections] = useState<Record<string, 'asc' | 'desc'>>(
+    columns.reduce(
+      (acc, column) => {
+        acc[column] = 'asc';
+        return acc;
+      },
+      {} as Record<string, 'asc' | 'desc'>,
+    ),
+  );
 
   const selectMenu = useSelector((state: RootState) => state.ui.selectMenu || '');
   const dispatch = useDispatch();
@@ -34,14 +39,14 @@ const ApprovalPage: React.FC = () => {
   };
 
   const toggleSortDirection = (column: string) =>
-    setSortDirections((prevSortDirections) => ({
+    setSortDirections(prevSortDirections => ({
       ...prevSortDirections,
       [column]: prevSortDirections[column] === 'asc' ? 'desc' : 'asc',
     }));
 
   const sortHandler = (column: string) => {
     let newSortValue = '';
-    if  (column === '문서번호') {
+    if (column === '문서번호') {
       newSortValue = sortDirections[column] === 'asc' ? 'id,asc&' : 'id,desc&';
     }
     if (column === '문서명') {
@@ -54,19 +59,20 @@ const ApprovalPage: React.FC = () => {
       newSortValue = sortDirections[column] === 'asc' ? 'regUsr,desc&' : 'regUsr,asc&';
     }
     if (column === '등록일') {
-      newSortValue = sortDirections[column] === 'asc' ? 'regDate,desc&' : 'regDate,asc&';
+      newSortValue = sortDirections[column] === 'asc' ? 'modDate,desc&' : 'modDate,asc&';
     }
     if (column === '진행현황') {
       newSortValue = sortDirections[column] === 'asc' ? 'state,desc&' : 'state,asc&';
     }
     setSortValue(newSortValue);
-    
+
     toggleSortDirection(column);
   };
 
   const { listData, totalItems } = useApprovalList(sortValue);
 
-  const searchTagsToUse = selectMenu === '/approval/document' ? [...searchTags, ...progressSearchTags] : searchTags;
+  const searchTagsToUse =
+    selectMenu === '/approval/document' ? [...searchTags, ...progressSearchTags] : searchTags;
   const boardTitle = `전자결재 > ${getMenuTitle(selectMenu)} (${totalItems})`;
 
   const goDetailPage = (isDetail: boolean, id: string, docType: string) => {
@@ -76,45 +82,60 @@ const ApprovalPage: React.FC = () => {
 
   const memoizedList = useMemo(() => {
     return listData.map((item, index) => {
-      const regDate = new Date(item.regDate);
-      const formattedRegDate = regDate.toISOString().split('T')[0];
+      const modDate = new Date(item.modDate);
+      const formattedRegDate = modDate.toISOString().split('T')[0];
       const documentType = DOCUMENT_TYPES[item.docType] || '';
       const statusLabel = STATUS_LABELS[item.state] || '결재대기';
       const isProceedingWithPending = item.state === 'PROCEEDING' && item.pendingApproval === 'Y';
 
       return (
         <tr className="table-hover" key={index}>
-          <td><span>{item.index}</span></td>
-          <td><span>{item.id}</span></td>
-          <td 
-            className="approval-list-title" 
-            onClick={() => goDetailPage(true, item.id, item.docType)}
-            >
-            <span>
-              {item.title}
-            </span>
+          <td>
+            <span>{item.index}</span>
           </td>
-          <td><span>{documentType}</span></td>
-          <td><span>{item.regUsrDeptNm}</span></td>
-          <td><span>{item.regUsrNm}</span></td>
-          <td><span>{formattedRegDate}</span></td>
-          <td>{item.lineType === '순차' || item.lineType === '병렬' ? (
-            <span>결재+합의</span>
-          ) : (
-            <span>결재</span>
-          )}</td>
+          <td>
+            <span>{item.id}</span>
+          </td>
+          <td
+            className="approval-list-title"
+            onClick={() => goDetailPage(true, item.id, item.docType)}>
+            <span>{item.title}</span>
+          </td>
+          <td>
+            <span>{documentType}</span>
+          </td>
+          <td>
+            <span>{item.regUsrDeptNm}</span>
+          </td>
+          <td>
+            <span>{item.regUsrNm}</span>
+          </td>
+          <td>
+            <span>{formattedRegDate}</span>
+          </td>
+          <td>
+            {item.lineType === '순차' || item.lineType === '병렬' ? (
+              <span>결재+합의</span>
+            ) : (
+              <span>결재</span>
+            )}
+          </td>
           <td>
             <div>
               <span
                 className={`status-badge ${
-                  isProceedingWithPending ? 'badge-warning' :
-                    statusLabel === '진행중' ? 'badge-success' :
-                      statusLabel === '완료' ? 'badge-info' :
-                        statusLabel === '반려' ? 'badge-denger' :
-                          statusLabel === '임시저장' ? 'badge-temp' :
-                            ''
-                }`}
-              >
+                  isProceedingWithPending
+                    ? 'badge-warning'
+                    : statusLabel === '진행중'
+                    ? 'badge-success'
+                    : statusLabel === '완료'
+                    ? 'badge-info'
+                    : statusLabel === '반려'
+                    ? 'badge-denger'
+                    : statusLabel === '임시저장'
+                    ? 'badge-temp'
+                    : ''
+                }`}>
                 {isProceedingWithPending ? '결재대기' : statusLabel}
               </span>
             </div>
@@ -132,10 +153,13 @@ const ApprovalPage: React.FC = () => {
             <tr>
               {columns.map((column, index) => (
                 <th key={index}>
-                  <span className='table-title-header' onClick={() => sortHandler(column)}>
+                  <span className="table-title-header" onClick={() => sortHandler(column)}>
                     <span>{column}</span>
                     {index !== 0 && (
-                      <i className={`fa-solid fa-sort-${sortDirections[column] === 'asc' ? 'down' : 'up'}`}></i>
+                      <i
+                        className={`fa-solid fa-sort-${
+                          sortDirections[column] === 'asc' ? 'down' : 'up'
+                        }`}></i>
                     )}
                   </span>
                 </th>
@@ -147,9 +171,7 @@ const ApprovalPage: React.FC = () => {
               memoizedList
             ) : (
               <tr className="table-not-exist">
-                <td colSpan={8}>
-                  작성된 글이 없습니다.
-                </td>
+                <td colSpan={8}>작성된 글이 없습니다.</td>
               </tr>
             )}
           </tbody>
@@ -157,6 +179,6 @@ const ApprovalPage: React.FC = () => {
       </div>
     </IndexPage>
   );
-}
+};
 
 export default ApprovalPage;

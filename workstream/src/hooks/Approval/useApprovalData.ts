@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getApprovalData } from '../../api/axios';
 import { ApprovalData } from '../../types/Approval/Approaval';
 
-export const useApprovalData = (id: string ) => {
+export const useApprovalData = (id: string) => {
   const [data, setData] = useState<ApprovalData | undefined>();
 
   const fetchData = async (id: string) => {
@@ -19,7 +19,6 @@ export const useApprovalData = (id: string ) => {
   const updateData = (newData: ApprovalData) => {
     setData(newData);
   };
-
 
   useEffect(() => {
     if (id) {

@@ -25,8 +25,9 @@ export function useApprovalList(sortValue: string) {
 
   const fetchApprovalList = async () => {
     try {
-      const { id, title, deptCd, docType, regUsrNm, state, regDateGoe, regDateLoe } = getSearchInput;
-      
+      const { id, title, deptCd, docType, regUsrNm, state, regDateGoe, regDateLoe } =
+        getSearchInput;
+
       let pendingApproval = '';
       let selectedState = state;
 
@@ -59,28 +60,28 @@ export function useApprovalList(sortValue: string) {
         deptCd: deptCd,
         docType: docType,
         regUsrNm: regUsrNm,
-        sort: sortValue + 'regDate,desc',
+        sort: sortValue + 'modDate,desc',
         regDateGoe: regDateGoe,
         regDateLoe: regDateLoe,
       });
 
       const data = response.data.content.map((item: any, index: number) => {
         // 각 항목에 'index' 속성을 추가합니다.
-        return { ...item, index: (getPage) * getPageSize + index + 1 };
+        return { ...item, index: getPage * getPageSize + index + 1 };
       });
       const getTotalElements = response.data.totalElements;
 
       setListData(data);
       console.log(data);
-      
+
       setTotalItems(getTotalElements);
       dispatch(uiActions.setTotalItems(getTotalElements));
     } catch (error) {
       console.log('Error fetching approval list:', error);
     }
   };
-  
-  const fetchDocumentCount = async() => {
+
+  const fetchDocumentCount = async () => {
     try {
       const response = await countDoucumentType();
       const data = response.data;
@@ -90,7 +91,7 @@ export function useApprovalList(sortValue: string) {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchApprovalList();

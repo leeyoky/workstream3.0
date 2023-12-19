@@ -10,11 +10,16 @@ th {
   border: 1px solid #000;
 }
 .approval-wrapper td{
-  font-size: 9.5pt;
+  font-size: 9pt;
   font-weight: 500;
 }
 .approval-wrapper p {
   margin: 0;
+}
+.text-align__left{
+  padding: 2px;
+  text-align: left;
+  height: 40px;
 }
 
 input:focus {
@@ -62,7 +67,7 @@ footer{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 40px 0px;
+  margin: 20px 0px;
   flex-direction: column;
 }
 footer p {
@@ -169,6 +174,28 @@ footer p {
   align-items: center;
   justify-content: center;
 }
+.header__left__common textarea{
+  width: -webkit-fill-available;
+  background-color: #ffffff00;
+  border: 1px solid;
+  border: none;
+  resize: none;
+  height: -webkit-fill-available;
+  font-family: "Noto Sans KR", sans-serif;
+  white-space: pre-line;
+  font-size: 9pt;
+  font-weight: 500;
+  display: flex;
+}
+.header__left__common textarea::placeholder{
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 10px;
+  color: #929292;
+}
 
 .header__left h1{
   font-size: 25pt;
@@ -183,6 +210,9 @@ footer p {
   width: 49%;
   justify-content: flex-end;
 }
+.header__right .isFinishedClass{
+  background-color: #fbdede;
+}
 .header-table,
 .header-info,
 .reference-table {
@@ -190,23 +220,44 @@ footer p {
   border-collapse: collapse;
 }
 .reference-table{
+  height: 30px;
   border: 1px solid #000;
   width: 99.7%;
   display: flex;
-  font-size: 10pt;
+  font-size: 9.5pt;
   font-weight: 500;
   justify-content: flex-start;
 }
+.reference-table input::placeholder {
+  font-size: 9pt;
+  font-weight: 400;
+  color: #a0a0a0;
+}
+.reference-table input:focus{
+  outline: none;
+  box-shadow: none;
+  cursor: default;
+}
 .reference-table-th{
-  width: 117px;
-  min-width: 117px;
+  background-color: #f0f0f0;
+}
+.instruction-table-th{
+  background-color: #ffb820;
+  font-weight: 900 !important;
+}
+.reference-table-th,
+.instruction-table-th{
+  width: 98px;
+  min-width: 98px;
   border-right: 1px solid;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 700;
-  background-color: #f0f0f0;
   min-height: 30px;
+}
+.reference-table-th div:nth-child(2){
+  background-color: #1f5079;
 }
 .reference-table-td{
   padding: 8px 5px;
@@ -214,9 +265,16 @@ footer p {
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
+  align-content: center
 }
 .reference-table-td span {
   padding-left: 3px;
+}
+.ccdept{
+  font-weight: 600;
+}
+.ccEmp {
+  font-weight: 500;
 }
 
 .header-info{
@@ -263,14 +321,15 @@ footer p {
   height: 25px;
   border: 1px solid black;
   position: relative;
-  font-size: 10pt;
+  font-size: 9.5pt;
   background-color: #f0f0f0;
   font-weight: 700 !important;
-  text-align: center
+  text-align: center;
+  word-break: keep-all;
 }
 
 .header-table__approval-td{
-  width: 70%;
+  width: 75%;
 }
 /* Body Table */
 .body-table{
@@ -328,18 +387,21 @@ footer p {
 }
 .approver-index {
   border-radius: 50%;
-  background-color: #979797;
+  background-color: #434343;
   display: inline-block;
   position: absolute;
-  left: 5%;
+  left: 2%;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 8pt;
 }
 .approver-index div {
   display: flex;
   justify-content: center;
   align-items: center;
   align-content: center;
-  height: 14px;
-  width: 14px;
+  height: 12px;
+  width: 12px;
 }
 .approver-table-header{
   text-align: center;
@@ -354,6 +416,9 @@ footer p {
   font-size: 10pt;
   color: #da0000;
   font-weight: 900 !important;
+}
+.isFinishedClass{
+  background-color: #fbdede;
 }
 
 .approver-result-gray{
@@ -438,7 +503,7 @@ footer p {
   justify-content: center;
   font-size: 13pt;
   letter-spacing: 1pt;
-  margin: 50px 0px;
+  margin: 20px 0px;
   text-align: center;
   word-spacing: 15px;
 }
@@ -452,6 +517,18 @@ footer p {
   display: flex;
   align-items: center;
   border-bottom: 1px solid;
+}
+.user-sign-box button {
+  background-color: #2B3499;
+  color: #ffffff;
+  border-radius: 2px;
+  margin-bottom: 3px;
+  font-weight: 500;
+  padding: 3px 10px;
+}
+.user-sign-box button:hover {
+  background-color: #1f2670;
+  transition: all 0.3s ease; 
 }
 .user-sign span:first-child {
   font-size: 12pt;
@@ -495,8 +572,37 @@ footer p {
   justify-content: flex-start;
   flex-direction: row;
 }
+.header-info > thead > tr:last-child th{
+  height: 40px;
+}
 .update-input {
   background-color: #eff7fc;
+}
+.update-input textarea {
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+  background-color: #ffffff00;
+  border: 1px solid;
+  border: none;
+  resize: none;
+  font-family: "Noto Sans KR", sans-serif;
+  white-space: pre-line;
+  font-size: 9pt;
+  font-weight: 500;
+  display: flex;
+  background-color: #eff7fc;
+  text-align: left;
+  padding: 2px
+}
+.update-input textarea::placeholder{
+  font-size: 10pt;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 10px;
+  color: #a5a5a5;
 }
 
 /* approval Attachment */
@@ -515,6 +621,21 @@ footer p {
   justify-content: center;
   color: #a0a0a0;
   position: absolute;
+  flex-direction: column
+}
+.file-info div:first-child{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+.file-warning p {
+  font-size: 8pt !important;
+  color: #7c7c7c;
+  font-weight: 700;
+}
+.file-warning span{
+  font-size: 8pt;
 }
 .file-download{
   font-size: 9pt;
@@ -582,7 +703,7 @@ footer p {
   cursor: pointer;
   margin-left: 3px;
   border-radius: 3px;
-  font-size: 11pt;
+  font-size: 10pt;
   font-weight: bold;
 }
 .approval-attachment-item input {
@@ -818,6 +939,7 @@ footer p {
 .comment-item {
   font-size: 9.5pt !important;
   color: #000 !important;
+  max-width: 600px;
 }
 .comment-date{
   margin-right: 10px;

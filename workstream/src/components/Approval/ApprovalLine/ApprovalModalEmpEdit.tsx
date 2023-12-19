@@ -3,14 +3,24 @@ import Modal from '../../../Layout/Modal/Modal';
 import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import ApprovalEmpSelector from './ApprovalEmpSelector';
 import ApprovalOrganization from './ApprovalOrganization';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 interface ApprovalCreateProps {
   onClose: () => void; // 모달 닫기 핸들러
   isEdit?: boolean; // 편집
 }
 
 const ApprovalModalEmpEdit: React.FC<ApprovalCreateProps> = props => {
+  const agreementType = useSelector((state: RootState) => state.approval.agreementType);
+  const approvers = useSelector((state: RootState) => state.approval.approvers);
   const closeModalHandler = () => {
     props.onClose();
+    console.log(props);
+
+    if (agreementType === 'parallel') {
+      alert('병렬방식');
+      console.log('approvers :  ', approvers);
+    }
   };
 
   return (

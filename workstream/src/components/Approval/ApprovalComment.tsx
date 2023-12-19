@@ -1,6 +1,12 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { deleteComment, fetchComment, getApprovalData, getResignationData, updateComment } from '../../api/axios';
+import {
+  deleteComment,
+  fetchComment,
+  getApprovalData,
+  getResignationData,
+  updateComment,
+} from '../../api/axios';
 import { formatDateOnly } from '../../helpers/formatDateTime';
 import classes from '../../pages/Approval/Approval.module.css';
 import { ApprovalData, CommentItem, ResignationData } from '../../types/Approval/Approaval';
@@ -17,8 +23,8 @@ const ApprovalComment = () => {
   const [editCommentIndex, setEditCommentIndex] = useState<number | null>(null);
   const [commentStates, setCommentStates] = useState<string[]>([]); // 수정된 부분: 빈 배열로 초기화
   const [dataChanged, setDataChanged] = useState(false);
-  const documentType = useSelector((state:RootState) => state.approval.documentType);
-  
+  const documentType = useSelector((state: RootState) => state.approval.documentType);
+
   const data = useDocumentData(documentType, id)?.data;
 
   // 타입가드
@@ -30,16 +36,17 @@ const ApprovalComment = () => {
     return data && 'resignation' in data;
   };
 
-  const getState = data ? (
-    documentType === 'APPROVAL_COMMON' ? (
-      isApprovalData(data) ? data.approval.state : ''
-    ) : (
-      isResignationData(data) ? data.resignation.state : ''
-    )
-  ) : '';
+  const getState = data
+    ? documentType === 'APPROVAL_COMMON'
+      ? isApprovalData(data)
+        ? data.approval.state
+        : ''
+      : isResignationData(data)
+      ? data.resignation.state
+      : ''
+    : '';
 
-  const isFinal = getState !== 'REJECTED' && getState !== 'APPROVED'
-
+  const isFinal = getState !== 'REJECTED' && getState !== 'APPROVED';
 
   useEffect(() => {
     const fetchData = async (id: string) => {
@@ -63,16 +70,28 @@ const ApprovalComment = () => {
         console.log(error);
       }
     };
-  
+
     fetchData(id);
   }, [dataChanged, id, documentType]); // documentType을 추가하여 이 값이 변경될 때마다 useEffect가 호출되도록 함
-  
 
   const commentChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>, index: number) => {
     const inputComment = e.target.value;
+
     const newCommentStates = [...commentStates];
     newCommentStates[index] = inputComment;
     setCommentStates(newCommentStates);
+  };
+
+  const commentHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const inputComment = e.target.value;
+    const newLength = inputComment.length;
+    console.log('newLength', newLength);
+
+    if (newLength > 100) {
+      alert('의견은 200자를 초과할 수 없습니다.');
+      return;
+    }
+    setComment(inputComment);
   };
 
   const commentSubmitHandler = async () => {
@@ -106,13 +125,13 @@ const ApprovalComment = () => {
         id: commentId,
         comment: commentStates[index] || '',
       };
-      
+
       try {
         const response = await updateComment(commentData);
         if (response.status === 204) {
           setDataChanged(true);
           setEditCommentIndex(null);
-          setAlertMessage('수정이 완료되었습니다.')
+          setAlertMessage('수정이 완료되었습니다.');
         }
       } catch (error) {
         console.log(error);
@@ -146,7 +165,7 @@ const ApprovalComment = () => {
 
   const closeAlertHandler = () => {
     setAlertMessage(null);
-  }
+  };
 
   return (
     <div className={classes['comment-wrapper']}>
@@ -155,25 +174,16 @@ const ApprovalComment = () => {
         <i className="fa-regular fa-comment"></i>
       </h2>
       <hr />
-      {isFinal &&
-      (
-      <div className={classes['comment-container']}>
-        <div className={classes['comment-input-wrapper']}>
-          <textarea
-            spellCheck={false}
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
+      {isFinal && (
+        <div className={classes['comment-container']}>
+          <div className={classes['comment-input-wrapper']}>
+            <textarea spellCheck={false} value={comment} onChange={commentHandler} />
+          </div>
+          <button className="btn btn-secondary" onClick={commentSubmitHandler}>
+            의견등록
+          </button>
         </div>
-        <button
-          className="btn btn-secondary"
-          onClick={commentSubmitHandler}
-        >
-          의견등록
-        </button>
-      </div>
-      )
-      }
+      )}
       {/* 반복할 item */}
       {listData?.comment.map((item, index) => (
         <div className={classes['comment-list-item-container']} key={item.id}>
@@ -182,78 +192,66 @@ const ApprovalComment = () => {
               <span>
                 {item.regUsrNm} {item.rankNm}
               </span>
-              <span>
-                ( {item.deptNm} )
-              </span>
+              <span>( {item.deptNm} )</span>
             </div>
           </div>
           <div className={classes['comment-content']}>
-          {editCommentIndex === index ? (
+            {editCommentIndex === index ? (
               <div className={classes['comment-edit']}>
                 <textarea
                   spellCheck={false}
                   value={commentStates[index]}
-                  onChange={(e) => commentChangeHandler(e, index)}
+                  onChange={e => commentChangeHandler(e, index)}
                 />
               </div>
             ) : (
               <p>
                 <span className={classes['comment-item']}>
-                {item.comment.split('\n').map((line, index) => (
-                  <React.Fragment key={index}>
-                    {index > 0 && <br />}
-                    {line}
-                  </React.Fragment>
-                ))}
+                  {item.comment.split('\n').map((line, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <br />}
+                      {line}
+                    </React.Fragment>
+                  ))}
                 </span>
                 <span className={classes['comment-date']}>
-                {item.regDate !== item.modDate ? (
-                  <span>
-                    (수정됨) {formatDateOnly(item.modDate)}</span>
+                  {item.regDate !== item.modDate ? (
+                    <span>(수정됨) {formatDateOnly(item.modDate)}</span>
                   ) : (
                     <span>{formatDateOnly(item.regDate)}</span>
-                    )}
-                  </span>
+                  )}
+                </span>
               </p>
             )}
           </div>
           {isFinal && (
-          <div className={classes['comment-button-box']}>
-            {editCommentIndex !== index ? (
-              <>
-                <i
-                  className='fa-solid fa-pen-to-square'
-                  onClick={() => updateCommentHandler(index)}
-                ></i>
-                <i
-                  className="fa-regular fa-trash-can"
-                  onClick={() => deleteCommentHandler(item.id)}
-                ></i>
-              </>
-            ) : (
-              <>
-                <i
-                  className={`${classes['checkIcon']} fa-solid fa-check`}
-                  onClick={() => confirmUpdateHandler(index, item.id)}
-                ></i>
-                <i
-                  className={`${classes['xmarkIcon']} fa-solid fa-xmark`}
-                  onClick={() => cancelUpdateHandler(index)}
-                ></i>
-              </>
-            )}
-          </div>
+            <div className={classes['comment-button-box']}>
+              {editCommentIndex !== index ? (
+                <>
+                  <i
+                    className="fa-solid fa-pen-to-square"
+                    onClick={() => updateCommentHandler(index)}></i>
+                  <i
+                    className="fa-regular fa-trash-can"
+                    onClick={() => deleteCommentHandler(item.id)}></i>
+                </>
+              ) : (
+                <>
+                  <i
+                    className={`${classes['checkIcon']} fa-solid fa-check`}
+                    onClick={() => confirmUpdateHandler(index, item.id)}></i>
+                  <i
+                    className={`${classes['xmarkIcon']} fa-solid fa-xmark`}
+                    onClick={() => cancelUpdateHandler(index)}></i>
+                </>
+              )}
+            </div>
           )}
         </div>
       ))}
       {alertMessage && (
-        <Alert 
-          message={alertMessage}
-          onClose={closeAlertHandler}
-          type="alert"
-          response={true}
-          />
-          )}
+        <Alert message={alertMessage} onClose={closeAlertHandler} type="alert" response={true} />
+      )}
     </div>
   );
 };

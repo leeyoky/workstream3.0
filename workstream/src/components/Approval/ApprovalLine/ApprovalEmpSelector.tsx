@@ -16,27 +16,26 @@ interface ApprovalEmpSelectorProps {
   isEdit?: boolean;
 }
 
-const ApprovalEmpSelector:React.FC<ApprovalEmpSelectorProps> = (props) => {
-  
+const ApprovalEmpSelector: React.FC<ApprovalEmpSelectorProps> = props => {
   const dispatch = useDispatch();
   const selectedOption = useSelector((state: RootState) => state.approval.selectedOption);
-  const selectedAgreeOption = useSelector((state: RootState) => state.approval.agreementType)
-  const isReference = useSelector((state:RootState) => state.approval.isReference);
+  const selectedAgreeOption = useSelector((state: RootState) => state.approval.agreementType);
+  const isReference = useSelector((state: RootState) => state.approval.isReference);
   // 결재라인 방식 선택
   const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(selectedActions.updateSelectedOption(e.target.value));
-    if (e.target.value === "addAgreement") {
-      dispatch(selectedActions.updateSelectedAgreementOption("sequential"));
+    if (e.target.value === 'addAgreement') {
+      dispatch(selectedActions.updateSelectedAgreementOption('sequential'));
     }
   };
   // 합의라인 방식 선택
   const selectChangeAgreementHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(selectedActions.updateSelectedAgreementOption(e.target.value))
-  }
+    dispatch(selectedActions.updateSelectedAgreementOption(e.target.value));
+  };
 
   useEffect(() => {
-    if(selectedOption === ''){
-      dispatch(selectedActions.updateSelectedOption('approval'))
+    if (selectedOption === '') {
+      dispatch(selectedActions.updateSelectedOption('approval'));
     }
   }, [props.isEdit]);
 
@@ -57,18 +56,15 @@ const ApprovalEmpSelector:React.FC<ApprovalEmpSelectorProps> = (props) => {
               selectChangeAgreementHandler={selectChangeAgreementHandler}
               selectedAgreeOption={selectedAgreeOption}
               removeAllHandler={removeAllHandler}
-              />
-            <ApprovalEmpResult 
-              selectedOption={selectedOption}
-              />
+            />
+            <ApprovalEmpResult selectedOption={selectedOption} />
           </>
         ) : (
           <>
-          <ApprovalSelectRef />
-          <ApprovalResultRef />
+            <ApprovalSelectRef />
+            <ApprovalResultRef />
           </>
-        ) 
-        }
+        )}
       </div>
     </div>
   );

@@ -27,6 +27,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
   const isRevise = useSelector((state: RootState) => state.approval.isReviseMode);
+  const finalExecuteDate = useSelector((state: RootState) => state.approval.executeDate);
   const { id = '' } = useParams<string>();
   const { data } = useApprovalData(id);
   const dispatch = useDispatch();
@@ -90,6 +91,13 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   // 제목 변경 핸들러
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
+    const newLength = newTitle.length;
+
+    // 200자를 초과하면 알림 표시
+    if (newLength > 50) {
+      alert('제목은 50자를 초과할 수 없습니다.');
+      return;
+    }
     setTitle(newTitle);
     dispatch(selectedActions.setTitle(newTitle));
   };
@@ -125,7 +133,7 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
                 <tr>
                   <th className={classes['header-table__approval-th']}>문서번호</th>
                   <td className={classes['header-table__approval-td']}>
-                    <span>{isRevise ? '' : id}</span>
+                    <span>{isRevise ? 'DS_새품의서_' : id}</span>
                   </td>
                 </tr>
                 <tr>
@@ -134,7 +142,8 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>시행일자</th>
-                  <td></td>
+
+                  <td> {finalExecuteDate ? finalExecuteDate : '-'} </td>
                 </tr>
                 <tr>
                   <th className={classes['header-table__approval-th']}>부서명</th>

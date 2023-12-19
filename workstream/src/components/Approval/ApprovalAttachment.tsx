@@ -183,18 +183,30 @@ const ApprovalAttachment = () => {
                 </ul>
               </div>
               <div className={classes['file-info']}>
-                <p>
-                  첨부할 파일을 드래그하거나
-                  <i className="fa-solid fa-paperclip"></i>
-                </p>
-                <label htmlFor="approval-attach-file"> 파일선택 </label>
-                <input
-                  className={classes['approval-attach-file']}
-                  id="approval-attach-file"
-                  type="file"
-                  multiple
-                  onChange={handleFileSelect}
-                />
+                <div>
+                  <p>
+                    첨부할 파일을 드래그하거나
+                    <i className="fa-solid fa-paperclip"></i>
+                  </p>
+                  <label htmlFor="approval-attach-file"> 파일선택 </label>
+                  <input
+                    className={classes['approval-attach-file']}
+                    id="approval-attach-file"
+                    type="file"
+                    multiple
+                    onChange={handleFileSelect}
+                  />
+                </div>
+                <div className={classes['file-warning']}>
+                  <span>
+                    {' '}
+                    <p>MS Office, PDF</p>파일만 첨부가능
+                  </span>
+                  <span>
+                    {' '}
+                    ( 파일 최대 용량 <p>50mb</p> ){' '}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

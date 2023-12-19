@@ -13,15 +13,15 @@ interface AlertProps {
   response?: boolean; // 추가: API 응답 여부
 }
 
-const Alert: React.FC<AlertProps> = (props) => {
+const Alert: React.FC<AlertProps> = props => {
   const { message, onClose, onConfirm, onCancel, type, response } = props;
   const [isModalOpen, setIsModalOpen] = useState(true);
   const portalElement = document.getElementById('alert');
-  
+
   const handleConfirm = () => {
     setIsModalOpen(false);
     console.log(isModalOpen);
-    
+
     onConfirm && onConfirm(); // onConfirm이 존재하면 호출
   };
 
@@ -44,7 +44,7 @@ const Alert: React.FC<AlertProps> = (props) => {
 
   return ReactDOM.createPortal(
     <div className={classes.alertBox}>
-      <div className={`${classes} ${type === 'alert' ? classes.alert : classes.confirm }`}>
+      <div className={`${classes} ${type === 'alert' ? classes.alert : classes.confirm}`}>
         {response !== undefined ? (
           // response가 정의되어 있을 때 (API 응답이 있는 경우)
           <div className={classes.response}>
@@ -72,20 +72,28 @@ const Alert: React.FC<AlertProps> = (props) => {
             <div className={classes.buttonBox}>
               {type === 'alert' && (
                 <>
-                  <button 
-                    className={`${classes.closeButton} ${classes.confirmButton}`} 
-                    onClick={() => { handleConfirm(); onConfirm && onConfirm(); }}>
+                  <button
+                    className={`${classes.closeButton} ${classes.confirmButton}`}
+                    onClick={() => {
+                      handleConfirm();
+                      onConfirm && onConfirm();
+                    }}>
                     확인
                   </button>
-                  <button 
-                    className={`${classes.closeButton} ${classes.cancelButton}`} 
-                    onClick={() => { handleCancel(); onCancel && onCancel(); }}>
+                  <button
+                    className={`${classes.closeButton} ${classes.cancelButton}`}
+                    onClick={() => {
+                      handleCancel();
+                      onCancel && onCancel();
+                    }}>
                     취소
                   </button>
                 </>
               )}
               {type === 'confirm' && (
-                <button className={`${classes.closeButton} ${classes.confirmButton}`} onClick={onClose}>
+                <button
+                  className={`${classes.closeButton} ${classes.confirmButton}`}
+                  onClick={onClose}>
                   확인
                 </button>
               )}
@@ -94,8 +102,8 @@ const Alert: React.FC<AlertProps> = (props) => {
         )}
       </div>
     </div>,
-    portalElement
+    portalElement,
   );
-}
+};
 
 export default Alert;

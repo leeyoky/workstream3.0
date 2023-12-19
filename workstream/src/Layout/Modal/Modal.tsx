@@ -7,6 +7,7 @@ interface ModalProps {
   isOpen: boolean;
   isEdit?: boolean;
   className?: string;
+  onClose?: () => void;
 }
 
 const Modal: React.FC<ModalProps> = props => {

@@ -27,6 +27,5 @@ export const useDocumentData = (documentType: string, id: string) => {
     }
   }, [documentType, id]);
 
-
   return { data };
 };

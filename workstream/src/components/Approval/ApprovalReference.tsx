@@ -75,18 +75,30 @@ const ApprovalReference = () => {
     if (!isEdit) {
       return (
         <>
-          {data?.ccUser.map((emp, index) => <span key={index}>{emp.empNm},</span>)}
-          {data?.ccDept.map((dept, index) => <span key={index}>{dept.deptNm}</span>)}
+          {data?.ccDept.map((dept, index) => (
+            <span className={classes['ccdept']} key={index}>
+              {dept.deptNm},
+            </span>
+          ))}
+          {data?.ccUser.map((emp, index) => (
+            <span className={classes['ccEmp']} key={index}>
+              {emp.empNm},
+            </span>
+          ))}
         </>
       );
     } else {
       return (
         <>
           {referenceDept.map((dept, index) => (
-            <span key={index}>{addCommaForDept(dept.deptNm, index, referenceDept)}</span>
+            <span className={classes['ccdept']} key={index}>
+              {addCommaForDept(dept.deptNm, index, referenceDept)}
+            </span>
           ))}
           {referenceEmp.map((emp, index) => (
-            <span key={index}>{addComma(emp.name, index, referenceEmp)}</span>
+            <span className={classes['ccEmp']} key={index}>
+              {addComma(emp.name, index, referenceEmp)}
+            </span>
           ))}
         </>
       );

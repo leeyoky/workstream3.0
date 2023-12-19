@@ -790,6 +790,8 @@ i[name]:hover::after {
   padding: 0px 2px 0px 0px;
   font-size: 9pt !important;
   font-weight: 700;
+  width: 17px;
+  height: 15px;
 }
 .badge-item.sub{
   font-weight: 900 !important;

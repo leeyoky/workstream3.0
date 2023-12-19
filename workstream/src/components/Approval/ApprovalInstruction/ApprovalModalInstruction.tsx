@@ -29,6 +29,17 @@ const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props 
   /* 지시사항 세팅 */
   const instructionChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const inputComment = e.target.value;
+
+    // 글의 길이 업데이트 및 200자 초과 여부 확인
+    const newLength = inputComment.length;
+    console.log('newLength', newLength);
+
+    // 200자를 초과하면 알림 표시
+    if (newLength > 200) {
+      alert('지시사항은 200자를 초과할 수 없습니다.');
+      return;
+    }
+
     setInstruction(inputComment);
   };
 

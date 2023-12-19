@@ -6,10 +6,11 @@ import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { formatDateMinutes } from '../../../helpers/formatDateTime';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-import useApprovalRequest from '../../../hooks/Approval/useApprovalRequest';
+/* import useApprovalRequest from '../../../hooks/Approval/useApprovalRequest'; */
 import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
 import { ApprovalData, ResignationData } from '../../../types/Approval/Approaval';
 import { APPROVAL_STATUS, COLUMN_LIMITS } from '../../../constants/constants';
+import { getUserInfo } from '../../../api/axios';
 const SignatureEdit = () => {
   const [newApprovers, setNewApprovers] = useState<
     {
@@ -19,14 +20,16 @@ const SignatureEdit = () => {
       duty: string;
       rankName: string;
       approvalType: string;
-      approvedYn: string;
+      modDate?: string | undefined;
+      approvedYn?: string | undefined;
     }[]
   >([]);
-
+  const [regUserinfo, setRegUserInfo] = useState();
   const { id = '' } = useParams<string>();
-  const { approvedYn } = useApprovalRequest();
+  /*  const { approvedYn } = useApprovalRequest(); */
   const dispatch = useDispatch();
   const documentType = useSelector((state: RootState) => state.approval.documentType);
+  const agreementType = useSelector((state: RootState) => state.approval.agreementType);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
   const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
@@ -35,7 +38,37 @@ const SignatureEdit = () => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const data = useDocumentData(documentType, id)?.data;
 
-  // 타입가드
+  useEffect(() => {
+    if (agreementType === 'parallel') {
+      const modifiedApprovers = [];
+      let consecutiveConsensualCount = 0;
+
+      for (let i = 0; i < approvers.length; i++) {
+        const currentApprover = approvers[i];
+        const previousApprover = i > 0 ? approvers[i - 1] : null;
+
+        if (
+          currentApprover &&
+          previousApprover &&
+          currentApprover.approvalType === 'CONSENSUAL' &&
+          previousApprover.approvalType === 'CONSENSUAL'
+        ) {
+          consecutiveConsensualCount++;
+        } else {
+          consecutiveConsensualCount = 0; // 연속이 끊기면 초기화
+        }
+
+        modifiedApprovers.push({
+          ...currentApprover,
+          index: i - consecutiveConsensualCount, // 인덱스 계산 수정
+        });
+      }
+      setNewApprovers(modifiedApprovers);
+    }
+    console.log('newApprovers', newApprovers);
+  }, [agreementType]);
+
+  /* 타입 가드 */
   const isApprovalData = (data: any): data is ApprovalData => {
     return data && 'approval' in data;
   };
@@ -43,9 +76,36 @@ const SignatureEdit = () => {
   const isResignationData = (data: any): data is ResignationData => {
     return data && 'resignation' in data;
   };
+  /**
+   * @description regUser의 Id를 전달하여 regUser의 직급을 가져옴
+   */
+  const fetchUserInfo = async () => {
+    try {
+      let userId;
+      if (documentType === 'APPROVAL_COMMON' && isApprovalData(data)) {
+        userId = data.approval.regUsr;
+      } else if (documentType === 'SOMETHING_ELSE' && isResignationData(data)) {
+        userId = data.resignation.regUsr;
+      }
 
-  useEffect(() => {}, [approvedYn, data]);
+      if (userId) {
+        const response = await getUserInfo(userId);
+        const userData = response.data.content[0].rankNm;
+        setRegUserInfo(userData);
+        console.log('userData', userData);
+      } else {
+        console.error('Invalid document type or data structure.');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  useEffect(() => {
+    fetchUserInfo();
+  }, [documentType, data]);
+
+  /* api요청으로 받은 데이터 store에 저장 */
   useEffect(() => {
     if (data && data.line) {
       const updatedApprovers = data.line.map(employee => ({
@@ -60,7 +120,7 @@ const SignatureEdit = () => {
       }));
       setNewApprovers(updatedApprovers);
     }
-  }, [data, data?.line]);
+  }, [data, data?.line, agreementType]);
 
   useEffect(() => {
     dispatch(selectedActions.setApprovers(newApprovers));
@@ -73,11 +133,12 @@ const SignatureEdit = () => {
     const specialName =
       documentType === 'APPROVAL_COMMON'
         ? isApprovalData(data)
-          ? data.approval.regUsrNm
+          ? `${data.approval.regUsrNm} ${regUserinfo || ''}`
           : ''
         : isResignationData(data)
-        ? data.resignation.regUsrNm
+        ? `${data.resignation.regUsrNm} ${regUserinfo || ''}`
         : '';
+    console.log('specialName', specialName);
 
     return { approvalApprovers, agreementApprovers, specialName };
   }, [approvers]);
@@ -133,15 +194,16 @@ const SignatureEdit = () => {
           </td>
         );
       }
+
       const resultText =
         approvalType === 'CONSENSUAL'
           ? approvedYn === 'Y'
-            ? '찬 성'
+            ? '합 의'
             : approvedYn === 'R'
             ? '반 대'
             : '대 기'
           : approvedYn === 'Y'
-          ? '승 인'
+          ? '결 재'
           : approvedYn === 'R'
           ? '반 려'
           : '대 기';
@@ -169,16 +231,16 @@ const SignatureEdit = () => {
 
   const renderHeader = (content: any, index: number, approverIndex: number) => {
     if (isDetailMode && content) {
-      const { name } = content;
+      const { name, rankName } = content;
 
       if (index === 0) {
         const specialName =
           documentType === 'APPROVAL_COMMON'
             ? isApprovalData(data)
-              ? data.approval.regUsrNm
+              ? `${data.approval.regUsrNm} ${regUserinfo || ''}`
               : ''
             : isResignationData(data)
-            ? data.resignation.regUsrNm
+            ? `${data.resignation.regUsrNm} ${regUserinfo || ''}`
             : '';
 
         return (
@@ -198,7 +260,7 @@ const SignatureEdit = () => {
             <span className={classes['approver-index']}>
               {approverIndex !== -1 ? <div>{approverIndex + 2}</div> : ''}
             </span>
-            {name}
+            {name} {rankName}
           </div>
         </th>
       );

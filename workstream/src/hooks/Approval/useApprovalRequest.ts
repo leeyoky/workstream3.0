@@ -54,9 +54,11 @@ const useApprovalRequest = () => {
   const handleCloseRefModal = () => setIsRefModalOpen(false);
 
   const handleShowInstModal = () => {
+    console.log('isInstModalOpen', isInstModalOpen);
     setIsInstModalOpen(true);
   };
   const handleCloseInstModal = () => {
+    console.log('isInstModalOpen', isInstModalOpen);
     setIsInstModalOpen(false);
   };
 
@@ -207,9 +209,9 @@ const useApprovalRequest = () => {
     const confirmMsg = `${
       requestType === 'PROCEEDING' ? '결재 요청하시겠습니까?' : '임시 저장하시겠습니까?'
     }`;
-
     if (data.approvers.length === 0) {
       alert('결재자가 선택되지 않았습니다');
+
       return;
     }
 
@@ -224,6 +226,7 @@ const useApprovalRequest = () => {
     }
     if (userData.address === '') {
       alert('주소가 입력되지 않았습니다');
+      console.log(data.reasonRetire.trim().length);
       return;
     }
 
@@ -237,8 +240,13 @@ const useApprovalRequest = () => {
       return;
     }
 
+    if (data.reasonRetire.trim().length < 10) {
+      alert('퇴직 사유를 10자 이상 입력해 주십시오.');
+      return;
+    }
+
     if (data.finalSign === false) {
-      alert('서명을 하지 않았습니다.');
+      alert('아래의 서명을 하지 않았습니다.');
       return;
     }
 
@@ -405,6 +413,42 @@ const useApprovalRequest = () => {
     }`;
 
     if (window.confirm(confirmMsg)) {
+      if (data.approvers.length === 0) {
+        alert('결재자가 선택되지 않았습니다');
+
+        return;
+      }
+
+      if (userData.userSSN === null) {
+        alert('주민번호가 입력되지 않았습니다.');
+        return;
+      }
+
+      if (data.retireDate === '') {
+        alert('퇴사일자를 입력하지 않았습니다.');
+        return;
+      }
+      if (userData.address === '') {
+        alert('주소가 입력되지 않았습니다');
+        console.log(data.reasonRetire.trim().length);
+        return;
+      }
+
+      if (userData.mobilePhone === '') {
+        alert('휴대폰 연락처가 입력되지 않았습니다.');
+        return;
+      }
+
+      if (data.reasonRetire === '') {
+        alert('퇴직 사유를 입력해 주십시오.');
+        return;
+      }
+
+      if (data.reasonRetire.trim().length < 10) {
+        alert('퇴직 사유를 10자 이상 입력해 주십시오.');
+        return;
+      }
+
       const newApprovers = approvers.map((employee, index) => ({
         apprType: employee.approvalType,
         approver: employee.empNo,
@@ -480,8 +524,9 @@ const useApprovalRequest = () => {
         if (response.status === 204) {
           setApprovedYn(result);
           alert(`${result === 'Y' ? '결재를 승인하였습니다.' : '결재를 반려하였습니다.'}`);
-          navigate('/approval/pending');
-          dispatch(uiActions.selectMenu('/approval/pending'));
+          window.location.reload();
+          /*           navigate('/approval/pending');
+          dispatch(uiActions.selectMenu('/approval/pending')); */
         }
       } catch (error) {
         console.error(error);
@@ -504,21 +549,27 @@ const useApprovalRequest = () => {
         approvedYn: result,
       };
       try {
-        const response = await fetchComment(commentData);
-        if (response.status === 201) {
-          dispatch(selectedActions.setComment(''));
-          /* 승인/ 반려 업데이트 */
-          const response = await fetchApproveDocument(approveData);
-          console.log(response);
-          if (response.status === 403) {
-            alert('권한이 없습니다.');
+        if (commentData.comment) {
+          const response = await fetchComment(commentData);
+          if (response.status === 201) {
+            dispatch(selectedActions.setComment(''));
           }
-          if (response.status === 204) {
-            setApprovedYn(result);
-            alert(`${result === 'Y' ? '결재를 승인하였습니다.' : '결재를 반려하였습니다.'}`);
-            navigate('/approval/pending');
-            dispatch(uiActions.selectMenu('/approval/pending'));
-          }
+        }
+        const response = await fetchApproveDocument(approveData);
+        console.log(response);
+        if (response.status === 403) {
+          alert('권한이 없습니다.');
+        }
+        if (response.status === 204) {
+          setApprovedYn(result);
+          alert(`${result === 'Y' ? '결재를 승인하였습니다.' : '결재를 반려하였습니다.'}`);
+          navigate('/approval/pending');
+          dispatch(uiActions.selectMenu('/approval/pending'));
+          /**
+           * @date 2023-12-18
+           * @description 승인 반려 결과만 리렌더링 못해줘서, 강제 렌더링 함
+           */
+          window.location.reload();
         }
       } catch (error) {
         console.error(error);
@@ -535,8 +586,7 @@ const useApprovalRequest = () => {
         console.log(response);
         if (response.status === 204) {
           alert('결재회수 하였습니다.');
-          navigate('/approval/in-progress');
-          dispatch(uiActions.selectMenu('/approval/in-progress'));
+          window.location.reload();
         }
       } catch (error) {
         console.error(error);

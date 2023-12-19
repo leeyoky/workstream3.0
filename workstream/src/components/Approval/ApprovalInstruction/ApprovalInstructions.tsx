@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 const ApprovalInstructions = () => {
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
-  const isRevise = useSelector((state: RootState) => state.approval.isReviseMode);
+  // const isRevise = useSelector((state: RootState) => state.approval.isReviseMode);
   const { id = '' } = useParams<string>();
   const data = useDocumentData(documentType, id)?.data;
   const lastApprover = data?.line[data?.line.length - 1]?.approver || '';
@@ -16,12 +16,16 @@ const ApprovalInstructions = () => {
 
   return (
     <div className={classes['reference-table']}>
-      <div className={classes['reference-table-th']}>
+      <div className={classes['instruction-table-th']}>
         <div>지시사항</div>
       </div>
       <div className={classes['reference-table-td']}>
-        {!isEdit}
-        <div>{isRevise ? '' : lastComment}</div>
+        <input
+          type="text"
+          readOnly={true}
+          placeholder="최종결재 결재 후 표시됩니다."
+          value={!isEdit ? (lastComment ? lastComment : ' - ') : ''}
+        />
       </div>
     </div>
   );

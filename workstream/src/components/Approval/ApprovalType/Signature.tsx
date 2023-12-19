@@ -7,7 +7,7 @@ import { COLUMN_LIMITS } from '../../../constants/constants';
 const Signature = () => {
   // Redux 결재자 정보 및 사용자 정보
   const approvers = useSelector((state: RootState) => state.approval.approvers);
-  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
   const getApproverIndex = (approver: any) => approvers.indexOf(approver);
 
@@ -24,7 +24,7 @@ const Signature = () => {
   useEffect(() => {
     // 최초 렌더링 시에는 값을 비우고, approvalApprovers 또는 agreementApprovers가 변경될 때에만 값을 업데이트
     if (approvalApprovers.length > 0 || agreementApprovers.length > 0) {
-      setRenderedEmpNm(userInfo?.empNm || '');
+      setRenderedEmpNm(`${userInfo?.empNm} ${userInfo?.rankNm || ''}`);
     }
   }, [approvalApprovers, agreementApprovers]);
 
@@ -68,7 +68,9 @@ const Signature = () => {
                 ) - 1,
             }).map((_, index) =>
               renderHeader(
-                index < approvalApprovers.length ? approvalApprovers[index].name : '',
+                index < approvalApprovers.length
+                  ? `${approvalApprovers[index].name} ${approvalApprovers[index].rankName}`
+                  : '',
                 index + 1,
                 getApproverIndex(approvalApprovers[index]),
               ),
@@ -96,7 +98,9 @@ const Signature = () => {
               ),
             }).map((_, index) =>
               renderHeader(
-                index < agreementApprovers.length ? agreementApprovers[index].name : '',
+                index < agreementApprovers.length
+                  ? `${agreementApprovers[index].name} ${agreementApprovers[index].rankName}`
+                  : '',
                 index + 1,
                 getApproverIndex(agreementApprovers[index]),
               ),

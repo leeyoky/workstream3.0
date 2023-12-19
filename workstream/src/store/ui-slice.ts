@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const uiSlice = createSlice({
   name: 'ui',
-  initialState : { 
-    isSidebarOpen : true,
+  initialState: {
+    isSidebarOpen: true,
     isSubbarOpen: false,
     draggingItem: null,
     dropTarget: null,
@@ -24,7 +24,7 @@ const uiSlice = createSlice({
     date: '',
   },
   reducers: {
-    // Side Bar 
+    // Side Bar
     toggle(state) {
       state.isSidebarOpen = !state.isSidebarOpen;
     },
@@ -37,7 +37,7 @@ const uiSlice = createSlice({
       state.draggingItem = action.payload;
     },
     // Drop
-    setDropTarget(state,action) {
+    setDropTarget(state, action) {
       state.dropTarget = action.payload;
     },
     resetDropTarget(state) {
@@ -48,19 +48,19 @@ const uiSlice = createSlice({
       state.selectMenu = action.payload;
     },
     // PageSize
-    selectPageSize(state,action) {
+    selectPageSize(state, action) {
       state.selectPageSize = action.payload;
     },
     // Page
-    selectPage(state,action) {
+    selectPage(state, action) {
       state.selectPage = action.payload;
     },
     // totalItem
-    setTotalItems (state,action) {
+    setTotalItems(state, action) {
       state.totalItems = action.payload;
     },
     // resetData
-    resetPage (state) {
+    resetPage(state) {
       state.selectPageSize = 10;
       state.selectPage = 0;
       state.totalItems = 0;
@@ -70,8 +70,7 @@ const uiSlice = createSlice({
       state.searchInput.docType = '';
       state.searchInput.regUsrNm = '';
       state.searchInput.state = '';
-      state.searchInput.regDateGoe = '',
-      state.searchInput.regDateLoe = ''
+      (state.searchInput.regDateGoe = ''), (state.searchInput.regDateLoe = '');
     },
     // search
     searchInput(state, action) {
@@ -80,9 +79,9 @@ const uiSlice = createSlice({
     // date
     setDate(state, action) {
       state.date = action.payload;
-    }
-  }
-})
+    },
+  },
+});
 
 export const uiActions = uiSlice.actions;
 
