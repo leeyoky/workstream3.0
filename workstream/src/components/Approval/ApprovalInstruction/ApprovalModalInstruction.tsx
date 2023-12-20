@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import useApprovalRequest from './../../../hooks/Approval/useApprovalRequest';
 import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
-
 interface ApprovalModalInstructionProps {
   onClose: () => void; // 모달 닫기 핸들러
 }
@@ -32,7 +31,6 @@ const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props 
 
     // 글의 길이 업데이트 및 200자 초과 여부 확인
     const newLength = inputComment.length;
-    console.log('newLength', newLength);
 
     // 200자를 초과하면 알림 표시
     if (newLength > 200) {
@@ -43,16 +41,16 @@ const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props 
     setInstruction(inputComment);
   };
 
-  useEffect(() => {
-    dispatch(selectedActions.setComment(instruction));
-  }, [instruction]);
-
   const handleCloseInstModal = () => {
     props.onClose();
   };
 
+  useEffect(() => {
+    dispatch(selectedActions.setComment(instruction));
+  }, [instruction]);
+
   return (
-    <Modal isOpen={true}>
+    <Modal isOpen={true} onClose={props.onClose}>
       <div className={classes['instruction-container']}>
         <div className={classes['instruction-box']}>
           <div className={classes['instruction-type']}>결재</div>

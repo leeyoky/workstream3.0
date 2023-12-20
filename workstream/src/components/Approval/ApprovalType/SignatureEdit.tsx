@@ -92,7 +92,6 @@ const SignatureEdit = () => {
         const response = await getUserInfo(userId);
         const userData = response.data.content[0].rankNm;
         setRegUserInfo(userData);
-        console.log('userData', userData);
       } else {
         console.error('Invalid document type or data structure.');
       }
@@ -138,7 +137,6 @@ const SignatureEdit = () => {
         : isResignationData(data)
         ? `${data.resignation.regUsrNm} ${regUserinfo || ''}`
         : '';
-    console.log('specialName', specialName);
 
     return { approvalApprovers, agreementApprovers, specialName };
   }, [approvers]);

@@ -96,7 +96,6 @@ const ResinationCreate = () => {
   const addressChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const userAddress = e.target.value;
     const newLength = userAddress.length;
-    console.log('newLength', newLength);
 
     // 200자를 초과하면 알림 표시
     if (newLength > 50) {
@@ -114,7 +113,6 @@ const ResinationCreate = () => {
   const exitChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const reasonRetirement = e.target.value;
     const newLength = reasonRetirement.length;
-    console.log('newLength', newLength);
 
     // 200자를 초과하면 알림 표시
     if (newLength > 150) {

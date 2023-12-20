@@ -85,7 +85,6 @@ const ApprovalComment = () => {
   const commentHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const inputComment = e.target.value;
     const newLength = inputComment.length;
-    console.log('newLength', newLength);
 
     if (newLength > 100) {
       alert('의견은 200자를 초과할 수 없습니다.');

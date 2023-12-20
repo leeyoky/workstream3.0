@@ -41,26 +41,34 @@ const useApprovalRequest = () => {
 
   useEffect(() => {}, [navigate]);
 
+  /* 결재자 모달 */
   const handleShowModal = () => {
     setIsModalOpen(true);
     dispatch(selectedActions.setReference(false));
+    console.log('결재자 모달 Open', isModalOpen);
   };
-  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    console.log('결재자 모달 Close', isModalOpen);
+  };
+
+  /* 최종승인 모달 */
+  const handleShowInstModal = () => {
+    setIsInstModalOpen(true);
+    console.log('최종승인 모달 Open', isInstModalOpen);
+  };
+
+  const handleCloseInstModal = () => {
+    setIsInstModalOpen(false);
+    console.log('isInstModalOpen', isInstModalOpen);
+  };
 
   const handleShowRefModal = () => {
     setIsRefModalOpen(true);
     dispatch(selectedActions.setReference(true));
   };
   const handleCloseRefModal = () => setIsRefModalOpen(false);
-
-  const handleShowInstModal = () => {
-    console.log('isInstModalOpen', isInstModalOpen);
-    setIsInstModalOpen(true);
-  };
-  const handleCloseInstModal = () => {
-    console.log('isInstModalOpen', isInstModalOpen);
-    setIsInstModalOpen(false);
-  };
 
   const handleShowPdfModal = () => {
     setIsPDFModalOpen(true);

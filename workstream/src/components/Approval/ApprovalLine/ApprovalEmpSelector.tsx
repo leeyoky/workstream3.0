@@ -12,7 +12,6 @@ import ApprovalSelectRef from '../ApprovalReference/ApprovalSelectRef';
 import ApprovalResultRef from '../ApprovalReference/ApprovalResultRef';
 
 interface ApprovalEmpSelectorProps {
-  onClose: () => void; // 모달 닫기 핸들러
   isEdit?: boolean;
 }
 

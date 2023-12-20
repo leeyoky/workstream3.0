@@ -4,9 +4,6 @@ hr {
   border: none;
 }
 
-li, ul {
-  list-style: none;
-}
 
 .card input{
   height: 18px;

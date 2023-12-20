@@ -123,7 +123,6 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   const addressChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const userAddress = e.target.value;
     const newLength = userAddress.length;
-    console.log('newLength', newLength);
 
     // 200자를 초과하면 알림 표시
     if (newLength > 50) {

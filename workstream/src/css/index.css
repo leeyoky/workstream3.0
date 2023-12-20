@@ -38,9 +38,6 @@ a {
   text-decoration: none;
 }
 
-li ul {
-  list-style: none;
-}
 html {
   max-width: initial;
   height: auto;

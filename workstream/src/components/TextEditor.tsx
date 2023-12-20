@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -25,50 +25,25 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
 
   const handleChange = (_event: any, editor: any) => {
     const data = editor.getData();
-    const newLength = data.length;
+    const textOnly = data.replace(/<[^>]*>/g, ''); // HTML 태그 제거
+    const textLength = textOnly.length;
+    const includeHTMLData = data.length;
 
-    console.log('newLength', newLength);
-
-    if (newLength > 2000) {
-      alert('내용은 2000자를 초과할 수 없습니다.');
-      const trimmedData = data.substring(0, 2000);
+    if (textLength > 1000) {
+      alert('내용은 1000자를 초과할 수 없습니다.');
+      const trimmedData = data.substring(0, 980);
       editor.setData(trimmedData);
       dispatch(selectedActions.setContent(trimmedData));
       return;
+    } else if (includeHTMLData > 3000) {
+      alert('텍스트 용량이 너무 큽니다.');
+      const trimmedData = data.substring(0, 2980);
+      editor.setData(trimmedData);
+      dispatch(selectedActions.setContent(trimmedData));
+      return;
+    } else {
+      dispatch(selectedActions.setContent(data));
     }
-
-    dispatch(selectedActions.setContent(data));
-
-    const editable = editor.ui.view.editable;
-
-    if (editable && editable.clientHeight > 500) {
-      // 에디터에서 마지막 엔터를 찾아서 제거
-      editor.model.change((writer: any) => {
-        const lastPosition = editor.model.document.selection.getLastPosition();
-        writer.remove(writer.createRangeOn(lastPosition), 'end');
-      });
-    }
-  };
-
-  const handleLimitHeight = (editor: any) => {
-    const document = editor.editing.view.document;
-
-    document.on('change:data', () => {
-      const body = document.getRoot().getDocument().getBody();
-
-      const isOverflowed = body.scrollHeight > body.clientHeight;
-      console.log('body.scrollHeight', body.scrollHeight);
-
-      if (isOverflowed) {
-        // 에디터에서 마지막 엔터를 찾아서 제거
-        editor.model.change((writer: any) => {
-          const lastPosition = editor.model.document.selection.getLastPosition();
-          if (lastPosition) {
-            writer.remove(writer.createRangeOn(lastPosition), 'end');
-          }
-        });
-      }
-    });
   };
 
   useEffect(() => {
@@ -137,9 +112,6 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
       editor={ClassicEditor}
       data={editorData}
       onChange={handleChange as any}
-      onReady={editor => {
-        handleLimitHeight(editor);
-      }}
       config={editorConfig}
       disabled={isEdit ? false : true}
     />

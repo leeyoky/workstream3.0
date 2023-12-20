@@ -5,17 +5,17 @@
 .ck.ck-editor{
   height: 660px !important;
   max-height: 660px !important;
-  
+  min-height: 660px !important;
+  resize: none !important;
 }
 .ck.ck-editor a {
   color: #0400ff;
 }
-.ck.ck-editor ul li {
-  list-style: disc !important;
+.ck-content{
+  height: 600px !important;
 }
-.ck.ck-editor ol li {
-  list-style: decimal !important;
-}
+
+
 
 .ck.ck-editor__main>.ck-editor__editable {
   height: 640px !important;
@@ -23,6 +23,7 @@
   min-height: 640px !important;
   overflow: hidden !important;
   font-size: 10pt;
+  resize: none !important;
 }
 
 .ck.ck-editor__editable_inline {

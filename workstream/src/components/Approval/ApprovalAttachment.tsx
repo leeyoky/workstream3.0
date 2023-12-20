@@ -26,7 +26,6 @@ const ApprovalAttachment = () => {
 
   useEffect(() => {
     setIsServerFile(data);
-    console.log('data', data);
   }, [data]);
 
   const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>) => {

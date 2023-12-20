@@ -11,7 +11,6 @@ import ApprovalModalInstruction from './ApprovalInstruction/ApprovalModalInstruc
 type ApprovalEditButtonsProps = {
   temp: boolean;
 };
-
 const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
   const {
     id,
@@ -21,10 +20,10 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     approvedYn,
     setApprovedYn,
     handleShowModal,
-    handleCloseModal,
-    handleCloseRefModal,
     handleShowRefModal,
     handleShowInstModal,
+    handleCloseModal,
+    handleCloseRefModal,
     handleCloseInstModal,
     goBackPage,
     deleteDocumentHandler,
@@ -45,11 +44,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
   const documentData = useDocumentData(documentType, id)?.data;
 
   useEffect(() => {
-    console.log('approvedYn!! :', approvedYn);
     setApprovedYn(prev => {
-      console.log('documentData', documentData);
-
-      console.log('approvedYn 변경 일어남', prev);
       return prev; // 또는 새로운 값으로 업데이트
     });
   }, [approvedYn, setApprovedYn, documentData]);
@@ -97,6 +92,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
   const isNextApprover = nextApprover?.approvedYn === 'N';
   const previousApprover = documentData?.line.find(approval => approval.order === userOrder - 1);
   const isPreviousApproved = !(previousApprover?.approvedYn === 'N');
+
   const renderApprovalButtons = () => {
     const approvedYn = userLineData?.approvedYn;
 
@@ -110,10 +106,12 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
       /* 마지막 결재자이며, 앞 사람이 결재를 했고, 상태가 완료이거나 반려상태가 아닐 때 */
       if (isLastApprover && isPreviousApproved && !isFinishedDocumnt) {
         return (
-          <button className="btn btn-blue" onClick={() => handleShowInstModal()}>
-            <span>최종결재</span>
+          <>
+            <button className="btn btn-blue" onClick={handleShowInstModal}>
+              <span>최종결재</span>
+            </button>
             {isInstModalOpen && <ApprovalModalInstruction onClose={handleCloseInstModal} />}
-          </button>
+          </>
         );
       }
 
