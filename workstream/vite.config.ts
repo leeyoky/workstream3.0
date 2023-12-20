@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 export default defineConfig({
   plugins: [react(), ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') })],
   optimizeDeps: {
-    include: ['@workspace/ckeditor5-custom-build'],
+    include: ['@workspace/ckeditor5-build-classic'],
   },
   server: {
     port: 5173,
