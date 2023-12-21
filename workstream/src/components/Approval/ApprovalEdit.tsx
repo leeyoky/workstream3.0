@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import BoardTitle from '../../Layout/BoardLayout/BoardTitle';
-import ApprovalEditButtons from './ApprovalEditButtons';
+import ApprovalEditButtons from './ApprovalButtonsGroup/ApprovalEditButtons';
 import ApprovalAttachment from './ApprovalAttachment';
 import ApprovalComment from './ApprovalComment';
 import CommonDetail from './ApprovalType/CommonDetail';

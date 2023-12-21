@@ -11,22 +11,20 @@ export const useResignationData = (id: string) => {
       const data = response.data;
       setData(data);
       console.log(data);
-      
     } catch (error) {
       console.log(error);
-      
     }
   };
-    // 상태업데이트
-    const updateData = (newData: ResignationData) => {
-      setData(newData);
-    };
+  // 상태업데이트
+  const updateData = (newData: ResignationData) => {
+    setData(newData);
+  };
 
-  useEffect(()=> {
-    if(id){
+  useEffect(() => {
+    if (id) {
       fetchResignationData(id);
     }
-  },[id]);
+  }, [id]);
 
   return { data, updateData };
-}
+};

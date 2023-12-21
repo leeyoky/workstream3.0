@@ -6,35 +6,25 @@ import { selectedActions } from './../../store/Approval/approval-slice';
 import {
   deleteDocument,
   fetchApprovalData,
-  fetchApproveDocument,
-  fetchComment,
   fetchFileData,
   fetchRecallDocument,
   fetchResignationData,
-  updateApproveDocument,
   updateDocument,
   updateResignation,
 } from '../../api/axios';
 import { AxiosError } from 'axios';
 import { userActions } from '../../store/User/user-slice';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import { uiActions } from '../../store/ui-slice';
 
 const useApprovalRequest = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRefModalOpen, setIsRefModalOpen] = useState(false);
-  const [isInstModalOpen, setIsInstModalOpen] = useState(false);
-  const [isPDFModalOpen, setIsPDFModalOpen] = useState(false);
-  const [approvedYn, setApprovedYn] = useState('');
   const [isDetail, setIsDetail] = useState(true);
   const { id = '' } = useParams<string>();
-
   const data = useSelector((state: RootState) => state.approval);
   const userData = useSelector((state: RootState) => state.user);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const fileData = useSelector((state: RootState) => state.file.files);
-  const instructionComment = useSelector((state: RootState) => state.approval.comment);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -47,23 +37,13 @@ const useApprovalRequest = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  const handleShowInstModal = () => {
-    setIsInstModalOpen(true);
-  };
-  const handleCloseInstModal = () => {
-    setIsInstModalOpen(false);
-  };
+
   const handleShowRefModal = () => {
     setIsRefModalOpen(true);
     dispatch(selectedActions.setReference(true));
   };
   const handleCloseRefModal = () => setIsRefModalOpen(false);
-  const handleShowPdfModal = () => {
-    setIsPDFModalOpen(true);
-  };
-  const handleClosePdfModal = () => {
-    setIsPDFModalOpen(false);
-  };
+
   useEffect(() => {
     setIsDetail(false);
   }, [isDetail]);
@@ -373,6 +353,8 @@ const useApprovalRequest = () => {
     }
   };
 
+  // 사직서 임시저장 -> 임시저장/ 결재요청
+
   const updateResignationHandler = async (requestType: 'PROCEEDING' | 'TEMP') => {
     const confirmMsg = `${
       requestType === 'PROCEEDING' ? '결재 요청하시겠습니까?' : '임시 저장하시겠습니까?'
@@ -473,152 +455,23 @@ const useApprovalRequest = () => {
     }
   };
 
-  /* 결재 승인/반려 */
-  const approveDocumentHandler = async (approverId: number, result: 'Y' | 'R') => {
-    const confirmMsg = `${result === 'Y' ? '승인하시겠습니까?' : '반려하시겠습니까?'}`;
-    if (window.confirm(confirmMsg)) {
-      try {
-        const approveData = {
-          id: approverId,
-          approvedYn: result,
-        };
-        const response = await fetchApproveDocument(approveData);
-        console.log(response);
-        if (response.status === 403) {
-          alert('권한이 없습니다.');
-        }
-        if (response.status === 204) {
-          setApprovedYn(result);
-          alert(`${result === 'Y' ? '결재를 승인하였습니다.' : '결재를 반려하였습니다.'}`);
-          window.location.reload();
-          /*           navigate('/approval/pending');
-          dispatch(uiActions.selectMenu('/approval/pending')); */
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  /* 최종결재 */
-  const instructionHandler = async (approverId: number, result: 'Y' | 'R') => {
-    const confirmMsg = `${result === 'Y' ? '승인하시겠습니까?' : '반려하시겠습니까?'}`;
-
-    /* 승인 할때 */
-    if (window.confirm(confirmMsg)) {
-      const commentData = {
-        apprId: id,
-        comment: instructionComment,
-      };
-      const approveData = {
-        id: approverId,
-        approvedYn: result,
-      };
-      try {
-        if (commentData.comment) {
-          const response = await fetchComment(commentData);
-          if (response.status === 201) {
-            dispatch(selectedActions.setComment(''));
-          }
-        }
-        const response = await fetchApproveDocument(approveData);
-        console.log(response);
-        if (response.status === 403) {
-          alert('권한이 없습니다.');
-        }
-        if (response.status === 204) {
-          setApprovedYn(result);
-          alert(`${result === 'Y' ? '결재를 승인하였습니다.' : '결재를 반려하였습니다.'}`);
-          navigate('/approval/pending');
-          dispatch(uiActions.selectMenu('/approval/pending'));
-          /**
-           * @date 2023-12-18
-           * @description 승인 반려 결과만 리렌더링 못해줘서, 강제 렌더링 함
-           */
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  /* 결재 승인/취소 */
-  const updateApprovalHandler = async (id: number) => {
-    const confirmMsg = '기존의 결재를 회수하시겠습니까?';
-    if (window.confirm(confirmMsg)) {
-      try {
-        const response = await updateApproveDocument(id);
-        console.log(response);
-        if (response.status === 204) {
-          alert('결재회수 하였습니다.');
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  /**
-   *  @description PDF 다운 기능
-   *  @access 등록자만 가능
-   */
-
-  const pdfDownloadHandler = () => {
-    const element: HTMLElement = document.getElementById('approval')!;
-
-    html2canvas(element, { scale: 3 }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        format: 'a4',
-        orientation: 'portrait',
-        unit: 'mm',
-      });
-
-      const padding = 10; // You can adjust the padding value as needed
-      const pdfWidth = 210 - 2 * padding;
-      const pdfHeight = 297 - 2 * padding;
-
-      pdf.addImage(imgData, 'PNG', padding, padding, pdfWidth, pdfHeight);
-      pdf.save('DS품의서.pdf');
-    });
-  };
-
-  /**
-   * @description PDF Viewer 기능
-   * @aceess Read 권한이 있는 모두가 가능
-   */
-
   return {
     id,
     isModalOpen,
     isRefModalOpen,
-    isInstModalOpen,
-    isPDFModalOpen,
-    approvedYn,
-    setApprovedYn,
     handleShowModal,
     handleCloseModal,
     handleShowRefModal,
     handleCloseRefModal,
-    handleShowInstModal,
-    handleCloseInstModal,
-    handleShowPdfModal,
-    handleClosePdfModal,
     goBackPage,
     requestApprovalHandler,
     updateDocumentHandler,
     updateResignationHandler,
     deleteDocumentHandler,
-    approveDocumentHandler,
-    updateApprovalHandler,
     changeTempModeHandler,
     requestApprovalType,
     requestTempDocument,
     recallDocument,
-    pdfDownloadHandler,
-    instructionHandler,
   };
 };
 

@@ -8,7 +8,6 @@ import { formatDateMinutes } from '../../../helpers/formatDateTime';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 /* import useApprovalRequest from '../../../hooks/Approval/useApprovalRequest'; */
 import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
-import { ApprovalData, ResignationData } from '../../../types/Approval/Approaval';
 import { APPROVAL_STATUS, COLUMN_LIMITS } from '../../../constants/constants';
 import { getUserInfo } from '../../../api/axios';
 import { isApprovalData, isResignationData } from '../../../helpers/Approval';
