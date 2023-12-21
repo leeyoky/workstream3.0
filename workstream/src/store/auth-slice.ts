@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { loginUserItem } from '../types/Organization/OrganizationType';
 interface AuthState {
-  isLogin : boolean;
+  isLogin: boolean;
   token: string;
   userInfo?: loginUserItem;
 }
 // 한수진 "2022001454"
 // 김원봉 "2022001453"
 const initialState: AuthState = {
-  isLogin: false, 
+  isLogin: false,
   token: '',
   userInfo: {
     deptCd: '',
@@ -16,7 +16,7 @@ const initialState: AuthState = {
     empNo: '',
     empNm: '',
   },
-}
+};
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -27,16 +27,19 @@ const authSlice = createSlice({
     logout(state) {
       state.isLogin = false;
       state.token = '';
+      state.userInfo = initialState.userInfo;
     },
-    setToken(state,action) {
+    setToken(state, action) {
       state.token = action.payload;
     },
-    setUserInfo(state, action){
+    deleteToken(state) {
+      state.token = '';
+    },
+    setUserInfo(state, action) {
       state.userInfo = action.payload;
-    }
-  }
-})
-
+    },
+  },
+});
 
 export const authActions = authSlice.actions;
 

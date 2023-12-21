@@ -144,13 +144,13 @@
 }
 .login-box h2{
   font-size: 40pt;
-  color: midnightblue;
+  color: #19197A;
   font-weight: bolder;
   letter-spacing: -1px;
 }
 .login-box span{
   letter-spacing: -1pt;
-  color: rgb(20, 20, 122);
+  color: #19197A;
 }
 .account-box{
   margin-top: 20px;

@@ -1,7 +1,7 @@
 // routes.js
 import { Route, Routes } from 'react-router-dom';
 import React from 'react';
-import Header from '../Layout/BoardLayout/Header';
+import Header from '../Layout/ToolBar/Header';
 import SideToolBar from '../Layout/ToolBar/SideToolBar';
 import MainPage from '../pages/MainPage';
 import ApprovalPage from '../pages/Approval/ApprovalPage';
@@ -11,7 +11,6 @@ import LoginPage from '../pages/LoginPage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
-
 export function AuthenticatedRoutes() {
   const isSidebarOpen: boolean = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const isSubBarOpen: boolean = useSelector((state: RootState) => state.ui.isSubbarOpen);
@@ -19,9 +18,12 @@ export function AuthenticatedRoutes() {
   return (
     <React.Fragment>
       <Header />
-      <div className='test'>
+      <div className="test">
         <SideToolBar />
-        <main className={`index-wrapper ${!isSidebarOpen ? 'active' : ''} ${isSubBarOpen ? 'sub-bar' : ''}`}>
+        <main
+          className={`index-wrapper ${!isSidebarOpen ? 'active' : ''} ${
+            isSubBarOpen ? 'sub-bar' : ''
+          }`}>
           <Routes>
             <Route index element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />

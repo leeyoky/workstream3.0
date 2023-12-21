@@ -7,6 +7,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
 import { ApprovalData, ResignationData } from '../../types/Approval/Approaval';
 import ApprovalModalInstruction from './ApprovalInstruction/ApprovalModalInstruction';
+import { isApprovalData, isResignationData } from '../../helpers/Approval';
 
 type ApprovalEditButtonsProps = {
   temp: boolean;
@@ -49,15 +50,6 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
     });
   }, [approvedYn, setApprovedYn, documentData]);
 
-  // 타입가드
-  const isApprovalData = (data: any): data is ApprovalData => {
-    return data && 'approval' in data;
-  };
-
-  const isResignationData = (data: any): data is ResignationData => {
-    return data && 'resignation' in data;
-  };
-
   const isApproved = documentData
     ? documentType === 'APPROVAL_COMMON'
       ? isApprovalData(documentData)
@@ -96,10 +88,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
   const renderApprovalButtons = () => {
     const approvedYn = userLineData?.approvedYn;
 
-    /**
-     * @description
-     * 결재라인에 본인이 있고, 편집상태가 아니며, 결재를 진행하지 않은 상태.
-     */
+    /* 결재라인에 본인이 있고, 편집상태가 아니며, 결재를 진행하지 않은 상태. */
     if (isApprover && !isEdit && approvedYn === 'N') {
       const isLastApprover = !nextApprover;
 
@@ -114,8 +103,8 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
           </>
         );
       }
-
-      if ((isNextApprover || isPreviousApproved) && !isFinishedDocumnt) {
+      /* 앞사람이 결재를 하거나, 뒷사람이 아직 결재를 하지 않은 상태 && 완료된 문서가 아닐때 */
+      if (isNextApprover && isPreviousApproved && !isFinishedDocumnt) {
         return (
           <>
             <button

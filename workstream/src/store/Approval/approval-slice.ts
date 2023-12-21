@@ -10,6 +10,7 @@ const initialState: ApprovalState = {
   selectedOption: 'approval' /* 결재 / 합의 */,
   agreementType: 'sequential' /* 순차 / 병렬 */,
   approvers: [],
+  updateApprovers: [],
   ccDept: [],
   ccUser: [],
   isReference: false,
@@ -45,17 +46,14 @@ const approvalSlice = createSlice({
     updateDocumentType(state, action: PayloadAction<string>) {
       state.documentType = action.payload;
     },
-
     // 결재 라인 방식 선택 옵션
     updateSelectedOption(state, action: PayloadAction<string>) {
       state.selectedOption = action.payload;
     },
-
     // 합의 라인 방식 선택 옵션
     updateSelectedAgreementOption(state, action: PayloadAction<string>) {
       state.agreementType = action.payload;
     },
-
     // 결재 직원을 추가
     addEmp(state, action: PayloadAction<Employee & { index: number }>) {
       const { empNo, name, rankName, duty, approvalType, index } = action.payload;
@@ -71,18 +69,15 @@ const approvalSlice = createSlice({
         }
       }
     },
-
     // 참조 부서 추가
     addRefDepCd(state, action: PayloadAction<ccDept>) {
       const { deptCd, deptNm } = action.payload;
-
       // 이미 추가된 부서 코드가 아닌 경우에만 배열에 추가
       const isDuplicate = state.ccDept.some(dept => dept.deptCd === deptCd);
       if (!isDuplicate) {
         state.ccDept.push({ deptCd, deptNm });
       }
     },
-
     // 참조직원 추가
     addRefEmp(state, action: PayloadAction<Employee>) {
       const { empNo, name, rankName, duty, approvalType, index } = action.payload;
@@ -125,7 +120,6 @@ const approvalSlice = createSlice({
     setContent(state, action) {
       state.content = action.payload;
     },
-
     /* 사직서 */
     setReasonRitire(state, action) {
       state.reasonRetire = action.payload;
@@ -136,7 +130,6 @@ const approvalSlice = createSlice({
     setRetireDate(state, action) {
       state.retireDate = action.payload;
     },
-
     // 직원 중 결재직원 선택
     updateApprovers(state, action: PayloadAction<{ indexes: number[]; approvalType: string }>) {
       const { indexes, approvalType } = action.payload;
@@ -150,6 +143,9 @@ const approvalSlice = createSlice({
     },
     setApprovers(state, action: PayloadAction<Employee[]>) {
       state.approvers = action.payload;
+    },
+    updateNewApprover(state, action: PayloadAction<Employee[]>) {
+      state.updateApprovers = action.payload;
     },
     setRefDepCd(state, action: PayloadAction<ccDept[]>) {
       state.ccDept = action.payload;

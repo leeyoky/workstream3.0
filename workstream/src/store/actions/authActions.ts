@@ -11,15 +11,18 @@ export const useAuthActions = () => {
   /* LOGIN  */
   const loginUser = async (username: string, password: string) => {
     try {
-      const userData = {
-        loginId: username,
-        password: password,
-      };
+      const formData = new FormData();
+      formData.append('loginId', username);
+      formData.append('password', password);
 
-      const response = await login(userData);
+      const response = await login(formData);
+      const setToken = response.headers.authorization;
+      const trimmedToken = setToken.replace(/Bearer\s*/i, '');
 
       if (response.status === 201) {
+        localStorage.setItem('token', trimmedToken);
         dispatch(authActions.login());
+        dispatch(authActions.setToken(trimmedToken));
         navigate('/main');
         fetchEmployee();
       } else {
@@ -34,7 +37,11 @@ export const useAuthActions = () => {
   /* LOGOUT */
   const logout = () => {
     dispatch(authActions.logout());
-    localStorage.removeItem('token');
+    dispatch(authActions.deleteToken());
+    localStorage.clear();
+    console.log('로그아웃');
+
+    //localStorage.removeItem('token');
   };
 
   /* GET LOGINUSER INFO */

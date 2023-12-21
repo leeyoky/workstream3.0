@@ -34,42 +34,30 @@ const useApprovalRequest = () => {
   const userData = useSelector((state: RootState) => state.user);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const fileData = useSelector((state: RootState) => state.file.files);
-  const agreementType = useSelector((state: RootState) => state.approval.agreementType);
   const instructionComment = useSelector((state: RootState) => state.approval.comment);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {}, [navigate]);
 
-  /* 결재자 모달 */
   const handleShowModal = () => {
     setIsModalOpen(true);
     dispatch(selectedActions.setReference(false));
-    console.log('결재자 모달 Open', isModalOpen);
   };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    console.log('결재자 모달 Close', isModalOpen);
   };
-
-  /* 최종승인 모달 */
   const handleShowInstModal = () => {
     setIsInstModalOpen(true);
-    console.log('최종승인 모달 Open', isInstModalOpen);
   };
-
   const handleCloseInstModal = () => {
     setIsInstModalOpen(false);
-    console.log('isInstModalOpen', isInstModalOpen);
   };
-
   const handleShowRefModal = () => {
     setIsRefModalOpen(true);
     dispatch(selectedActions.setReference(true));
   };
   const handleCloseRefModal = () => setIsRefModalOpen(false);
-
   const handleShowPdfModal = () => {
     setIsPDFModalOpen(true);
   };
@@ -110,7 +98,9 @@ const useApprovalRequest = () => {
   };
   /**
    * @description 완료, 반려 문서를 재기안 하는 기능
-   * isEdit = true, isDetail = false
+   * @param reqestType
+   * @param isEdit {true}
+   * @param isDetail {false}
    */
   const changeTempModeHandler = (reqestType: 'Y' | 'N') => {
     if (reqestType === 'Y') {
@@ -121,12 +111,11 @@ const useApprovalRequest = () => {
   };
 
   /**
-   *
-   * @param documentType
-   * @param requestType
+   * @description 결재요청
+   * @param documentType 문서종류
+   * @param requestType 임시저장/결재요청
    */
 
-  // 결재요청(문서종류)
   const requestApprovalType = (documentType: string, requestType: 'PROCEEDING' | 'TEMP') => {
     if (documentType === 'APPROVAL_COMMON') {
       requestApprovalHandler(requestType);
@@ -154,31 +143,14 @@ const useApprovalRequest = () => {
     const confirmMsg = `${
       requestType === 'PROCEEDING' ? '결재 요청하시겠습니까?' : '임시 저장하시겠습니까?'
     }`;
-
     if (window.confirm(confirmMsg)) {
-      let order = 0;
-      let prevApprovalType = '';
-
-      /* 합의 방식이 병렬인 경우 같은 order 부여 */
       const newApprovers = approvers.map(employee => {
-        if (agreementType === 'parallel' && employee.approvalType === 'CONSENSUAL') {
-          if (prevApprovalType !== 'CONSENSUAL') {
-            order += 1;
-          }
-          prevApprovalType = 'CONSENSUAL';
-        } else {
-          order += 1;
-          prevApprovalType = '';
-        }
-
-        // order를 부여
         return {
           apprType: employee.approvalType,
           approver: employee.empNo,
-          order: order,
+          order: employee.order as number,
         };
       });
-
       try {
         const formData = {
           ccDept: data.ccDept.map(dept => dept.deptCd),
@@ -259,26 +231,12 @@ const useApprovalRequest = () => {
     }
 
     if (window.confirm(confirmMsg)) {
-      let order = 0;
-      let prevApprovalType = '';
-
       /* 합의 방식이 병렬인 경우 같은 order 부여 */
       const newApprovers = approvers.map(employee => {
-        if (agreementType === 'parallel' && employee.approvalType === 'CONSENSUAL') {
-          if (prevApprovalType !== 'CONSENSUAL') {
-            order += 1;
-          }
-          prevApprovalType = 'CONSENSUAL';
-        } else {
-          order += 1;
-          prevApprovalType = '';
-        }
-
-        // order를 부여
         return {
           apprType: employee.approvalType,
           approver: employee.empNo,
-          order: order,
+          order: employee.order as number,
         };
       });
 
@@ -356,10 +314,10 @@ const useApprovalRequest = () => {
     }`;
 
     if (window.confirm(confirmMsg)) {
-      const newApprovers = approvers.map((employee, index) => ({
+      const newApprovers = approvers.map(employee => ({
         apprType: employee.approvalType,
         approver: employee.empNo,
-        order: index + 1,
+        order: employee.order as number,
       }));
 
       if (data.title === '') {
@@ -457,10 +415,10 @@ const useApprovalRequest = () => {
         return;
       }
 
-      const newApprovers = approvers.map((employee, index) => ({
+      const newApprovers = approvers.map(employee => ({
         apprType: employee.approvalType,
         approver: employee.empNo,
-        order: index + 1,
+        order: employee.order as number,
       }));
 
       const docData = {

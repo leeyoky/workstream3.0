@@ -9,8 +9,6 @@ const Signature = () => {
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
-  const getApproverIndex = (approver: any) => approvers.indexOf(approver);
-
   // Memoizaion 최적화
   const memoizedApprovers = useMemo(() => {
     const approvalApprovers = approvers.filter(approver => approver.approvalType === 'APPROVER');
@@ -33,16 +31,19 @@ const Signature = () => {
   const agreementColumnCount = Math.min(COLUMN_LIMITS.MAX_AGREEMENT, agreementApprovers.length);
 
   // 셀 헤더
-  const renderHeader = (content: any, index: number, approverIndex: number) => (
-    <th className={classes['header-table__approval-th']} key={index}>
-      <div>
-        <span className={classes['approver-index']}>
-          {approverIndex !== -1 ? <div>{approverIndex + 2}</div> : ''}
-        </span>
-        {content}
-      </div>
-    </th>
-  );
+  const renderHeader = (content: any, index: number, order: any) => {
+    console.log(`Rendering header for index ${index}, order ${order}`);
+    return (
+      <th className={classes['header-table__approval-th']} key={index}>
+        <div>
+          <span className={classes['approver-index']}>
+            {order !== undefined ? <div>{order + 1}</div> : null}
+          </span>
+          {content}
+        </div>
+      </th>
+    );
+  };
 
   // 콘텐츠
   const renderContent = () => (
@@ -59,7 +60,7 @@ const Signature = () => {
         <tbody>
           <tr key="header-approval">
             <th rowSpan={2}>결재</th>
-            {renderHeader(renderedEmpNm, 0, -1)}
+            {renderHeader(renderedEmpNm, 0, 0)}
             {Array.from({
               length:
                 Math.min(
@@ -72,7 +73,7 @@ const Signature = () => {
                   ? `${approvalApprovers[index].name} ${approvalApprovers[index].rankName}`
                   : '',
                 index + 1,
-                getApproverIndex(approvalApprovers[index]),
+                approvalApprovers[index]?.order,
               ),
             )}
           </tr>
@@ -102,7 +103,7 @@ const Signature = () => {
                   ? `${agreementApprovers[index].name} ${agreementApprovers[index].rankName}`
                   : '',
                 index + 1,
-                getApproverIndex(agreementApprovers[index]),
+                agreementApprovers[index]?.order,
               ),
             )}
           </tr>

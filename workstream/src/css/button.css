@@ -187,3 +187,18 @@
   background-color: #ffb820;
   color: #ffffff;
 }
+
+
+/* alert */
+.alert-info{
+  background-color: #3981aad3;
+}
+.alert-success{
+  background-color: #32b45ed3;
+}
+.alert-fail{
+  background-color: #e42e21e7;
+}
+.alert-warning{
+  background-color: #ffae00d3;
+}

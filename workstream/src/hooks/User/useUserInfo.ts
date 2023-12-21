@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { getEnteredDate } from '../../api/axios';
 
@@ -14,18 +13,17 @@ const useUserInfo = (userId: string) => {
       const response = await getEnteredDate(userId);
       const data = response.data;
       setEnterDate(data);
-
     } catch (error) {
       console.log(error);
     }
-  }
-  useEffect(()=> {
-    if(userId){
+  };
+  useEffect(() => {
+    if (userId) {
       fetchEnterDate(userId);
     }
-  }, [userId])
+  }, [userId]);
 
-  return enterDate ;
-}
+  return enterDate;
+};
 
-export default useUserInfo
+export default useUserInfo;

@@ -1,4 +1,4 @@
-import instance from './interceptor';
+import { instance } from './interceptor';
 import {
   docData,
   commentData,
@@ -7,8 +7,8 @@ import {
   resinationDocData,
 } from '../types/Approval/Approaval';
 
-export function login(userData: { loginId: string; password: string }) {
-  return instance.post('login', userData);
+export function login(formData: FormData) {
+  return instance.post('login', formData);
 }
 
 export function getUsersInfo() {

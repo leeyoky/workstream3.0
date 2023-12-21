@@ -6,7 +6,7 @@ import { RootState } from '../../store';
 import { fileActions } from './../../store/file-slice';
 import { useParams } from 'react-router-dom';
 import { deleteFileData } from '../../api/axios';
-import { ApprovalData, CommonData } from '../../types/Approval/Approaval';
+import { ApprovalData, CommonData, ResignationData } from '../../types/Approval/Approaval';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
 import PdfViewerModal from '../../common/PdfViewerModal';
 
@@ -18,14 +18,24 @@ const ApprovalAttachment = () => {
   const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
   const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
+  const loginUser = useSelector((state: RootState) => state.user.userInfo.empNo);
   const { id = '' } = useParams();
   const [isServerFile, setIsServerFile] = useState<CommonData | undefined>();
   const [drag, setDrag] = useState(false);
   const dispatch = useDispatch();
   const { data } = useDocumentData(documentType, id);
 
+  const regUser = data
+    ? documentType === 'APPROVAL_COMMON'
+      ? (data as ApprovalData).approval.regUsr
+      : (data as ResignationData).resignation.regUsr
+    : '';
+
+  const isSameUser = loginUser === regUser;
+
   useEffect(() => {
     setIsServerFile(data);
+    console.log('isSameUser', isSameUser);
   }, [data]);
 
   const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>) => {
@@ -99,7 +109,7 @@ const ApprovalAttachment = () => {
     }
   };
 
-  /*   const fileDownloadHandler = (fileId: number, fileName: string) => {
+  const fileDownloadHandler = (fileId: number, fileName: string) => {
     try {
       // 파일 다운로드 URL을 동적으로 생성
       const downloadUrl = `${import.meta.env.VITE_REACT_APP_API_BASE_URL}approval/file/${fileId}`;
@@ -116,7 +126,7 @@ const ApprovalAttachment = () => {
       console.error('다운로드 실패:', error);
       // 사용자에게 피드백 제공 등, 예를 들면 사용자에게 오류 메시지를 표시
     }
-  }; */
+  };
 
   const openPdfViewer = (file: CommonData['files'][0]) => {
     setSelectedFile(file);
@@ -220,14 +230,29 @@ const ApprovalAttachment = () => {
           <div className={classes['approval-attachment-item-download']}>
             <div className={classes['file-download']}>
               <ul>
-                {/* <li key={index} onClick={() => fileDownloadHandler(item.id, item.fileName)}> */}
                 {data?.files && data?.files.length > 0 ? (
                   data.files.map((item, index) => (
-                    <li key={index} onClick={() => openPdfViewer(item)}>
-                      <span>{item.fileName}</span>
-                      <button>
-                        <i className="fa-solid fa-angle-down"></i>
-                      </button>
+                    <li key={index}>
+                      {isSameUser ? (
+                        <>
+                          <span onClick={() => fileDownloadHandler(item.id, item.fileName)}>
+                            {item.fileName}
+                          </span>
+                          <button onClick={() => fileDownloadHandler(item.id, item.fileName)}>
+                            <i className="fa-solid fa-angle-down"></i>
+                          </button>
+                          <button onClick={() => openPdfViewer(item)}>
+                            <i className="fa-regular fa-file-pdf"></i>
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <span onClick={() => openPdfViewer(item)}>{item.fileName}</span>
+                          <button>
+                            <i className="fa-regular fa-file-pdf"></i>
+                          </button>
+                        </>
+                      )}
                     </li>
                   ))
                 ) : (

@@ -70,10 +70,7 @@ export function useApprovalList(sortValue: string) {
         return { ...item, index: getPage * getPageSize + index + 1 };
       });
       const getTotalElements = response.data.totalElements;
-
       setListData(data);
-      console.log(data);
-
       setTotalItems(getTotalElements);
       dispatch(uiActions.setTotalItems(getTotalElements));
     } catch (error) {
@@ -85,7 +82,7 @@ export function useApprovalList(sortValue: string) {
     try {
       const response = await countDoucumentType();
       const data = response.data;
-      console.log(data);
+      // console.log(data);
       setDocuemntCnt(data);
       dispatch(selectedActions.setDocumentCnt(data));
     } catch (error) {

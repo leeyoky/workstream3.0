@@ -18,6 +18,7 @@ export interface Employee {
   modDate?: string;
   index: number /* order */;
   approvedYn?: string;
+  order?: number;
 }
 
 export interface DocumentCounts {
@@ -46,6 +47,7 @@ export interface ApprovalState {
   selectedOption: string; // 결재방식 선택
   agreementType: string; // 힙의방식 선택
   approvers: Employee[];
+  updateApprovers: Employee[];
   ccDept: ccDept[];
   ccUser: Employee[];
   content: string;

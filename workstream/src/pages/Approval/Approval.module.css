@@ -545,6 +545,10 @@ footer p {
 }
 
 /* approval Create */
+.approval-create-wrapper ul,
+.approval-create-wrapper li {
+  list-style: none;
+}
 .approval-create-wrapper{
   display: flex;
   flex-direction: column;
@@ -646,6 +650,7 @@ footer p {
   margin: 0;
   padding: 0;
   display: flex;
+  flex-wrap: wrap;
 }
 .file-download li,
 .file-list li {
@@ -653,7 +658,7 @@ footer p {
   color: #585858;
   border: 1px solid #CC8B29;
   border-radius: 30px;
-  margin: 2px;
+  margin: 3px 5px;
   padding: 2px 7px;
 }
 .file-download li:hover{

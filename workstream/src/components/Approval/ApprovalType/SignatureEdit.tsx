@@ -11,6 +11,7 @@ import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
 import { ApprovalData, ResignationData } from '../../../types/Approval/Approaval';
 import { APPROVAL_STATUS, COLUMN_LIMITS } from '../../../constants/constants';
 import { getUserInfo } from '../../../api/axios';
+import { isApprovalData, isResignationData } from '../../../helpers/Approval';
 const SignatureEdit = () => {
   const [newApprovers, setNewApprovers] = useState<
     {
@@ -26,7 +27,6 @@ const SignatureEdit = () => {
   >([]);
   const [regUserinfo, setRegUserInfo] = useState();
   const { id = '' } = useParams<string>();
-  /*  const { approvedYn } = useApprovalRequest(); */
   const dispatch = useDispatch();
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const agreementType = useSelector((state: RootState) => state.approval.agreementType);
@@ -34,7 +34,6 @@ const SignatureEdit = () => {
   const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
   const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
   const isRevise = useSelector((state: RootState) => state.approval.isReviseMode);
-  const getApproverIndex = (approver: any) => approvers.indexOf(approver);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const data = useDocumentData(documentType, id)?.data;
 
@@ -65,17 +64,8 @@ const SignatureEdit = () => {
       }
       setNewApprovers(modifiedApprovers);
     }
-    console.log('newApprovers', newApprovers);
   }, [agreementType]);
 
-  /* 타입 가드 */
-  const isApprovalData = (data: any): data is ApprovalData => {
-    return data && 'approval' in data;
-  };
-
-  const isResignationData = (data: any): data is ResignationData => {
-    return data && 'resignation' in data;
-  };
   /**
    * @description regUser의 Id를 전달하여 regUser의 직급을 가져옴
    */
@@ -92,8 +82,6 @@ const SignatureEdit = () => {
         const response = await getUserInfo(userId);
         const userData = response.data.content[0].rankNm;
         setRegUserInfo(userData);
-      } else {
-        console.error('Invalid document type or data structure.');
       }
     } catch (error) {
       console.error(error);
@@ -116,6 +104,7 @@ const SignatureEdit = () => {
         rankName: employee.rankNm,
         approvalType: employee.apprType,
         approvedYn: employee.approvedYn,
+        order: employee.order,
       }));
       setNewApprovers(updatedApprovers);
     }
@@ -227,7 +216,7 @@ const SignatureEdit = () => {
     }
   };
 
-  const renderHeader = (content: any, index: number, approverIndex: number) => {
+  const renderHeader = (content: any, index: number, order: any) => {
     if (isDetailMode && content) {
       const { name, rankName } = content;
 
@@ -245,7 +234,7 @@ const SignatureEdit = () => {
           <th className={classes['header-table__approval-th']}>
             <div>
               <span className={classes['approver-index']}>
-                {approverIndex !== -1 ? <div>{approverIndex + 2}</div> : <div>1</div>}
+                <div>{1}</div>
               </span>
               {specialName}
             </div>
@@ -256,7 +245,7 @@ const SignatureEdit = () => {
         <th className={classes['header-table__approval-th']}>
           <div>
             <span className={classes['approver-index']}>
-              {approverIndex !== -1 ? <div>{approverIndex + 2}</div> : ''}
+              {order !== undefined ? <div>{order + 1}</div> : null}
             </span>
             {name} {rankName}
           </div>
@@ -286,7 +275,7 @@ const SignatureEdit = () => {
               renderHeader(
                 index < approvalApprovers.length ? approvalApprovers[index] : '',
                 index + 1,
-                getApproverIndex(approvalApprovers[index]),
+                approvalApprovers[index]?.order,
               ),
             )}
           </tr>
@@ -310,7 +299,7 @@ const SignatureEdit = () => {
               renderHeader(
                 index < agreementApprovers.length ? agreementApprovers[index] : null,
                 index + 1,
-                getApproverIndex(agreementApprovers[index]),
+                agreementApprovers[index]?.order,
               ),
             )}
           </tr>

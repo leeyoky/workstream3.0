@@ -12,25 +12,29 @@ const SideToolBar = () => {
   const { fetchEmployee } = useAuthActions();
   const { documentCnt } = useApprovalDocumentCnt();
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
-  const loginUserInfo = useSelector((state:RootState) => state.user.userInfo)
+  const loginUserInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
-  const location = useLocation();   // 현재 경로 가져오기
-  const isMainActive = location.pathname === '/' || location.pathname === '/main' ;
-  const isSubToolBarActive = location.pathname.startsWith('/approval')
+  const location = useLocation(); // 현재 경로 가져오기
+  const isMainActive = location.pathname === '/' || location.pathname === '/main';
+  const isSubToolBarActive = location.pathname.startsWith('/approval');
 
   useEffect(() => {
     if (!loginUserInfo || Object.keys(loginUserInfo).length === 0) {
       fetchEmployee();
     }
-    
   }, [loginUserInfo]);
-  
-  useEffect(()=> {
+
+  useEffect(() => {
+    /*     if (getToken === '') {
+      console.log('getToken!!', getToken);
+      dispatch(authActions.logout());
+    } */
+  }, []);
+
+  useEffect(() => {
     console.log('documentCnt', documentCnt);
+  }, []);
 
-  },[])
-
-  
   const toggleSideBar = () => {
     dispatch(uiActions.toggle());
   };
@@ -40,13 +44,12 @@ const SideToolBar = () => {
   };
 
   const updatePath = (to: string) => {
-    dispatch(uiActions.selectMenu(to))
-  }
+    dispatch(uiActions.selectMenu(to));
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     toggleSubBar();
-  },[location.pathname])
-  
+  }, [location.pathname]);
 
   const classNames = {
     wrapper: `side-bar-wrapper ${!isSidebarOpen ? 'active' : ''}`,
@@ -59,11 +62,26 @@ const SideToolBar = () => {
   const menuItems = [
     { to: '/main', iconClass: 'fa-solid fa-house', label: '메인페이지', title: '메인페이지' },
     { to: '/notice', iconClass: 'fa-regular fa-heart', label: '전사공지', title: '전사공지' },
-    { to: '/approval/document', iconClass: 'fa-regular fa-pen-to-square', label: '전자결재', title:'전자결재' },
-    { to: '/booking', iconClass: 'fa-regular fa-calendar', label: '회의예약', title:'회의예약' },
-    { to: '/todoList', iconClass: 'fa-regular fa-circle-check', label: 'ToDo+', title:'ToDo' },
-    { to: '/request', iconClass: 'fa-regular fa-paper-plane', label: '요청사항', title:'요청사항' },
-    { to: '/address', iconClass: 'fa-regular fa-address-book', label: '사내연락망', title:'사내연락망' },
+    {
+      to: '/approval/document',
+      iconClass: 'fa-regular fa-pen-to-square',
+      label: '전자결재',
+      title: '전자결재',
+    },
+    { to: '/booking', iconClass: 'fa-regular fa-calendar', label: '회의예약', title: '회의예약' },
+    { to: '/todoList', iconClass: 'fa-regular fa-circle-check', label: 'ToDo+', title: 'ToDo' },
+    {
+      to: '/request',
+      iconClass: 'fa-regular fa-paper-plane',
+      label: '요청사항',
+      title: '요청사항',
+    },
+    {
+      to: '/address',
+      iconClass: 'fa-regular fa-address-book',
+      label: '사내연락망',
+      title: '사내연락망',
+    },
   ];
 
   return (
@@ -91,24 +109,25 @@ const SideToolBar = () => {
           <ul className={classNames.menuIcon}>
             {menuItems.map((item, index) => (
               <li key={index}>
-                <NavLink 
-                  to={item.to} 
-                  className={`${item.to === '/main' ? 
-                    isMainActive ? 'active' : '' : ''} ${
-                    isSubToolBarActive && item.to === '/approval/document' ? 'active' : ''}`}
+                <NavLink
+                  to={item.to}
+                  className={`${item.to === '/main' ? (isMainActive ? 'active' : '') : ''} ${
+                    isSubToolBarActive && item.to === '/approval/document' ? 'active' : ''
+                  }`}
                   onClick={() => updatePath(item.to)}>
-                  <i 
-                    className={`${item.iconClass} ${classNames.menuIcon}`} 
-                    title={`${item.title}`}>
-                  </i>
-                  <span 
-                    className={classNames.menuIcon}>
-                      {item.label}
-                  </span>
+                  <i
+                    className={`${item.iconClass} ${classNames.menuIcon}`}
+                    title={`${item.title}`}></i>
+                  <span className={classNames.menuIcon}>{item.label}</span>
                   {item.label === '전자결재' && (
-                  <span className={`badge-item ${documentCnt?.pendingCount === null || documentCnt?.pendingCount === 0  ? 'none' : 'main'}`}>
-                    {documentCnt?.pendingCount}
-                  </span>
+                    <span
+                      className={`badge-item ${
+                        documentCnt?.pendingCount === null || documentCnt?.pendingCount === 0
+                          ? 'none'
+                          : 'main'
+                      }`}>
+                      {documentCnt?.pendingCount}
+                    </span>
                   )}
                 </NavLink>
               </li>

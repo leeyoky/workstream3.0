@@ -1,12 +1,14 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { uiActions } from '../../../store/ui-slice';
 import ApprovalTypeSelector from './ApprovalTypeSelector';
+import { Employee } from '../../../types/Approval/Approaval';
 interface ApprovalEmpResultProps {
   selectedOption: string;
+  updateApprovers: Employee[];
 }
 
 const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
@@ -18,15 +20,6 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
   const selectedOption = useSelector((state: RootState) => state.approval.selectedOption);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
-
-  const agreementType = useSelector((state: RootState) => state.approval.agreementType);
-
-  /* 실시간 합의 병렬일때 */
-  useEffect(() => {
-    if (agreementType === 'parallel') {
-      console.log('합의 병렬방식 선택');
-    }
-  }, [agreementType]);
 
   // dragStartIndex를 ref로 관리
   const dragStartIndex = useRef(-1);

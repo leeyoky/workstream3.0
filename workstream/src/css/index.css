@@ -243,12 +243,12 @@ i[name]:hover::after {
 
 .sidebar-right i:hover {
   color: black;
-  transform: scale(1.05);
   transition: all 0.1s;
 }
 .margin-left {
   display: flex;
   align-items: center;
+  height: 55px;
 }
 .toolbar-menus {
   display: flex;
@@ -259,6 +259,12 @@ i[name]:hover::after {
   font-size: 12pt;
   margin: 0;
   padding: 0;
+  align-items: center;
+  height: 100%;
+}
+.toolbar-menus ul,
+.toolbar-menus li {
+  list-style: none;
 }
 
 .underline a {
@@ -299,15 +305,14 @@ i[name]:hover::after {
   background-color: rgb(249, 249, 255);
   width: 80px;
   right: 0%;
-  line-height: 2.2rem;
+  top: 45px;
+  line-height: 2rem;
   display: none;
 }
 .my-page a {
-  justify-content: flex-start;
+  font-size: 10pt;
 }
-.padding-0 {
-  padding: 0;
-}
+
 .header-logo {
   display: flex;
   cursor: pointer;
@@ -355,6 +360,7 @@ i[name]:hover::after {
   width: 5rem;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .header-logo > ul > li > ul > li {
   width: 100%;
@@ -366,11 +372,24 @@ i[name]:hover::after {
   width: 5rem;
   justify-content: center;
   height: 35px;
+  align-items: center;
 }
 
 .sidebar-right .fa-circle-question {
   font-size: 19pt;
   padding-top: 2px;
+}
+.sidebar-right > ul >li {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.sidebar-right > ul > li a {
+  cursor: pointer;
+}
+.sidebar-right > ul > li a:hover{
+  font-weight: 900;
+  color: #000000;
 }
 .fa-house{
   font-size: 1.4rem !important;
@@ -491,7 +510,8 @@ i[name]:hover::after {
 .side-bar-profile-wrapper i {
   font-size: 110pt;
   text-align: center;
-  color: #e78383;
+  /* color: #e78383; */
+  color: #2B3499;
 }
 
 .side-bar-profile-wrapper img {
@@ -783,7 +803,8 @@ i[name]:hover::after {
 }
 .badge-item.main {
   margin-left: 10px;
-  background-color: #ff4a4a;
+  /* background-color: #ff4a4a; */
+  background-color: #2B3499;
   padding: 0px 2px 0px 0px;
   font-size: 9pt !important;
   font-weight: 700;

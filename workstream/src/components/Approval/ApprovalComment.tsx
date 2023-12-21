@@ -9,16 +9,18 @@ import {
 } from '../../api/axios';
 import { formatDateOnly } from '../../helpers/formatDateTime';
 import classes from '../../pages/Approval/Approval.module.css';
-import { ApprovalData, CommentItem, ResignationData } from '../../types/Approval/Approaval';
+import { ApprovalData, CommentItem } from '../../types/Approval/Approaval';
 import Alert from '../../Layout/Alert/Alert';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
+import { isApprovalData, isResignationData } from '../../helpers/Approval';
 
 const ApprovalComment = () => {
   const { id = '' } = useParams<string>();
   const [comment, setComment] = useState('');
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertMessage2, setAlertMessage2] = useState<string | null>(null);
   const [listData, setListData] = useState<ApprovalData | null>(null);
   const [editCommentIndex, setEditCommentIndex] = useState<number | null>(null);
   const [commentStates, setCommentStates] = useState<string[]>([]); // 수정된 부분: 빈 배열로 초기화
@@ -26,15 +28,6 @@ const ApprovalComment = () => {
   const documentType = useSelector((state: RootState) => state.approval.documentType);
 
   const data = useDocumentData(documentType, id)?.data;
-
-  // 타입가드
-  const isApprovalData = (data: any): data is ApprovalData => {
-    return data && 'approval' in data;
-  };
-
-  const isResignationData = (data: any): data is ResignationData => {
-    return data && 'resignation' in data;
-  };
 
   const getState = data
     ? documentType === 'APPROVAL_COMMON'
@@ -87,7 +80,7 @@ const ApprovalComment = () => {
     const newLength = inputComment.length;
 
     if (newLength > 100) {
-      alert('의견은 200자를 초과할 수 없습니다.');
+      setAlertMessage2('의견은 200자를 초과할 수 없습니다.');
       return;
     }
     setComment(inputComment);
@@ -95,7 +88,7 @@ const ApprovalComment = () => {
 
   const commentSubmitHandler = async () => {
     const confirmMsg = '의견을 등록하시겠습니까?';
-
+    // setConfirmMsg('의견을 등록하시겠습니까?');
     if (window.confirm(confirmMsg)) {
       const commentData = {
         apprId: id,
@@ -106,6 +99,7 @@ const ApprovalComment = () => {
         if (response.status === 201) {
           setDataChanged(true);
           setComment('');
+          setAlertMessage('댓글 쓰기에 성공했습니다');
         }
       } catch (error) {
         console.log(error);
@@ -154,7 +148,7 @@ const ApprovalComment = () => {
         const response = await deleteComment(commentId);
         if (response.status === 204) {
           setDataChanged(true);
-          alert('삭제되었습니다.');
+          setAlertMessage('삭제되었습니다.');
         }
       } catch (error) {
         console.log(error);
@@ -164,6 +158,7 @@ const ApprovalComment = () => {
 
   const closeAlertHandler = () => {
     setAlertMessage(null);
+    setAlertMessage2(null);
   };
 
   return (
@@ -250,6 +245,23 @@ const ApprovalComment = () => {
       ))}
       {alertMessage && (
         <Alert message={alertMessage} onClose={closeAlertHandler} type="alert" response={true} />
+      )}
+      {/* {confirmMsg && (
+        <Alert
+          className="alert-fail"
+          message={confirmMsg}
+          type="confirm"
+          onClose={closeAlertHandler}
+        />
+      )} */}
+      {alertMessage2 && (
+        <Alert
+          className="alert-fail"
+          message={alertMessage2}
+          onClose={closeAlertHandler}
+          type="alert"
+          response={false}
+        />
       )}
     </div>
   );
