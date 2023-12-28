@@ -15,7 +15,7 @@ interface AlertProps {
 }
 
 const Alert: React.FC<AlertProps> = props => {
-  const { message, onClose, onConfirm, onCancel, type, response, className } = props;
+  const { message, onClose, onConfirm, onCancel, type, response } = props;
   const [isModalOpen, setIsModalOpen] = useState(true);
   const portalElement = document.getElementById('alert');
 

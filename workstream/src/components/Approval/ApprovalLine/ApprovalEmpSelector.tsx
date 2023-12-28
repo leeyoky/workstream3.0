@@ -10,7 +10,7 @@ import { uiActions } from '../../../store/ui-slice';
 import ApprovalSelectRef from '../ApprovalReference/ApprovalSelectRef';
 import ApprovalResultRef from '../ApprovalReference/ApprovalResultRef';
 import { Employee } from '../../../types/Approval/Approaval';
-import { getOrderForApprovers } from './getOrderForApprovers';
+import { getOrderForApprovers } from '../../../helpers/getOrderForApprovers';
 
 interface ApprovalEmpSelectorProps {
   isEdit?: boolean;

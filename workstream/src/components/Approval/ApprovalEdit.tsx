@@ -48,7 +48,7 @@ const ApprovalEdit = () => {
       <div className="index-box">
         <div className={classes['inner-container']}>
           <div className={classes['approval__document']}>
-            <ApprovalEditButtons temp={temp} />
+            <ApprovalEditButtons temp={temp} type={'top'} />
 
             <div className={classes['approval-wrapper']}>
               {isCreate ? (
@@ -69,6 +69,12 @@ const ApprovalEdit = () => {
 
               <ApprovalAttachment />
             </div>
+            <ApprovalEditButtons
+              temp={temp}
+              className={classes['approval-btn-box__bottom']}
+              type={'bottom'}
+            />
+            {/* TODO: 댯글은 create제외 다 보이게 */}
             {!isCreate && !temp && <ApprovalComment />}
           </div>
         </div>

@@ -37,7 +37,7 @@ const LoginForm: React.FC = () => {
     try {
       await login(username, password);
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
+      if (error.response && error.response.status === 400) {
         if (error.response.data.message === '자격 증명에 실패하였습니다.') {
           setMsg('아이디 또는 비밀번호를 잘못 입력했습니다.');
         }

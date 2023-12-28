@@ -78,6 +78,8 @@ export type ApprovalListItem = {
   submitDate: null;
   title: string;
   index: number;
+  fileCount: number;
+  commentCount: number;
 };
 
 export interface SearchBoxOption {

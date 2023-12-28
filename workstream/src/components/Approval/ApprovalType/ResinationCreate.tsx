@@ -114,9 +114,9 @@ const ResinationCreate = () => {
     const reasonRetirement = e.target.value;
     const newLength = reasonRetirement.length;
 
-    // 200자를 초과하면 알림 표시
+    // 150자를 초과하면 알림 표시
     if (newLength > 150) {
-      alert('퇴직사유는 100자를 초과할 수 없습니다.');
+      alert('퇴직사유는 150자를 초과할 수 없습니다.');
       return;
     }
     setFormData(prevData => ({
@@ -243,6 +243,15 @@ const ResinationCreate = () => {
               <tr>
                 <th>퇴직 사유</th>
                 <td colSpan={6} className={classes['update-input']}>
+                  {/*                   <select>
+                    <option value="개인사정">개인사정</option>
+                    <option value="이직">이직</option>
+                    <option value="급여불만족">급여 불만족</option>
+                    <option value="근무환경불만족">근무환경 불만족</option>
+                    <option value="상사/동료와의갈등">상사/동료와의 갈등</option>
+                    <option value="업무가적성에맞지않으">업무가 적성에 맞지 않음</option>
+                    <option value="">기타</option>
+                  </select> */}
                   <textarea
                     placeholder="퇴직 사유는 10자 이상 입력해주세요."
                     className={classes['body-table__input']}

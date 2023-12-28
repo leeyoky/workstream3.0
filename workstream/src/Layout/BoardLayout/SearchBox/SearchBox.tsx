@@ -37,6 +37,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
     }
   };
 
+  const resetFilter = () => {
+    dispatch(uiActions.resetSearchInput());
+  };
+
   return (
     <div className="board-search-wrapper">
       <div className="board-search">
@@ -68,11 +72,16 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
             )}
           </div>
         ))}
-        <div className="board-search-tag">
-          <button className="search-btn" onClick={searchHandler}>
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
+      </div>
+      <div className="search-btn-wrapper">
+        <button className="search-btn" onClick={searchHandler}>
+          <span>검색</span>
+          <i className="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button className="reset-btn" onClick={resetFilter}>
+          <span>초기화</span>
+          <i className="fa-solid fa-arrow-rotate-left"></i>
+        </button>
       </div>
     </div>
   );

@@ -57,6 +57,22 @@
   color: #ecaa1b;
   padding: 2px 9px 2px 9px;
 }
+.btn-secondary-blue{
+  background-color: #2B3499;
+  color: white;
+  font-weight: 500;
+}
+.btn-secondary-blue:hover{
+  background-color: #212875;
+  transition: all 0.3s ease; 
+}
+.btn-secondary-blue-line {
+  border: 1px solid #262e8f;
+  transition: all 0.3s ease; 
+  background-color: #ffffff;
+  color: #2B3499;
+  padding: 2px 9px 2px 9px;
+}
 
 .btn-primary { 
   background-color: #ff9900; 
@@ -137,7 +153,7 @@
 /* badge */
 .status-badge {
   width: 100px;
-  font-weight: 500;
+  font-weight: 800;
   font-size: 9.5pt;
   padding: 3px 0px;
   border-radius: 3px;
@@ -165,8 +181,10 @@
 }
 
 .badge-denger{
-  background-color: #e94c4c;
-  color: #ffffff;
+/*   background-color: #e94c4c;
+  color: #ffffff; */
+  background-color: #f5d6d6;
+  color: #d43131;
 }
 .badge-accent{
   background-color: #2B3499;
@@ -174,18 +192,26 @@
 }
 
 .badge-info{
-  background-color: #3979AA;
-  color: #ffffff;
+/*   background-color: #3979AA;
+  color: #ffffff; */
+  background-color: #cee0ee;
+  color: #236aa0;
 }
 .badge-success,
 .btn-green{
-  background-color: #34b970;
+  background-color: #c8f1e3;
+  color: #1aa771;
+}
+.btn-green{
+  background-color: #1fa571;
   color: #ffffff;
 }
 
 .badge-warning{
-  background-color: #ffb820;
-  color: #ffffff;
+/*   background-color: #ffb820;
+  color: #ffffff; */
+  background-color: #f7e6c6;
+  color: #e0a119;
 }
 
 

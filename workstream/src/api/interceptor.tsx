@@ -38,7 +38,6 @@ const createAxiosInstance = () => {
       if (error.response && error.response.status === 401) {
         const newAccessToken = error.response.headers.authorization;
         if (newAccessToken) {
-          // console.log('새 토큰: ', newAccessToken);
           localStorage.removeItem('token');
           localStorage.setItem('token', newAccessToken.replace('Bearer ', ''));
           originalConfig.headers = {
@@ -48,8 +47,8 @@ const createAxiosInstance = () => {
         } else if (newAccessToken === null || newAccessToken === undefined) {
           // console.log('리프레시토큰 만료 ', newAccessToken);
           localStorage.removeItem('token');
-          store.dispatch(authActions.logout());
           alert('토큰 만료로 인해 로그아웃 되었습니다.');
+          store.dispatch(authActions.logout());
           window.location.href = '/login';
         }
       }

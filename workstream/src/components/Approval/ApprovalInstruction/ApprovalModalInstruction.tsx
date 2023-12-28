@@ -6,8 +6,8 @@ import { RootState } from '../../../store';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-import useApprovalRequest from './../../../hooks/Approval/useApprovalRequest';
 import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
+import useApprovalAction from '../../../hooks/Approval/useApprovalAction';
 interface ApprovalModalInstructionProps {
   onClose: () => void; // 모달 닫기 핸들러
 }
@@ -20,7 +20,7 @@ const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props 
   const userData = useSelector((state: RootState) => state.auth.userInfo?.empNo);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const documentData = useDocumentData(documentType, id)?.data;
-  const { instructionHandler } = useApprovalRequest();
+  const { instructionHandler } = useApprovalAction();
   const dispatch = useDispatch();
 
   const matchingId = documentData?.line?.find(approval => approval.approver === userData)?.id || 0;

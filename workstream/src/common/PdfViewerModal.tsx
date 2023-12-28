@@ -5,6 +5,8 @@ import { Worker, Viewer, ZoomEvent } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/zoom/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { getFileData } from '../api/axios';
+import { AxiosResponse } from 'axios';
 
 const PdfViewerModal: React.FC<{
   isOpen: boolean;
@@ -15,11 +17,9 @@ const PdfViewerModal: React.FC<{
 
   useEffect(() => {
     const fetchPdfUrl = async () => {
-      const downloadUrl = `${import.meta.env.VITE_REACT_APP_API_BASE_URL}approval/file/${file.id}`;
-
       try {
-        const response = await fetch(downloadUrl);
-        const blob = await response.blob();
+        const response: AxiosResponse<Blob> = await getFileData(file.id);
+        const blob = response.data;
         const objectUrl = URL.createObjectURL(blob);
         setPdfUrl(objectUrl);
       } catch (error) {
@@ -50,7 +50,7 @@ const PdfViewerModal: React.FC<{
               display: 'flex',
               flexDirection: 'column',
               height: '800px',
-              width: '750px',
+              width: '850px',
             }}>
             <div
               style={{

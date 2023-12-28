@@ -1,4 +1,4 @@
-import { Employee } from '../../../types/Approval/Approaval';
+import { Employee } from '../types/Approval/Approaval';
 
 const getOrderForApprovers = (approvers: Employee[], agreementType: string) => {
   let order = 0;

@@ -1,12 +1,12 @@
 import jsPDF from 'jspdf';
 
 export interface serverFile {
-  id: number,
-  docNumber: string,
-  docType: string,
-  fileExtension: string,
-  fileName: string,
-  fileSize: number,
+  id: number;
+  docNumber: string;
+  docType: string;
+  fileExtension: string;
+  fileName: string;
+  fileSize: number;
 }
 
 declare global {

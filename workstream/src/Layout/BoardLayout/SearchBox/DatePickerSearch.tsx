@@ -13,7 +13,7 @@ interface DatePickerSearchProps {
   setLocalSearchInput: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 }
 
-const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ setLocalSearchInput }) => {
+const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ tag, setLocalSearchInput }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -31,7 +31,7 @@ const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ setLocalSearchInput
 
   const handleStartDateChange = (date: Date | null) => {
     setStartDate(date);
-    updateLocalSearchInput(date, endDate);
+    updateLocalSearchInput(date, endDate, tag.name);
   };
 
   const handleEndDateChange = (date: Date | null) => {
@@ -41,31 +41,31 @@ const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ setLocalSearchInput
       setEndDate(null);
     } else {
       setEndDate(date);
-      updateLocalSearchInput(startDate, date);
+      updateLocalSearchInput(startDate, endDate, tag.name);
     }
   };
 
-  const updateLocalSearchInput = (start: Date | null, end: Date | null) => {
-    setLocalSearchInput((prev) => ({
+  const updateLocalSearchInput = (start: Date | null, end: Date | null, name: string) => {
+    setLocalSearchInput(prev => ({
       ...prev,
-      regDateGoe: formatToYMD(start),
-      regDateLoe: formatToYMD(end),
+      [`${name}Goe`]: formatToYMD(start),
+      [`${name}Loe`]: formatToYMD(end),
     }));
   };
 
   return (
-    <div className='datepicker-searchbox__wrapper'>
+    <div className="datepicker-searchbox__wrapper">
       <DatePick
-        placeholderText='시작일'
+        placeholderText="시작일"
         selected={startDate}
-        onChange={(date) => handleStartDateChange(date)}
+        onChange={date => handleStartDateChange(date)}
         dateFormat="yyyy-MM-dd"
       />
       <span>~</span>
       <DatePick
-        placeholderText='종료일'
+        placeholderText="종료일"
         selected={endDate}
-        onChange={(date) => handleEndDateChange(date)}
+        onChange={date => handleEndDateChange(date)}
         dateFormat="yyyy-MM-dd"
       />
     </div>

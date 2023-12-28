@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FileState {
   files: File[];
@@ -20,9 +20,12 @@ const fileSlice = createSlice({
     updateServerFiles(state, action) {
       state.serverFiles = action.payload;
     },
-    resetFiles(state){
+    resetFiles(state) {
       state.files = [];
-    }
+    },
+    resetServerFiles(state) {
+      state.serverFiles = [];
+    },
   },
 });
 

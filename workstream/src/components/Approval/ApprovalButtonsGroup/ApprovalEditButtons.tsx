@@ -12,12 +12,16 @@ import usePdfDownload from '../../../hooks/Approval/usePdfDownload';
 
 type ApprovalEditButtonsProps = {
   temp: boolean;
+  className?: string;
+  type: string;
+  targetRef?: React.RefObject<any>;
 };
-const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
+const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, temp, type }) => {
   const {
     id,
     isModalOpen,
     isRefModalOpen,
+
     handleShowModal,
     handleShowRefModal,
     handleCloseModal,
@@ -47,6 +51,8 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
   const userData = useSelector((state: RootState) => state.auth.userInfo?.empNo);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const documentData = useDocumentData(documentType, id)?.data;
+
+  const buttonsLocation = type === 'bottom' ? className : '';
 
   useEffect(() => {
     setApprovedYn(prev => {
@@ -78,6 +84,17 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
       : isResignationData(documentData)
       ? documentData.resignation.regUsr
       : '';
+
+  /* 버튼을 누르면 의견 화면으로 스크롤 해줌  */
+  const goComment = () => {
+    const targetElement = document.getElementById('approval-comment');
+    if (targetElement) {
+      window.scrollTo({
+        top: targetElement.offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   const isFinishedDocumnt = isApproved === 'APPROVED' || isApproved === 'REJECTED';
   const matchingId = documentData?.line?.find(approval => approval.approver === userData)?.id || 0;
@@ -200,6 +217,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
               <i className="fa-solid fa-rotate-left"></i>
             </button>
           )}
+
           {isFinishedDocumnt &&
             regUsrNo === memoizedValues.userData &&
             documentType === 'APPROVAL_COMMON' && (
@@ -217,7 +235,15 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ temp }) => {
   );
 
   return (
-    <div className={classes['btn-group']}>
+    <div className={`${classes['btn-group']} ${buttonsLocation}`}>
+      {type !== 'bottom' && !isEdit && !isRevise && (
+        <button className="btn btn-secondary-blue-line first-child" onClick={goComment}>
+          <span>
+            <span> {documentData?.comment.length}개</span>의 의견
+          </span>
+          <i className="fa-regular fa-comments"></i>
+        </button>
+      )}
       {!memoizedValues.isDetail ? renderGeneralButtons() : renderDetailButtons()}
       <button className="btn btn-border" onClick={goBackPage}>
         <span>문서함이동</span>

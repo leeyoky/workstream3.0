@@ -36,7 +36,7 @@ input[type="file"] {
     border: 0;
 }
 .RRnumber {
-  width: 23% !important;
+  width: 35% !important;
   font-weight: 500;
 }
 .RRnumber::placeholder {
@@ -229,7 +229,7 @@ footer p {
   justify-content: flex-start;
 }
 .reference-table input::placeholder {
-  font-size: 9pt;
+  font-size: 8pt;
   font-weight: 400;
   color: #a0a0a0;
 }
@@ -306,7 +306,7 @@ footer p {
   text-align: center;
 }
 .header-table__common input::placeholder {
-  font-size: 9.5pt;
+  font-size: 8pt;
   font-weight: 400;
   color: #8f8f8f;
 }
@@ -358,7 +358,8 @@ footer p {
   border: none;
   padding: 0;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 9pt;
 }
 
 .approver-content,
@@ -599,7 +600,7 @@ footer p {
   padding: 2px
 }
 .update-input textarea::placeholder{
-  font-size: 10pt;
+  font-size: 9pt;
   font-weight: 500;
   display: flex;
   justify-content: center;
@@ -607,6 +608,9 @@ footer p {
   text-align: center;
   padding-top: 10px;
   color: #a5a5a5;
+}
+.update-input input::placeholder{
+  font-size: 8.5pt;
 }
 
 /* approval Attachment */
@@ -754,6 +758,8 @@ footer p {
   font-size: 9pt;
   display: flex;
   line-height: 1.5rem;
+  background-color: #ffffffb5;
+  z-index: 2;
 }
 .file-list span {
   display: flex;
@@ -764,7 +770,7 @@ footer p {
   margin-left: 5px;
 }
 .file-list button{
-  background-color: #fff;
+  background-color: #fff0;
   display: flex;
   align-items: center;
 }
@@ -841,8 +847,8 @@ footer p {
   display: flex;
   width: 100%;
   margin-left: 5px;
-  font-size: 11pt;
-  font-weight: 500;
+  font-size: 10pt;
+  font-weight: 600;
   letter-spacing: -1pt;
   flex-direction: column;
 }
@@ -958,3 +964,4 @@ footer p {
   font-weight: 900;
   font-size: 14pt;
 }
+

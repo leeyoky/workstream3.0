@@ -37,7 +37,7 @@ const Signature = () => {
       <th className={classes['header-table__approval-th']} key={index}>
         <div>
           <span className={classes['approver-index']}>
-            {order !== undefined ? <div>{order + 1}</div> : null}
+            {order !== undefined && approvers.length > 0 ? <div>{order + 1}</div> : null}
           </span>
           {content}
         </div>

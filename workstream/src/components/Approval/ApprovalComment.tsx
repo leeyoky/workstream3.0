@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   deleteComment,
@@ -7,14 +7,13 @@ import {
   getResignationData,
   updateComment,
 } from '../../api/axios';
-import { formatDateOnly } from '../../helpers/formatDateTime';
+import { formatDateMinutes } from '../../helpers/formatDateTime';
 import classes from '../../pages/Approval/Approval.module.css';
-import { ApprovalData, CommentItem } from '../../types/Approval/Approaval';
+import { ApprovalData, CommentItem, ResignationData } from '../../types/Approval/Approaval';
 import Alert from '../../Layout/Alert/Alert';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
-import { isApprovalData, isResignationData } from '../../helpers/Approval';
 
 const ApprovalComment = () => {
   const { id = '' } = useParams<string>();
@@ -26,20 +25,19 @@ const ApprovalComment = () => {
   const [commentStates, setCommentStates] = useState<string[]>([]); // 수정된 부분: 빈 배열로 초기화
   const [dataChanged, setDataChanged] = useState(false);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
+  const loginUserInfo = useSelector((state: RootState) => state.user.userInfo);
+  const loginUser = useSelector((state: RootState) => state.user.userInfo.empNo);
+  const { data } = useDocumentData(documentType, id);
 
-  const data = useDocumentData(documentType, id)?.data;
-
-  const getState = data
+  const regUser = data
     ? documentType === 'APPROVAL_COMMON'
-      ? isApprovalData(data)
-        ? data.approval.state
-        : ''
-      : isResignationData(data)
-      ? data.resignation.state
-      : ''
+      ? (data as ApprovalData).approval.regUsr
+      : (data as ResignationData).resignation.regUsr
     : '';
 
-  const isFinal = getState !== 'REJECTED' && getState !== 'APPROVED';
+  const isApprover = data?.line.some(approver => approver.approver === loginUser);
+  const isSameUser = loginUser === regUser;
+  const targetRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async (id: string) => {
@@ -53,6 +51,8 @@ const ApprovalComment = () => {
         }
         if (response && response.data) {
           const data = response.data;
+          console.log('comment: ', data);
+
           setDataChanged(false);
           setListData(data);
           setCommentStates(data?.comment.map((item: CommentItem) => item.comment) || []);
@@ -69,6 +69,12 @@ const ApprovalComment = () => {
 
   const commentChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>, index: number) => {
     const inputComment = e.target.value;
+    const newLength = inputComment.length;
+
+    if (newLength > 100) {
+      setAlertMessage2('의견은 200자를 초과할 수 없습니다.');
+      return;
+    }
 
     const newCommentStates = [...commentStates];
     newCommentStates[index] = inputComment;
@@ -162,13 +168,16 @@ const ApprovalComment = () => {
   };
 
   return (
-    <div className={classes['comment-wrapper']}>
+    <div className={classes['comment-wrapper']} ref={targetRef} id="approval-comment">
       <h2>
         의견
         <i className="fa-regular fa-comment"></i>
       </h2>
       <hr />
-      {isFinal && (
+      {/* 의견 등록 form
+          글쓴이 + 결재line 사람
+       */}
+      {(isApprover || isSameUser) && (
         <div className={classes['comment-container']}>
           <div className={classes['comment-input-wrapper']}>
             <textarea spellCheck={false} value={comment} onChange={commentHandler} />
@@ -210,15 +219,15 @@ const ApprovalComment = () => {
                 </span>
                 <span className={classes['comment-date']}>
                   {item.regDate !== item.modDate ? (
-                    <span>(수정됨) {formatDateOnly(item.modDate)}</span>
+                    <span>(수정됨) {formatDateMinutes(item.modDate)}</span>
                   ) : (
-                    <span>{formatDateOnly(item.regDate)}</span>
+                    <span>{formatDateMinutes(item.regDate)}</span>
                   )}
                 </span>
               </p>
             )}
           </div>
-          {isFinal && (
+          {item.regUsr === loginUserInfo.empNo && (
             <div className={classes['comment-button-box']}>
               {editCommentIndex !== index ? (
                 <>
@@ -246,14 +255,6 @@ const ApprovalComment = () => {
       {alertMessage && (
         <Alert message={alertMessage} onClose={closeAlertHandler} type="alert" response={true} />
       )}
-      {/* {confirmMsg && (
-        <Alert
-          className="alert-fail"
-          message={confirmMsg}
-          type="confirm"
-          onClose={closeAlertHandler}
-        />
-      )} */}
       {alertMessage2 && (
         <Alert
           className="alert-fail"

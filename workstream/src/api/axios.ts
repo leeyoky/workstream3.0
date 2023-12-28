@@ -6,6 +6,7 @@ import {
   approveResultData,
   resinationDocData,
 } from '../types/Approval/Approaval';
+import { AxiosResponse } from 'axios';
 
 export function login(formData: FormData) {
   return instance.post('login', formData);
@@ -69,8 +70,8 @@ export function fetchFileData(formData: FormData) {
 }
 
 // 첨부파일 다운로드
-export function getFileData(fileId: number) {
-  return instance.get(`approval/file/${fileId}`);
+export function getFileData(fileId: number): Promise<AxiosResponse<Blob>> {
+  return instance.get(`approval/file/${fileId}`, { responseType: 'blob' });
 }
 
 // 첨부파일 삭제
@@ -144,6 +145,8 @@ export function getApprovalList(params: {
   sort?: string;
   regDateGoe: string /* 시작일 */;
   regDateLoe: string /* 종료일 */;
+  executeDateGoe: string /* 시행일자 시작일 */;
+  executeDateLoe: string /* 시행일자 종료일 */;
 }) {
   const queryString = Object.keys(params as Record<string, any>)
     .filter(key => (params as Record<string, any>)[key] !== undefined)

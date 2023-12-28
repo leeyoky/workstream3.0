@@ -25,8 +25,18 @@ export function useApprovalList(sortValue: string) {
 
   const fetchApprovalList = async () => {
     try {
-      const { id, title, deptCd, docType, regUsrNm, state, regDateGoe, regDateLoe } =
-        getSearchInput;
+      const {
+        id,
+        title,
+        deptCd,
+        docType,
+        regUsrNm,
+        state,
+        regDateGoe,
+        regDateLoe,
+        executeDateGoe,
+        executeDateLoe,
+      } = getSearchInput;
 
       let pendingApproval = '';
       let selectedState = state;
@@ -63,12 +73,16 @@ export function useApprovalList(sortValue: string) {
         sort: sortValue + 'modDate,desc',
         regDateGoe: regDateGoe,
         regDateLoe: regDateLoe,
+        executeDateGoe: executeDateGoe,
+        executeDateLoe: executeDateLoe,
       });
 
       const data = response.data.content.map((item: any, index: number) => {
         // 각 항목에 'index' 속성을 추가합니다.
         return { ...item, index: getPage * getPageSize + index + 1 };
       });
+      console.log(data);
+
       const getTotalElements = response.data.totalElements;
       setListData(data);
       setTotalItems(getTotalElements);
@@ -82,7 +96,6 @@ export function useApprovalList(sortValue: string) {
     try {
       const response = await countDoucumentType();
       const data = response.data;
-      // console.log(data);
       setDocuemntCnt(data);
       dispatch(selectedActions.setDocumentCnt(data));
     } catch (error) {

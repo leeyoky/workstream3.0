@@ -19,6 +19,7 @@ const SubToolBar = () => {
 
   useEffect(() => {
     setDocumentCnt(getDocumentCnt);
+    console.log('documentCnt', documentCnt);
   }, [getDocumentCnt, dispatch]);
 
   // 클릭한 메뉴 디스패치
@@ -52,11 +53,16 @@ const SubToolBar = () => {
               </span>
               <span className="badge badge-accent">
                 <div className="badge badge-count-box">
-                  {getBadgeCountByLabel(submenu.label) !== undefined && (
-                    <span className={`badge-item ${'sub'} ${submenu.state?.toLowerCase()}`}>
-                      {getBadgeCountByLabel(submenu.label)}
-                    </span>
-                  )}
+                  {getBadgeCountByLabel(submenu.label) !== null &&
+                    getBadgeCountByLabel(submenu.label) !== undefined && (
+                      <span className={`badge-item ${'sub'} ${submenu.state?.toLowerCase()}`}>
+                        {(() => {
+                          const badgeCount = getBadgeCountByLabel(submenu.label);
+                          /* console.log(`Badge Count for ${submenu.label}:`, badgeCount); */
+                          return badgeCount;
+                        })()}
+                      </span>
+                    )}
                 </div>
               </span>
             </NavLink>
@@ -79,7 +85,9 @@ const SubToolBar = () => {
                     <div className="badge badge-count-box">
                       {getBadgeCountByLabel(item.label) !== undefined && (
                         <span className={`badge-item ${'sub'}`}>
-                          {getBadgeCountByLabel(item.label)}
+                          {getBadgeCountByLabel(item.label) === undefined
+                            ? null
+                            : getBadgeCountByLabel(item.label)}
                         </span>
                       )}
                     </div>
@@ -115,6 +123,8 @@ const SubToolBar = () => {
         documentCnt.approvedCount;
       return totalCount !== 0 ? totalCount : undefined;
     }
+
+    return undefined;
   };
 
   return (

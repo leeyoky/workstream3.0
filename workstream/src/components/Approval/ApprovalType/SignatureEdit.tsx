@@ -10,7 +10,7 @@ import { selectedActions } from '../../../store/Approval/approval-slice';
 import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
 import { APPROVAL_STATUS, COLUMN_LIMITS } from '../../../constants/constants';
 import { getUserInfo } from '../../../api/axios';
-import { isApprovalData, isResignationData } from '../../../helpers/Approval';
+import { isApprovalData, isResignationData } from '../../../helpers/approval';
 const SignatureEdit = () => {
   const [newApprovers, setNewApprovers] = useState<
     {
@@ -171,7 +171,7 @@ const SignatureEdit = () => {
               <div className={classes['approver-complete-container']}>
                 {!isEditMode && (
                   <>
-                    <span className={getApprovalResultClass('Y')}>승 인</span>
+                    <span className={getApprovalResultClass('Y')}>결 재</span>
                     <span className={classes['approver-complete-date']}>{specialModDate}</span>
                   </>
                 )}
@@ -194,11 +194,25 @@ const SignatureEdit = () => {
           ? '반 려'
           : '대 기';
 
+      const documentState =
+        documentType === 'APPROVAL_COMMON'
+          ? isApprovalData(data)
+            ? `${data.approval.state}`
+            : ''
+          : isResignationData(data)
+          ? `${data.resignation.state}`
+          : '';
+
+      /* 반려상태인 경우 대기 중인 뒷 결재자들의 상태를 표시하지 않음 */
+      const shouldRenderResultText =
+        documentState !== 'REJECTED' || (documentState === 'REJECTED' && resultText !== '대 기');
+
       return (
         <td className={classes['approver-content']}>
           <div className={classes['approver-content-item-container']}>
             <div className={classes['approver-complete-container']}>
-              {!isEditMode && !isRevise && (
+              {!isEditMode && !isRevise && shouldRenderResultText && (
+                /* documentState ===  */
                 <span className={getApprovalResultClass(approvedYn)}>{resultText}</span>
               )}
               {(approvedYn === 'Y' || approvedYn === 'R') && !isRevise && (
@@ -266,7 +280,7 @@ const SignatureEdit = () => {
       <table className={classes['header-table']}>
         <tbody>
           <tr>
-            <th rowSpan={2}>결재</th>
+            <th rowSpan={2}>승 인</th>
             {renderHeader(userInfo?.empNm, 0, -1)}
             {Array.from({
               length: Math.min(MAX_APPROVAL, Math.max(MIN_APPROVAL, approvalColumnCount)) - 1,

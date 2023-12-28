@@ -19,32 +19,33 @@ const ApprovalEmpLineSelect: React.FC<ApprovalSelectProps> = ({
   selectChangeAgreementHandler,
   removeAllHandler,
 }) => {
-  const isReference = useSelector((state: RootState ) => state.approval.isReference)
+  const isReference = useSelector((state: RootState) => state.approval.isReference);
   const lineSelector = useSelector((state: RootState) => state.approval.selectedOption);
 
   return (
     <div className={classes['card-header']}>
       <p>결재라인 방식 선택</p>
       <hr />
-      <div className={`${classes['emp-list__result-select-wrapper']} ${isReference ? classes['emp-list__result-select-wrapper__ref'] : ''}`}>
+      <div
+        className={`${classes['emp-list__result-select-wrapper']} ${
+          isReference ? classes['emp-list__result-select-wrapper__ref'] : ''
+        }`}>
         <div className={classes['line-select_select-box']}>
           <select
             className={classes['emp-list__result-select']}
             value={selectedOption}
-            onChange={selectChangeHandler}
-          >
+            onChange={selectChangeHandler}>
             <option value="approval">결재</option>
             <option value="addAgreement">결재+합의</option>
           </select>
-          { lineSelector === 'addAgreement' && (
+          {lineSelector === 'addAgreement' && (
             <select
-            className={classes['emp-list__result-select__agr']}
-            value={selectedAgreeOption}
-            onChange={selectChangeAgreementHandler}
-          >
-            <option value="sequential">합의 순차방식</option>
-            <option value="parallel">합의 병렬방식</option>
-          </select>
+              className={classes['emp-list__result-select__agr']}
+              value={selectedAgreeOption}
+              onChange={selectChangeAgreementHandler}>
+              <option value="sequential">합의 순차방식</option>
+              <option value="parallel">합의 병렬방식</option>
+            </select>
           )}
         </div>
         <div className={classes['control-button-group']}>

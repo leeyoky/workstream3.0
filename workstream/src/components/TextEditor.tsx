@@ -29,15 +29,15 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
     const textLength = textOnly.length;
     const includeHTMLData = data.length;
 
-    if (textLength > 1000) {
+    if (textLength > 10000) {
+      const trimmedData = textOnly.substring(0, 9900);
       alert('내용은 1000자를 초과할 수 없습니다.');
-      const trimmedData = data.substring(0, 980);
       editor.setData(trimmedData);
       dispatch(selectedActions.setContent(trimmedData));
       return;
-    } else if (includeHTMLData > 3000) {
+    } else if (includeHTMLData > 30000) {
+      const trimmedData = data.substring(0, 29800);
       alert('텍스트 용량이 너무 큽니다.');
-      const trimmedData = data.substring(0, 2980);
       editor.setData(trimmedData);
       dispatch(selectedActions.setContent(trimmedData));
       return;

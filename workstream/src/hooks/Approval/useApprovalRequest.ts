@@ -15,6 +15,7 @@ import {
 import { AxiosError } from 'axios';
 import { userActions } from '../../store/User/user-slice';
 import { uiActions } from '../../store/ui-slice';
+import { fileActions } from '../../store/file-slice';
 
 const useApprovalRequest = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,6 +86,8 @@ const useApprovalRequest = () => {
   const changeTempModeHandler = (reqestType: 'Y' | 'N') => {
     if (reqestType === 'Y') {
       dispatch(selectedActions.setIsReviseMode(true));
+      dispatch(fileActions.resetFiles());
+      dispatch(fileActions.resetServerFiles());
     } else {
       dispatch(selectedActions.setIsReviseMode(false));
     }
@@ -151,7 +154,12 @@ const useApprovalRequest = () => {
             // 파일 데이터가 있는 경우에만 실행
             await fetchFileHandler(responseData.id);
           }
-          alert('결재요청에 성공했습니다.');
+          if (requestType === 'PROCEEDING') {
+            alert('결재요청에 성공했습니다.');
+          } else {
+            alert('임시저장에 성공했습니다.');
+          }
+
           navigate(`/approval/detail/${responseData.id}`);
           setIsDetail(true);
           dispatch(selectedActions.resetArray());

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import classes from '../../pages/Approval/Approval.module.css';
 import { RootState } from '../../store';
-import { Employee, ccDept } from '../../types/Approval/Approaval';
+import { Employee, ccDept, ccUser } from '../../types/Approval/Approaval';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -26,6 +26,11 @@ const ApprovalReference = () => {
       rankNm: string;
     }[]
   >([]);
+  const [ccArr, setCcArr] = useState<
+    {
+      name: string;
+    }[]
+  >([]);
   const referenceDept = useSelector((state: RootState) => state.approval.ccDept);
   const referenceEmp = useSelector((state: RootState) => state.approval.ccUser);
   const { id = '' } = useParams<string>();
@@ -44,7 +49,6 @@ const ApprovalReference = () => {
         deptNm: ccdept.deptNm,
       }));
       setCcdept(updatedCcDept);
-
       const updatedCcUser = data.ccUser.map(ccUser => ({
         deptNm: ccUser.deptNm,
         empNm: ccUser.empNm,
@@ -54,8 +58,27 @@ const ApprovalReference = () => {
         rankNm: ccUser.rankNm,
       }));
       setCcUser(updatedCcUser);
+
+      const updatedCcArr = generateCcArr(updatedCcDept, updatedCcUser);
+      setCcArr(updatedCcArr);
     }
   }, [data]);
+
+  const generateCcArr = (ccDept: ccDept[], ccUser: ccUser[]): { name: string }[] => {
+    const arr: { name: string }[] = [];
+
+    // ccDept 항목 추가
+    ccDept.forEach(dept => {
+      arr.push({ name: dept.deptNm });
+    });
+
+    // ccUser 항목 추가
+    ccUser.forEach(emp => {
+      arr.push({ name: emp.empNm });
+    });
+
+    return arr;
+  };
 
   useEffect(() => {
     dispatch(selectedActions.setRefDepCd(ccdept));
@@ -75,14 +98,10 @@ const ApprovalReference = () => {
     if (!isEdit) {
       return (
         <>
-          {data?.ccDept.map((dept, index) => (
-            <span className={classes['ccdept']} key={index}>
-              {dept.deptNm},
-            </span>
-          ))}
-          {data?.ccUser.map((emp, index) => (
+          {ccArr.map((item, index) => (
             <span className={classes['ccEmp']} key={index}>
-              {emp.empNm},
+              {item.name}
+              {ccArr.length > 1 && index < ccArr.length - 1 && ','}
             </span>
           ))}
         </>

@@ -123,8 +123,13 @@ const ApprovalTypeSelector: React.FC<ApprovalTypeSelectorProps> = ({ index, name
   let lastApproveButtons = null;
   if (index === approverEmps.length - 1) {
     lastApproveButtons = (
-      <div className={classes['button-box__buttons']}>
-        <button className={classes['last']}>최종 결재</button>
+      <div className={classes['last-approver']}>
+        <div className={classes['button-box__buttons']}>
+          <button className={classes['last']}>최종 결재</button>
+        </div>
+        <span className={classes['button-delete']} onClick={deleteEmp}>
+          <i className="fa-regular fa-trash-can"></i>
+        </span>
       </div>
     );
   }

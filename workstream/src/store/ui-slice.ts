@@ -8,7 +8,7 @@ const uiSlice = createSlice({
     draggingItem: null,
     dropTarget: null,
     selectMenu: null,
-    selectPageSize: 10,
+    selectPageSize: 15,
     selectPage: 0,
     totalItems: 0,
     searchInput: {
@@ -20,6 +20,8 @@ const uiSlice = createSlice({
       state: '',
       regDateGoe: '',
       regDateLoe: '',
+      executeDateGoe: '',
+      executeDateLoe: '',
     },
     date: '',
   },
@@ -61,7 +63,7 @@ const uiSlice = createSlice({
     },
     // resetData
     resetPage(state) {
-      state.selectPageSize = 10;
+      state.selectPageSize = 15;
       state.selectPage = 0;
       state.totalItems = 0;
       state.searchInput.id = '';
@@ -71,6 +73,19 @@ const uiSlice = createSlice({
       state.searchInput.regUsrNm = '';
       state.searchInput.state = '';
       (state.searchInput.regDateGoe = ''), (state.searchInput.regDateLoe = '');
+    },
+    // resetSearchInput
+    resetSearchInput(state) {
+      state.searchInput.id = '';
+      state.searchInput.title = '';
+      state.searchInput.deptCd = '';
+      state.searchInput.docType = '';
+      state.searchInput.regUsrNm = '';
+      state.searchInput.state = '';
+      state.searchInput.regDateLoe = '';
+      state.searchInput.regDateGoe = '';
+      state.searchInput.executeDateGoe = '';
+      state.searchInput.executeDateLoe = '';
     },
     // search
     searchInput(state, action) {

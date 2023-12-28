@@ -13,7 +13,7 @@ const ApprovalPage: React.FC = () => {
   const [sortDirections, setSortDirections] = useState<Record<string, 'asc' | 'desc'>>(
     columns.reduce(
       (acc, column) => {
-        acc[column] = 'asc';
+        acc[column.name] = 'asc';
         return acc;
       },
       {} as Record<string, 'asc' | 'desc'>,
@@ -58,8 +58,11 @@ const ApprovalPage: React.FC = () => {
     if (column === '기안자') {
       newSortValue = sortDirections[column] === 'asc' ? 'regUsr,desc&' : 'regUsr,asc&';
     }
-    if (column === '등록일') {
+    if (column === '기안일자') {
       newSortValue = sortDirections[column] === 'asc' ? 'modDate,desc&' : 'modDate,asc&';
+    }
+    if (column === '시행일자') {
+      newSortValue = sortDirections[column] === 'asc' ? 'executeDate,desc&' : 'executeDate,asc&';
     }
     if (column === '진행현황') {
       newSortValue = sortDirections[column] === 'asc' ? 'state,desc&' : 'state,asc&';
@@ -82,6 +85,8 @@ const ApprovalPage: React.FC = () => {
 
   const memoizedList = useMemo(() => {
     return listData.map((item, index) => {
+      console.log('listData', listData);
+
       const modDate = new Date(item.modDate);
       const formattedRegDate = modDate.toISOString().split('T')[0];
       const documentType = DOCUMENT_TYPES[item.docType] || '';
@@ -96,6 +101,7 @@ const ApprovalPage: React.FC = () => {
           <td>
             <span>{item.id}</span>
           </td>
+
           <td
             className="approval-list-title"
             onClick={() => goDetailPage(true, item.id, item.docType)}>
@@ -114,10 +120,23 @@ const ApprovalPage: React.FC = () => {
             <span>{formattedRegDate}</span>
           </td>
           <td>
+            <span>{item.executeDate ? item.executeDate : '-'}</span>
+          </td>
+          <td>
             {item.lineType === '순차' || item.lineType === '병렬' ? (
               <span>결재+합의</span>
             ) : (
               <span>결재</span>
+            )}
+          </td>
+          <td>
+            <span>{item.commentCount}</span>
+          </td>
+          <td>
+            {item.fileCount > 0 && (
+              <span className="approval-list__paperclip">
+                <i className="fa-solid fa-paperclip"></i>
+              </span>
             )}
           </td>
           <td>
@@ -153,12 +172,12 @@ const ApprovalPage: React.FC = () => {
             <tr>
               {columns.map((column, index) => (
                 <th key={index}>
-                  <span className="table-title-header" onClick={() => sortHandler(column)}>
-                    <span>{column}</span>
-                    {index !== 0 && (
+                  <span className="table-title-header" onClick={() => sortHandler(column.name)}>
+                    <span>{column.name}</span>
+                    {index !== 0 && column.sort === true && (
                       <i
                         className={`fa-solid fa-sort-${
-                          sortDirections[column] === 'asc' ? 'down' : 'up'
+                          sortDirections[column.name] === 'asc' ? 'down' : 'up'
                         }`}></i>
                     )}
                   </span>
@@ -171,7 +190,7 @@ const ApprovalPage: React.FC = () => {
               memoizedList
             ) : (
               <tr className="table-not-exist">
-                <td colSpan={8}>작성된 글이 없습니다.</td>
+                <td colSpan={12}>작성된 글이 없습니다.</td>
               </tr>
             )}
           </tbody>

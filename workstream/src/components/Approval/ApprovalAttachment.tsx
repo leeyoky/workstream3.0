@@ -17,6 +17,7 @@ const ApprovalAttachment = () => {
   const [isFileSelected, setIsFileSelected] = useState(false);
   const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
   const isDetailMode = useSelector((state: RootState) => state.approval.isDetailMode);
+  const isReviseMode = useSelector((state: RootState) => state.approval.isReviseMode);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const loginUser = useSelector((state: RootState) => state.user.userInfo.empNo);
   const { id = '' } = useParams();
@@ -129,6 +130,7 @@ const ApprovalAttachment = () => {
   };
 
   const openPdfViewer = (file: CommonData['files'][0]) => {
+    // 작성자가 아니면 첨부파일 뷰어만 가능
     setSelectedFile(file);
     setIsPdfViewerOpen(true);
   };
@@ -160,7 +162,10 @@ const ApprovalAttachment = () => {
                 }`}>
                 <ul>
                   {/* 임시저장일때 */}
-                  {isServerFile?.files && isServerFile?.files.length > 0 && isDetailMode ? (
+                  {isServerFile?.files &&
+                  isServerFile?.files.length > 0 &&
+                  isDetailMode &&
+                  !isReviseMode ? (
                     <>
                       {isServerFile.files.map((item, index) => (
                         <li key={index}>
@@ -248,7 +253,7 @@ const ApprovalAttachment = () => {
                       ) : (
                         <>
                           <span onClick={() => openPdfViewer(item)}>{item.fileName}</span>
-                          <button>
+                          <button onClick={() => openPdfViewer(item)}>
                             <i className="fa-regular fa-file-pdf"></i>
                           </button>
                         </>

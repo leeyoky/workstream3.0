@@ -7,7 +7,10 @@ interface ApprovalAgreementProps {
   agreementEmployees: string[]; // 합의 직원 이름 배열 추가
 }
 
-const ApprovalAgreement: React.FC<ApprovalAgreementProps> = ({ agreementItems, agreementEmployees }) => {
+const ApprovalAgreement: React.FC<ApprovalAgreementProps> = ({
+  agreementItems,
+  agreementEmployees,
+}) => {
   return (
     <div className={classes['emp-list__agreement']}>
       {agreementItems.map((item, index) => (
@@ -21,8 +24,8 @@ const ApprovalAgreement: React.FC<ApprovalAgreementProps> = ({ agreementItems, a
             </div>
             {agreementEmployees[index] ? (
               <>
-              <i className="fa-solid fa-user"></i>
-              <span>{agreementEmployees[index]}</span>
+                <i className="fa-solid fa-user"></i>
+                <span>{agreementEmployees[index]}</span>
               </>
             ) : (
               <span>&nbsp;</span>

@@ -56,12 +56,12 @@ const usePhoneValidation = () => {
     const phoneFilterNumber = phoneValue
       .replace(/\D/g, '')
       .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
-    const containsNonDigit = /\D/.test(phoneValue);
+    /*     const containsNonDigit = /\D/.test(phoneValue);
 
     if (containsNonDigit) {
       alert('숫자 이외의 문자는 입력할 수 없습니다.');
       return;
-    }
+    } */
 
     if (getLengthWithoutHyphen(phoneFilterNumber) > 11) {
       alert('전화번호부 양식이 맞지 않습니다.');

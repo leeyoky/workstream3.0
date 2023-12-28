@@ -1,8 +1,8 @@
 /**
  * 연-월-일 시:분:초 반환 함수
- * 
- * @param datetimeString 
- * @returns 
+ *
+ * @param datetimeString
+ * @returns
  */
 export function formatDateTime(datetimeString: string): string {
   // 'T'를 공백으로 교체
@@ -22,9 +22,9 @@ export function formatDateTime(datetimeString: string): string {
 
 /**
  * 연-월-일 시:분 반환함수
- * 
- * @param datetimeString 
- * @returns 
+ *
+ * @param datetimeString
+ * @returns
  */
 export function formatDateMinutes(datetimeString: string): string {
   // 'T'를 공백으로 교체
@@ -43,15 +43,15 @@ export function formatDateMinutes(datetimeString: string): string {
 
 /**
  * 연-월-일 반환 함수
- * 
- * @param datetimeString 
- * @returns 
+ *
+ * @param datetimeString
+ * @returns
  */
 export function formatDateOnly(datetimeString: string): string {
   if (!datetimeString) {
     return ''; // 빈 문자열 또는 다른 기본값을 반환하거나 오류 처리를 수행
   }
-  
+
   // 'T'를 공백으로 교체
   datetimeString = datetimeString.replace('T', ' ');
 
@@ -67,9 +67,9 @@ export function formatDateOnly(datetimeString: string): string {
 /**
  * 오늘 날짜를 연-월-일 형식을 선택하거나, 연.월.일로 변환하는 함수
  * param을 아무것도 넘기지 않으면 default hyphen
- * 
- * @param format 
- * @returns 
+ *
+ * @param format
+ * @returns
  */
 export function getToday(format: 'hyphen' | 'dot' = 'hyphen') {
   const today = new Date();
@@ -92,12 +92,12 @@ export function getToday(format: 'hyphen' | 'dot' = 'hyphen') {
 
 /**
  * @description 하이픈 제거 함수
- * @param dateString 
- * @returns 
+ * @param dateString
+ * @returns
  */
 
 export const removeHyphens = (dateString: string): string => {
   return dateString.replace(/-/g, '');
-}
+};
 
 export default formatDateTime;

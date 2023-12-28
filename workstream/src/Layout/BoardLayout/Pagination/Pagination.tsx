@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useMemo } from 'react'
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { uiActions } from '../../../store/ui-slice';
 import { RootState } from '../../../store';
@@ -20,10 +20,13 @@ const Pagination = () => {
     if (page >= 0 && page < totalPages) {
       handlePageClick(page);
     }
-  }
+  };
 
   // 페이지 버튼을 동적으로 생성
-  const pages = useMemo(() => Array.from({ length: totalPages }, (_, index) => index), [totalPages]);
+  const pages = useMemo(
+    () => Array.from({ length: totalPages }, (_, index) => index),
+    [totalPages],
+  );
 
   return (
     <div className="pagination">
@@ -33,12 +36,11 @@ const Pagination = () => {
       <button className="previous" onClick={() => goToPage(activePage - 1)}>
         <i className="fa-solid fa-angle-left"></i>
       </button>
-      {pages.map((page) => (
+      {pages.map(page => (
         <button
           key={page}
           className={`page ${activePage === page ? 'active' : ''}`}
-          onClick={() => goToPage(page)}
-        >
+          onClick={() => goToPage(page)}>
           {page + 1}
         </button>
       ))}

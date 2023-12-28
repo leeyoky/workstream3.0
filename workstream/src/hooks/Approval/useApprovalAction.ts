@@ -1,10 +1,9 @@
 import { useSelector } from 'react-redux';
 import { fetchApproveDocument, fetchComment, updateApproveDocument } from '../../api/axios';
 import { selectedActions } from '../../store/Approval/approval-slice';
-import { uiActions } from '../../store/ui-slice';
 import { RootState } from '../../store';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 /**
@@ -17,7 +16,6 @@ const useApprovalAction = () => {
   const instructionComment = useSelector((state: RootState) => state.approval.comment);
 
   const { id = '' } = useParams<string>();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // 지시사항 모달 열기
@@ -77,8 +75,14 @@ const useApprovalAction = () => {
         approvedYn: result,
       };
       try {
+        if (result === 'R' && !commentData.comment.trim()) {
+          alert('반려의 경우 반려 사유는 필수 입력사항입니다.');
+          return;
+        }
+
         if (commentData.comment) {
           const response = await fetchComment(commentData);
+
           if (response.status === 201) {
             dispatch(selectedActions.setComment(''));
           }
@@ -91,8 +95,6 @@ const useApprovalAction = () => {
         if (response.status === 204) {
           setApprovedYn(result);
           alert(`${result === 'Y' ? '결재를 승인하였습니다.' : '결재를 반려하였습니다.'}`);
-          navigate('/approval/pending');
-          dispatch(uiActions.selectMenu('/approval/pending'));
           window.location.reload();
         }
       } catch (error) {
