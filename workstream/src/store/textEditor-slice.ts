@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const textEditorSlice = createSlice({
   name: 'textEditor',
   initialState: {
-    text: '', 
+    text: '',
   },
   reducers: {
     setText: (state, action) => {
@@ -11,7 +11,6 @@ const textEditorSlice = createSlice({
     },
   },
 });
-
 
 export const textEditorActions = textEditorSlice.actions;
 

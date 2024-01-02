@@ -5,8 +5,7 @@ interface AuthState {
   token: string;
   userInfo?: loginUserItem;
 }
-// 한수진 "2022001454"
-// 김원봉 "2022001453"
+
 const initialState: AuthState = {
   isLogin: false,
   token: '',

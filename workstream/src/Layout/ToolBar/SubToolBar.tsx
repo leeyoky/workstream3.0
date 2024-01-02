@@ -19,7 +19,6 @@ const SubToolBar = () => {
 
   useEffect(() => {
     setDocumentCnt(getDocumentCnt);
-    console.log('documentCnt', documentCnt);
   }, [getDocumentCnt, dispatch]);
 
   // 클릭한 메뉴 디스패치

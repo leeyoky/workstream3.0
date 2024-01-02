@@ -11,6 +11,8 @@
   color: #332F29;
 }
 
+
+
 .page-wrapper{
   display: flex;
   flex-direction: column;
@@ -138,6 +140,12 @@ i[name]:hover::after {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+/* 정렬 */
+
+.left-align{
+  text-align: left;
 }
 
 
@@ -795,7 +803,6 @@ i[name]:hover::after {
   align-items: center;
 }
 .sub-toolbar-menu-box li a.active span {
-  font-size: 10.5pt;
   font-weight: 800;
 }
 
@@ -916,6 +923,9 @@ i[name]:hover::after {
   font-size: 10pt;
   margin-left: 3px;
   margin-top: 6px;
+}
+.table-board .fa-sort {
+  margin-left: 3px;
 }
 .table-hover td div {
   display: flex;
@@ -1472,7 +1482,7 @@ i[name]:hover::after {
 /* Page Size */
 .page-size-wrapper{
   display: flex;
-  margin-right: auto;
+  margin-left: auto;
   flex-direction: column;
 }
 .page-size-wrapper select {

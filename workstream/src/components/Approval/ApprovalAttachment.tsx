@@ -12,7 +12,7 @@ import PdfViewerModal from '../../common/PdfViewerModal';
 
 const ApprovalAttachment = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // 새로 추가하는 로컬 파일
-  const [selectedFile, setSelectedFile] = useState<CommonData['files'][0] | null>(null); // Track the selected file
+  const [selectedFile, setSelectedFile] = useState<CommonData['files'][0] | null>(null);
   const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const isEditMode = useSelector((state: RootState) => state.approval.isEditMode);
@@ -35,9 +35,14 @@ const ApprovalAttachment = () => {
   const isSameUser = loginUser === regUser;
 
   useEffect(() => {
+    setSelectedFiles([]);
+  }, [isDetailMode]);
+
+  useEffect(() => {
     setIsServerFile(data);
-    console.log('isSameUser', isSameUser);
-  }, [data]);
+    console.log('isServerFile', isServerFile);
+    console.log('selectedFiles 새로 추가하는 로컬파일 ', selectedFiles);
+  }, [data, selectedFiles]);
 
   const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -49,6 +54,7 @@ const ApprovalAttachment = () => {
     setDrag(false);
   };
 
+  // 드래그 앤 드롭 event
   const dropHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDrag(false);
@@ -63,11 +69,7 @@ const ApprovalAttachment = () => {
     }
   };
 
-  useEffect(() => {
-    setIsFileSelected(selectedFiles.length > 0);
-    dispatch(fileActions.updateSelectedFiles(selectedFiles)); // 파일을 추가하기 전에 dispatch
-  }, [selectedFiles, dispatch, isEditMode]);
-
+  // 파일 선택 event
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files); // 선택한 파일 목록을 배열로 변환
@@ -81,8 +83,24 @@ const ApprovalAttachment = () => {
     }
   };
 
+  useEffect(() => {
+    setIsFileSelected(selectedFiles.length > 0);
+    dispatch(fileActions.updateSelectedFiles(selectedFiles)); // 파일을 추가하기 전에 dispatch
+  }, [selectedFiles, isEditMode]);
+
+  useEffect(() => {
+    setSelectedFiles([]);
+  }, [isEditMode]);
+
+  /* 삭제 할때 로컬 useState랑 api랑 같이 삭제해야함 */
+
   const fileDeleteHandler = (file: File) => {
-    setSelectedFiles(prevFiles => prevFiles.filter(prevFile => prevFile !== file));
+    const confirmMsg = window.confirm('첨부파일을 삭제하시겠습니까?');
+    if (confirmMsg) {
+      setSelectedFiles(prevFiles => prevFiles.filter(prevFile => prevFile !== file));
+    } else {
+      return;
+    }
   };
 
   const fileDeleteAPIHandler = async (fileId: number) => {
@@ -167,6 +185,7 @@ const ApprovalAttachment = () => {
                   isDetailMode &&
                   !isReviseMode ? (
                     <>
+                      {/* api에서 끌어오는 file */}
                       {isServerFile.files.map((item, index) => (
                         <li key={index}>
                           <span>{item.fileName}</span>
@@ -175,6 +194,7 @@ const ApprovalAttachment = () => {
                           </button>
                         </li>
                       ))}
+                      {/* 로컬 state에서 가져오는 file */}
                       {selectedFiles.map((file, index) => (
                         <li key={index}>
                           {file.name}
@@ -238,11 +258,9 @@ const ApprovalAttachment = () => {
                 {data?.files && data?.files.length > 0 ? (
                   data.files.map((item, index) => (
                     <li key={index}>
-                      {isSameUser ? (
+                      <span>{item.fileName}</span>
+                      {isSameUser && (
                         <>
-                          <span onClick={() => fileDownloadHandler(item.id, item.fileName)}>
-                            {item.fileName}
-                          </span>
                           <button onClick={() => fileDownloadHandler(item.id, item.fileName)}>
                             <i className="fa-solid fa-angle-down"></i>
                           </button>
@@ -250,13 +268,11 @@ const ApprovalAttachment = () => {
                             <i className="fa-regular fa-file-pdf"></i>
                           </button>
                         </>
-                      ) : (
-                        <>
-                          <span onClick={() => openPdfViewer(item)}>{item.fileName}</span>
-                          <button onClick={() => openPdfViewer(item)}>
-                            <i className="fa-regular fa-file-pdf"></i>
-                          </button>
-                        </>
+                      )}
+                      {!isSameUser && (
+                        <button onClick={() => fileDownloadHandler(item.id, item.fileName)}>
+                          <i className="fa-solid fa-angle-down"></i>
+                        </button>
                       )}
                     </li>
                   ))

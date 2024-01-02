@@ -8,8 +8,13 @@ import {
 } from '../types/Approval/Approaval';
 import { AxiosResponse } from 'axios';
 
+/* AUTH */
 export function login(formData: FormData) {
   return instance.post('login', formData);
+}
+
+export function logoutUser() {
+  return instance.delete('logout');
 }
 
 export function getUsersInfo() {

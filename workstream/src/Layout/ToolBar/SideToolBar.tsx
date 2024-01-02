@@ -31,10 +31,6 @@ const SideToolBar = () => {
     } */
   }, []);
 
-  useEffect(() => {
-    console.log('documentCnt', documentCnt);
-  }, []);
-
   const toggleSideBar = () => {
     dispatch(uiActions.toggle());
   };

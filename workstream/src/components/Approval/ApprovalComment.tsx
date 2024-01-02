@@ -51,8 +51,6 @@ const ApprovalComment = () => {
         }
         if (response && response.data) {
           const data = response.data;
-          console.log('comment: ', data);
-
           setDataChanged(false);
           setListData(data);
           setCommentStates(data?.comment.map((item: CommentItem) => item.comment) || []);

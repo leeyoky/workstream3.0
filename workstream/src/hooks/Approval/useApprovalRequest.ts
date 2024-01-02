@@ -162,9 +162,11 @@ const useApprovalRequest = () => {
 
           navigate(`/approval/detail/${responseData.id}`);
           setIsDetail(true);
-          dispatch(selectedActions.resetArray());
-          dispatch(userActions.resetArray());
         }
+        dispatch(selectedActions.resetArray());
+        dispatch(userActions.resetArray());
+        dispatch(fileActions.resetServerFiles());
+        dispatch(fileActions.resetFiles());
       } catch (error) {
         console.error(error);
       }

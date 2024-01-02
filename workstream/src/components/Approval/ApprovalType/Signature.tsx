@@ -32,7 +32,6 @@ const Signature = () => {
 
   // 셀 헤더
   const renderHeader = (content: any, index: number, order: any) => {
-    console.log(`Rendering header for index ${index}, order ${order}`);
     return (
       <th className={classes['header-table__approval-th']} key={index}>
         <div>

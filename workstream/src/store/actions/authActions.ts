@@ -1,8 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { authActions } from '../auth-slice';
-import { getLoginUserInfo, getUserInfo, login } from '../../api/axios';
+import { getLoginUserInfo, getUserInfo, login, logoutUser } from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { userActions } from '../User/user-slice';
+import { log } from 'console';
 
 export const useAuthActions = () => {
   const dispatch = useDispatch();
@@ -35,11 +36,15 @@ export const useAuthActions = () => {
   };
 
   /* LOGOUT */
-  const logout = () => {
-    dispatch(authActions.logout());
-    dispatch(authActions.deleteToken());
-    localStorage.clear();
-    console.log('로그아웃');
+  const logout = async () => {
+    try {
+      await logoutUser();
+      dispatch(authActions.logout());
+      dispatch(authActions.deleteToken());
+      localStorage.clear();
+    } catch (error) {
+      console.error();
+    }
 
     //localStorage.removeItem('token');
   };

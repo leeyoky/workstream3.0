@@ -56,6 +56,8 @@ const usePhoneValidation = () => {
     const phoneFilterNumber = phoneValue
       .replace(/\D/g, '')
       .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+
+    // TODO: 문자 이외 입력 못하게 할 때 갯수 오류
     /*     const containsNonDigit = /\D/.test(phoneValue);
 
     if (containsNonDigit) {

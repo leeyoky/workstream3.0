@@ -70,7 +70,7 @@ export function useApprovalList(sortValue: string) {
         deptCd: deptCd,
         docType: docType,
         regUsrNm: regUsrNm,
-        sort: sortValue + 'modDate,desc',
+        sort: sortValue,
         regDateGoe: regDateGoe,
         regDateLoe: regDateLoe,
         executeDateGoe: executeDateGoe,
