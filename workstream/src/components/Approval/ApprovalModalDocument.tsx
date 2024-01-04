@@ -2,17 +2,13 @@ import React, { useState, useEffect } from 'react';
 import classes from '../../pages/Approval/ApprovalSelect.module.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { documentTypes } from '../../pages/Approval/ApprovalSearchTag';
 
 interface ApprovalDocumentTypeProps {
   onChange: (documentType: string) => void;
 }
 
 const ApprovalModalDocument: React.FC<ApprovalDocumentTypeProps> = props => {
-  const documentTypes = [
-    { type: 'APPROVAL_COMMON', label: '기본 품의서' },
-    { type: 'RESIGNATION', label: '사직원' },
-  ];
-
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const [activeDocumentType, setActiveDocumentType] = useState(documentType); // 초기 선택값 설정
   const [selectedDocumentType, setSelectedDocumentType] = useState(documentType);

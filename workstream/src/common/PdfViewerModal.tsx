@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../Layout/Modal/Modal';
 import { zoomPlugin } from '@react-pdf-viewer/zoom';
+import { thumbnailPlugin } from '@react-pdf-viewer/thumbnail';
+import { fullScreenPlugin } from '@react-pdf-viewer/full-screen';
 import { Worker, Viewer, ZoomEvent } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/zoom/lib/styles/index.css';
+import '@react-pdf-viewer/thumbnail/lib/styles/index.css';
+import '@react-pdf-viewer/full-screen/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { getFileData } from '../api/axios';
 import { AxiosResponse } from 'axios';
@@ -32,6 +36,10 @@ const PdfViewerModal: React.FC<{
 
   const zoomPluginInstance = zoomPlugin();
   const { ZoomInButton, ZoomOutButton, ZoomPopover } = zoomPluginInstance;
+  const thumbnailPluginInstance = thumbnailPlugin();
+  const { Thumbnails } = thumbnailPluginInstance;
+  const fullScreenPluginInstance = fullScreenPlugin();
+  const { EnterFullScreen } = fullScreenPluginInstance;
 
   const handleZoom = (e: ZoomEvent) => {
     console.log('Zoom level:', e.scale);
@@ -44,32 +52,26 @@ const PdfViewerModal: React.FC<{
       </div>
       {pdfUrl && (
         <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js`}>
-          <div
-            className="rpv-core__viewer"
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              height: '800px',
-              width: '850px',
-            }}>
-            <div
-              style={{
-                alignItems: 'center',
-                backgroundColor: '#ffffff',
-                display: 'flex',
-                justifyContent: 'center',
-              }}>
+          <div className="rpv-core__viewer">
+            {/* 확대/ 축소 */}
+            <div className="react-pdf-viewer__header">
               <ZoomOutButton />
               <ZoomPopover />
               <ZoomInButton />
+              <EnterFullScreen />
             </div>
-
-            <div
-              style={{
-                flex: 1,
-                overflow: 'hidden',
-              }}>
-              <Viewer fileUrl={pdfUrl} onZoom={handleZoom} plugins={[zoomPluginInstance]} />
+            {/* 썸네일 및 화면 */}
+            <div className="react-pdf-viewer__content">
+              <div className="react-pdf-viewer__thumnails">
+                <Thumbnails />
+              </div>
+              <div className="react-pdf-viewer__pdf-pages">
+                <Viewer
+                  fileUrl={pdfUrl}
+                  onZoom={handleZoom}
+                  plugins={[zoomPluginInstance, thumbnailPluginInstance, fullScreenPluginInstance]}
+                />
+              </div>
             </div>
           </div>
         </Worker>

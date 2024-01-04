@@ -78,11 +78,18 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
             'imageUpload',
           ],
         },
+        link: {
+          addTargetToExternalLinks: true,
+        },
       }
     : {
         language: 'ko',
         isReadOnly: true,
         toolbar: [],
+        // _target 새창으로 외부링크를 열수 있게 하는 기능
+        link: {
+          addTargetToExternalLinks: true,
+        },
       };
 
   useEffect(() => {

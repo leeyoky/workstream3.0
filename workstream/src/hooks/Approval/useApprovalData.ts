@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import { getApprovalData } from '../../api/axios';
 import { ApprovalData } from '../../types/Approval/Approaval';
 
+/**
+ * 기본 품의서 API Data
+ * @param id
+ * @returns
+ */
 export const useApprovalData = (id: string) => {
   const [data, setData] = useState<ApprovalData | undefined>();
 

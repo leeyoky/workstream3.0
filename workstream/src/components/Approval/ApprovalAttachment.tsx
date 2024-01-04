@@ -28,8 +28,8 @@ const ApprovalAttachment = () => {
 
   const regUser = data
     ? documentType === 'APPROVAL_COMMON'
-      ? (data as ApprovalData).approval.regUsr
-      : (data as ResignationData).resignation.regUsr
+      ? (data as ApprovalData)?.approval?.regUsr
+      : (data as ResignationData)?.resignation?.regUsr
     : '';
 
   const isSameUser = loginUser === regUser;
@@ -40,8 +40,6 @@ const ApprovalAttachment = () => {
 
   useEffect(() => {
     setIsServerFile(data);
-    console.log('isServerFile', isServerFile);
-    console.log('selectedFiles 새로 추가하는 로컬파일 ', selectedFiles);
   }, [data, selectedFiles]);
 
   const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>) => {
@@ -60,26 +58,27 @@ const ApprovalAttachment = () => {
     setDrag(false);
 
     const files = Array.from(e.dataTransfer.files);
-    const pdfFiles = files.filter(file => file.name.toLowerCase().endsWith('.pdf'));
-    if (pdfFiles.length === 0) {
-      alert('pdf확장자 파일만 업로드 가능합니다.');
-      return;
-    } else {
-      setSelectedFiles(prevFiles => [...prevFiles, ...pdfFiles]);
-    }
+    setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+    // const pdfFiles = files.filter(file => file.name.toLowerCase().endsWith('.pdf'));
+    // if (pdfFiles.length === 0) {
+    //   alert('pdf확장자 파일만 업로드 가능합니다.');
+    //   return;
+    // } else {
+    //   setSelectedFiles(prevFiles => [...prevFiles, ...pdfFiles]);
+    // }
   };
 
   // 파일 선택 event
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files); // 선택한 파일 목록을 배열로 변환
-      const pdfFiles = files.filter(file => file.name.toLowerCase().endsWith('.pdf'));
-      if (pdfFiles.length === 0) {
-        alert('pdf확장자 파일만 업로드 가능합니다.');
-        return;
-      } else {
-        setSelectedFiles(prevFiles => [...prevFiles, ...pdfFiles]);
-      }
+      setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+      // const pdfFiles = files.filter(file => file.name.toLowerCase().endsWith('.pdf'));
+      // if (pdfFiles.length === 0) {
+      //   alert('pdf확장자 파일만 업로드 가능합니다.');
+      //   return;
+      // } else {
+      // }
     }
   };
 
@@ -262,7 +261,7 @@ const ApprovalAttachment = () => {
                       {isSameUser && (
                         <>
                           <button onClick={() => fileDownloadHandler(item.id, item.fileName)}>
-                            <i className="fa-solid fa-angle-down"></i>
+                            <i className="fa-solid fa-download"></i>
                           </button>
                           <button onClick={() => openPdfViewer(item)}>
                             <i className="fa-regular fa-file-pdf"></i>
@@ -270,8 +269,8 @@ const ApprovalAttachment = () => {
                         </>
                       )}
                       {!isSameUser && (
-                        <button onClick={() => fileDownloadHandler(item.id, item.fileName)}>
-                          <i className="fa-solid fa-angle-down"></i>
+                        <button onClick={() => openPdfViewer(item)}>
+                          <i className="fa-regular fa-file-pdf"></i>
                         </button>
                       )}
                     </li>

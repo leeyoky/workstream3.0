@@ -3,7 +3,6 @@ import { authActions } from '../auth-slice';
 import { getLoginUserInfo, getUserInfo, login, logoutUser } from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { userActions } from '../User/user-slice';
-import { log } from 'console';
 
 export const useAuthActions = () => {
   const dispatch = useDispatch();

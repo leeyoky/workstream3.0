@@ -22,6 +22,8 @@ const initialState: ApprovalState = {
   reasonRetire: '',
   finalSign: false,
   retireDate: '',
+  /* 시행문 */
+  recipient: '',
 };
 // 결재자는 기안자와 최종결재권자 포함 최대 6명
 // 합의자는 최대 7명까지
@@ -129,6 +131,10 @@ const approvalSlice = createSlice({
     },
     setRetireDate(state, action) {
       state.retireDate = action.payload;
+    },
+    /* 시행문 */
+    setRecipient(state, action) {
+      state.recipient = action.payload;
     },
     // 직원 중 결재직원 선택
     updateApprovers(state, action: PayloadAction<{ indexes: number[]; approvalType: string }>) {

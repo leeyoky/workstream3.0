@@ -6,11 +6,13 @@ import { selectedActions } from './../../store/Approval/approval-slice';
 import {
   deleteDocument,
   fetchApprovalData,
+  fetchExecutionData,
   fetchFileData,
   fetchRecallDocument,
   fetchResignationData,
   updateDocument,
   updateResignation,
+  updatedExecution,
 } from '../../api/axios';
 import { AxiosError } from 'axios';
 import { userActions } from '../../store/User/user-slice';
@@ -23,6 +25,7 @@ const useApprovalRequest = () => {
   const [isDetail, setIsDetail] = useState(true);
   const { id = '' } = useParams<string>();
   const data = useSelector((state: RootState) => state.approval);
+  const executeDate = data.executeDate;
   const userData = useSelector((state: RootState) => state.user);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const fileData = useSelector((state: RootState) => state.file.files);
@@ -35,6 +38,7 @@ const useApprovalRequest = () => {
     setIsModalOpen(true);
     dispatch(selectedActions.setReference(false));
   };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -49,7 +53,9 @@ const useApprovalRequest = () => {
     setIsDetail(false);
   }, [isDetail]);
 
-  // 문서함 이동
+  /**
+   * 문서함 이동
+   */
   const goBackPage = () => {
     const isCancle = window.confirm('작업한 모든 문서의 정보를 잃게됩니다. 취소하시겠습니까?');
     if (isCancle) {
@@ -58,7 +64,25 @@ const useApprovalRequest = () => {
     }
   };
 
-  // 문서 회수하기
+  /**
+   * 시행문 생성
+   * @param id
+   * @param executeDate
+   */
+  const goCreateExecution = (id: string, executeDate: string) => {
+    const confirmMsg = window.confirm('해당 문서의 시행문을 생성하시겠습니까?');
+    if (confirmMsg) {
+      dispatch(selectedActions.updateDocumentType('EXECUTION'));
+      navigate('/approval/create', {
+        state: { isCreate: true, documentId: id, executeDate: executeDate },
+      });
+    }
+  };
+
+  /**
+   * 문서 회수
+   * @param id
+   */
   const recallDocument = async (id: string) => {
     const confirmMsg = window.confirm('문서를 회수하시겠습니까?');
     if (confirmMsg) {
@@ -78,7 +102,7 @@ const useApprovalRequest = () => {
     }
   };
   /**
-   * @description 완료, 반려 문서를 재기안 하는 기능
+   * 완료, 반려 문서를 재기안 하는 기능
    * @param reqestType
    * @param isEdit {true}
    * @param isDetail {false}
@@ -94,21 +118,29 @@ const useApprovalRequest = () => {
   };
 
   /**
-   * @description 결재요청
+   * 결재요청
    * @param documentType 문서종류
    * @param requestType 임시저장/결재요청
    */
 
-  const requestApprovalType = (documentType: string, requestType: 'PROCEEDING' | 'TEMP') => {
+  const requestApprovalType = (
+    documentType: string,
+    requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED',
+  ) => {
     if (documentType === 'APPROVAL_COMMON') {
       requestApprovalHandler(requestType);
     } else if (documentType === 'RESIGNATION') {
       requestResinationHandler(requestType);
+    } else if (documentType === 'EXECUTION') {
+      requestExecutionHandler(requestType);
     }
   };
 
-  // 결재 요청
-  const requestApprovalHandler = async (requestType: 'PROCEEDING' | 'TEMP') => {
+  /**
+   *  결재요청 - 기본 품의서
+   */
+
+  const requestApprovalHandler = async (requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED') => {
     if (data.title === '') {
       alert('문서의 제목을 입력하지 않았습니다.');
       return;
@@ -173,8 +205,13 @@ const useApprovalRequest = () => {
     }
   };
 
-  // 사직원 결재요청
-  const requestResinationHandler = async (requestType: 'PROCEEDING' | 'TEMP') => {
+  /**
+   * 결재요청 - 사직원
+   * @param requestType
+   * @returns
+   */
+
+  const requestResinationHandler = async (requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED') => {
     // 임시저장, 결재요청의 여부
     const confirmMsg = `${
       requestType === 'PROCEEDING' ? '결재 요청하시겠습니까?' : '임시 저장하시겠습니까?'
@@ -221,7 +258,7 @@ const useApprovalRequest = () => {
     }
 
     if (window.confirm(confirmMsg)) {
-      /* 합의 방식이 병렬인 경우 같은 order 부여 */
+      // 합의 방식이 병렬인 경우 같은 order 부여
       const newApprovers = approvers.map(employee => {
         return {
           apprType: employee.approvalType,
@@ -268,6 +305,63 @@ const useApprovalRequest = () => {
     }
   };
 
+  /**
+   * 시행문 결재요청
+   * @param documentId
+   */
+
+  const requestExecutionHandler = async (requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED') => {
+    console.log('시행문 결재요청');
+    // 임시저장, 결재요청의 여부
+
+    const confirmMsg = `${
+      requestType === 'APPROVED' ? '시행문을 발행하시겠습니까?' : '임시 저장하시겠습니까?'
+    }`;
+    if (data.title === '') {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+    if (data.recipient === '') {
+      alert('수신처를 입력해주세요.');
+      return;
+    }
+    if (data.content === '') {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+    if (window.confirm(confirmMsg)) {
+      try {
+        const formData = {
+          title: data.title,
+          recipient: data.recipient,
+          ccId: data.executeDate,
+          contents: data.content,
+          state: requestType,
+        };
+
+        const response = await fetchExecutionData(formData);
+        console.log(response.data);
+
+        if (response.status === 201) {
+          if (fileData.length > 0) {
+            // 파일 데이터가 있는 경우에만 실행
+            await fetchFileHandler(response.data.id);
+          }
+          if (requestType === 'PROCEEDING') {
+            alert('결재요청에 성공했습니다.');
+          } else {
+            alert('임시저장에 성공했습니다.');
+          }
+
+          navigate(`/approval/detail/${response.data.id}`);
+          setIsDetail(true);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   // 첨부파일 업데이트
   const fetchFileHandler = async (documentId: string) => {
     const formData = new FormData();
@@ -289,16 +383,25 @@ const useApprovalRequest = () => {
     }
   };
 
-  const requestTempDocument = (documentType: string, requestType: 'PROCEEDING' | 'TEMP') => {
+  const requestTempDocument = (
+    documentType: string,
+    requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED',
+  ) => {
     if (documentType === 'APPROVAL_COMMON') {
       updateDocumentHandler(requestType);
     } else if (documentType === 'RESIGNATION') {
       updateResignationHandler(requestType);
+    } else if (documentType === 'EXECUTION') {
+      updateExecutionHandler(requestType);
     }
   };
 
-  // 임시저장 -> 임시저장 / 결재요청
-  const updateDocumentHandler = async (requestType: 'PROCEEDING' | 'TEMP') => {
+  /**
+   * 기본 품의서 임시저장
+   * @param requestType
+   * @returns
+   */
+  const updateDocumentHandler = async (requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED') => {
     const confirmMsg = `${
       requestType === 'PROCEEDING' ? '결재 요청하시겠습니까?' : '임시 저장하시겠습니까?'
     }`;
@@ -363,17 +466,20 @@ const useApprovalRequest = () => {
     }
   };
 
-  // 사직서 임시저장 -> 임시저장/ 결재요청
+  /**
+   * 사직원 임시저장
+   * @param requestType
+   * @returns
+   */
 
-  const updateResignationHandler = async (requestType: 'PROCEEDING' | 'TEMP') => {
+  const updateResignationHandler = async (requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED') => {
     const confirmMsg = `${
-      requestType === 'PROCEEDING' ? '결재 요청하시겠습니까?' : '임시 저장하시겠습니까?'
+      requestType === 'APPROVED' ? '시행문을 작성하시겠습니까?' : '임시 저장하시겠습니까?'
     }`;
 
     if (window.confirm(confirmMsg)) {
       if (data.approvers.length === 0) {
         alert('결재자가 선택되지 않았습니다');
-
         return;
       }
 
@@ -447,6 +553,63 @@ const useApprovalRequest = () => {
     }
   };
 
+  /**
+   * 시행문 임시저장
+   * @param requestType
+   * @returns
+   */
+
+  const updateExecutionHandler = async (requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED') => {
+    const confirmMsg = `${
+      requestType === 'APPROVED' ? '시행문을 작성하시겠습니까?' : '임시 저장하시겠습니까?'
+    }`;
+
+    if (window.confirm(confirmMsg)) {
+      if (data.title === '') {
+        alert('제목을 입력해주세요.');
+        return;
+      }
+      if (data.recipient === '') {
+        alert('수신처를 입력해주세요.');
+        return;
+      }
+      if (data.content === '') {
+        alert('내용을 입력해주세요.');
+        return;
+      }
+
+      const formData = {
+        title: data.title,
+        recipient: data.recipient,
+        executeDate: data.executeDate,
+        contents: data.content,
+        state: requestType,
+      };
+
+      try {
+        const response = await updatedExecution(formData);
+
+        if (response.status === 201) {
+          if (fileData.length > 0) {
+            // 파일 데이터가 있는 경우에만 실행
+            await fetchFileHandler(response.data.id);
+          }
+          if (requestType === 'APPROVED') {
+            alert('시행문 작성에 성공했습니다.');
+          } else {
+            alert('임시저장에 성공했습니다');
+          }
+          setIsDetail(true);
+          navigate(`/approval/detail/${response.data.id}`);
+          dispatch(selectedActions.resetArray());
+          dispatch(selectedActions.resetResination());
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   // 문서 삭제
   const deleteDocumentHandler = async (id: string) => {
     const confirmMsg = '문서를 삭제하시겠습니까?';
@@ -474,6 +637,8 @@ const useApprovalRequest = () => {
     handleShowRefModal,
     handleCloseRefModal,
     goBackPage,
+    goCreateExecution,
+    executeDate,
     requestApprovalHandler,
     updateDocumentHandler,
     updateResignationHandler,

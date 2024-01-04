@@ -159,7 +159,7 @@ const SignatureEdit = () => {
         const specialModDate =
           documentType === 'APPROVAL_COMMON'
             ? isApprovalData(data)
-              ? formatDateMinutes(data.approval.regDate as string)
+              ? formatDateMinutes(data.approval.modDate as string)
               : ''
             : isResignationData(data)
             ? formatDateMinutes(data.resignation.resignationDate as string)

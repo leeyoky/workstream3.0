@@ -949,10 +949,10 @@ i[name]:hover::after {
   width: 3%;
 }
 .approval-page-wrapper th:nth-child(2){ /* 문서번호 */
-  width: 8%;
+  width: 10%;
 }
 .approval-page-wrapper th:nth-child(3){ /* 문서명 */
-  width: 38%;
+  width: 36%;
   text-align: left;
 }
 .approval-page-wrapper th:nth-child(4){ /* 문서종류 */
@@ -1241,7 +1241,7 @@ i[name]:hover::after {
 /* Search Form */
 .board-search-wrapper {
   width: 100%;
-  height: 4rem;
+  height: auto;
   display: flex;
   font-size: 10pt;
   justify-content: center;
@@ -1255,7 +1255,6 @@ i[name]:hover::after {
 }
 .board-search{
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   width: 100%;
   /* height: 100%; */
@@ -1266,13 +1265,19 @@ i[name]:hover::after {
   border-radius: 15px;
 
 }
+.board-search__items{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: 79%;
+}
 .board-search-tag {
   height: auto;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px 15px;
-  width: 280px;
+  padding: 0px 10px;
+  width: 275px;
   min-width: 200px;
   justify-content: flex-start;
 }
@@ -1282,14 +1287,15 @@ i[name]:hover::after {
 .board-search-tag > label {
   width: 50px;
 }
+.search-btn-wrapper-flex{
+  display: flex;
+  justify-content: center;
+}
 .search-btn-wrapper {
   margin-left: auto;
   margin-top: 5px;
   display: flex;
   align-items: center;
-  position: absolute;
-  top:20%;
-  right: 5%
 }
 
 
@@ -1501,21 +1507,46 @@ i[name]:hover::after {
 }
 
 /* PDF */
-
+.rpv-core__viewer{
+  display: flex;
+  flex-direction: column;
+  height:800px;
+  width:900px;
+}
+.rpv-core__viewer ::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+.container::-webkit-scrollbar-thumb {
+  background-color: #2f3542;
+}
+.react-pdf-viewer__header {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 45%;
+  top: 1%;
+}
+.react-pdf-viewer__content{
+  display: flex;
+  background-color: #ffffff;
+  align-items: center;
+  height: 850px;
+  border: 1px solid gainsboro;
+  border-radius: 10px;
+  padding: 5px;
+}
 .pdf-viewer__wrapper {
   width: 1000px;
   height: 850px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
-.modal .pdfViewer__modal{
-  width: 150px;
-}
+
 .pdf-viewer__tools,
 .pdf-viewer__xmark {
   width: 100%;
   display: flex;
+  margin-bottom: 10px ;
 }
 .pdf-viewer__tools{
   justify-content: center;
@@ -1525,18 +1556,36 @@ i[name]:hover::after {
 .pdf-viewer__xmark i {
   margin-left: auto;
 }
+.rpv-core__inner-pages{
+  overflow-x: hidden;
+}
+.react-pdf-viewer__pdf-pages{
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+}
+.react-pdf-viewer__thumnails {
+  display: flex;
+  height: 100%;
+  align-items: flex-start;
+}
 .core__inner-pages {
   height: 750px !important;
   width: 750px !important;
 }
 .rpv-core__viewer .rpv-core__viewer--light {
-  height: 750px !important;
+  height: 800px !important;
 }
+.rpv-thumbnail__list {
+  overflow-x: hidden;
+}
+
 
 @media (min-width: 768px) {
   .pdfViewer_modal{
     width: auto;
-    left: calc(50% - 22rem);
+    left: calc(50% - 25rem);
     top: 2%;
   }
 }

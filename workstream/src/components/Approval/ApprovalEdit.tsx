@@ -3,9 +3,10 @@ import classes from '../../pages/Approval/Approval.module.css';
 
 import { RootState } from '../../store';
 import { useDispatch } from 'react-redux';
-import { selectedActions } from '../../store/Approval/approval-slice';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { selectedActions } from '../../store/Approval/approval-slice';
+import { ApprovalData } from '../../types/Approval/Approaval';
 
 import BoardTitle from '../../Layout/BoardLayout/BoardTitle';
 import ApprovalEditButtons from './ApprovalButtonsGroup/ApprovalEditButtons';
@@ -15,7 +16,9 @@ import CommonDetail from './ApprovalType/CommonDetail';
 import CommonCreate from './ApprovalType/CommonCreate';
 import ResinationCreate from './ApprovalType/ResinationCreate';
 import ResinationDetail from './ApprovalType/ResinationDetail';
-import { ApprovalData } from '../../types/Approval/Approaval';
+import ExecutionCreate from './ApprovalType/ExecutionCreate';
+import ExecutionDetail from './ApprovalType/ExecutionDetail';
+import CondolenceCreate from './ApprovalType/CondolenceCreate';
 
 const ApprovalEdit = () => {
   const [temp, setTemp] = useState(false);
@@ -55,6 +58,8 @@ const ApprovalEdit = () => {
                 <>
                   {documentType === 'APPROVAL_COMMON' && <CommonCreate />}
                   {documentType === 'RESIGNATION' && <ResinationCreate />}
+                  {documentType === 'EXECUTION' && <ExecutionCreate />}
+                  {documentType === 'CONDOLENCE' && <CondolenceCreate />}
                 </>
               ) : (
                 <>
@@ -64,6 +69,7 @@ const ApprovalEdit = () => {
                   {documentType === 'RESIGNATION' && (
                     <ResinationDetail temp={temp} setTemp={setTemp} />
                   )}
+                  {documentType === 'EXECUTION' && <ExecutionDetail />}
                 </>
               )}
 
@@ -75,7 +81,7 @@ const ApprovalEdit = () => {
               type={'bottom'}
             />
             {/* TODO: 댯글은 create제외 다 보이게 */}
-            {!isCreate && !temp && <ApprovalComment />}
+            {!isCreate && !temp && !(documentType === 'EXECUTION') && <ApprovalComment />}
           </div>
         </div>
       </div>

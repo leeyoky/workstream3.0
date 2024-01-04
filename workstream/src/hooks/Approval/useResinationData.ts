@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react';
 import { ResignationData } from '../../types/Approval/Approaval';
 import { getResignationData } from '../../api/axios';
 
+/**
+ * 사직원 Data API data
+ * @param id
+ * @returns
+ */
+
 export const useResignationData = (id: string) => {
   const [data, setData] = useState<ResignationData | undefined>();
 

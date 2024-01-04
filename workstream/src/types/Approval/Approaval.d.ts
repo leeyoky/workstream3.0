@@ -58,6 +58,8 @@ export interface ApprovalState {
   reasonRetire: string;
   finalSign: boolean;
   retireDate: string;
+
+  recipient: string;
 }
 
 /* -------------------- */
@@ -115,6 +117,16 @@ export interface resinationDocData {
   mobileContact: string;
   reasons: string;
   resignationDate: string;
+  state: string;
+}
+/* 시행문 */
+export interface executiondocData {
+  title: string;
+  id?: string;
+  ccId?: string;
+  executeDate?: string;
+  recipient: string;
+  contents: string;
   state: string;
 }
 

@@ -3,7 +3,12 @@ import { ApprovalData, ResignationData } from '../../types/Approval/Approaval';
 import { getApprovalData, getResignationData } from '../../api/axios';
 
 type DocumentData = ApprovalData | ResignationData;
-
+/**
+ * 기본 품의서와 사직원 공용
+ * @param documentType
+ * @param id
+ * @returns
+ */
 export const useDocumentData = (documentType: string, id: string) => {
   const [data, setData] = useState<DocumentData | undefined>();
 

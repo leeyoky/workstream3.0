@@ -3,31 +3,47 @@
 }
 
 .ck.ck-editor{
-  height: 660px !important;
-  max-height: 660px !important;
-  min-height: 660px !important;
-  resize: none !important;
+  height: 660px;
+  max-height: 660px;
+  min-height: 660px;
 }
 .ck.ck-editor a {
   color: #0400ff;
 }
 .ck-content{
-  height: 600px !important;
+  height: 600px;
 }
 
 
 
 .ck.ck-editor__main>.ck-editor__editable {
-  height: 640px !important;
-  max-height: 640px !important;
-  min-height: 640px !important;
-  overflow: hidden !important;
-  font-size: 10pt;
-  resize: none !important;
+  max-height: 640px;
+  min-height: 640px;
+/*   overflow: hidden !important; */
+  font-size: 9pt;
+/*   resize: none !important; */
 }
 
+.approval-wrapper.ck.ck-editor{
+  height: 680px;
+  max-height: 680px;
+  min-height: 680px;
+}
+.approval-wrapper.ck-content{
+  height: 700px;
+}
+.approval-wrapper.ck.ck-editor__main>.ck-editor__editable {
+  max-height: 680px !important;
+  min-height: 680px !important;
+}
+
+.ck-read-only {
+  cursor: default;
+}
+
+
 .ck.ck-editor__editable_inline {
-  overflow: hidden !important;
+ /*  overflow: hidden !important; */
 }
 
 .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused){

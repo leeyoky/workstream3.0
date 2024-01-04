@@ -31,6 +31,7 @@ export const STATUS_LABELS: Record<string, string> = {
 export const DOCUMENT_TYPES: Record<string, string> = {
   APPROVAL_COMMON: '품의서',
   RESIGNATION: '사직서',
+  EXECUTION: '시행문',
 };
 
 // 컬럼 정렬 속성 상수 정의
@@ -38,7 +39,7 @@ export const COLUMN_SORT_ATTRIBUTES: Record<string, string> = {
   문서번호: 'id',
   문서명: 'title',
   문서종류: 'docType',
-  기안자: 'regUsr',
+  기안자: 'regUsrNm',
   기안일자: 'modDate',
   시행일자: 'executeDate',
   진행현황: 'state',

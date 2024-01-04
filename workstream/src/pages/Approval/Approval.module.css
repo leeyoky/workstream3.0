@@ -318,7 +318,7 @@ footer p {
 }
 .header-table__approval-th{
   width: 90px;
-  height: 25px;
+  height: 20px;
   border: 1px solid black;
   position: relative;
   font-size: 9.5pt;
@@ -661,24 +661,31 @@ footer p {
   cursor: pointer;
   color: #585858;
   border: 1px solid #CC8B29;
+  background-color: #ffae341f;
   border-radius: 30px;
   margin: 3px 5px;
   padding: 2px 7px;
 }
 .file-download li:hover{
-  background-color: #f3f3f3;
+  background-color: #d4912c42;
   transition: 0.2s all;
 }
 .file-download span {
   text-align: center;
-  font-size: 10pt;
-  color: #585858;
+  font-size: 8.5pt;
+  color: #2c2c2c;
+  font-weight: 600;
 }
 .file-download button {
   background-color: #ffffff00;
-  font-size: 8pt;
   padding-right: 0px;
+  font-weight: 900;
 }
+
+.file-download button i {
+  font-size: 9pt;
+}
+
 .approval-attachment p {
   font-size: 10pt;
   display: inline-block;
@@ -965,3 +972,141 @@ footer p {
   font-size: 14pt;
 }
 
+
+/* 시행문 */
+
+.execution-header{
+  display: flex;
+  height: 50px;
+  position: relative;
+  align-items: center;
+}
+.execution-header > .header-logo {
+  width: auto;
+  position: absolute;
+  align-items: center;
+  margin: 0;
+}
+/* 문서 제목 */
+.header-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.header-title b {
+  font-size: 20pt;
+}
+.header-title p {
+  font-size: 9pt;
+}
+.header-title p span {
+  padding-left: 10px;
+}
+.approval-execution hr {
+  height: 1px;
+  background-color: #858585;
+  width: 100%;
+  margin: 15px 0px;
+}
+.execution-table {
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+  padding: 15px 0px;
+}
+.execution-table-tr {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 25px;
+}
+.execution-table-th{
+  width: 120px;
+  font-weight: 600;
+  font-size: 12pt;
+  display: flex;
+}
+.execution-table-td{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 11pt;
+  font-weight: 400;
+}
+.execution-table__defalut {
+  margin-left: 5px;
+}
+.execution-table-tr span {
+  width: 100%;
+}
+
+.approval-execution footer span {
+  padding: 0px 10px;
+}
+.approval-execution .footer-text{
+  font-size: 14pt;
+}
+/* .approval-wrapper .ck-content{
+  height: 700px !important;
+}
+.approval-wrapper .ck.ck-editor__main>.ck-editor__editable {
+  max-height: 680px !important;
+  min-height: 680px !important;
+} */
+.execution-table input {
+  border: none;
+  display: flex;
+  height: -webkit-fill-available;
+  width: 100%;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 400;
+  font-size: 11pt;
+  text-align: left;
+}
+.execution-table input::placeholder {
+  text-align: left;
+}
+
+/* 경조사비 */
+
+.condolence-form{
+  justify-content:flex-start !important;
+}
+.condolence-form table{
+  border-collapse: collapse;
+}
+.condolence-form .header-info-table {
+  margin: 50px 0px;
+}
+.condolence-form .header-info-table th {
+  width: 20%;
+  height: 2rem;
+  font-size: 12pt;
+}
+
+.condolence-form .header-info-table td {
+  width: 30%;
+  text-align: center;
+  font-size: 11pt;
+}
+.condolence-form p {
+  font-size: 10pt;
+}
+.content-table-tr th:nth-child(1){
+  width: 20%;
+}
+.content-table-tr th:nth-child(2){
+  width: 30%;
+}
+.content-table th {
+  font-size: 12pt;
+}
+
+.content-table td {
+  text-align: center;
+  font-size: 11pt;
+}
+.content-table input {
+  width: 15px;
+  height: 15px;
+}

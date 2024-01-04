@@ -23,6 +23,7 @@ export const searchTags = [
     class: 'col-4',
     options: [
       { label: '품의서', value: 'APPROVAL_COMMON' },
+      { label: '시행문', value: 'EXECUTION' },
       { label: '사직서', value: 'RESIGNATION' },
     ],
   },
@@ -59,5 +60,13 @@ export const columns = [
   { name: '결재유형', sort: false },
   { name: '의견', sort: false },
   { name: '첨부', sort: false },
-  { name: '진행현황', sort: true },
+  { name: '진행현황', sort: false },
+];
+
+export const documentTypes = [
+  { type: 'APPROVAL_COMMON', label: '기본 품의서' },
+  { type: 'REFRESH', label: '휴가/출장 신청서' },
+  { type: 'CONDOLENCE', label: '경조비 신청서' },
+  { type: 'EXECUTION', label: '시행문' },
+  { type: 'RESIGNATION', label: '사직원' },
 ];

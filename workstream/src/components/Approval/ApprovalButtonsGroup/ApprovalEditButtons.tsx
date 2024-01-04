@@ -27,6 +27,8 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, te
     handleCloseModal,
     handleCloseRefModal,
     goBackPage,
+    goCreateExecution,
+    executeDate,
     deleteDocumentHandler,
     changeTempModeHandler,
     requestApprovalType,
@@ -131,12 +133,14 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, te
 
   const renderGeneralButtons = () => (
     <>
-      <button className="btn" onClick={handleShowModal}>
-        <span>결재자지정</span>
-        <i className="fa-solid fa-user-pen"></i>
-      </button>
+      {!(documentType === 'EXECUTION') && (
+        <button className="btn" onClick={handleShowModal}>
+          <span>결재자지정</span>
+          <i className="fa-solid fa-user-pen"></i>
+        </button>
+      )}
       {isModalOpen && <ApprovalModalEmpEdit onClose={handleCloseModal} isEdit={true} />}
-      {!(documentType === 'RESIGNATION') && (
+      {!(documentType === 'RESIGNATION' || documentType === 'EXECUTION') && (
         <button className="btn" onClick={handleShowRefModal}>
           <span>참조자/부서</span>
           <i className="fa-solid fa-users"></i>
@@ -147,12 +151,21 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, te
         <span>임시저장</span>
         <i className="fa-solid fa-floppy-disk"></i>
       </button>
-      <button
-        className="btn btn-blue"
-        onClick={() => requestApprovalType(documentType, 'PROCEEDING')}>
-        <span>결재요청</span>
-        <i className="fa-solid fa-pen-nib"></i>
-      </button>
+      {documentType === 'EXECUTION' ? (
+        <button
+          className="btn btn-blue"
+          onClick={() => requestApprovalType(documentType, 'APPROVED')}>
+          <span>작성 완료</span>
+          <i className="fa-solid fa-pen-nib"></i>
+        </button>
+      ) : (
+        <button
+          className="btn btn-blue"
+          onClick={() => requestApprovalType(documentType, 'PROCEEDING')}>
+          <span>결재요청</span>
+          <i className="fa-solid fa-pen-nib"></i>
+        </button>
+      )}
     </>
   );
 
@@ -218,17 +231,30 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, te
             </button>
           )}
 
-          {isFinishedDocumnt &&
-            regUsrNo === memoizedValues.userData &&
-            documentType === 'APPROVAL_COMMON' && (
-              <button className="btn btn-green" onClick={() => changeTempModeHandler('Y')}>
-                <span>재기안</span>
-              </button>
-            )}
+          {isFinishedDocumnt && regUsrNo === memoizedValues.userData && (
+            <>
+              {documentType === 'APPROVAL_COMMON' && (
+                <button className="btn" onClick={() => changeTempModeHandler('Y')}>
+                  <span>재기안</span>
+                  <i className="fa-solid fa-arrow-up-from-bracket"></i>
+                </button>
+              )}
+              {/*               {documentType === 'EXECUTION' && (
+              )} */}
+            </>
+          )}
+
           <button className="btn btn-green-line" onClick={pdfDownloadHandler}>
             <span>PDF다운</span>
             <i className="fa-solid fa-file-pdf"></i>
           </button>
+          {/* 완료 된 문서이고, 시행문 생성 이외의 모든 품의서는 시행문 생성 가능 */}
+          {isFinishedDocumnt && !(documentType === 'EXECUTION') && (
+            <button className="btn btn-green" onClick={() => goCreateExecution(id, executeDate)}>
+              <span>시행문 생성</span>
+              <i className="fa-solid fa-file-export"></i>
+            </button>
+          )}
         </>
       )}
     </>
@@ -236,7 +262,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, te
 
   return (
     <div className={`${classes['btn-group']} ${buttonsLocation}`}>
-      {type !== 'bottom' && !isEdit && !isRevise && (
+      {type !== 'bottom' && !isEdit && !isRevise && !(documentType === 'EXECUTION') && (
         <button className="btn btn-secondary-blue-line first-child" onClick={goComment}>
           <span>
             <span> {documentData?.comment.length}개</span>의 의견

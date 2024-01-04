@@ -243,7 +243,7 @@ const ResinationCreate = () => {
               <tr>
                 <th>퇴직 사유</th>
                 <td colSpan={6} className={classes['update-input']}>
-                  {/*                   <select>
+                  <select>
                     <option value="개인사정">개인사정</option>
                     <option value="이직">이직</option>
                     <option value="급여불만족">급여 불만족</option>
@@ -251,7 +251,7 @@ const ResinationCreate = () => {
                     <option value="상사/동료와의갈등">상사/동료와의 갈등</option>
                     <option value="업무가적성에맞지않으">업무가 적성에 맞지 않음</option>
                     <option value="">기타</option>
-                  </select> */}
+                  </select>
                   <textarea
                     placeholder="퇴직 사유는 10자 이상 입력해주세요."
                     className={classes['body-table__input']}

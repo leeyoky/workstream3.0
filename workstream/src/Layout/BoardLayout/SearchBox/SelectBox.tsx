@@ -13,31 +13,25 @@ const SelectBox: React.FC<{
   setLocalSearchInput: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
 }> = ({ tag, localSearchInput, setLocalSearchInput }) => {
   const [showOptions, setShowOptions] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const selectBoxRef = useRef<HTMLDivElement | null>(null);
 
   const toggleOptions = async () => {
     setShowOptions(!showOptions);
-    console.log(isLoading);
-    setIsLoading(true);
 
     if (tag.name === 'deptCd') {
       try {
         const response = await getDepartment();
         const data = response.data;
 
-        // API에서 받은 데이터를 옵션으로 설정합니다.
+        // API에서 받은 데이터를 옵션으로 설정
         const deptOptions = data.map((dept: any) => ({
           label: dept.deptNm,
           value: dept.deptCd,
         }));
 
         tag.options = deptOptions;
-
-        setIsLoading(false);
       } catch (error) {
         console.log(error);
-        setIsLoading(false);
       }
     }
   };

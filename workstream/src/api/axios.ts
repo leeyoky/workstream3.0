@@ -5,6 +5,7 @@ import {
   fetchCommentData,
   approveResultData,
   resinationDocData,
+  executiondocData,
 } from '../types/Approval/Approaval';
 import { AxiosResponse } from 'axios';
 
@@ -55,6 +56,10 @@ export function fetchResignationData(formData: resinationDocData) {
   return instance.post('approval/resignation', formData);
 }
 
+export function fetchExecutionData(formData: executiondocData) {
+  return instance.post('approval/execution', formData);
+}
+
 /* Read */
 
 // 품의서 정보 가져오기
@@ -65,6 +70,11 @@ export function getApprovalData(id: string) {
 // 사직원 정보 가져오기
 export function getResignationData(id: string) {
   return instance.get(`approval/resignation/${id}`);
+}
+
+// 시행문 정보 가져오기
+export function getExecutionData(id: string) {
+  return instance.get(`approval/execution/${id}`);
 }
 
 /* File */
@@ -117,6 +127,11 @@ export function updateResignation(formData: resinationDocData) {
   return instance.patch('approval/resignation', formData);
 }
 
+// 임시저장상태에서 수정 ( 시행문 )
+export function updatedExecution(formData: executiondocData) {
+  return instance.patch('approval/execution', formData);
+}
+
 /* Delete */
 export function deleteDocument(id: string) {
   return instance.delete(`approval/${id}`);
@@ -147,7 +162,7 @@ export function getApprovalList(params: {
   deptCd?: string;
   docType?: string;
   regUsrNm?: string;
-  sort?: string;
+  orderBy?: string;
   regDateGoe: string /* 시작일 */;
   regDateLoe: string /* 종료일 */;
   executeDateGoe: string /* 시행일자 시작일 */;

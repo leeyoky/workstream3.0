@@ -38,50 +38,55 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
   };
 
   const resetFilter = () => {
+    setLocalSearchInput({});
     dispatch(uiActions.resetSearchInput());
   };
 
   return (
     <div className="board-search-wrapper">
       <div className="board-search">
-        {tags.map((tag: any, index: number) => (
-          <div key={index.toString()} className="board-search-tag">
-            <label>{tag.label}</label>
-            {tag.type === 'select' ? (
-              <SelectBox
-                tag={tag}
-                localSearchInput={localSearchInput}
-                setLocalSearchInput={setLocalSearchInput}
-              />
-            ) : tag.type === 'date' ? (
-              <DatePickerSearch
-                tag={tag}
-                localSearchInput={localSearchInput}
-                setLocalSearchInput={setLocalSearchInput}
-              />
-            ) : (
-              <input
-                className={`${tag.class}`}
-                type="text"
-                name={tag.name}
-                placeholder={tag.label}
-                value={localSearchInput[tag.name] || ''}
-                onChange={e => inputChangeHandler(e, tag.name)}
-                onKeyDown={handleKeyPress}
-              />
-            )}
+        <div className="board-search__items">
+          {tags.map((tag: any, index: number) => (
+            <div key={index.toString()} className="board-search-tag">
+              <label>{tag.label}</label>
+              {tag.type === 'select' ? (
+                <SelectBox
+                  tag={tag}
+                  localSearchInput={localSearchInput}
+                  setLocalSearchInput={setLocalSearchInput}
+                />
+              ) : tag.type === 'date' ? (
+                <DatePickerSearch
+                  tag={tag}
+                  localSearchInput={localSearchInput}
+                  setLocalSearchInput={setLocalSearchInput}
+                />
+              ) : (
+                <input
+                  className={`${tag.class}`}
+                  type="text"
+                  name={tag.name}
+                  placeholder={tag.label}
+                  value={localSearchInput[tag.name] || ''}
+                  onChange={e => inputChangeHandler(e, tag.name)}
+                  onKeyDown={handleKeyPress}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="search-btn-wrapper-flex">
+          <div className="search-btn-wrapper">
+            <button className="search-btn" onClick={searchHandler}>
+              <span>검색</span>
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button className="reset-btn" onClick={resetFilter}>
+              <span>초기화</span>
+              <i className="fa-solid fa-arrow-rotate-left"></i>
+            </button>
           </div>
-        ))}
-      </div>
-      <div className="search-btn-wrapper">
-        <button className="search-btn" onClick={searchHandler}>
-          <span>검색</span>
-          <i className="fa-solid fa-magnifying-glass"></i>
-        </button>
-        <button className="reset-btn" onClick={resetFilter}>
-          <span>초기화</span>
-          <i className="fa-solid fa-arrow-rotate-left"></i>
-        </button>
+        </div>
       </div>
     </div>
   );
