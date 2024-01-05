@@ -334,7 +334,8 @@ const useApprovalRequest = () => {
         const formData = {
           title: data.title,
           recipient: data.recipient,
-          ccId: data.executeDate,
+          ccId: data.ccId,
+          executeDate: data.executeDate,
           contents: data.content,
           state: requestType,
         };
@@ -530,7 +531,6 @@ const useApprovalRequest = () => {
         line: newApprovers,
         state: requestType, // 이 부분을 requestType에 따라 설정
       };
-
       try {
         const response = await updateResignation(docData);
 
@@ -579,30 +579,28 @@ const useApprovalRequest = () => {
       }
 
       const formData = {
+        id,
+        ccId: data.ccId,
         title: data.title,
-        recipient: data.recipient,
         executeDate: data.executeDate,
+        recipient: data.recipient,
         contents: data.content,
         state: requestType,
       };
+      console.log('로컬 formData', formData);
 
       try {
         const response = await updatedExecution(formData);
+        console.log('response', response);
 
-        if (response.status === 201) {
-          if (fileData.length > 0) {
-            // 파일 데이터가 있는 경우에만 실행
-            await fetchFileHandler(response.data.id);
-          }
+        if (response.status === 204) {
           if (requestType === 'APPROVED') {
             alert('시행문 작성에 성공했습니다.');
           } else {
             alert('임시저장에 성공했습니다');
           }
           setIsDetail(true);
-          navigate(`/approval/detail/${response.data.id}`);
           dispatch(selectedActions.resetArray());
-          dispatch(selectedActions.resetResination());
         }
       } catch (error) {
         console.log(error);

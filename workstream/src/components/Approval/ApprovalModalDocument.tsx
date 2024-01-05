@@ -12,6 +12,7 @@ const ApprovalModalDocument: React.FC<ApprovalDocumentTypeProps> = props => {
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const [activeDocumentType, setActiveDocumentType] = useState(documentType); // 초기 선택값 설정
   const [selectedDocumentType, setSelectedDocumentType] = useState(documentType);
+  const [openFolders, setOpenFolders] = useState<string[]>([]); // 레벨 2 폴더들의 목록
 
   useEffect(() => {
     setActiveDocumentType(selectedDocumentType);
@@ -20,6 +21,20 @@ const ApprovalModalDocument: React.FC<ApprovalDocumentTypeProps> = props => {
 
   const handleDocumentTypeSelect = (documentType: string) => {
     setSelectedDocumentType(documentType);
+  };
+
+  const handleFolderToggle = (folderType: string) => {
+    // 폴더를 토글하는 로직을 추가
+    setActiveDocumentType(prevActiveType => (prevActiveType === folderType ? '' : folderType));
+    // 레벨 2 폴더를 열거나 닫을 때 openFolders 목록을 업데이트
+    setOpenFolders(prevOpenFolders => {
+      if (prevOpenFolders.includes(folderType)) {
+        return prevOpenFolders.filter(folder => folder !== folderType);
+      } else {
+        return [...prevOpenFolders, folderType];
+      }
+    });
+    console.log(openFolders);
   };
 
   return (
@@ -33,12 +48,17 @@ const ApprovalModalDocument: React.FC<ApprovalDocumentTypeProps> = props => {
           {documentTypes.map(docType => (
             <div
               key={docType.type}
-              className={`${classes['document-item']} 
-              ${activeDocumentType === docType.type ? classes['active'] : ''}`}
+              className={`${classes['document-item']} ${
+                activeDocumentType === docType.type ? classes['active'] : ''
+              } ${classes[docType.class]}`}
               onClick={() => {
-                handleDocumentTypeSelect(docType.type);
+                if (docType.level === 1) {
+                  handleFolderToggle(docType.type);
+                } else {
+                  handleDocumentTypeSelect(docType.type);
+                }
               }}>
-              <i className="fa-regular fa-file"></i>
+              <i className={`fa-solid ${docType.class === 'folder' ? 'fa-folder' : 'fa-file'}`}></i>
               <span>{docType.label}</span>
             </div>
           ))}

@@ -265,7 +265,8 @@ input:focus{
   overflow-y: scroll;
 }
 .document-list{
-  height: 150px;
+  height: 250px;
+  font-size: 8pt;
 }
 
 /* Bookmark */
@@ -522,12 +523,12 @@ background-color: #5f5f5f;
 }
 .document-item{
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   letter-spacing: -1px;
   cursor: pointer;
 }
-
 .document-selector-wrapper .emp-item:hover{
   background-color: #f3f3f3;
 }
@@ -560,13 +561,22 @@ background-color: #5f5f5f;
   margin-left: 5px;
   line-height: 1.2rem;
 }
-.document-item.active{
-  background-color: #ffc880;
+.document-item.active.doc{
+  background-color: #f0f1ff;
   border-radius: 3px;
+  outline: 1px solid #a0a8fd;
 }
 .document-item.active span {
-  font-size: 10.5pt;
+  font-size: 10pt;
   font-weight: bolder;
+}
+.document-item.folder i{
+  color: #f7cc70;
+}
+
+.document-item.doc i {
+  color:#cecece;
+  margin-left: 10px;
 }
 
 

@@ -3,7 +3,7 @@ import { executiondocData } from '../../types/Approval/Approaval';
 import { getExecutionData } from '../../api/axios';
 
 const useApprovalExecutionData = (id: string) => {
-  const [data, setData] = useState<executiondocData>();
+  const [data, setData] = useState<executiondocData | undefined>();
 
   const fetchExecutionData = async (id: string) => {
     try {

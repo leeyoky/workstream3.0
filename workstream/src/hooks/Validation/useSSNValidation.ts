@@ -4,7 +4,7 @@ import { userActions } from '../../store/User/user-slice';
 
 /**
  * @description 주민등록 번호 유효성 검사 커스텀 훅
- * @returns 
+ * @returns
  */
 
 const useSSNValidation = () => {
@@ -41,6 +41,6 @@ const useSSNValidation = () => {
     ssnBack,
     handleSSNChange,
   };
-  };
+};
 
 export default useSSNValidation;

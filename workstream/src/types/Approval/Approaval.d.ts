@@ -60,6 +60,7 @@ export interface ApprovalState {
   retireDate: string;
 
   recipient: string;
+  ccId: string;
 }
 
 /* -------------------- */

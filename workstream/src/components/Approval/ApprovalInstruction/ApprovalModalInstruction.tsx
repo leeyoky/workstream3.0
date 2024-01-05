@@ -10,6 +10,7 @@ import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
 import useApprovalAction from '../../../hooks/Approval/useApprovalAction';
 interface ApprovalModalInstructionProps {
   onClose: () => void; // 모달 닫기 핸들러
+  isLastApprover: boolean;
 }
 
 const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props => {
@@ -22,9 +23,11 @@ const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props 
   const documentData = useDocumentData(documentType, id)?.data;
   const { instructionHandler } = useApprovalAction();
   const dispatch = useDispatch();
-
   const matchingId = documentData?.line?.find(approval => approval.approver === userData)?.id || 0;
 
+  useEffect(() => {
+    console.log('Is Last Approver:', props.isLastApprover);
+  }, [props.isLastApprover]);
   /* 지시사항 세팅 */
   const instructionChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const inputComment = e.target.value;
@@ -63,13 +66,17 @@ const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props 
             <div className={classes['instruction-content']}>{getDocumentTitle}</div>
           </div>
           <div className={classes['instruction__approver-title']}>
-            <div className={classes['instruction-title']}>최종결재자</div>
+            <div className={classes['instruction-title']}>
+              {props.isLastApprover ? <span>최종결재자</span> : <span>결재자</span>}
+            </div>
             <div className={classes['instruction-content']}>
               {getUserInfo.empNm} {getUserInfo.rankNm}
             </div>
           </div>
           <div className={`${classes['instruction__approver-title']} ${classes['textarea-box']}`}>
-            <div className={classes['instruction-title']}>지시사항</div>
+            <div className={classes['instruction-title']}>
+              {props.isLastApprover ? <span>지시사항</span> : <span>의견</span>}
+            </div>
             <div className={classes['instruction-content']}>
               <textarea
                 spellCheck="false"

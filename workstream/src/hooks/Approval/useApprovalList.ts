@@ -86,6 +86,8 @@ export function useApprovalList(sortValue: string) {
       const getTotalElements = response.data.totalElements;
       setListData(data);
       setTotalItems(getTotalElements);
+      console.log('totalElements', response.data);
+
       dispatch(uiActions.setTotalItems(getTotalElements));
     } catch (error) {
       console.log('Error fetching approval list:', error);

@@ -69,11 +69,12 @@ const ApprovalEdit = () => {
                   {documentType === 'RESIGNATION' && (
                     <ResinationDetail temp={temp} setTemp={setTemp} />
                   )}
-                  {documentType === 'EXECUTION' && <ExecutionDetail />}
+                  {documentType === 'EXECUTION' && (
+                    <ExecutionDetail temp={temp} setTemp={setTemp} />
+                  )}
                 </>
               )}
-
-              <ApprovalAttachment />
+              {!(documentType === 'EXECUTION') && <ApprovalAttachment />}
             </div>
             <ApprovalEditButtons
               temp={temp}

@@ -24,6 +24,7 @@ const initialState: ApprovalState = {
   retireDate: '',
   /* 시행문 */
   recipient: '',
+  ccId: '',
 };
 // 결재자는 기안자와 최종결재권자 포함 최대 6명
 // 합의자는 최대 7명까지
@@ -43,6 +44,10 @@ const approvalSlice = createSlice({
     // 참조자 부서 모달 on/off
     setReference(state, action) {
       state.isReference = action.payload;
+    },
+    // 참조 문서 id
+    setCcId(state, action) {
+      state.ccId = action.payload;
     },
     // 문서 종류
     updateDocumentType(state, action: PayloadAction<string>) {

@@ -1003,6 +1003,16 @@ footer p {
 .header-title p span {
   padding-left: 10px;
 }
+.approval-execution footer p {
+  position: relative;
+}
+.approval-execution footer img {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: -100%;
+  left: 90%;
+}
 .approval-execution hr {
   height: 1px;
   background-color: #858585;
@@ -1057,7 +1067,8 @@ footer p {
   border: none;
   display: flex;
   height: -webkit-fill-available;
-  width: 100%;
+  width: 99%;
+  height: 15px;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 400;
   font-size: 11pt;

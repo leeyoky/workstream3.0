@@ -1530,7 +1530,7 @@ i[name]:hover::after {
   display: flex;
   background-color: #ffffff;
   align-items: center;
-  height: 850px;
+  height: 800px;
   border: 1px solid gainsboro;
   border-radius: 10px;
   padding: 5px;
@@ -1579,6 +1579,7 @@ i[name]:hover::after {
 }
 .rpv-thumbnail__list {
   overflow-x: hidden;
+  height: 98%;
 }
 
 
@@ -1586,6 +1587,6 @@ i[name]:hover::after {
   .pdfViewer_modal{
     width: auto;
     left: calc(50% - 25rem);
-    top: 2%;
+    top: 1%;
   }
 }

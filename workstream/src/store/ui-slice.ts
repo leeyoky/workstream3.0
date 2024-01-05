@@ -72,7 +72,8 @@ const uiSlice = createSlice({
       state.searchInput.docType = '';
       state.searchInput.regUsrNm = '';
       state.searchInput.state = '';
-      (state.searchInput.regDateGoe = ''), (state.searchInput.regDateLoe = '');
+      state.searchInput.regDateGoe = '';
+      state.searchInput.regDateLoe = '';
     },
     // resetSearchInput
     resetSearchInput(state) {

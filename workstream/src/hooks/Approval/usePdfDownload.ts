@@ -30,31 +30,42 @@ const usePdfDownload = () => {
     setIsPDFModalOpen(false);
   };
 
-  const pdfDownloadHandler = () => {
+  const pdfDownloadHandler = async () => {
     const element: HTMLElement = document.getElementById('approval')!;
+    const pdf = new jsPDF({
+      format: 'a4',
+      orientation: 'portrait',
+      unit: 'mm',
+    });
 
+    const padding = 10;
+    const pdfWidth = 210 - 2 * padding;
+    const pdfHeight = 297 - 2 * padding;
+
+    pdf.setTextColor(100, 100, 100);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(8);
+
+    // 첫 번째 페이지 추가
     html2canvas(element, { scale: 3 }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        format: 'a4',
-        orientation: 'portrait',
-        unit: 'mm',
-      });
-      console.log(pdf.getFontList());
-
-      const padding = 10; // You can adjust the padding value as needed
-      const pdfWidth = 210 - 2 * padding;
-      const pdfHeight = 297 - 2 * padding;
-
-      // 워터마크 추가
-      // TODO: font 깨지는 문제
-      pdf.setTextColor(100, 100, 100);
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(8);
-
       pdf.text(waterMark, 10, 8);
-
       pdf.addImage(imgData, 'PNG', padding, padding, pdfWidth, pdfHeight);
+
+      // 두 번째 페이지 추가
+      pdf.addPage();
+      const editorElement = document.querySelector(
+        '.ck.ck-editor__editable.ck-read-only',
+      ) as HTMLElement;
+
+      console.log(editorElement);
+
+      html2canvas(editorElement, { scale: 3 }).then(nextCanvas => {
+        const nextImgData = nextCanvas.toDataURL('image/png');
+        pdf.addImage(nextImgData, 'PNG', padding, padding, pdfWidth, pdfHeight);
+      });
+
+      // PDF 저장
       pdf.save('DS품의서.pdf');
     });
   };

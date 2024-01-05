@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import classes from '../../../pages/Approval/Approval.module.css';
 import logoSmall from '../../../assets/img/logo.png';
+import tamp from '../../../assets/img/tamp.png';
 import TextEditor from '../../TextEditor';
 import { useLocation } from 'react-router-dom';
 
@@ -17,6 +18,7 @@ const ExecutionCreate = () => {
   useEffect(() => {
     dispatch(selectedActions.setIsEditMode(true));
     dispatch(selectedActions.setIsDetailMode(false));
+    dispatch(selectedActions.setCcId(state.documentId));
   }, []);
 
   /* 제목 */
@@ -101,14 +103,6 @@ const ExecutionCreate = () => {
           </div>
           <div className={classes['execution-table-tr']}>
             <div className={classes['execution-table-th']}>
-              <span>참 조</span>
-            </div>
-            <div className={classes['execution-table-td']}>
-              :<span className={classes['execution-table__defalut']}></span>
-            </div>
-          </div>
-          <div className={classes['execution-table-tr']}>
-            <div className={classes['execution-table-th']}>
               <span>참조 문서</span>
             </div>
             <div className={classes['execution-table-td']}>
@@ -125,6 +119,7 @@ const ExecutionCreate = () => {
         <p className={classes['footer']}>
           <span>대 표 이 사</span>
           <span>이 영 상</span>
+          <img src={tamp} alt="Logo" />
         </p>
       </footer>
     </form>

@@ -205,7 +205,10 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, te
             onClick={() =>
               isRevise
                 ? requestApprovalType(documentType, 'PROCEEDING')
-                : requestTempDocument(documentType, 'PROCEEDING')
+                : requestTempDocument(
+                    documentType,
+                    documentType === 'EXECUTION' ? 'APPROVED' : 'PROCEEDING',
+                  )
             }>
             <span>결재요청</span>
             <i className="fa-solid fa-pen-nib"></i>

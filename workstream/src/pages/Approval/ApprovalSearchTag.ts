@@ -64,9 +64,17 @@ export const columns = [
 ];
 
 export const documentTypes = [
-  { type: 'APPROVAL_COMMON', label: '기본 품의서' },
-  { type: 'REFRESH', label: '휴가/출장 신청서' },
-  { type: 'CONDOLENCE', label: '경조비 신청서' },
-  { type: 'EXECUTION', label: '시행문' },
-  { type: 'RESIGNATION', label: '사직원' },
+  { type: 'COMMON', label: '공용', level: 1, class: 'folder' },
+  { type: 'APPROVAL_COMMON', label: '기본 품의서', level: 2, class: 'doc', upCd: 'COMMON' },
+  { type: 'CONDOLENCE', label: '경조비 신청서', level: 2, class: 'doc', upCd: 'COMMON' },
+  { type: 'EXECUTION', label: '시행문', level: 2, class: 'doc', upCd: 'COMMON' },
+  { type: 'EXPLANATION', label: '사유서', level: 2, class: 'doc', upCd: 'COMMON' },
+  { type: 'PERSONNEL', label: '인사', level: 1, class: 'folder' },
+  { type: 'REFRESH', label: '휴가/출장 신청서', level: 2, class: 'doc', upCd: 'PERSONNEL' },
+  { type: 'RESIGNATION', label: '사직원', level: 2, class: 'doc', upCd: 'COMMON' },
+  { type: 'SALES', label: '영업', level: 1, class: 'folder' },
+  { type: 'GOLF_USAGE', label: '법인골프장 사용 신청서', level: 2, class: 'doc', upCd: 'SALES' },
+  { type: 'FINANCIAL', label: '재경', level: 1, class: 'folder' },
+  { type: 'ADVANCE_PAYMENT', label: '선급금 신청서', level: 2, class: 'doc', upCd: 'FINANCIAL' },
+  { type: '', label: '지출 결의서', level: 2, class: 'doc', upCd: 'FINANCIAL' },
 ];

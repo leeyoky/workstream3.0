@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { fileActions } from './../../store/file-slice';
 import { useParams } from 'react-router-dom';
-import { deleteFileData } from '../../api/axios';
+import { deleteFileData, getFileData } from '../../api/axios';
 import { ApprovalData, CommonData, ResignationData } from '../../types/Approval/Approaval';
 import { useDocumentData } from '../../hooks/Approval/useDocumentData';
 import PdfViewerModal from '../../common/PdfViewerModal';
@@ -127,18 +127,29 @@ const ApprovalAttachment = () => {
     }
   };
 
-  const fileDownloadHandler = (fileId: number, fileName: string) => {
+  /**
+   * 첨부파일 다운로드 기능
+   * @param fileId
+   * @param fileName
+   */
+  const fileDownloadHandler = async (fileId: number, fileName: string) => {
     try {
-      // 파일 다운로드 URL을 동적으로 생성
-      const downloadUrl = `${import.meta.env.VITE_REACT_APP_API_BASE_URL}approval/file/${fileId}`;
+      // 파일 데이터 받아오기
+      const response = await getFileData(fileId);
 
       // 파일 다운로드
+      const blob = new Blob([response.data], { type: response.headers['content-type'] });
+      const url = window.URL.createObjectURL(blob);
+
       const a = document.createElement('a');
-      a.href = downloadUrl;
+      a.href = url;
       a.download = fileName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+
+      // 객체 URL 해제
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       // 다운로드 오류 처리
       console.error('다운로드 실패:', error);
