@@ -2,6 +2,10 @@ import { useDispatch } from 'react-redux';
 import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 
+/**
+ * 참조자/부서 버튼을 클릭하면 나타나는 모달의 header부분
+ * @returns
+ */
 const ApprovalSelectRef = () => {
   const dispatch = useDispatch();
   const removeAllHandler = () => {

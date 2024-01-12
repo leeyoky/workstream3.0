@@ -108,13 +108,13 @@ const useApprovalAction = () => {
    * @param id
    */
   const updateApprovalHandler = async (id: number) => {
-    const confirmMsg = '기존의 결재를 회수하시겠습니까?';
+    const confirmMsg = '기존 결재를 취소하시겠습니까?';
     if (window.confirm(confirmMsg)) {
       try {
         const response = await updateApproveDocument(id);
         console.log(response);
         if (response.status === 204) {
-          alert('결재회수 하였습니다.');
+          alert('결재 취소 하였습니다.');
           window.location.reload();
         }
       } catch (error) {

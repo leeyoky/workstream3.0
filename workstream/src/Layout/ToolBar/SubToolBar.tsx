@@ -141,10 +141,10 @@ const SubToolBar = () => {
           <strong>문서함</strong>
           {renderMenuItems(approvalMenuItems.slice(0, 5))}
         </div>
-        {/*         <div className="sub-toolbar-menu-box">
+        <div className="sub-toolbar-menu-box">
           <strong>관리</strong>
           {renderMenuItems(approvalMenuItems.slice(6))}
-        </div> */}
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import React from 'react';
 import Modal from '../../../Layout/Modal/Modal';
 import classes from '../../../pages/Approval/ApprovalSelect.module.css';
-import ApprovalEmpSelector from './ApprovalEmpSelector';
-import ApprovalOrganization from './ApprovalOrganization';
+import ApprovalEmpSelector from '../ApprovalLine/ApprovalEmpSelector';
+import ApprovalOrganization from '../ApprovalLine/ApprovalOrganization';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,12 @@ interface ApprovalCreateProps {
   onClose: () => void; // 모달 닫기 핸들러
   isEdit?: boolean; // 편집
 }
+
+/**
+ * 결재자 지정 버튼을 누르면 나타나는 결재자 편집 모달
+ * @param props
+ * @returns
+ */
 
 const ApprovalModalEmpEdit: React.FC<ApprovalCreateProps> = props => {
   const newUpdateApprovers = useSelector((state: RootState) => state.approval.updateApprovers);

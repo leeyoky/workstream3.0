@@ -12,6 +12,13 @@ interface ApprovalSelectProps {
   removeAllHandler: () => void;
 }
 
+/**
+ * 결재자 지정 버튼을 눌렀을 때 나타나는 모달 우측의
+ * 결재라인 방식 선택 컴포넌트
+ * 결재, 결재+합의 및 합의 순차, 합의 병렬을 선택할 수 있음
+ * @param param0
+ * @returns
+ */
 const ApprovalEmpLineSelect: React.FC<ApprovalSelectProps> = ({
   selectedOption,
   selectedAgreeOption,

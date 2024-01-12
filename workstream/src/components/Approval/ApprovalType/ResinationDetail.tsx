@@ -3,17 +3,18 @@ import classes from '../../../pages/Approval/Approval.module.css';
 import logoSmall from '../../../assets/img/logo.png';
 import { RootState } from '../../../store';
 import { useSelector } from 'react-redux';
-import SignatureEdit from './SignatureEdit';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { userActions } from '../../../store/User/user-slice';
-import DatePick from '../../DatePick';
 import { formatDateOnly } from '../../../helpers/formatDateTime';
-import useSSNValidation from '../../../hooks/Validation/useSSNValidation';
-import usePhoneValidation from '../../../hooks/Validation/usePhoneValidation';
 import { useResignationData } from './../../../hooks/Approval/useResinationData';
 import { ResignationData } from '../../../types/Approval/Approaval';
+import useSSNValidation from '../../../hooks/Validation/useSSNValidation';
+import usePhoneValidation from '../../../hooks/Validation/usePhoneValidation';
+import DatePick from '../../DatePick';
+import SignatureEdit from '../ApprovalSign/SignatureEdit';
+import ResinationResonSelectBox from './ResinationResonSelectBox';
 
 type ResinationDetailProps = {
   temp: boolean;
@@ -25,7 +26,6 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   const { data } = useResignationData(id);
   const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
   const dispatch = useDispatch();
-
   const {
     ssnFront: validationSSNFront,
     ssnBack: validationSSNBack,
@@ -45,6 +45,9 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
   const [homePhone, setHomePhone] = useState('');
   const [mobilePhone, setMobilePhone] = useState('');
   const [userSSN, setUserSSN] = useState('');
+  const [reasonCd, setReasonCd] = useState('');
+  const [reasonValue, setReasonValue] = useState('');
+
   const deleteHypenFront = data?.resignation.identityNo?.split('-')[0];
   const deleteHypenBack = data?.resignation.identityNo?.split('-')[1];
   const stateUserAddress = data?.resignation.address;
@@ -54,6 +57,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
 
   useEffect(() => {
     initializeData();
+    console.log(reasonRetirement, reasonValue);
   }, [isEdit, data?.resignation.state]);
 
   useEffect(() => {
@@ -85,6 +89,8 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
       setHomePhone(stateHomeContact || '');
       setMobilePhone(stateMobileContact || '');
       setUserSSN(data.resignation.identityNo || '');
+      setReasonValue(data.resignation.reasonCdValue || '');
+      setReasonCd(data.resignation.reasonCd || '');
 
       dispatch(userActions.setSSN(`${ssnFront}-${ssnBack}`));
 
@@ -131,12 +137,6 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
     }
     setUserAddress(userAddress);
     dispatch(userActions.setAddress(userAddress));
-  };
-
-  const exitChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const reasonRetirement = e.target.value;
-    setReasonRetirement(reasonRetirement);
-    dispatch(selectedActions.setReasonRitire(reasonRetirement));
   };
 
   return (
@@ -260,20 +260,16 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
               </tr>
               <tr>
                 <th>퇴직 사유</th>
-                {isEdit ? (
-                  <td colSpan={6} className={classes['update-input']}>
-                    <textarea
-                      placeholder="퇴직 사유를 입력해주세요."
-                      className={classes['body-table__input']}
-                      onChange={exitChangeHandler}
-                      value={reasonRetirement}
-                    />
-                  </td>
-                ) : (
-                  <td colSpan={6} className={classes['text-align__left']}>
-                    {data?.resignation.reasons}
-                  </td>
-                )}
+                <td colSpan={6} className={classes['text-align__left']}>
+                  {isEdit ? (
+                    <ResinationResonSelectBox reasonCd={reasonCd} />
+                  ) : (
+                    <>
+                      {data?.resignation.reasons}
+                      {data?.resignation.reasonCdValue}
+                    </>
+                  )}
+                </td>
               </tr>
             </tbody>
           </table>

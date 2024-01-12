@@ -44,3 +44,8 @@ export const COLUMN_SORT_ATTRIBUTES: Record<string, string> = {
   시행일자: 'executeDate',
   진행현황: 'state',
 };
+// alert 메세지
+export const ALERT_MESSAGES = {
+  SELF_REFERENCE: '자기 자신을 참조자로 추가할 수 없습니다.',
+  MAX_REF_EXCEEDED: '참조자는 최대 10명까지 추가 가능합니다.',
+};

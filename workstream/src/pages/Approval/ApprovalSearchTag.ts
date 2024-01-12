@@ -74,7 +74,30 @@ export const documentTypes = [
   { type: 'RESIGNATION', label: '사직원', level: 2, class: 'doc', upCd: 'COMMON' },
   { type: 'SALES', label: '영업', level: 1, class: 'folder' },
   { type: 'GOLF_USAGE', label: '법인골프장 사용 신청서', level: 2, class: 'doc', upCd: 'SALES' },
+  { type: '', label: '계약서 내부 결제', level: 2, class: 'doc', upCd: 'SALES' },
   { type: 'FINANCIAL', label: '재경', level: 1, class: 'folder' },
-  { type: 'ADVANCE_PAYMENT', label: '선급금 신청서', level: 2, class: 'doc', upCd: 'FINANCIAL' },
+  {
+    type: 'TRANSPORTATION',
+    label: '교통비사용지급 신청서',
+    level: 2,
+    class: 'doc',
+    upCd: 'FINANCIAL',
+  },
+  {
+    type: 'VEHICLE_LOG',
+    label: '업무용승용차 운행기록부',
+    level: 2,
+    class: 'doc',
+    upCd: 'FINANCIAL',
+  },
+  { type: '', label: '부실채권발생 보고서', level: 2, class: 'doc', upCd: 'FINANCIAL' },
+  { type: '', label: '법인카드 분출신청서', level: 2, class: 'doc', upCd: 'FINANCIAL' },
   { type: '', label: '지출 결의서', level: 2, class: 'doc', upCd: 'FINANCIAL' },
+];
+
+export const resignationReason = [
+  { code: '001', attr1: '자진퇴사' },
+  { code: '002', attr1: '회사사정과 근로자 귀책사유에 의한 이직' },
+  { code: '003', attr1: '정년 및 기간만료에 의한 이직' },
+  { code: '004', attr1: '직접입력' },
 ];

@@ -1,0 +1,32 @@
+          Edit      Detail
+Create    True      False
+Temp      True      True
+Detail    False     True
+
+
+* 모든 문서에서 문서함이동 Button 포함.   
+
+==== APPROVAL_COMMON (기본품의서)
+Create            결재자지정, 참조자/부서, 임시저장, 결재요청
+Temp              결재자지정, 참조자/부서, 임시저장, 결재요청, [문서삭제]
+Detail(공통)       PDF다운, 의견
+Detail(결재 전)    [문서회수], PDF다운                                  
+Detail(결재 진행)  PDF다운
+Detail(결재 완료)  [재기안], [시행문생성], PDF다운
+
+==== RESIGNAION (사직원)
+Create            결재자지정, 임시저장, 결재요청
+Temp              결재자지정, 임시저장, 결재요청, [문서삭제]
+Detail(결재 전)    [문서회수], PDF다운
+Detail(결재 진행)  PDF다운
+Detail(결재 완료)  [재기안], PDF다운
+
+=== EXECUTION (시행문)
+Create            [작성완료]
+Detail(결재 완료)  PDF다운
+
+
+* Buttons
+문서회수 : isSameUser === true && approvalYn === False
+재기안 : isSameUser === true && isFinishedDocumnt === true
+시행문생성 : isSameUser === true && isFinishedDocumnt === true && documentType === APPROVAL_COMMON

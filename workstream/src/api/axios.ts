@@ -152,6 +152,11 @@ export function updateApproveDocument(id: number) {
   return instance.patch(`approval-line/${id}`);
 }
 
+/* 퇴사 사유 동적 selectBox */
+export function updateResignReason() {
+  return instance.get('approval/resignation/reasons');
+}
+
 export function getApprovalList(params: {
   id: string;
   page?: number;

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import classes from '../../../pages/Approval/ApprovalSelect.module.css';
-
 interface DocumentType {
   type: string;
   label: string;
@@ -8,12 +7,16 @@ interface DocumentType {
   class: string;
   child?: DocumentType[];
 }
-
 interface ApprovalDocumentItemProps {
   docType: DocumentType;
   activeDocumentType: string;
   onSelect: (documentType: string) => void;
 }
+/**
+ * 문서 상신 버튼을 눌렀을 때 열리는 문서 선택 모달
+ * @param param0
+ * @returns
+ */
 
 const ApprovalDocumentItem: React.FC<ApprovalDocumentItemProps> = ({
   docType,

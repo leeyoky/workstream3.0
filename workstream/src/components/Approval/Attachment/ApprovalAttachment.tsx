@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import classes from '../../pages/Approval/Approval.module.css';
+import classes from '../../../pages/Approval/Approval.module.css';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { fileActions } from './../../store/file-slice';
+import { RootState } from '../../../store';
+import { fileActions } from '../../../store/file-slice';
 import { useParams } from 'react-router-dom';
-import { deleteFileData, getFileData } from '../../api/axios';
-import { ApprovalData, CommonData, ResignationData } from '../../types/Approval/Approaval';
-import { useDocumentData } from '../../hooks/Approval/useDocumentData';
-import PdfViewerModal from '../../common/PdfViewerModal';
+import { deleteFileData, getFileData } from '../../../api/axios';
+import { ApprovalData, CommonData, ResignationData } from '../../../types/Approval/Approaval';
+import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
+import PdfViewerModal from '../../../common/PdfViewerModal';
 
 const ApprovalAttachment = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // 새로 추가하는 로컬 파일
@@ -35,6 +35,13 @@ const ApprovalAttachment = () => {
   const isSameUser = loginUser === regUser;
 
   useEffect(() => {
+    console.log('documentType', documentType);
+
+    console.log('id', id);
+    console.log('data', data);
+  }, [documentType, id]);
+
+  useEffect(() => {
     setSelectedFiles([]);
   }, [isDetailMode]);
 
@@ -59,13 +66,6 @@ const ApprovalAttachment = () => {
 
     const files = Array.from(e.dataTransfer.files);
     setSelectedFiles(prevFiles => [...prevFiles, ...files]);
-    // const pdfFiles = files.filter(file => file.name.toLowerCase().endsWith('.pdf'));
-    // if (pdfFiles.length === 0) {
-    //   alert('pdf확장자 파일만 업로드 가능합니다.');
-    //   return;
-    // } else {
-    //   setSelectedFiles(prevFiles => [...prevFiles, ...pdfFiles]);
-    // }
   };
 
   // 파일 선택 event
@@ -73,12 +73,6 @@ const ApprovalAttachment = () => {
     if (e.target.files) {
       const files = Array.from(e.target.files); // 선택한 파일 목록을 배열로 변환
       setSelectedFiles(prevFiles => [...prevFiles, ...files]);
-      // const pdfFiles = files.filter(file => file.name.toLowerCase().endsWith('.pdf'));
-      // if (pdfFiles.length === 0) {
-      //   alert('pdf확장자 파일만 업로드 가능합니다.');
-      //   return;
-      // } else {
-      // }
     }
   };
 
@@ -244,7 +238,7 @@ const ApprovalAttachment = () => {
                 <div className={classes['file-warning']}>
                   <span>
                     {' '}
-                    <p>MS Office, PDF</p>파일만 첨부가능
+                    <p>doc, docx, xls, xlsx, ppt, pptx, pdf</p> 파일만 첨부가능
                   </span>
                   <span>
                     {' '}

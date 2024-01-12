@@ -4,6 +4,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 
+/**
+ * 참조자/ 부서 모달의 내용을 표시하는 컴포넌트
+ * @returns
+ */
 const ApprovalResultRef = () => {
   const referenceDept = useSelector((state: RootState) => state.approval.ccDept);
   const referenceEmp = useSelector((state: RootState) => state.approval.ccUser);

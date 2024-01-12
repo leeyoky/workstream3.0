@@ -16,7 +16,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ textValue }) => {
   const [editorData, setEditorData] = useState(textValue || '');
   const dispatch = useDispatch();
   const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
-
+  // const documentType = useSelector((state: RootState) => state.approval.documentType);
   useEffect(() => {
     if (textValue !== undefined) {
       setEditorData(textValue);

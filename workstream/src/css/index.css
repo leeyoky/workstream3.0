@@ -63,14 +63,27 @@ html {
   margin: 0;
   padding: 0;
 }
-input:focus {
-  outline: 1px solid #aedaff;
-  box-shadow: 0 0 10px #7ebbec;
+input:focus,
+textarea:focus{
+  outline: 1px solid #ffae00;
+  box-shadow: none;
 }
-textarea:focus {
-  outline: 1px solid #aedaff;
-  box-shadow: 0 0 10px #7ebbec;
+
+.setData{
+  outline: 1px solid #ffae00;
+  box-shadow: none;
+  border-radius: 2px;
 }
+
+/* autofill css */
+
+input:-webkit-autofill {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-transition: background-color 9999s ease-out;
+  -webkit-box-shadow: 0 0 0px 1000px #fff0de inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
 input {
   height: 1.8rem;
   background-color: #ffffff00;
@@ -1182,10 +1195,7 @@ i[name]:hover::after {
   font-size: 8pt;
   font-weight: 500;
 }
-.setData{
-    outline: 1px solid #aedaff;
-  box-shadow: 0 0 10px #7ebbec;
-}
+
 .select-box i {
   font-size: 10pt;
   border-radius: 3px;
@@ -1249,7 +1259,6 @@ i[name]:hover::after {
   position: relative;
   /* flex-wrap: wrap; */
 
-  margin-top: 10px;
   margin-bottom: 20px;
   flex-direction: column;
 }
@@ -1583,10 +1592,17 @@ i[name]:hover::after {
 }
 
 
+/* MODAL */
 @media (min-width: 768px) {
   .pdfViewer_modal{
     width: auto;
     left: calc(50% - 25rem);
     top: 1%;
   }
+  .approval_execution-ccdoc-modal{
+    width: auto;
+    left: calc(50% - 25rem);
+    top: 13%;
+  }
+
 }

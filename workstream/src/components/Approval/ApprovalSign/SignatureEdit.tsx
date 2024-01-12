@@ -6,11 +6,12 @@ import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { formatDateMinutes } from '../../../helpers/formatDateTime';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-/* import useApprovalRequest from '../../../hooks/Approval/useApprovalRequest'; */
 import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
 import { APPROVAL_STATUS, COLUMN_LIMITS } from '../../../constants/constants';
 import { getUserInfo } from '../../../api/axios';
 import { isApprovalData, isResignationData } from '../../../helpers/approval';
+import useApprovalAction from '../../../hooks/Approval/useApprovalAction';
+
 const SignatureEdit = () => {
   const [newApprovers, setNewApprovers] = useState<
     {
@@ -24,6 +25,7 @@ const SignatureEdit = () => {
       approvedYn?: string | undefined;
     }[]
   >([]);
+  const { approvedYn } = useApprovalAction();
   const [regUserinfo, setRegUserInfo] = useState();
   const { id = '' } = useParams<string>();
   const dispatch = useDispatch();
@@ -36,6 +38,9 @@ const SignatureEdit = () => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const data = useDocumentData(documentType, id)?.data;
 
+  /**
+   * 병렬 합의인 경우, 같은 순번을 부여
+   */
   useEffect(() => {
     if (agreementType === 'parallel') {
       const modifiedApprovers = [];
@@ -91,6 +96,8 @@ const SignatureEdit = () => {
     fetchUserInfo();
   }, [documentType, data]);
 
+  useEffect(() => {}, [approvedYn]);
+
   /* api요청으로 받은 데이터 store에 저장 */
   useEffect(() => {
     if (data && data.line) {
@@ -127,7 +134,7 @@ const SignatureEdit = () => {
         : '';
 
     return { approvalApprovers, agreementApprovers, specialName };
-  }, [approvers]);
+  }, [approvers, approvedYn]);
 
   const { approvalApprovers, agreementApprovers } = memoizedApprovers;
 
@@ -140,6 +147,11 @@ const SignatureEdit = () => {
   const approvalColumnCount = Math.min(MAX_APPROVAL, approvalApprovers.length + 1);
   const agreementColumnCount = Math.min(MAX_AGREEMENT, agreementApprovers.length);
 
+  /**
+   * 결재, 반려에 따른 text 색상
+   * @param approvedYn
+   * @returns
+   */
   const getApprovalResultClass = (approvedYn: string) => {
     switch (approvedYn) {
       case APPROVAL_STATUS.APPROVED:
@@ -150,6 +162,68 @@ const SignatureEdit = () => {
         return classes['approver-result-gray'];
     }
   };
+
+  /**
+   * 결재라인 헤더
+   * @param content
+   * @param index
+   * @param order 결재 순번
+   * @returns
+   */
+  const renderHeader = (content: any, index: number, order: any) => {
+    if (isDetailMode && content) {
+      const { name, rankName } = content;
+
+      // 기안자 본인
+      if (index === 0) {
+        const specialName =
+          documentType === 'APPROVAL_COMMON'
+            ? isApprovalData(data)
+              ? `${data.approval.regUsrNm} ${regUserinfo || ''}`
+              : ''
+            : isResignationData(data)
+            ? `${data.resignation.regUsrNm} ${regUserinfo || ''}`
+            : '';
+
+        return (
+          <th className={classes['header-table__approval-th']}>
+            <div>
+              <span className={classes['approver-index']}>
+                <div>{1}</div>
+              </span>
+              {specialName}
+            </div>
+          </th>
+        );
+      }
+      // 사원 이름 + 직급
+      return (
+        <th className={classes['header-table__approval-th']}>
+          <div>
+            <span className={classes['approver-index']}>
+              {order !== undefined ? <div>{order + 1}</div> : null}
+            </span>
+            {name} {rankName}
+          </div>
+        </th>
+      );
+    } else {
+      return (
+        <th className={classes['header-table__approval-th']}>
+          <div>
+            <span>{content}</span>
+          </div>
+        </th>
+      );
+    }
+  };
+
+  /**
+   * 결재 컴포넌트 내용
+   * @param content
+   * @param index
+   * @returns
+   */
 
   const renderContent = (content: any, index: number) => {
     if (isDetailMode && content) {
@@ -203,7 +277,7 @@ const SignatureEdit = () => {
           ? `${data.resignation.state}`
           : '';
 
-      /* 반려상태인 경우 대기 중인 뒷 결재자들의 상태를 표시하지 않음 */
+      // 반려상태인 경우 대기 중인 뒷 결재자들의 상태를 표시하지 않음
       const shouldRenderResultText =
         documentState !== 'REJECTED' || (documentState === 'REJECTED' && resultText !== '대 기');
 
@@ -229,58 +303,12 @@ const SignatureEdit = () => {
     }
   };
 
-  const renderHeader = (content: any, index: number, order: any) => {
-    if (isDetailMode && content) {
-      const { name, rankName } = content;
-
-      if (index === 0) {
-        const specialName =
-          documentType === 'APPROVAL_COMMON'
-            ? isApprovalData(data)
-              ? `${data.approval.regUsrNm} ${regUserinfo || ''}`
-              : ''
-            : isResignationData(data)
-            ? `${data.resignation.regUsrNm} ${regUserinfo || ''}`
-            : '';
-
-        return (
-          <th className={classes['header-table__approval-th']}>
-            <div>
-              <span className={classes['approver-index']}>
-                <div>{1}</div>
-              </span>
-              {specialName}
-            </div>
-          </th>
-        );
-      }
-      return (
-        <th className={classes['header-table__approval-th']}>
-          <div>
-            <span className={classes['approver-index']}>
-              {order !== undefined ? <div>{order + 1}</div> : null}
-            </span>
-            {name} {rankName}
-          </div>
-        </th>
-      );
-    } else {
-      return (
-        <th className={classes['header-table__approval-th']}>
-          <div>
-            <span>{content}</span>
-          </div>
-        </th>
-      );
-    }
-  };
-
   return (
     <div className={classes['header__right']}>
       <table className={classes['header-table']}>
         <tbody>
           <tr>
-            <th rowSpan={2}>승 인</th>
+            <th rowSpan={2}>결 재</th>
             {renderHeader(userInfo?.empNm, 0, -1)}
             {Array.from({
               length: Math.min(MAX_APPROVAL, Math.max(MIN_APPROVAL, approvalColumnCount)) - 1,

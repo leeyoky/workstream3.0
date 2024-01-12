@@ -40,10 +40,6 @@
     width: auto;
     left: calc(50% - 20rem);
   }
-  .modal.pdfViewer__modal{
-    width: auto;
-    left: calc(40% - 5rem);
-  }
 }
 
 @keyframes slide-down {

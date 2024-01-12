@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import ApprovalModalInstruction from '../ApprovalInstruction/ApprovalModalInstruction';
+import React from 'react';
+import ApprovalModalInstruction from '../../ApprovalModals/ApprovalModalInstruction';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import { RootState } from '../../../../store';
 
-type ApprovalButtonProps = {
+type ApprovalActionButtonsProps = {
   isApprover: boolean;
   isEdit: boolean;
   approvedYn: string | undefined;
@@ -16,10 +16,15 @@ type ApprovalButtonProps = {
   approveDocumentHandler: (matchingId: number, action: 'Y' | 'R') => void;
   matchingId: number;
   userLineData: any; // Update the type accordingly
-  updateApprovalHandler: (id: number) => void;
+  updateApprovalHandler: (id: number, result: 'N') => void;
 };
 
-const ApprovalButtons: React.FC<ApprovalButtonProps> = ({
+/**
+ * 결재 요청과 관련 된 버튼
+ * @param param0
+ * @returns
+ */
+const ApprovalActionButtons: React.FC<ApprovalActionButtonsProps> = ({
   isApprover,
   isEdit,
   approvedYn,
@@ -33,7 +38,6 @@ const ApprovalButtons: React.FC<ApprovalButtonProps> = ({
   handleShowInstModal,
 }) => {
   const documentType = useSelector((state: RootState) => state.approval.documentType);
-  useEffect(() => {}, [isEdit]);
 
   if (isApprover && !isEdit && approvedYn === 'N') {
     const isNextApprover = !isLastApprover && isPreviousApproved && !isFinishedDocumnt;
@@ -75,15 +79,11 @@ const ApprovalButtons: React.FC<ApprovalButtonProps> = ({
   }
 
   if ((isApprover && !isEdit && approvedYn === 'R') || approvedYn === 'Y') {
-    if (
-      (!isLastApprover || isPreviousApproved) &&
-      !isFinishedDocumnt &&
-      !(documentType === 'EXECUTION')
-    ) {
+    if ((!isLastApprover || isPreviousApproved) && !(documentType === 'EXECUTION')) {
       return (
         <button
           className="btn btn-red"
-          onClick={() => userLineData && updateApprovalHandler(userLineData.id)}>
+          onClick={() => userLineData && updateApprovalHandler(userLineData.id, 'N')}>
           <span>{userLineData?.apprType === 'APPROVER' ? '결재 취소' : '합의 취소'}</span>
         </button>
       );
@@ -93,4 +93,4 @@ const ApprovalButtons: React.FC<ApprovalButtonProps> = ({
   return null;
 };
 
-export default ApprovalButtons;
+export default ApprovalActionButtons;

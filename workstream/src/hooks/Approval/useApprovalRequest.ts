@@ -12,27 +12,25 @@ import {
   fetchResignationData,
   updateDocument,
   updateResignation,
-  updatedExecution,
 } from '../../api/axios';
 import { AxiosError } from 'axios';
 import { userActions } from '../../store/User/user-slice';
 import { uiActions } from '../../store/ui-slice';
 import { fileActions } from '../../store/file-slice';
+import { resinationDocData } from '../../types/Approval/Approaval';
 
 const useApprovalRequest = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRefModalOpen, setIsRefModalOpen] = useState(false);
   const [isDetail, setIsDetail] = useState(true);
   const { id = '' } = useParams<string>();
-  const data = useSelector((state: RootState) => state.approval);
-  const executeDate = data.executeDate;
   const userData = useSelector((state: RootState) => state.user);
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const fileData = useSelector((state: RootState) => state.file.files);
+  const files = useSelector((state: RootState) => state.file);
+  const data = useSelector((state: RootState) => state.approval);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {}, [navigate]);
 
   const handleShowModal = () => {
     setIsModalOpen(true);
@@ -69,12 +67,20 @@ const useApprovalRequest = () => {
    * @param id
    * @param executeDate
    */
-  const goCreateExecution = (id: string, executeDate: string) => {
+  const goCreateExecution = (id: string) => {
+    console.log('files : ', files);
+
     const confirmMsg = window.confirm('해당 문서의 시행문을 생성하시겠습니까?');
     if (confirmMsg) {
       dispatch(selectedActions.updateDocumentType('EXECUTION'));
       navigate('/approval/create', {
-        state: { isCreate: true, documentId: id, executeDate: executeDate },
+        state: {
+          isCreate: true,
+          documentId: id,
+          executeDate: data.executeDate,
+          content: data.content,
+          title: data.title,
+        },
       });
     }
   };
@@ -241,15 +247,20 @@ const useApprovalRequest = () => {
       alert('휴대폰 연락처가 입력되지 않았습니다.');
       return;
     }
-
-    if (data.reasonRetire === '') {
-      alert('퇴직 사유를 입력해 주십시오.');
+    if (data.reasonCd === '') {
+      alert('퇴직 사유를 선택해 주세요.');
       return;
     }
 
-    if (data.reasonRetire.trim().length < 10) {
-      alert('퇴직 사유를 10자 이상 입력해 주십시오.');
-      return;
+    if (data.reasonRetire) {
+      if (data.reasonRetire === '') {
+        alert('퇴직 사유를 입력해 주십시오.');
+        return;
+      }
+      if (data.reasonRetire.trim().length < 10) {
+        alert('퇴직 사유를 10자 이상 입력해 주십시오.');
+        return;
+      }
     }
 
     if (data.finalSign === false) {
@@ -272,16 +283,17 @@ const useApprovalRequest = () => {
           ccDept: data.ccDept.map(dept => dept.deptCd),
           ccUser: data.ccUser.map(emp => emp.empNo),
           address: userData.address,
-          homeContact: userData.homePhone,
+          homeContact: userData.homePhone ? userData.homePhone : null,
           identityNo: userData.userSSN,
           mobileContact: userData.mobilePhone,
           reasons: data.reasonRetire,
+          reasonCd: data.reasonCd,
           resignationDate: data.retireDate,
           line: newApprovers,
           state: requestType, // 이 부분을 requestType에 따라 설정
         };
 
-        const response = await fetchResignationData(docData);
+        const response = await fetchResignationData(docData as resinationDocData);
         const responseData = response.data;
 
         if (response.status === 201) {
@@ -317,18 +329,16 @@ const useApprovalRequest = () => {
     const confirmMsg = `${
       requestType === 'APPROVED' ? '시행문을 발행하시겠습니까?' : '임시 저장하시겠습니까?'
     }`;
-    if (data.title === '') {
-      alert('제목을 입력해주세요.');
+
+    if (data.ccId === '') {
+      alert('참조 문서를 선택하여 정보를 불러와주세요.');
       return;
     }
     if (data.recipient === '') {
-      alert('수신처를 입력해주세요.');
+      alert('수신처가 입력되지 않았습니다.');
       return;
     }
-    if (data.content === '') {
-      alert('내용을 입력해주세요.');
-      return;
-    }
+
     if (window.confirm(confirmMsg)) {
       try {
         const formData = {
@@ -344,12 +354,8 @@ const useApprovalRequest = () => {
         console.log(response.data);
 
         if (response.status === 201) {
-          if (fileData.length > 0) {
-            // 파일 데이터가 있는 경우에만 실행
-            await fetchFileHandler(response.data.id);
-          }
-          if (requestType === 'PROCEEDING') {
-            alert('결재요청에 성공했습니다.');
+          if (requestType === 'APPROVED') {
+            alert('시행문 발행을 성공했습니다.');
           } else {
             alert('임시저장에 성공했습니다.');
           }
@@ -357,6 +363,7 @@ const useApprovalRequest = () => {
           navigate(`/approval/detail/${response.data.id}`);
           setIsDetail(true);
         }
+        dispatch(selectedActions.resetArray());
       } catch (error) {
         console.error(error);
       }
@@ -392,8 +399,6 @@ const useApprovalRequest = () => {
       updateDocumentHandler(requestType);
     } else if (documentType === 'RESIGNATION') {
       updateResignationHandler(requestType);
-    } else if (documentType === 'EXECUTION') {
-      updateExecutionHandler(requestType);
     }
   };
 
@@ -475,7 +480,7 @@ const useApprovalRequest = () => {
 
   const updateResignationHandler = async (requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED') => {
     const confirmMsg = `${
-      requestType === 'APPROVED' ? '시행문을 작성하시겠습니까?' : '임시 저장하시겠습니까?'
+      requestType === 'PROCEEDING' ? '결재요청 작성하시겠습니까?' : '임시 저장하시겠습니까?'
     }`;
 
     if (window.confirm(confirmMsg)) {
@@ -504,14 +509,20 @@ const useApprovalRequest = () => {
         return;
       }
 
-      if (data.reasonRetire === '') {
-        alert('퇴직 사유를 입력해 주십시오.');
+      if (data.reasonCd === '') {
+        alert('퇴직 사유를 선택해 주세요.');
         return;
       }
 
-      if (data.reasonRetire.trim().length < 10) {
-        alert('퇴직 사유를 10자 이상 입력해 주십시오.');
-        return;
+      if (data.reasonRetire) {
+        if (data.reasonRetire === '') {
+          alert('퇴직 사유를 입력해 주십시오.');
+          return;
+        }
+        if (data.reasonRetire.trim().length < 10) {
+          alert('퇴직 사유를 10자 이상 입력해 주십시오.');
+          return;
+        }
       }
 
       const newApprovers = approvers.map(employee => ({
@@ -527,6 +538,7 @@ const useApprovalRequest = () => {
         identityNo: userData.userSSN,
         mobileContact: userData.mobilePhone,
         reasons: data.reasonRetire,
+        reasonCd: data.reasonCd,
         resignationDate: data.retireDate,
         line: newApprovers,
         state: requestType, // 이 부분을 requestType에 따라 설정
@@ -549,61 +561,8 @@ const useApprovalRequest = () => {
         }
       } catch (error) {
         console.log(error);
-      }
-    }
-  };
-
-  /**
-   * 시행문 임시저장
-   * @param requestType
-   * @returns
-   */
-
-  const updateExecutionHandler = async (requestType: 'PROCEEDING' | 'TEMP' | 'APPROVED') => {
-    const confirmMsg = `${
-      requestType === 'APPROVED' ? '시행문을 작성하시겠습니까?' : '임시 저장하시겠습니까?'
-    }`;
-
-    if (window.confirm(confirmMsg)) {
-      if (data.title === '') {
-        alert('제목을 입력해주세요.');
-        return;
-      }
-      if (data.recipient === '') {
-        alert('수신처를 입력해주세요.');
-        return;
-      }
-      if (data.content === '') {
-        alert('내용을 입력해주세요.');
-        return;
-      }
-
-      const formData = {
-        id,
-        ccId: data.ccId,
-        title: data.title,
-        executeDate: data.executeDate,
-        recipient: data.recipient,
-        contents: data.content,
-        state: requestType,
-      };
-      console.log('로컬 formData', formData);
-
-      try {
-        const response = await updatedExecution(formData);
-        console.log('response', response);
-
-        if (response.status === 204) {
-          if (requestType === 'APPROVED') {
-            alert('시행문 작성에 성공했습니다.');
-          } else {
-            alert('임시저장에 성공했습니다');
-          }
-          setIsDetail(true);
-          dispatch(selectedActions.resetArray());
-        }
-      } catch (error) {
-        console.log(error);
+      } finally {
+        dispatch(selectedActions.resetResination());
       }
     }
   };
@@ -636,7 +595,6 @@ const useApprovalRequest = () => {
     handleCloseRefModal,
     goBackPage,
     goCreateExecution,
-    executeDate,
     requestApprovalHandler,
     updateDocumentHandler,
     updateResignationHandler,

@@ -1,13 +1,17 @@
 import { useSelector } from 'react-redux';
 import classes from '../../../pages/Approval/Approval.module.css';
 import { RootState } from '../../../store';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { COLUMN_LIMITS } from '../../../constants/constants';
-/* 최초 create */
+import SignatureApprovalSection from './SignatureApprovalSection';
+
+/**
+ * 결재문서의 우측상단에 위치한 결재자 컴포넌트
+ * @returns {React.ReactElement} - SignatureApprovalSection
+ */
 const Signature = () => {
   // Redux 결재자 정보 및 사용자 정보
   const approvers = useSelector((state: RootState) => state.approval.approvers);
-  const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
   // Memoizaion 최적화
   const memoizedApprovers = useMemo(() => {
@@ -16,18 +20,8 @@ const Signature = () => {
     return { approvalApprovers, agreementApprovers };
   }, [approvers]);
 
-  const { approvalApprovers, agreementApprovers } = memoizedApprovers;
-  const [renderedEmpNm, setRenderedEmpNm] = useState<string | undefined>('');
+  const { agreementApprovers } = memoizedApprovers;
 
-  useEffect(() => {
-    // 최초 렌더링 시에는 값을 비우고, approvalApprovers 또는 agreementApprovers가 변경될 때에만 값을 업데이트
-    if (approvalApprovers.length > 0 || agreementApprovers.length > 0) {
-      setRenderedEmpNm(`${userInfo?.empNm} ${userInfo?.rankNm || ''}`);
-    }
-  }, [approvalApprovers, agreementApprovers]);
-
-  // 실제로 표시할 열의 수
-  const approvalColumnCount = Math.min(COLUMN_LIMITS.MAX_APPROVAL, approvalApprovers.length + 1);
   const agreementColumnCount = Math.min(COLUMN_LIMITS.MAX_AGREEMENT, agreementApprovers.length);
 
   // 셀 헤더
@@ -57,37 +51,7 @@ const Signature = () => {
     <div className={classes['header__right']}>
       <table className={classes['header-table']}>
         <tbody>
-          <tr key="header-approval">
-            <th rowSpan={2}>결재</th>
-            {renderHeader(renderedEmpNm, 0, 0)}
-            {Array.from({
-              length:
-                Math.min(
-                  COLUMN_LIMITS.MAX_APPROVAL,
-                  Math.max(COLUMN_LIMITS.MIN_APPROVAL, approvalColumnCount),
-                ) - 1,
-            }).map((_, index) =>
-              renderHeader(
-                index < approvalApprovers.length
-                  ? `${approvalApprovers[index].name} ${approvalApprovers[index].rankName}`
-                  : '',
-                index + 1,
-                approvalApprovers[index]?.order,
-              ),
-            )}
-          </tr>
-          <tr key="content-approval">
-            {renderContent()}
-            {Array.from({
-              length:
-                Math.min(
-                  COLUMN_LIMITS.MAX_APPROVAL,
-                  Math.max(COLUMN_LIMITS.MIN_APPROVAL, approvalColumnCount),
-                ) - 1,
-            }).map(() => {
-              return renderContent();
-            })}
-          </tr>
+          <SignatureApprovalSection />
 
           <tr key="header-agreement">
             <th rowSpan={2}>합의</th>

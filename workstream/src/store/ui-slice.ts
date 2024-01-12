@@ -42,6 +42,14 @@ const uiSlice = createSlice({
     setDropTarget(state, action) {
       state.dropTarget = action.payload;
     },
+    // state를 설정
+    setState(state, action) {
+      state.searchInput.state = action.payload;
+    },
+    // docType을 설정
+    setDocType(state, action) {
+      state.searchInput.docType = action.payload;
+    },
     resetDropTarget(state) {
       state.dropTarget = null;
     },

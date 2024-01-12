@@ -37,6 +37,7 @@ export interface ccUser {
   empNm: string;
   empNo: string;
 }
+// slice
 export interface ApprovalState {
   documentCnt: string;
   isEditMode: boolean;
@@ -55,6 +56,7 @@ export interface ApprovalState {
   executeDate: string;
   comment: string;
   pendingCnt: string;
+  reasonCd: string;
   reasonRetire: string;
   finalSign: boolean;
   retireDate: string;
@@ -117,18 +119,30 @@ export interface resinationDocData {
   line: { apprType: string; approver: string; order: number }[];
   mobileContact: string;
   reasons: string;
+  reasonCd: string;
   resignationDate: string;
   state: string;
 }
 /* 시행문 */
 export interface executiondocData {
-  title: string;
+  title?: string;
+  state?: string;
+  regUsr?: string;
+  regUsrNm?: string;
+  regUsrDeptNm?: string;
+  files?: Array<{
+    id: number;
+    fileSize: number;
+    fileName: string;
+    fileExtension: string;
+    docType: string;
+    docNumber: string;
+  }>;
   id?: string;
   ccId?: string;
   executeDate?: string;
-  recipient: string;
-  contents: string;
-  state: string;
+  recipient?: string;
+  contents?: string;
 }
 
 export interface fetchCommentData {
@@ -253,10 +267,21 @@ export type ResignationData = CommonData & {
     officeDutyNm: string;
     rankNm: string;
     reasons: string;
+    reasonCd: string;
+    reasonCdValue?: string;
     regUsr: string;
     regUsrDeptNm: string;
     regUsrNm: string;
     resignationDate: string;
     state: string;
   };
+};
+
+/* resign reason dynamic selectbox */
+export type resignReasonSelectData = {
+  code: string;
+  value: string;
+  attr1: string;
+  attr2: string;
+  attr3: string;
 };

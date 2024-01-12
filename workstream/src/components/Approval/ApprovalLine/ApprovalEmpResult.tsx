@@ -11,6 +11,11 @@ interface ApprovalEmpResultProps {
   updateApprovers: Employee[];
 }
 
+/**
+ * 결재라인 방식 선택 중
+ * 결재자 추가/삭제 및 직원의 결재자의 순서 편집이 가능한 컴포넌트
+ * @returns
+ */
 const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
   const [isDragging, setIsDragging] = useState(false);
   const approvers = useSelector((state: RootState) => state.approval.approvers);

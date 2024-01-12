@@ -3,14 +3,14 @@ import { ApprovalState, ccDept, Employee } from '../../types/Approval/Approaval'
 
 const initialState: ApprovalState = {
   documentCnt: '',
-  isEditMode: true,
+  isEditMode: false,
   isDetailMode: true,
   isReviseMode: false,
   documentType: '',
-  selectedOption: 'approval' /* 결재 / 합의 */,
-  agreementType: 'sequential' /* 순차 / 병렬 */,
-  approvers: [],
-  updateApprovers: [],
+  selectedOption: 'approval', // 결재 타입
+  agreementType: 'sequential', // 합의 타입
+  approvers: [], // 결재자 정보
+  updateApprovers: [], // 결재자 업데이트 배열
   ccDept: [],
   ccUser: [],
   isReference: false,
@@ -19,8 +19,10 @@ const initialState: ApprovalState = {
   executeDate: '',
   comment: '',
   pendingCnt: '',
-  reasonRetire: '',
   finalSign: false,
+  /* 사직원 */
+  reasonCd: '',
+  reasonRetire: '',
   retireDate: '',
   /* 시행문 */
   recipient: '',
@@ -128,6 +130,9 @@ const approvalSlice = createSlice({
       state.content = action.payload;
     },
     /* 사직서 */
+    setReasonCd(state, action) {
+      state.reasonCd = action.payload;
+    },
     setReasonRitire(state, action) {
       state.reasonRetire = action.payload;
     },
@@ -215,7 +220,7 @@ const approvalSlice = createSlice({
       state.selectedOption = '';
       state.agreementType = '';
       state.approvers = [];
-      state.isEditMode = true;
+      state.isEditMode = false;
       state.isReviseMode = false;
       state.ccDept = [];
       state.ccUser = [];
@@ -234,6 +239,13 @@ const approvalSlice = createSlice({
       state.reasonRetire = '';
       state.retireDate = '';
       state.finalSign = false;
+      state.reasonCd = '';
+    },
+    resetExecution(state) {
+      state.executeDate = '';
+      state.recipient = '';
+      state.title = '';
+      state.content = '';
     },
   },
 });

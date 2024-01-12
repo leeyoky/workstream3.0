@@ -15,6 +15,12 @@ import { getOrderForApprovers } from '../../../helpers/getOrderForApprovers';
 interface ApprovalEmpSelectorProps {
   isEdit?: boolean;
 }
+/**
+ * 결재자 지정 버튼을 누르면 나타나는 모달의 우측에 위치한
+ * 결재라인방식 선택 컴포넌트
+ * @param props
+ * @returns
+ */
 
 const ApprovalEmpSelector: React.FC<ApprovalEmpSelectorProps> = props => {
   const [updateApprovers, setUpdateApprovers] = useState<Employee[]>([]);

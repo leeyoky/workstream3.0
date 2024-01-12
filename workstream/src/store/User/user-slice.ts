@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const userSlice = createSlice ({
+const userSlice = createSlice({
   name: 'user',
   initialState: {
     userSSN: null as number | null,
@@ -38,14 +38,14 @@ const userSlice = createSlice ({
     setUserInfo(state, action) {
       state.userInfo = action.payload;
     },
-    resetArray(state){
-      state.userSSN = null,
-      state.address = '',
-      state.homePhone = '',
-      state.mobilePhone = ''
-    }
-}
-})
+    resetArray(state) {
+      (state.userSSN = null),
+        (state.address = ''),
+        (state.homePhone = ''),
+        (state.mobilePhone = '');
+    },
+  },
+});
 
 export const userActions = userSlice.actions;
 

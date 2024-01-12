@@ -18,19 +18,21 @@ type ExecutionDetailProps = {
   setTemp: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp }) => {
-  const [title, setTitle] = useState('');
+const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
   const [recipient, setRecipient] = useState('');
 
   const { id = '' } = useParams<string>();
   const { data } = useApprovalExecutionData(id);
 
   const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
+  const isDetail = useSelector((state: RootState) => state.approval.isDetailMode);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('data', data);
+
     initializeData();
-    dispatch(selectedActions.setIsDetailMode(true));
+
     dispatch(selectedActions.setCcId(data?.ccId));
   }, [isEdit, data?.state]);
 
@@ -49,12 +51,15 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp }) => {
   const initializeData = () => {
     if (isTempStorage(data)) {
       setTemp(true);
+      dispatch(selectedActions.setIsEditMode(false));
+      dispatch(selectedActions.setIsDetailMode(false));
       setData();
-      dispatch(selectedActions.setIsEditMode(true));
     } else {
       setTemp(false);
       dispatch(selectedActions.setIsEditMode(false));
+      dispatch(selectedActions.setIsDetailMode(true));
     }
+    console.log('temp', temp);
   };
 
   /**
@@ -62,27 +67,12 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp }) => {
    */
   const setData = () => {
     if (data) {
-      setTitle(data.title);
-      setRecipient(data.recipient);
+      // 시행일자 세팅
+      dispatch(selectedActions.setDate(data.executeDate));
+      // 제목 세팅
+      dispatch(selectedActions.setTitle(data.title));
+      setRecipient(data.recipient?.toString() || '');
     }
-  };
-
-  /**
-   * 제목 수정 핸들러
-   * @param {React.ChangeEvent<HTMLInputElement>} e
-   * @returns
-   * @throws {Error} 50자 초과 시 alert
-   */
-  const updateTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
-    const inputLength = newTitle.length;
-
-    if (inputLength > 50) {
-      alert('50자를 초과할 수 없습니다.');
-      return;
-    }
-    setTitle(newTitle);
-    dispatch(selectedActions.setTitle(newTitle));
   };
 
   /**
@@ -143,7 +133,7 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp }) => {
             </div>
             <div className={classes['execution-table-td']}>
               :
-              {isEdit ? (
+              {!isDetail ? (
                 <span>
                   <input
                     className={classes['update-input']}
@@ -164,26 +154,12 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp }) => {
               <span>제 목</span>
             </div>
             <div className={classes['execution-table-td']}>
-              :
-              {isEdit ? (
-                <span>
-                  <input
-                    className={classes['update-input']}
-                    type="text"
-                    placeholder="제목을 입력해주세요"
-                    name="title"
-                    value={title}
-                    onChange={updateTitle}
-                  />
-                </span>
-              ) : (
-                <span className={classes['execution-table__defalut']}>{data?.title}</span>
-              )}
+              : <span className={classes['execution-table__defalut']}>{data?.title}</span>
             </div>
           </div>
           <div className={classes['execution-table-tr']}>
             <div className={classes['execution-table-th']}>
-              <span>참조 근거</span>
+              <span>참조 문서</span>
             </div>
             <div className={classes['execution-table-td']}>
               :<span className={classes['execution-table__defalut']}>{data?.ccId}</span>

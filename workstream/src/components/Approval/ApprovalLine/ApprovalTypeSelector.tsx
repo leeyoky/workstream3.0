@@ -4,12 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
 import { RootState } from '../../../store';
 import { Employee } from '../../../types/Approval/Approaval';
-
 interface ApprovalTypeSelectorProps {
   index: number;
   name: string;
 }
-
+/**
+ * 결재자 결과창에 보여지는 사원의 결재타입을 선택하는 문서
+ * 결재/합의 버튼을 눌러 타입을 선택한다.
+ *
+ * @param param0
+ * @returns
+ */
 const ApprovalTypeSelector: React.FC<ApprovalTypeSelectorProps> = ({ index, name }) => {
   // State
   const [isApproveActive, setIsApproveActive] = useState(true);

@@ -10,7 +10,6 @@ import { ApprovalData } from '../../types/Approval/Approaval';
 
 import BoardTitle from '../../Layout/BoardLayout/BoardTitle';
 import ApprovalEditButtons from './ApprovalButtonsGroup/ApprovalEditButtons';
-import ApprovalAttachment from './ApprovalAttachment';
 import ApprovalComment from './ApprovalComment';
 import CommonDetail from './ApprovalType/CommonDetail';
 import CommonCreate from './ApprovalType/CommonCreate';
@@ -19,6 +18,9 @@ import ResinationDetail from './ApprovalType/ResinationDetail';
 import ExecutionCreate from './ApprovalType/ExecutionCreate';
 import ExecutionDetail from './ApprovalType/ExecutionDetail';
 import CondolenceCreate from './ApprovalType/CondolenceCreate';
+import TransportationCreate from './ApprovalType/TransportationCreate';
+import ApprovalAttachment from './Attachment/ApprovalAttachment';
+import ReadOnlyAttachment from './Attachment/ReadOnlyAttachment';
 
 const ApprovalEdit = () => {
   const [temp, setTemp] = useState(false);
@@ -60,6 +62,7 @@ const ApprovalEdit = () => {
                   {documentType === 'RESIGNATION' && <ResinationCreate />}
                   {documentType === 'EXECUTION' && <ExecutionCreate />}
                   {documentType === 'CONDOLENCE' && <CondolenceCreate />}
+                  {documentType === 'TRANSPORTATION' && <TransportationCreate />}
                 </>
               ) : (
                 <>
@@ -74,7 +77,7 @@ const ApprovalEdit = () => {
                   )}
                 </>
               )}
-              {!(documentType === 'EXECUTION') && <ApprovalAttachment />}
+              {documentType === 'EXECUTION' ? <ReadOnlyAttachment /> : <ApprovalAttachment />}
             </div>
             <ApprovalEditButtons
               temp={temp}

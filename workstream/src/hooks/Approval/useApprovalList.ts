@@ -21,7 +21,15 @@ export function useApprovalList(sortValue: string) {
   useEffect(() => {
     dispatch(uiActions.resetPage());
     dispatch(selectedActions.resetArray());
+    dispatch(selectedActions.resetDocument());
+    dispatch(selectedActions.resetResination());
+    dispatch(selectedActions.resetExecution());
   }, [selectMenu]);
+
+  useEffect(() => {
+    fetchApprovalList();
+    fetchDocumentCount();
+  }, [getPage, getPageSize, selectMenu, getSearchInput, sortValue, location.pathname]);
 
   const fetchApprovalList = async () => {
     try {
@@ -86,7 +94,6 @@ export function useApprovalList(sortValue: string) {
       const getTotalElements = response.data.totalElements;
       setListData(data);
       setTotalItems(getTotalElements);
-      console.log('totalElements', response.data);
 
       dispatch(uiActions.setTotalItems(getTotalElements));
     } catch (error) {
@@ -104,11 +111,6 @@ export function useApprovalList(sortValue: string) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    fetchApprovalList();
-    fetchDocumentCount();
-  }, [getPage, getPageSize, selectMenu, getSearchInput, sortValue, location.pathname]);
 
   const menuClickHandler = (to: string | null) => {
     dispatch(uiActions.selectMenu(to));

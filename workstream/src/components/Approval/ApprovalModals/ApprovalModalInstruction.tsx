@@ -13,6 +13,11 @@ interface ApprovalModalInstructionProps {
   isLastApprover: boolean;
 }
 
+/**
+ * 결재 지시사항 모달
+ * @param props
+ * @returns
+ */
 const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props => {
   const [instruction, setInstruction] = useState('');
   const { id = '' } = useParams<string>();
@@ -28,6 +33,7 @@ const ApprovalModalInstruction: React.FC<ApprovalModalInstructionProps> = props 
   useEffect(() => {
     console.log('Is Last Approver:', props.isLastApprover);
   }, [props.isLastApprover]);
+  useEffect(() => {}, []);
   /* 지시사항 세팅 */
   const instructionChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const inputComment = e.target.value;

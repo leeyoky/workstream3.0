@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import classes from '../../../pages/Approval/Approval.module.css';
 import logoSmall from '../../../assets/img/logo.png';
-import Signature from './Signature';
+import Signature from '../ApprovalSign/Signature';
 import { RootState } from '../../../store';
 import { useSelector } from 'react-redux';
 import { formatDateOnly, getToday } from '../../../helpers/formatDateTime';
@@ -25,7 +25,7 @@ const ResinationCreate = () => {
     reasonRetirement: string;
     mobilePhone: string;
     complete: boolean;
-    homePhone: string;
+    homePhone: string | null;
     error: string;
   }>({
     sign: '',
@@ -108,23 +108,6 @@ const ResinationCreate = () => {
       userAddress: userAddress,
     }));
     dispatch(userActions.setAddress(userAddress));
-  };
-
-  /* 퇴직 사유 입력 */
-  const exitChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const reasonRetirement = e.target.value;
-    const newLength = reasonRetirement.length;
-
-    // 150자를 초과하면 알림 표시
-    if (newLength > 150) {
-      alert('퇴직사유는 150자를 초과할 수 없습니다.');
-      return;
-    }
-    setFormData(prevData => ({
-      ...prevData,
-      reasonRetirement: reasonRetirement,
-    }));
-    dispatch(selectedActions.setReasonRitire(reasonRetirement));
   };
 
   /* 퇴사 일자 datePicker */
@@ -243,7 +226,7 @@ const ResinationCreate = () => {
               </tr>
               <tr>
                 <th>퇴직 사유</th>
-                <td colSpan={6} className={classes['update-input']}>
+                <td colSpan={6}>
                   <ResinationResonSelectBox />
                   {/* <textarea
                     placeholder="퇴직 사유는 10자 이상 입력해주세요."

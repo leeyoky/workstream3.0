@@ -15,17 +15,19 @@ import { AxiosResponse } from 'axios';
 const PdfViewerModal: React.FC<{
   isOpen: boolean;
   onClose: () => void;
-  file: { id: number; fileName: string };
+  file: { id: number; fileName: string } | null;
 }> = ({ isOpen, onClose, file }) => {
   const [pdfUrl, setPdfUrl] = useState<string>('');
 
   useEffect(() => {
     const fetchPdfUrl = async () => {
       try {
-        const response: AxiosResponse<Blob> = await getFileData(file.id);
-        const blob = response.data;
-        const objectUrl = URL.createObjectURL(blob);
-        setPdfUrl(objectUrl);
+        if (file) {
+          const response: AxiosResponse<Blob> = await getFileData(file.id);
+          const blob = response.data;
+          const objectUrl = URL.createObjectURL(blob);
+          setPdfUrl(objectUrl);
+        }
       } catch (error) {
         console.error('PDF URL 가져오기 실패:', error);
       }

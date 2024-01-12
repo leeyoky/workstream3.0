@@ -98,11 +98,34 @@
 
 
 .btn-secondary {
-  background-color: #99743D;
+  background-color: #2B3499;
   color: #ffffff;
   font-weight: 500;
 }
-.btn-secondary:hover{ background-color: #72562c; transition: all 0.3s ease;}
+.btn-secondary-light{
+  background-color: #f0f1ff;
+  outline: 1px solid #a0a8fd;
+  border-radius: 3px;
+}
+.btn-secondary-light:hover{
+  background-color: #e4e4f1;
+  transition: all 0.3s ease;
+}
+.btn-gray{
+  background-color: #555555;
+  color: #ffffff;
+  font-weight: 500;
+}
+.btn-gray:hover{
+  background-color: #414141;
+  transition: all 0.3s ease;
+}
+.btn-light-gray{
+  background-color: #9c9c9c;
+  color: #ffffff;
+  font-weight: 500;
+}
+.btn-secondary:hover{ background-color: #151c64; transition: all 0.3s ease;}
 .primary{
   background-color: #ff9900;
 }
