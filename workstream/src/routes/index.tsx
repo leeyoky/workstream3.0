@@ -10,6 +10,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import LoginPage from '../pages/LoginPage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import ApprovalManager from '../pages/Approval/ApprovalManager';
 
 export function AuthenticatedRoutes() {
   const isSidebarOpen: boolean = useSelector((state: RootState) => state.ui.isSidebarOpen);
@@ -35,6 +36,7 @@ export function AuthenticatedRoutes() {
             <Route path="/approval/rejected" element={<ApprovalPage />} />
             <Route path="/approval/create" element={<ApprovalEdit />} />
             <Route path="/approval/detail/:id" element={<ApprovalEdit />} />
+            <Route path="/approval/delegation" element={<ApprovalManager />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </main>

@@ -78,7 +78,7 @@ const SignatureEdit = () => {
       let userId;
       if (documentType === 'APPROVAL_COMMON' && isApprovalData(data)) {
         userId = data.approval.regUsr;
-      } else if (documentType === 'SOMETHING_ELSE' && isResignationData(data)) {
+      } else if (documentType === 'RESIGNATION' && isResignationData(data)) {
         userId = data.resignation.regUsr;
       }
 

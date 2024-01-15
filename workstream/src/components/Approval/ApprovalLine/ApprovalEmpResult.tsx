@@ -150,6 +150,18 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
     <div className={classes['emp-list__result']} onDragOver={handleDragOver} onDrop={handleDrop}>
       <div className={classes['emp-item-wrapper']}>
         <div className={classes['emp-index-default']}>
+          <div className={classes['approver-item-index']}>
+            <div className={classes['approver-item-th']}>
+              <span></span>
+              <span>이름</span>
+              <span>직급</span>
+              <span>직책</span>
+              <span>결재타입</span>
+              <span>후결</span>
+              <span>전결</span>
+              <span>삭제</span>
+            </div>
+          </div>
           <div className={classes['approver-item']}>
             <div className={classes['approver-item__items']}>
               <span>{1}</span>

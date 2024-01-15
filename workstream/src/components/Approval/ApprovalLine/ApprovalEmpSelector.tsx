@@ -30,14 +30,6 @@ const ApprovalEmpSelector: React.FC<ApprovalEmpSelectorProps> = props => {
   const isReference = useSelector((state: RootState) => state.approval.isReference);
   const dispatch = useDispatch();
 
-  // 결재라인 방식 선택
-  const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(selectedActions.updateSelectedOption(e.target.value));
-    if (e.target.value === 'addAgreement') {
-      dispatch(selectedActions.updateSelectedAgreementOption('sequential'));
-    }
-  };
-
   // 합의라인 방식 선택
   const selectChangeAgreementHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(selectedActions.updateSelectedAgreementOption(e.target.value));
@@ -70,7 +62,6 @@ const ApprovalEmpSelector: React.FC<ApprovalEmpSelectorProps> = props => {
           <>
             <ApprovalLineSelect
               selectedOption={selectedOption}
-              selectChangeHandler={selectChangeHandler}
               selectChangeAgreementHandler={selectChangeAgreementHandler}
               selectedAgreeOption={selectedAgreeOption}
               removeAllHandler={removeAllHandler}

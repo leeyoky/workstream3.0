@@ -10,7 +10,7 @@ interface SearchTag {
 interface IndexPageProps {
   children?: ReactNode;
   boardTitle: string;
-  searchTags: SearchTag[];
+  searchTags?: SearchTag[];
 }
 
 const IndexPage: React.FC<IndexPageProps> = props => {
@@ -18,7 +18,7 @@ const IndexPage: React.FC<IndexPageProps> = props => {
     <div className="page-wrapper">
       <BoardTitle title={props.boardTitle} />
       <div className="index-box">
-        <SearchBox tags={props.searchTags} />
+        <SearchBox tags={props.searchTags || []} />
         <PageSizing />
         {props.children}
       </div>

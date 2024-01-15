@@ -32,6 +32,11 @@ export const searchTags = [
   { label: '시행일자', name: 'executeDate', type: 'date' },
 ];
 
+export const settingSearchTag = [
+  { label: '대결자', name: 'id', class: 'col-7' },
+  { label: '부재기간', name: 'absenceDate', type: 'date' },
+];
+
 export const progressSearchTags = [
   {
     label: '진행현황',
@@ -61,6 +66,13 @@ export const columns = [
   { name: '의견', sort: false },
   { name: '첨부', sort: false },
   { name: '진행현황', sort: false },
+];
+
+/* setting Page */
+export const settingColumns = [
+  { name: '구분', sort: true },
+  { name: '대결기간', sort: true },
+  { name: '대결자', sort: true },
 ];
 
 export const documentTypes = [

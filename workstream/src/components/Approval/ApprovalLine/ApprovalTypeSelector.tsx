@@ -93,6 +93,7 @@ const ApprovalTypeSelector: React.FC<ApprovalTypeSelectorProps> = ({ index, name
     } else {
       setIsAgreeActive(true);
       setIsApproveActive(false);
+
       dispatch(
         selectedActions.updateApprovers({
           indexes: [index],
@@ -108,17 +109,16 @@ const ApprovalTypeSelector: React.FC<ApprovalTypeSelectorProps> = ({ index, name
 
   let approveButtons = null;
 
-  const displayStyle =
-    selectedOpton === 'approval' || index === approverEmps.length - 1 ? 'none' : '';
+  const displayStyle = index === approverEmps.length - 1 ? 'none' : '';
   approveButtons = (
     <div className={classes['button-box__buttons']} style={{ display: displayStyle }}>
       <button
-        className={`${classes['active-button']} ${isApproveActive ? classes.active : ''}`}
+        className={`${classes['active-button']} ${isApproveActive ? classes.approvalType : ''}`}
         onClick={() => approveClickHandler(index)}>
         결재
       </button>
       <button
-        className={`${classes['active-button']} ${isAgreeActive ? classes.active : ''}`}
+        className={`${classes['active-button']} ${isAgreeActive ? classes.approvalType : ''}`}
         onClick={() => agreeClickHandler(index)}>
         합의
       </button>
@@ -132,27 +132,30 @@ const ApprovalTypeSelector: React.FC<ApprovalTypeSelectorProps> = ({ index, name
         <div className={classes['button-box__buttons']}>
           <button className={classes['last']}>최종 결재</button>
         </div>
-        <span className={classes['button-delete']} onClick={deleteEmp}>
-          <i className="fa-regular fa-trash-can"></i>
-        </span>
       </div>
     );
   }
 
-  let deleteButton: JSX.Element | null = (
+  const deleteButton: JSX.Element | null = (
     <span className={classes['button-delete']} onClick={deleteEmp}>
       <i className="fa-regular fa-trash-can"></i>
     </span>
   );
 
-  if (index === approverEmps.length - 1) {
-    deleteButton = null;
-  }
-
   return (
     <div className={classes['button-box']}>
       {approveButtons}
       {lastApproveButtons}
+      <input
+        style={{ visibility: index === approverEmps.length - 1 ? 'hidden' : 'visible' }}
+        className={classes['button-box__checkbox']}
+        type="checkbox"
+        name={`approvalType_${index}`}></input>
+      <input
+        style={{ visibility: index === approverEmps.length - 1 ? 'hidden' : 'visible' }}
+        className={classes['button-box__checkbox']}
+        type="checkbox"
+        name={`approvalType_${index}`}></input>
       {deleteButton}
     </div>
   );

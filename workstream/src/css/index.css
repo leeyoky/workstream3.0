@@ -16,6 +16,10 @@
 .page-wrapper{
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+.setting-page{
+  background-color: #f3f3f3;
 }
 .form-wrapper{
   padding: 20px;
@@ -1302,7 +1306,6 @@ i[name]:hover::after {
 }
 .search-btn-wrapper {
   margin-left: auto;
-  margin-top: 5px;
   display: flex;
   align-items: center;
 }

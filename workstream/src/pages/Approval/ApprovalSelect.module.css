@@ -83,10 +83,10 @@ input:focus{
 }
 
 .organization-selector__result-wrapper{
-  width: 380px;
+  width: 460px;
 }
 .organization-selector__input-wrapper .accordion {
-  height: 250px;
+  height: 280px;
 }
 .organization-selector__result-wrapper .card,
 .document-selector-wrapper .card {
@@ -108,7 +108,6 @@ input:focus{
   height: auto;
   box-shadow: #4444442e 0px 5px 10px 2px;
   padding: 15px;
-
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -280,10 +279,11 @@ input:focus{
 .emp-list__result{
   border: 1px solid #e0e0e0;
   border-radius: 3px;
-  height: 260px;
+  height: 290px;
   font-size: 12pt;
   line-height: 13pt;
   overflow-y: scroll;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -329,7 +329,7 @@ input:focus{
 .approver-item button {
   width: 40px;
   border-radius: 3px;
-  color: #5f5f5f;
+  color: #acacac;
 }
 .emp-index,
 .emp-index--ref{
@@ -342,10 +342,47 @@ input:focus{
 .emp-index--ref{
   cursor: default;
 }
-
+.approver-item-th{
+  display: flex;
+  width: 100%;
+  height: 20px;
+  justify-content: space-between;
+  flex-direction: row;
+  background-color: #f0f0f0;
+}
+.approver-item-th span{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.approver-item-th span:first-child{
+  width: 5%;
+}
+.approver-item-th span:nth-child(2){
+  width: 15%;
+}
+.approver-item-th span:nth-child(3){
+  width: 15%;
+}
+.approver-item-th span:nth-child(4){
+  width: 15%;
+}
+.approver-item-th span:nth-child(5){
+  width: 18%;
+}
+.approver-item-th span:nth-child(6){
+  width: 10%;
+}
+.approver-item-th span:nth-child(7){
+  width: 10%;
+}
+.approver-item-th span:nth-child(8){
+  width: 10%;
+}
 .emp-index-default{
   display: flex;
   flex: 1;
+  flex-direction: column;
 }
 .emp-index-default button{
   cursor: auto;
@@ -356,16 +393,16 @@ input:focus{
   padding-left: 3px;
 }
 .approver-item span:nth-child(2){
-  width: 25%;
+  width: 31%;
   padding-left: 5px;
   text-align: center;
 }
 .approver-item span:nth-child(3){
-  width: 25%;
+  width: 30%;
   text-align: center;
 }
 .approver-item span:nth-child(4){
-  width: 40%;
+  width: 30%;
   text-align: center;
 }
 
@@ -395,21 +432,33 @@ input:focus{
 }
 
 .button-delete {
-  padding-left: 10px;
+  padding-left: 5px;
+  width: 30%;
+  text-align: center;
 }
 .button-box {
-  width: 100px;
+  width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
 }
-.button-box__buttons{
+.button-box__buttons,
+.button-box__checkbox{
   display: flex;
 }
+.button-box__checkbox{
+  margin: 0px 15px;
+}
 
-.button-box button.active,
+.button-box button.approvalType,
 .button-box .approval {
   background-color: #ffbb00;
+  color: #000000;
+  font-weight: 600;
+}
+.button-box button.postApprovalType{
+  background-color: #fff;
+  border: 1px solid #ccc;
   color: #000000;
   font-weight: 600;
 }
@@ -419,7 +468,6 @@ input:focus{
   color: #000000;
   background-color: #ffbb00;
   width: 80px;
-  /* margin-right: 20px; */
 }
 .last-approver{
   display: flex;
@@ -440,7 +488,16 @@ input:focus{
   padding: 4px;
   width: 100%;
   height: 20px;
-  grid-template-columns: 250px 100px;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+}
+.approver-item-index{
+  display: grid;
+  align-items: center;
+  border-bottom: 1px solid #d8d8d8;
+  width: 100%;
+  height: 20px;
+  justify-items: center;
 }
 .reference-item--dept,
 .reference-item--emp {
@@ -467,6 +524,7 @@ input:focus{
 .approver-item__items{
   display: flex;
   width: 100%;
+  min-width: 225px;
   align-items: center;
   flex-wrap: wrap;
 }

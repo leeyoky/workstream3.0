@@ -4,7 +4,7 @@ const BoardTitle = (props: any) => {
       <p>{props.title}</p>
       <hr />
     </div>
-  )
-}
+  );
+};
 
-export default BoardTitle
+export default BoardTitle;

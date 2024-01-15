@@ -25,6 +25,15 @@
   color: white;
   font-weight: 500;
 }
+.btn-red-light {
+  background-color: #ffecec;
+  outline: 1px solid #fda0a5;
+  border-radius: 3px;
+}
+.btn-red-light:hover{
+  background-color: #eedddd;
+  transition: all 0.3s ease; 
+}
 
 .btn-red:hover{
   background-color: rgb(179, 0, 0);
@@ -124,6 +133,10 @@
   background-color: #9c9c9c;
   color: #ffffff;
   font-weight: 500;
+}
+.btn-light-gray:hover {
+  background-color: #808080;
+  transition: all 0.3s ease;
 }
 .btn-secondary:hover{ background-color: #151c64; transition: all 0.3s ease;}
 .primary{
