@@ -32,6 +32,7 @@ const ResignationButtons = () => {
       )}
       {isDetail && (
         <>
+          {/* <SelectApproverButton /> */}
           <DocumentActionButtons />
           <PdfDownloadButton />
         </>

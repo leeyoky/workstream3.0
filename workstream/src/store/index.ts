@@ -11,6 +11,7 @@ import thunk from 'redux-thunk';
 import textEditorSlice from './textEditor-slice';
 import fileSlice from './file-slice';
 import userSlice from './User/user-slice';
+import approvalSettingSlice from './Approval/setting-slice';
 
 const persistConfig = {
   key: 'root',
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   textEditor: textEditorSlice.reducer,
   file: fileSlice.reducer,
   user: userSlice.reducer,
+  setting: approvalSettingSlice.reducer,
 });
 
 const isDevelopment = process.env.NODE_ENV === 'development';

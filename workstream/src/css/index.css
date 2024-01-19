@@ -13,6 +13,7 @@
 
 
 
+
 .page-wrapper{
   display: flex;
   flex-direction: column;
@@ -84,7 +85,7 @@ textarea:focus{
 input:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-transition: background-color 9999s ease-out;
-  -webkit-box-shadow: 0 0 0px 1000px #fff0de inset !important;
+ /*  -webkit-box-shadow: 0 0 0px 1000px #fff0de inset !important; */
   -webkit-text-fill-color: #000 !important;
 }
 
@@ -952,7 +953,7 @@ i[name]:hover::after {
 .table-not-exist td{
   font-size: 10pt;
   font-weight: 400;
-  height: 300px;
+  height: 440px;
 }
 .table-hover:hover {
   background-color: rgb(245, 245, 245);
@@ -1606,6 +1607,11 @@ i[name]:hover::after {
     width: auto;
     left: calc(50% - 25rem);
     top: 13%;
+  }
+  .modal__organization{
+    width: auto;
+    left: calc(50% - 10rem);
+    top: 10%;
   }
 
 }

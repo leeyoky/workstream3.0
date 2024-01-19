@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import DocumentRequestButton from '../ButtonItem/DocumentRequestButton';
-import DocumentActionButtons from '../ButtonItem/DocumentActionButtons';
 import PdfDownloadButton from '../ButtonItem/PdfDownloadButton';
 
 const ExecutionButtons = () => {
@@ -19,7 +18,6 @@ const ExecutionButtons = () => {
       )}
       {isDetail && (
         <>
-          <DocumentActionButtons />
           <PdfDownloadButton />
         </>
       )}

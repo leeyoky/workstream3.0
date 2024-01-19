@@ -12,6 +12,11 @@ import { getUserInfo } from '../../../api/axios';
 import { isApprovalData, isResignationData } from '../../../helpers/approval';
 import useApprovalAction from '../../../hooks/Approval/useApprovalAction';
 
+/**
+ * 결재자 지정 ( EDIT MODE )
+ * TODO: 오잉
+ * @returns
+ */
 const SignatureEdit = () => {
   const [newApprovers, setNewApprovers] = useState<
     {
@@ -23,6 +28,7 @@ const SignatureEdit = () => {
       approvalType: string;
       modDate?: string | undefined;
       approvedYn?: string | undefined;
+      order: number;
     }[]
   >([]);
   const { approvedYn } = useApprovalAction();
@@ -94,6 +100,7 @@ const SignatureEdit = () => {
 
   useEffect(() => {
     fetchUserInfo();
+    console.log('data:', data);
   }, [documentType, data]);
 
   useEffect(() => {}, [approvedYn]);
@@ -110,6 +117,8 @@ const SignatureEdit = () => {
         rankName: employee.rankNm,
         approvalType: employee.apprType,
         approvedYn: employee.approvedYn,
+        deferredYn: employee.deferredYn,
+        overrideYn: employee.overrideYn,
         order: employee.order,
       }));
       setNewApprovers(updatedApprovers);

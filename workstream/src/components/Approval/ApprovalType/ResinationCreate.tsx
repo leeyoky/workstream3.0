@@ -12,7 +12,7 @@ import { getEnteredDate } from '../../../api/axios';
 import DatePick from '../../DatePick';
 import useSSNValidation from '../../../hooks/Validation/useSSNValidation';
 import usePhoneValidation from '../../../hooks/Validation/usePhoneValidation';
-import ResinationResonSelectBox from './ResinationResonSelectBox';
+import ResinationResonSelectBox from './ResinationReasonSelectBox';
 
 const ResinationCreate = () => {
   const [formData, setFormData] = useState<{
@@ -59,6 +59,7 @@ const ResinationCreate = () => {
     if (userId) {
       fetchEnterDate(userId);
       dispatch(selectedActions.setFinalSign(false));
+      dispatch(selectedActions.setIsEditMode(true));
       dispatch(selectedActions.setIsDetailMode(false));
       dispatch(selectedActions.setRetireDate(getDateHyphen));
     }

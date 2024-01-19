@@ -29,9 +29,10 @@
   background-color: #ffecec;
   outline: 1px solid #fda0a5;
   border-radius: 3px;
+  color: #ce0000;
 }
 .btn-red-light:hover{
-  background-color: #eedddd;
+  background-color: #ffd6d6;
   transition: all 0.3s ease; 
 }
 

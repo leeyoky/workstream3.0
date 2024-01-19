@@ -6,9 +6,9 @@ import { RootState } from '../../../store';
 import { fileActions } from '../../../store/file-slice';
 import { useParams } from 'react-router-dom';
 import { deleteFileData, getFileData } from '../../../api/axios';
-import { ApprovalData, CommonData, ResignationData } from '../../../types/Approval/Approaval';
-import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
+import { ApprovalData, CommonData } from '../../../types/Approval/Approaval';
 import PdfViewerModal from '../../../common/PdfViewerModal';
+import useApprovalExecutionData from '../../../hooks/Approval/useApprovalExecutionData';
 
 const ApprovalAttachment = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // 새로 추가하는 로컬 파일
@@ -24,13 +24,8 @@ const ApprovalAttachment = () => {
   const [isServerFile, setIsServerFile] = useState<CommonData | undefined>();
   const [drag, setDrag] = useState(false);
   const dispatch = useDispatch();
-  const { data } = useDocumentData(documentType, id);
-
-  const regUser = data
-    ? documentType === 'APPROVAL_COMMON'
-      ? (data as ApprovalData)?.approval?.regUsr
-      : (data as ResignationData)?.resignation?.regUsr
-    : '';
+  const { data } = useApprovalExecutionData(id);
+  const regUser = data?.execution.regUsr;
 
   const isSameUser = loginUser === regUser;
 

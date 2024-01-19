@@ -6,6 +6,7 @@ import { uiActions } from '../../store/ui-slice';
 import { countDoucumentType, getApprovalList } from '../../api/axios';
 import { selectedActions } from '../../store/Approval/approval-slice';
 import { useNavigate } from 'react-router-dom';
+import { userActions } from '../../store/User/user-slice';
 
 export function useApprovalList(sortValue: string) {
   const [listData, setListData] = useState<ApprovalListItem[]>([]);
@@ -24,6 +25,7 @@ export function useApprovalList(sortValue: string) {
     dispatch(selectedActions.resetDocument());
     dispatch(selectedActions.resetResination());
     dispatch(selectedActions.resetExecution());
+    dispatch(userActions.resetArray());
   }, [selectMenu]);
 
   useEffect(() => {

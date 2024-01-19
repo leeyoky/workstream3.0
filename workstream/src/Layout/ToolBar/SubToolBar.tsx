@@ -133,17 +133,21 @@ const SubToolBar = () => {
           <Button onShowModal={handleShowModal}>문서 상신</Button>
           {isModalOpen && <ApprovalCreate isCreate={true} onClose={handleCloseModal} />}
         </div>
-        {/*         <div className="sub-toolbar-menu-box">
+        <div className="sub-toolbar-menu-box">
           <strong>작성</strong>
           {renderMenuItems([approvalMenuItems[0]])}
-        </div> */}
+        </div>
         <div className="sub-toolbar-menu-box">
           <strong>문서함</strong>
-          {renderMenuItems(approvalMenuItems.slice(0, 5))}
+          {renderMenuItems(approvalMenuItems.slice(1, 5))}
+        </div>
+        <div className="sub-toolbar-menu-box">
+          <strong>개인문서함</strong>
+          {renderMenuItems(approvalMenuItems.slice(5, 7))}
         </div>
         <div className="sub-toolbar-menu-box">
           <strong>관리</strong>
-          {renderMenuItems(approvalMenuItems.slice(6))}
+          {renderMenuItems(approvalMenuItems.slice(7))}
         </div>
       </div>
     </div>

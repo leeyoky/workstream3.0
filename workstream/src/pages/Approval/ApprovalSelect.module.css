@@ -83,7 +83,7 @@ input:focus{
 }
 
 .organization-selector__result-wrapper{
-  width: 460px;
+  width: 480px;
 }
 .organization-selector__input-wrapper .accordion {
   height: 280px;
@@ -326,10 +326,29 @@ input:focus{
   border-bottom: 1px solid #d8d8d8;
   padding: 5px;
 }
+/* 결재 완료 된 component */
+.approved {
+  background-color: #f5f5f5;
+  color: #909090;
+  cursor: no-drop;
+}
+.approved span{
+  font-weight: 400 !important;
+  cursor: no-drop;
+}
+.approved button {
+  color: #6a6a6a !important;
+  cursor: no-drop;
+}
+.approved button.approvalType {
+  background-color: #d7ceb7!important;
+  font-weight: 400 !important;
+  cursor: no-drop;
+}
+
 .approver-item button {
   width: 40px;
   border-radius: 3px;
-  color: #acacac;
 }
 .emp-index,
 .emp-index--ref{
@@ -359,25 +378,25 @@ input:focus{
   width: 5%;
 }
 .approver-item-th span:nth-child(2){
-  width: 15%;
+  width: 16%;
 }
 .approver-item-th span:nth-child(3){
-  width: 15%;
+  width: 16%;
 }
 .approver-item-th span:nth-child(4){
-  width: 15%;
+  width: 25%;
 }
 .approver-item-th span:nth-child(5){
-  width: 18%;
+  width: 20%;
 }
 .approver-item-th span:nth-child(6){
-  width: 10%;
+  width: 8%;
 }
 .approver-item-th span:nth-child(7){
-  width: 10%;
+  width: 8%;
 }
 .approver-item-th span:nth-child(8){
-  width: 10%;
+  width: 8%;
 }
 .emp-index-default{
   display: flex;
@@ -387,22 +406,26 @@ input:focus{
 .emp-index-default button{
   cursor: auto;
 }
+.emp-index-default div:nth-child(2){
+  max-width: -webkit-fill-available;
+}
+
 .approver-item span:first-child{
   width: 5%;
   text-align: center;
   padding-left: 3px;
 }
 .approver-item span:nth-child(2){
-  width: 31%;
+  width: 25.5%;
   padding-left: 5px;
   text-align: center;
 }
 .approver-item span:nth-child(3){
-  width: 30%;
+  width: 25.5%;
   text-align: center;
 }
 .approver-item span:nth-child(4){
-  width: 30%;
+  width: 44%;
   text-align: center;
 }
 
@@ -432,8 +455,8 @@ input:focus{
 }
 
 .button-delete {
-  padding-left: 5px;
   width: 30%;
+  padding-left: 5px;
   text-align: center;
 }
 .button-box {
@@ -447,7 +470,8 @@ input:focus{
   display: flex;
 }
 .button-box__checkbox{
-  margin: 0px 15px;
+  margin-left: 13px;
+    margin-right: 8px;
 }
 
 .button-box button.approvalType,
@@ -488,7 +512,7 @@ input:focus{
   padding: 4px;
   width: 100%;
   height: 20px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr;
   justify-items: center;
 }
 .approver-item-index{
@@ -526,7 +550,6 @@ input:focus{
   width: 100%;
   min-width: 225px;
   align-items: center;
-  flex-wrap: wrap;
 }
 .approver-item__items i {
   font-size: 10pt !important;

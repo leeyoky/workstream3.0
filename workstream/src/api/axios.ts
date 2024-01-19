@@ -6,6 +6,7 @@ import {
   approveResultData,
   resinationDocData,
   executiondocData,
+  updateApprovalLineData,
 } from '../types/Approval/Approaval';
 import { AxiosResponse } from 'axios';
 
@@ -150,6 +151,10 @@ export function fetchApproveDocument(resultData: approveResultData) {
 // 결재 승인/반려 취소
 export function updateApproveDocument(id: number) {
   return instance.patch(`approval-line/${id}`);
+}
+// 결재자편집
+export function updatedApprovalLine(id: string, formdata: updateApprovalLineData[]) {
+  return instance.patch(`approval-line/proceeding/${id}`, formdata);
 }
 
 /* 퇴사 사유 동적 selectBox */

@@ -169,6 +169,8 @@ const useApprovalRequest = () => {
         return {
           apprType: employee.approvalType,
           approver: employee.empNo,
+          deferredYn: employee.deferredYn,
+          overrideYn: employee.overrideYn,
           order: employee.order as number,
         };
       });
@@ -183,6 +185,7 @@ const useApprovalRequest = () => {
           contents: data.content,
           state: requestType, // 이 부분을 requestType에 따라 설정
         };
+        console.log('formData', formData);
 
         const response = await fetchApprovalData(formData);
         const responseData = response.data;
@@ -274,6 +277,8 @@ const useApprovalRequest = () => {
         return {
           apprType: employee.approvalType,
           approver: employee.empNo,
+          deferredYn: employee.deferredYn,
+          overrideYn: employee.overrideYn,
           order: employee.order as number,
         };
       });
@@ -310,6 +315,7 @@ const useApprovalRequest = () => {
           navigate(`/approval/detail/${responseData.id}`);
           dispatch(selectedActions.resetArray());
           dispatch(selectedActions.resetResination());
+          dispatch(userActions.resetArray());
         }
       } catch (error) {
         console.log(error);
@@ -416,6 +422,8 @@ const useApprovalRequest = () => {
       const newApprovers = approvers.map(employee => ({
         apprType: employee.approvalType,
         approver: employee.empNo,
+        deferredYn: employee.deferredYn,
+        overrideYn: employee.overrideYn,
         order: employee.order as number,
       }));
 
@@ -468,6 +476,7 @@ const useApprovalRequest = () => {
       } finally {
         dispatch(selectedActions.resetArray());
         dispatch(selectedActions.resetResination());
+        dispatch(userActions.resetArray());
       }
     }
   };
@@ -528,6 +537,8 @@ const useApprovalRequest = () => {
       const newApprovers = approvers.map(employee => ({
         apprType: employee.approvalType,
         approver: employee.empNo,
+        deferredYn: employee.deferredYn,
+        overrideYn: employee.overrideYn,
         order: employee.order as number,
       }));
 
@@ -556,13 +567,11 @@ const useApprovalRequest = () => {
           navigate('/approval/document');
           dispatch(uiActions.selectMenu('/approval/document'));
           dispatch(selectedActions.resetArray());
-          dispatch(userActions.resetArray());
           dispatch(selectedActions.resetResination());
+          dispatch(userActions.resetArray());
         }
       } catch (error) {
         console.log(error);
-      } finally {
-        dispatch(selectedActions.resetResination());
       }
     }
   };

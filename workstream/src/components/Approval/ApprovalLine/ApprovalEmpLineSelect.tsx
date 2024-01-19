@@ -24,6 +24,7 @@ const ApprovalEmpLineSelect: React.FC<ApprovalSelectProps> = ({
   removeAllHandler,
 }) => {
   const isReference = useSelector((state: RootState) => state.approval.isReference);
+  const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
 
   return (
     <div className={classes['card-header']}>
@@ -42,11 +43,13 @@ const ApprovalEmpLineSelect: React.FC<ApprovalSelectProps> = ({
             <option value="parallel">합의 병렬방식</option>
           </select>
         </div>
-        <div className={classes['control-button-group']}>
-          <button className="btn-red btn" onClick={removeAllHandler}>
-            전체삭제
-          </button>
-        </div>
+        {isEdit && (
+          <div className={classes['control-button-group']}>
+            <button className="btn-red btn" onClick={removeAllHandler}>
+              전체삭제
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

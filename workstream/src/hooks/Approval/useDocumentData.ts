@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ApprovalData, ResignationData } from '../../types/Approval/Approaval';
-import { getApprovalData, getResignationData } from '../../api/axios';
+import { getApprovalData, getExecutionData, getResignationData } from '../../api/axios';
 
 type DocumentData = ApprovalData | ResignationData;
 /**
@@ -19,6 +19,9 @@ export const useDocumentData = (documentType: string, id: string) => {
         setData(response.data);
       } else if (documentType === 'RESIGNATION') {
         const response = await getResignationData(id);
+        setData(response.data);
+      } else if (documentType === 'EXECUTION') {
+        const response = await getExecutionData(id);
         setData(response.data);
       }
     } catch (error) {

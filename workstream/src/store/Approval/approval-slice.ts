@@ -9,8 +9,11 @@ const initialState: ApprovalState = {
   documentType: '',
   selectedOption: 'approval', // 결재 타입
   agreementType: 'sequential', // 합의 타입
+  deferredYn: 'N', // 후결
+  overrideYn: 'N', // 전결
   approvers: [], // 결재자 정보
   updateApprovers: [], // 결재자 업데이트 배열
+  overrideIndex: null, // 전결 체크박스
   ccDept: [],
   ccUser: [],
   isReference: false,
@@ -63,13 +66,39 @@ const approvalSlice = createSlice({
     updateSelectedAgreementOption(state, action: PayloadAction<string>) {
       state.agreementType = action.payload;
     },
+    // 전결 체크박스
+    setSelectedPreliminaryIndex(state, action: PayloadAction<number | null>) {
+      state.overrideIndex = action.payload;
+    },
     // 결재 직원을 추가
     addEmp(state, action: PayloadAction<Employee & { index: number }>) {
-      const { empNo, name, rankName, duty, approvalType, index } = action.payload;
+      const {
+        empNo,
+        name,
+        rankName,
+        duty,
+        deptNm,
+        deptCd,
+        approvedYn,
+        approvalType,
+        index,
+        order,
+      } = action.payload;
       const isDuplicate = state.approvers.find(emp => emp.name === name);
 
       if (!isDuplicate) {
-        state.approvers.push({ empNo, name, rankName, duty, approvalType, index });
+        state.approvers.push({
+          empNo,
+          name,
+          rankName,
+          duty,
+          deptNm,
+          deptCd,
+          approvedYn,
+          approvalType,
+          index,
+          order,
+        });
       } else {
         // 이미 추가된 직원이 있을 때 index를 업데이트
         const existingEmpIndex = state.approvers.findIndex(emp => emp.name === name);
@@ -147,12 +176,35 @@ const approvalSlice = createSlice({
       state.recipient = action.payload;
     },
     // 직원 중 결재직원 선택
-    updateApprovers(state, action: PayloadAction<{ indexes: number[]; approvalType: string }>) {
+    updateApprovers(
+      state,
+      action: PayloadAction<{
+        indexes: number[];
+        approvalType: string;
+      }>,
+    ) {
       const { indexes, approvalType } = action.payload;
       // 선택한 직원들의 index를 사용하여 approvalType을 업데이트
       state.approvers = state.approvers.map((employee, index) => {
         if (indexes.includes(index)) {
           return { ...employee, approvalType };
+        }
+        return employee;
+      });
+    },
+    // 전결/후결 checkBox
+    updateApproverCheckBox(
+      state,
+      action: PayloadAction<{
+        indexes: number[];
+        overrideYn: string;
+        deferredYn: string;
+      }>,
+    ) {
+      const { indexes, deferredYn, overrideYn } = action.payload;
+      state.approvers = state.approvers.map((employee, index) => {
+        if (indexes.includes(index)) {
+          return { ...employee, deferredYn, overrideYn };
         }
         return employee;
       });
@@ -200,6 +252,7 @@ const approvalSlice = createSlice({
     },
     removeAllEmps(state) {
       state.approvers = [];
+      state.overrideIndex = null;
     },
     // 수정하기
     setIsEditMode(state, action) {
@@ -224,6 +277,7 @@ const approvalSlice = createSlice({
       state.isReviseMode = false;
       state.ccDept = [];
       state.ccUser = [];
+      state.overrideIndex = null;
     },
     resetDocument(state) {
       state.selectedOption = '';
@@ -234,6 +288,7 @@ const approvalSlice = createSlice({
       state.executeDate = '';
       state.ccDept = [];
       state.ccUser = [];
+      state.reasonCd = '';
     },
     resetResination(state) {
       state.reasonRetire = '';

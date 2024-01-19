@@ -14,7 +14,7 @@ import useSSNValidation from '../../../hooks/Validation/useSSNValidation';
 import usePhoneValidation from '../../../hooks/Validation/usePhoneValidation';
 import DatePick from '../../DatePick';
 import SignatureEdit from '../ApprovalSign/SignatureEdit';
-import ResinationResonSelectBox from './ResinationResonSelectBox';
+import ResinationResonSelectBox from './ResinationReasonSelectBox';
 
 type ResinationDetailProps = {
   temp: boolean;
@@ -68,7 +68,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
     dispatch(selectedActions.setReasonRitire(stateReason));
     dispatch(userActions.setHomePhone(stateHomeContact));
     dispatch(userActions.setMobilePhone(stateMobileContact));
-
+    dispatch(selectedActions.setFinalSign(true));
     dispatch(selectedActions.setIsDetailMode(true));
   }, [userSSN, stateUserAddress]);
 
@@ -168,7 +168,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 <td colSpan={2}>{data?.resignation.regUsrNm}</td>
                 <th>주민 번호</th>
                 {isEdit ? (
-                  <td colSpan={2} className={classes['update-input']}>
+                  <td colSpan={2}>
                     <>
                       <input
                         className={`${classes['body-table__input']} ${classes['RRnumber']}`}
@@ -198,7 +198,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 <td colSpan={2}>{data?.resignation.enterDate}</td>
                 <th>퇴사 일자</th>
                 {isEdit ? (
-                  <td colSpan={2} className={classes['update-input']}>
+                  <td colSpan={2}>
                     <DatePick
                       placeholderText="퇴사일자"
                       selected={retireDate}
@@ -213,7 +213,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
               <tr>
                 <th rowSpan={2}>현재 주소</th>
                 {isEdit ? (
-                  <td colSpan={2} rowSpan={2} className={classes['update-input']}>
+                  <td colSpan={2} rowSpan={2}>
                     <textarea
                       placeholder="주소를 입력해주세요."
                       className={classes['body-table__input']}
@@ -222,14 +222,14 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                     />
                   </td>
                 ) : (
-                  <td colSpan={2} rowSpan={2} className={classes['text-align__left']}>
+                  <td colSpan={2} rowSpan={2}>
                     {data?.resignation.address}
                   </td>
                 )}
                 <th rowSpan={2}>연 락 처</th>
                 <th className={classes['body-table__100']}>집</th>
                 {isEdit ? (
-                  <td className={classes['update-input']}>
+                  <td>
                     <input
                       placeholder="연락처를 입력해주세요."
                       className={classes['body-table__input']}
@@ -245,7 +245,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
               <tr>
                 <th>휴대폰</th>
                 {isEdit ? (
-                  <td className={classes['update-input']}>
+                  <td>
                     <input
                       placeholder="휴대폰 번호를 입력해주세요"
                       className={classes['body-table__input']}
@@ -262,7 +262,7 @@ const ResinationDetail: React.FC<ResinationDetailProps> = ({ setTemp }) => {
                 <th>퇴직 사유</th>
                 <td colSpan={6} className={classes['text-align__left']}>
                   {isEdit ? (
-                    <ResinationResonSelectBox reasonCd={reasonCd} />
+                    <ResinationResonSelectBox reasonCd={reasonCd} reasonValue={reasonValue} />
                   ) : (
                     <>
                       {data?.resignation.reasons}

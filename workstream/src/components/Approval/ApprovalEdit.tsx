@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { selectedActions } from '../../store/Approval/approval-slice';
-import { ApprovalData } from '../../types/Approval/Approaval';
 
 import BoardTitle from '../../Layout/BoardLayout/BoardTitle';
 import ApprovalEditButtons from './ApprovalButtonsGroup/ApprovalEditButtons';
@@ -20,11 +19,9 @@ import ExecutionDetail from './ApprovalType/ExecutionDetail';
 import CondolenceCreate from './ApprovalType/CondolenceCreate';
 import TransportationCreate from './ApprovalType/TransportationCreate';
 import ApprovalAttachment from './Attachment/ApprovalAttachment';
-import ReadOnlyAttachment from './Attachment/ReadOnlyAttachment';
 
 const ApprovalEdit = () => {
   const [temp, setTemp] = useState(false);
-  const [data, setData] = useState<ApprovalData | undefined>(undefined);
 
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const dispatch = useDispatch();
@@ -39,7 +36,6 @@ const ApprovalEdit = () => {
 
   useEffect(() => {
     if (prevDocumentType.current !== documentType) {
-      console.log(data);
       // 이전 documentType와 현재 documentType이 다른 경우에만 실행
       dispatch(selectedActions.resetArray());
       prevDocumentType.current = documentType; // 이전 documentType 업데이트
@@ -67,7 +63,7 @@ const ApprovalEdit = () => {
               ) : (
                 <>
                   {documentType === 'APPROVAL_COMMON' && (
-                    <CommonDetail temp={temp} setTemp={setTemp} setData={setData} />
+                    <CommonDetail temp={temp} setTemp={setTemp} />
                   )}
                   {documentType === 'RESIGNATION' && (
                     <ResinationDetail temp={temp} setTemp={setTemp} />
@@ -77,7 +73,7 @@ const ApprovalEdit = () => {
                   )}
                 </>
               )}
-              {documentType === 'EXECUTION' ? <ReadOnlyAttachment /> : <ApprovalAttachment />}
+              <ApprovalAttachment />
             </div>
             <ApprovalEditButtons
               temp={temp}

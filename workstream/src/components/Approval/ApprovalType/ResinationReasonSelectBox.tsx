@@ -13,11 +13,12 @@ import { RootState } from '../../../store';
  * @returns
  */
 
-type ResinationResonSelectBoxProps = {
+type ResinationReasonSelectBoxProps = {
   reasonCd?: string;
+  reasonValue?: string;
 };
 
-const ResinationResonSelectBox: React.FC<ResinationResonSelectBoxProps> = ({ reasonCd }) => {
+const ResinationReasonSelectBox: React.FC<ResinationReasonSelectBoxProps> = () => {
   // api에서 가져온 값
   const [reasons, setReasons] = useState<resignReasonSelectData[]>([]);
   // 첫번째 셀렉트 박스 값
@@ -26,18 +27,36 @@ const ResinationResonSelectBox: React.FC<ResinationResonSelectBoxProps> = ({ rea
   const [reasonsForSelectedAtt1, setReasonsForSelectedAtt1] = useState<resignReasonSelectData[]>(
     [],
   );
+  const detailMode = useSelector((state: RootState) => state.approval.isDetailMode);
+  // 두번째 셀렉트 박스의 선택된 코드 값
   const [reasonsValue, setReasonsValue] = useState('');
-  const isDetail = useSelector((state: RootState) => state.approval.isDetailMode);
+  // 퇴직사유 입력 값
   const [reasonRetirement, setReasonRetirement] = useState('');
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     const updatedResignReason = async () => {
       try {
         const response = await updateResignReason();
-        const data = response.data;
+        const data: resignReasonSelectData[] = response.data;
         setReasons(data);
         console.log('reason Data:', data);
+        // 처음 마운트될 때의 로직 추가
+        if (data.length > 0 && detailMode) {
+          const defaultAttr1Value = data[0].attr1;
+          setSelectedAtt1(defaultAttr1Value);
+
+          // 해당 attr1 값에 따른 이유들 추출 및 설정
+          const filteredReasons = data.filter(reason => reason.attr1 === defaultAttr1Value);
+          setReasonsForSelectedAtt1(filteredReasons);
+
+          // 이유들 중 첫 번째 항목의 코드 값 설정
+          if (filteredReasons.length > 0) {
+            const defaultReasonValue = filteredReasons[0].code;
+            setReasonsValue(defaultReasonValue);
+          }
+        }
       } catch (error) {
         console.log(error);
       }
@@ -45,28 +64,18 @@ const ResinationResonSelectBox: React.FC<ResinationResonSelectBoxProps> = ({ rea
     updatedResignReason();
   }, []);
 
-  useEffect(() => {
-    // 선택한 att1에 맞는 이유들을 추출하여 두 번째 셀렉트박스에 설정
-    const filteredReasons = reasons.filter(reason => reason.attr1 === selectedAtt1);
-    setReasonsForSelectedAtt1(filteredReasons);
-    if (isDetail) {
-      // 두 번째 셀렉트 박스의 value 값을 이용하여 첫 번째 셀렉트 박스의 value 값을 찾기
-      const matchingOption = reasons.find(reason => reason.code === reasonCd);
-      // 찾은 값이 있다면 해당 값을 선택
-      if (matchingOption) {
-        setReasonsValue(matchingOption.code);
-        setSelectedAtt1(matchingOption.attr1);
-      }
-    }
-  }, [reasons]);
-
   /**
    * 퇴직사유 첫번째 selectBox 클릭 이벤트
    * @param e
    */
   const att1ChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedAtt1Value = e.target.value;
+    // 첫번째 셀렉트박스 value 세팅
     setSelectedAtt1(selectedAtt1Value);
+    // 선택한 att1에 맞는 이유들을 추출 하여 두번째 셀렉트박스에 설정
+    const filteredReasons = reasons.filter(reason => reason.attr1 === selectedAtt1Value);
+    setReasonsForSelectedAtt1(filteredReasons);
+    // 다른 상태 초기화
     setReasonsValue('');
     dispatch(selectedActions.setReasonRitire(''));
   };
@@ -78,6 +87,8 @@ const ResinationResonSelectBox: React.FC<ResinationResonSelectBoxProps> = ({ rea
   const setReasonCdHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setReasonsValue(selectedValue);
+    console.log('selectedValue : ', selectedValue);
+
     dispatch(selectedActions.setReasonCd(selectedValue));
     dispatch(selectedActions.setReasonRitire(''));
   };
@@ -127,4 +138,4 @@ const ResinationResonSelectBox: React.FC<ResinationResonSelectBoxProps> = ({ rea
   );
 };
 
-export default ResinationResonSelectBox;
+export default ResinationReasonSelectBox;

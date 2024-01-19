@@ -17,9 +17,8 @@ th {
   margin: 0;
 }
 .text-align__left{
-  padding: 2px;
   text-align: left;
-  height: 40px;
+  height: 30px;
 }
 
 input:focus {
@@ -619,9 +618,7 @@ footer p {
 .header-info > thead > tr:last-child th{
   height: 40px;
 }
-.update-input {
-  background-color: #fff9f1 !important;
-}
+
 .update-input textarea {
   height: -webkit-fill-available;
   width: -webkit-fill-available;
@@ -634,7 +631,6 @@ footer p {
   font-size: 9pt;
   font-weight: 500;
   display: flex;
-  background-color: #fff9f1;
   text-align: left;
   padding: 2px;
 }
@@ -645,7 +641,6 @@ footer p {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding-top: 15px;
   color: #a5a5a5;
 }
 .update-input input::placeholder{

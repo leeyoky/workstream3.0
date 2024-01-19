@@ -9,6 +9,7 @@ import { RootState } from '../../../store';
  * 결재라인 컴포넌트
  * @returns
  */
+
 const SignatureApprovalSection = () => {
   const approvers = useSelector((state: RootState) => state.approval.approvers);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -29,6 +30,9 @@ const SignatureApprovalSection = () => {
     }
   }, [approvalApprovers]);
 
+  const approvalColumnCount = Math.min(COLUMN_LIMITS.MAX_APPROVAL, approvers.length + 1);
+
+  // 셀 헤더
   const renderHeader = (content: any, index: number, order: any) => {
     return (
       <th className={classes['header-table__approval-th']} key={index}>
@@ -50,8 +54,6 @@ const SignatureApprovalSection = () => {
     </td>
   );
 
-  const approvalColumnCount = Math.min(COLUMN_LIMITS.MAX_APPROVAL, approvers.length + 1);
-
   return (
     <>
       <tr key="header-approval">
@@ -69,7 +71,7 @@ const SignatureApprovalSection = () => {
               ? `${approvalApprovers[index].name} ${approvalApprovers[index].rankName}`
               : '',
             index + 1,
-            approvers[index]?.order,
+            approvalApprovers[index]?.order,
           ),
         )}
       </tr>

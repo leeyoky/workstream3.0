@@ -34,12 +34,12 @@ const ApprovalAttachment = () => {
 
   const isSameUser = loginUser === regUser;
 
-  useEffect(() => {
+  /*   useEffect(() => {
     console.log('documentType', documentType);
 
     console.log('id', id);
     console.log('data', data);
-  }, [documentType, id]);
+  }, [documentType, id]); */
 
   useEffect(() => {
     setSelectedFiles([]);
@@ -47,6 +47,7 @@ const ApprovalAttachment = () => {
 
   useEffect(() => {
     setIsServerFile(data);
+    dispatch(fileActions.updateServerFiles(data?.files));
   }, [data, selectedFiles]);
 
   const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>) => {

@@ -23,7 +23,6 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
 
   const { id = '' } = useParams<string>();
   const { data } = useApprovalExecutionData(id);
-
   const isEdit = useSelector((state: RootState) => state.approval.isEditMode);
   const isDetail = useSelector((state: RootState) => state.approval.isDetailMode);
   const dispatch = useDispatch();
@@ -33,8 +32,8 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
 
     initializeData();
 
-    dispatch(selectedActions.setCcId(data?.ccId));
-  }, [isEdit, data?.state]);
+    dispatch(selectedActions.setCcId(data?.execution.ccId));
+  }, [isEdit, data?.execution.state]);
 
   /**
    * api 요청에 따른 document의 state가 임시저장 상태인지
@@ -42,7 +41,7 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
    * @returns
    */
   const isTempStorage = (data: executiondocData | undefined): data is executiondocData => {
-    return data !== undefined && data.state === 'TEMP';
+    return data !== undefined && data.execution.state === 'TEMP';
   };
 
   /**
@@ -68,10 +67,10 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
   const setData = () => {
     if (data) {
       // 시행일자 세팅
-      dispatch(selectedActions.setDate(data.executeDate));
+      dispatch(selectedActions.setDate(data.execution.executeDate));
       // 제목 세팅
-      dispatch(selectedActions.setTitle(data.title));
-      setRecipient(data.recipient?.toString() || '');
+      dispatch(selectedActions.setTitle(data.execution.title));
+      setRecipient(data.execution.recipient?.toString() || '');
     }
   };
 
@@ -116,7 +115,7 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
               <span>문서번호</span>
             </div>
             <div className={classes['execution-table-td']}>
-              :<span className={classes['execution-table__defalut']}>{data?.id}</span>
+              :<span className={classes['execution-table__defalut']}>{data?.execution.id}</span>
             </div>
           </div>
           <div className={classes['execution-table-tr']}>
@@ -124,7 +123,10 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
               <span>시행일자</span>
             </div>
             <div className={classes['execution-table-td']}>
-              :<span className={classes['execution-table__defalut']}>{data?.executeDate}</span>
+              :
+              <span className={classes['execution-table__defalut']}>
+                {data?.execution.executeDate}
+              </span>
             </div>
           </div>
           <div className={classes['execution-table-tr']}>
@@ -144,7 +146,9 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
                   />
                 </span>
               ) : (
-                <span className={classes['execution-table__defalut']}>{data?.recipient}</span>
+                <span className={classes['execution-table__defalut']}>
+                  {data?.execution.recipient}
+                </span>
               )}
             </div>
           </div>
@@ -154,7 +158,7 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
               <span>제 목</span>
             </div>
             <div className={classes['execution-table-td']}>
-              : <span className={classes['execution-table__defalut']}>{data?.title}</span>
+              : <span className={classes['execution-table__defalut']}>{data?.execution.title}</span>
             </div>
           </div>
           <div className={classes['execution-table-tr']}>
@@ -162,12 +166,12 @@ const ExecutionDetail: React.FC<ExecutionDetailProps> = ({ setTemp, temp }) => {
               <span>참조 문서</span>
             </div>
             <div className={classes['execution-table-td']}>
-              :<span className={classes['execution-table__defalut']}>{data?.ccId}</span>
+              :<span className={classes['execution-table__defalut']}>{data?.execution.ccId}</span>
             </div>
           </div>
         </div>
       </div>
-      <TextEditor textValue={data?.contents} />
+      <TextEditor textValue={data?.execution.contents} />
       <footer>
         <div className={classes['footer-text']}>
           <span>주식회사 데이터스트림즈</span>

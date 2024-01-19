@@ -40,6 +40,8 @@ const ApprovalCommonButtons = () => {
       )}
       {isDetail && (
         <>
+          <SelectApproverButton title="결재자편집" />
+          {/* <SelectCCButton /> */}
           <DocumentActionButtons />
           <PdfDownloadButton />
         </>

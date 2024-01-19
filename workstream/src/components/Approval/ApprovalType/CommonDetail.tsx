@@ -17,10 +17,9 @@ import ApprovalInstructions from '../ApprovalInstruction/ApprovalInstructions';
 type CommonDetailProps = {
   temp: boolean;
   setTemp: React.Dispatch<React.SetStateAction<boolean>>;
-  setData: React.Dispatch<React.SetStateAction<ApprovalData | undefined>>;
 };
 
-const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
+const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp }) => {
   const [executeDate, setExecuteDate] = useState<Date | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -52,7 +51,6 @@ const CommonDetail: React.FC<CommonDetailProps> = ({ setTemp, setData }) => {
   // 데이터 초기화
   const initializeData = () => {
     if (data) {
-      setData(data);
       setTitle(data.approval.title || '');
       setExecuteDate(data.approval.executeDate ? new Date(data.approval.executeDate) : null);
       setContent(data.approval.contents || '');

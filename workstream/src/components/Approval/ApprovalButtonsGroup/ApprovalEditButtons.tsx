@@ -61,16 +61,20 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, ty
       : ''
     : '';
 
-  const isFinishedDocumnt = isApproved === 'APPROVED' || isApproved === 'REJECTED';
-  const matchingId = documentData?.line?.find(approval => approval.approver === userData)?.id || 0;
-  const isApprover = documentData?.line.some(approval => approval.approvedYn === 'N') ?? false;
-  const userLineData = documentData?.line.find(approval => approval.approver === userData);
-  const userOrder = documentData?.line.find(a => a.approver === userData)?.order!;
-  const nextApprover = documentData?.line.find(approval => approval.order === userOrder + 1);
-  const previousApprover = documentData?.line.find(approval => approval.order === userOrder - 1);
-  const isPreviousApproved = !(previousApprover?.approvedYn === 'N');
-
   const renderApprovalButtons = () => {
+    if (!documentData?.line) {
+      return null;
+    }
+    const isFinishedDocumnt = isApproved === 'APPROVED' || isApproved === 'REJECTED';
+    const matchingId =
+      documentData?.line?.find(approval => approval.approver === userData)?.id || 0;
+    const isApprover = documentData?.line.some(approval => approval.approvedYn === 'N') ?? false;
+    const userLineData = documentData?.line.find(approval => approval.approver === userData);
+    const userOrder = documentData?.line.find(a => a.approver === userData)?.order!;
+    const nextApprover = documentData?.line.find(approval => approval.order === userOrder + 1);
+    const previousApprover = documentData?.line.find(approval => approval.order === userOrder - 1);
+    const isPreviousApproved = !(previousApprover?.approvedYn === 'N');
+
     const approvedYn = userLineData?.approvedYn;
     const isLastApprover = !nextApprover;
 

@@ -15,10 +15,28 @@ export interface Employee {
   duty: string /* officeDutyNm */;
   rankName: string /* rankNm */;
   approvalType: string /* apprType */;
+  deptCd?: string;
+  deptNm?: string;
   modDate?: string;
   index: number /* order */;
   approvedYn?: string;
+  deferredYn?: string /* 후결여부 */;
+  overrideYn?: string /* 전결여부 */;
   order?: number;
+}
+
+export interface approver {
+  index: string;
+  empNo: string;
+  name: string;
+  duty: string;
+  rankName: string;
+  modDate: string;
+  approvalType: string;
+  approvedYn: string;
+  deferredYn: string;
+  overrideYn: string;
+  order: number;
 }
 
 export interface DocumentCounts {
@@ -47,6 +65,9 @@ export interface ApprovalState {
   documentType: string; // 품의서 종류
   selectedOption: string; // 결재방식 선택
   agreementType: string; // 힙의방식 선택
+  deferredYn: string; // 후결
+  overrideYn: string; // 전결
+  overrideIndex: number | null;
   approvers: Employee[];
   updateApprovers: Employee[];
   ccDept: ccDept[];
@@ -60,7 +81,6 @@ export interface ApprovalState {
   reasonRetire: string;
   finalSign: boolean;
   retireDate: string;
-
   recipient: string;
   ccId: string;
 }
@@ -125,25 +145,37 @@ export interface resinationDocData {
 }
 /* 시행문 */
 export interface executiondocData {
-  title?: string;
-  state?: string;
-  regUsr?: string;
-  regUsrNm?: string;
-  regUsrDeptNm?: string;
-  files?: Array<{
+  execution: {
+    title?: string;
+    state?: string;
+    regUsr?: string;
+    regUsrNm?: string;
+    regUsrDeptNm?: string;
+    id?: string;
+    ccId?: string;
+    executeDate?: string;
+    recipient?: string;
+    contents?: string;
+  };
+  files: {
     id: number;
     fileSize: number;
     fileName: string;
     fileExtension: string;
     docType: string;
     docNumber: string;
-  }>;
-  id?: string;
-  ccId?: string;
-  executeDate?: string;
-  recipient?: string;
-  contents?: string;
+  };
 }
+
+/* 결재라인 편집  */
+
+export type updateApprovalLineData = {
+  apprType: string;
+  approver: string;
+  deferredYn?: string;
+  overrideYn?: string;
+  order?: number;
+};
 
 export interface fetchCommentData {
   apprId: string;
@@ -183,7 +215,7 @@ export interface ArrpovalLine {
   modDate: string;
   deptNm: string;
   officeDutyNm: string;
-  order: 1;
+  order: number;
   rankNm: string;
 }
 
@@ -226,11 +258,16 @@ type CommonData = {
     id: number;
     order: number;
     apprType: string;
-    approvedYn: string;
     approver: string;
     approverNm: string;
-    modDate: string;
+    approvedYn: string;
+    deferredYn: string;
+    delegatedYn: string;
+    delegatedApprover: string;
+    delegatedApproverNm: string;
+    overrideYn: string;
     deptNm: string;
+    modDate: string;
     officeDutyNm: string;
     rankNm: string;
   }[];

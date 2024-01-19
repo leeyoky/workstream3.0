@@ -1,7 +1,14 @@
 import { useState } from 'react';
-import classes from './ApprovalMagager.module.css';
-import { data } from './data';
+import classes from '../../../pages/Approval/ApprovalMagager.module.css';
+import { data } from '../../../pages/Approval/data';
 
+/**
+ * 전자결재 > 위임관리 History 컴포넌트
+ * default 5개의 최근 내역만 보여주기
+ * 검색 필터에서 기간 설정하기
+ * TODO: 설정 모달 만들기
+ * @returns
+ */
 const ApprovalManagerHistory = () => {
   const [isContentOpen, setIsContentOpen] = useState(true);
   const openContentHandler = () => {
@@ -13,12 +20,16 @@ const ApprovalManagerHistory = () => {
   return (
     <div className={classes['card']}>
       <div className={classes['card_title']}>
-        <span>
+        <span className={classes['hisory-header']}>
           <i className="fa-solid fa-list"></i>
-          History
+          <span>History</span>
+          <span className={classes['date-bage-box']}>
+            <span># 2024</span>
+          </span>
         </span>
+
         {isContentOpen ? (
-          <button className="btn btn-red-light" onClick={closeContentHandler}>
+          <button className="btn" onClick={closeContentHandler}>
             접기
             <i className="fa-solid fa-minus"></i>
           </button>

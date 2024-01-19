@@ -5,12 +5,12 @@ import useApprovalRequest from '../../../../hooks/Approval/useApprovalRequest';
  * 결재자 지정 버튼
  * @returns
  */
-const SelectApproverButton = () => {
+const SelectApproverButton = ({ title = '결재자지정' }) => {
   const { isModalOpen, handleShowModal, handleCloseModal } = useApprovalRequest();
   return (
     <>
       <button className="btn" onClick={handleShowModal}>
-        <span>결재자지정</span>
+        <span>{title}</span>
         <i className="fa-solid fa-user-pen"></i>
       </button>
       {isModalOpen && <ApprovalModalEmpEdit onClose={handleCloseModal} isEdit={true} />}

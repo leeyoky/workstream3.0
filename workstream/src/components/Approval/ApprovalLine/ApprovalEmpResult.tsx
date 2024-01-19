@@ -44,6 +44,7 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
         rankName: rankNm,
         duty: officeDutyNm,
         approvalType: '',
+        approvedYn: 'N',
         index,
       };
 
@@ -65,6 +66,7 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     const empNameData = e.dataTransfer.getData('empName');
+
     const draggedData = JSON.parse(empNameData);
     e.preventDefault();
 
@@ -120,17 +122,21 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
   const employeeElements: JSX.Element[] = [];
 
   approvers.forEach((employee, index) => {
+    const approverItemClass =
+      employee.approvedYn !== 'N'
+        ? `${classes['approver-item']} ${classes['approved']}`
+        : classes['approver-item'];
     employeeElements.push(
       <div
         className={classes['emp-index']}
         key={index}
-        draggable="true"
+        draggable={employee.approvedYn !== 'Y' ? true : false}
         data-index={index}
         data-emp-info={JSON.stringify(employee)}
         onDragStart={e =>
           handleDragStart(e, employee.empNo, employee.name, employee.rankName, employee.duty, index)
         }>
-        <div className={classes['approver-item']}>
+        <div className={approverItemClass}>
           <div className={classes['approver-item__items']}>
             <span>{index + 2}</span>
             <span>{employee.name}</span>
@@ -139,7 +145,11 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
           </div>
           {/* 인덱스 값을 하위 컴포넌트에 전달 */}
           {isReference === false ? (
-            <ApprovalTypeSelector index={index} name={employee.name} />
+            <ApprovalTypeSelector
+              index={index}
+              name={employee.name}
+              approvedYn={employee.approvedYn}
+            />
           ) : null}
         </div>
       </div>,
@@ -162,7 +172,7 @@ const ApprovalEmpResult: React.FC<ApprovalEmpResultProps> = () => {
               <span>삭제</span>
             </div>
           </div>
-          <div className={classes['approver-item']}>
+          <div className={`${classes['approver-item']} ${classes['approved']}`}>
             <div className={classes['approver-item__items']}>
               <span>{1}</span>
               <span>{userLoginInfo?.empNm}</span>

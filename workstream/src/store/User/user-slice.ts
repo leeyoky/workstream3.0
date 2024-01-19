@@ -39,10 +39,10 @@ const userSlice = createSlice({
       state.userInfo = action.payload;
     },
     resetArray(state) {
-      (state.userSSN = null),
-        (state.address = ''),
-        (state.homePhone = ''),
-        (state.mobilePhone = '');
+      state.userSSN = null;
+      state.address = '';
+      state.homePhone = '';
+      state.mobilePhone = '';
     },
   },
 });

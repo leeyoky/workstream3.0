@@ -8,6 +8,8 @@ const EmpItem = ({
   empNm,
   rankNm,
   officeDutyNm,
+  deptCd,
+  deptNm,
   handleDragStart,
   searchResultEmpNm,
   addEmpHandler,
@@ -16,6 +18,8 @@ const EmpItem = ({
   empNm: string;
   rankNm: string;
   officeDutyNm: string;
+  deptCd: string;
+  deptNm: string;
   // eslint-disable-next-line @typescript-eslint/ban-types
   handleDragStart: Function;
   searchResultEmpNm: string;
@@ -45,7 +49,7 @@ const EmpItem = ({
           isSearchResult ? classes['search-result'] : ''
         }`}
         draggable
-        onDragStart={e => handleDragStart(e, empNo, empNm, rankNm, officeDutyNm)}
+        onDragStart={e => handleDragStart(e, empNo, empNm, rankNm, officeDutyNm, deptCd, deptNm)}
         onClick={addEmpHandler}>
         <i
           className="fa-solid fa-user"

@@ -3,14 +3,13 @@ import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectedActions } from '../../../store/Approval/approval-slice';
-
-import ApprovalLineSelect from './ApprovalEmpLineSelect';
-import ApprovalEmpResult from './ApprovalEmpResult';
 import { uiActions } from '../../../store/ui-slice';
-import ApprovalSelectRef from '../ApprovalReference/ApprovalSelectRef';
-import ApprovalResultRef from '../ApprovalReference/ApprovalResultRef';
 import { Employee } from '../../../types/Approval/Approaval';
 import { getOrderForApprovers } from '../../../helpers/getOrderForApprovers';
+import ApprovalLineSelect from './ApprovalEmpLineSelect';
+import ApprovalEmpResult from './ApprovalEmpResult';
+import ApprovalSelectRef from '../ApprovalReference/ApprovalSelectRef';
+import ApprovalResultRef from '../ApprovalReference/ApprovalResultRef';
 
 interface ApprovalEmpSelectorProps {
   isEdit?: boolean;
@@ -39,7 +38,6 @@ const ApprovalEmpSelector: React.FC<ApprovalEmpSelectorProps> = props => {
   useEffect(() => {
     const updatedApprovers = getOrderForApprovers(approvers, selectedAgreeOption);
     setUpdateApprovers(updatedApprovers);
-    console.log('updatedApprovers', updatedApprovers);
     dispatch(selectedActions.updateNewApprover(updatedApprovers));
   }, [selectedAgreeOption, approvers]);
 

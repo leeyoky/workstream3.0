@@ -146,6 +146,8 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
     empNm: string,
     rankNm: string,
     officeDutyNm: string,
+    deptCd: string,
+    deptNm: string,
     index: number,
   ) => {
     const empInfo = {
@@ -153,9 +155,14 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
       name: empNm,
       rankName: rankNm,
       duty: officeDutyNm,
+      deptCd: deptCd,
+      deptNm: deptNm,
+      approvedYn: 'N',
       approvalType: 'APPROVER',
       index,
     };
+
+    console.log(empInfo);
 
     // 객체를 문자열로 직렬화
     const empInfoString = JSON.stringify(empInfo);
@@ -182,9 +189,14 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
       name: employee.empNm,
       rankName: employee.rankNm,
       duty: employee.officeDutyNm,
+      deptCd: employee.deptCd,
+      deptNm: employee.deptNm,
       approvalType: 'APPROVER',
+      approvedYn: 'N',
       index,
     };
+    console.log('empData', empData);
+
     // 자기 자신인 경우 추가할 수 없음.
     if (employee.empNo === loginUserInfo?.empNo) {
       return;
@@ -263,6 +275,8 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
                     boss[0].empNm,
                     boss[0].officeDutyNm,
                     boss[0].rankNm,
+                    boss[0].deptCd,
+                    boss[0].deptNm,
                     index,
                   )
                 }
@@ -287,6 +301,8 @@ const OrganizationAccordion: React.FC<OrganizationAccordionProps> = ({ searchTex
                 empNm={employee.empNm}
                 rankNm={employee.rankNm}
                 officeDutyNm={employee.officeDutyNm}
+                deptCd={employee.deptCd}
+                deptNm={employee.deptNm}
                 handleDragStart={handleDragStart}
                 searchResultEmpNm={searchResultDept?.empNm || ''}
                 addEmpHandler={() => addEmpHandler(employee, index)}
