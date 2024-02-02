@@ -1,5 +1,7 @@
 .login-form{
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .login-form input {
   background-color: rgb(242 244 255);
@@ -18,23 +20,23 @@
   font-weight: bolder;
   background-color: rgb(249, 249, 255);
   width: 100%;
+  min-width: 30rem;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  min-width: 500px;
   justify-content: space-between;
 }
 
 .login-selectBox {
-  float: right;
+  height: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.3rem;
 }
 .lang-select{
   border: 1px solid #dadada;
   font-family: "Noto Sans KR", sans-serif;
-  padding: 2px 10px;
   border-radius: 5px;
-  margin-top: 10px;
-  margin-right: 10px;
   box-shadow: none;
   background-color: transparent;
   background-position: center right;
@@ -43,6 +45,7 @@
   padding: 2px 10px;
   color: #8b8b8b;
   font-size: 9pt;
+  height: 1.5rem;
 }
 
 .lang-select:focus{
@@ -58,7 +61,7 @@
 .account-box input{
   height: 1.8rem;
   border: 1px solid gainsboro;
-  width: 300px;
+  width: 20rem;
   padding: 5px;
   padding-left: 10px;
   font-size: 11pt;
@@ -75,7 +78,7 @@
   border: none;
   background-color: rgb(0, 66, 141);
   color: white;
-  width: 320px;
+  width: 22rem;
   height: 50px;
   border-radius: 5px;
   font-size: 18pt;
@@ -89,6 +92,7 @@
   4px 4px 5px 0px rgba(0,0,0,.1);
   display: inline-block;
   outline: none;
+  margin: 1rem 0rem;
 }
 .login-btn span{
   /* position: relative; */
@@ -133,17 +137,13 @@
   height: 100%;
   width: 100%;
 }
-.account-container{
-  margin: 0 auto;
-}
+
 .login-box{
   width: fit-content;
-  margin-top: 20%;
-  margin-bottom: 100px;
   font-size: 19pt;
 }
 .login-box h2{
-  font-size: 40pt;
+  font-size: 3.5rem;
   color: #19197A;
   font-weight: bolder;
   letter-spacing: -1px;
@@ -152,8 +152,14 @@
   letter-spacing: -1pt;
   color: #19197A;
 }
+.login-info-wrapper{
+  display: flex;
+  flex-direction: column;
+  width: 25rem;
+  align-items: center;
+}
 .account-box{
-  margin-top: 20px;
+  margin: 20px 0px;
 }
 .login-wrapper-img {
   display: flex;
@@ -206,7 +212,7 @@
 .remember-me {
   display: flex;
   align-items: center;
-  margin-top: 1rem;
+  margin: 1rem 0rem;
 }
 
 .remember-me-input {
@@ -231,7 +237,7 @@
 /* 테블릿 가로 */
 
 @media all and (min-width: 768px) and (max-width: 1023px){
-  .login-wrapper { min-width: 450px; }
+  .login-wrapper {  }
   .login-main-wrapper{ display: none; }
   .wrapper { display: inline-block; }
 
@@ -241,9 +247,9 @@
 @media all and (min-width: 480px) and (max-width: 767px){
 
   .login-wrapper {
-    min-width: 560px;
     width: 100%;
     height: 100%;
+    min-width: auto;
   }
   .login-main-wrapper{
     display: none;
@@ -252,16 +258,57 @@
     display: inline-block;
   }
 
+
 }
 
 @media all and (max-width:479px) {
-
+  .wrapper {
+    display: flex;
+  }
+  .bar{
+    width: 4px;
+    height: 1rem;
+  }
   .login-wrapper {
     width: 100%;
     height: 100%;
+    min-width: auto;
+  }
+  .account-box {
+    margin: 10px 0px;
+  }
+  .account-box input {
+    width: 15rem;
+    height: 1.3rem;
+  }
+  .login-btn-box .login-btn {
+    width: 16rem;
+    height: 3rem;
+    margin: 3px 0px;
+    display: flex;
+  }
+  .login-btn-box .forgot-pw-btn{
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
+  }
+  .login-box span{
+    font-size: 1.3rem;
+  }
+  .login-box h2 {
+    margin: 0;
+    margin-bottom: 2rem;
+    font-size: 2.7rem;
+    text-align: center;
   }
   .login-main-wrapper{
     display: none;
+  }
+  .login-wrapper-img{
+    min-height: 6rem;
+    display: flex;
+    align-items: center;
+    padding: 0;
   }
 
 }

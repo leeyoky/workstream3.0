@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import ExecutionModalCCDoc from '../ApprovalModals/ExecutionModalCCDoc';
 import { ApprovalData } from '../../../types/Approval/Approaval';
 import { uiActions } from '../../../store/ui-slice';
+import { fileActions } from '../../../store/file-slice';
 
 /**
  * 시행문 생성
@@ -85,6 +86,7 @@ const ExecutionCreate = () => {
     setExecuteDate(data[0].approval.executeDate);
     setDocumentId(data[0].approval.id);
     setContent(data[0].approval.contents);
+    dispatch(fileActions.updateServerFiles(data[0].files));
   };
 
   return (

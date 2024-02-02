@@ -10,6 +10,7 @@ type ApprovalActionButtonsProps = {
   isLastApprover: boolean;
   isPreviousApproved: boolean;
   isFinishedDocumnt: boolean;
+  isOverride: boolean;
   handleShowInstModal: () => void;
   handleCloseInstModal: () => void;
   isInstModalOpen: boolean;
@@ -32,6 +33,7 @@ const ApprovalActionButtons: React.FC<ApprovalActionButtonsProps> = ({
   isPreviousApproved,
   isFinishedDocumnt,
   isInstModalOpen,
+  isOverride,
   userLineData,
   updateApprovalHandler,
   handleCloseInstModal,
@@ -58,7 +60,7 @@ const ApprovalActionButtons: React.FC<ApprovalActionButtonsProps> = ({
       );
     }
 
-    if (isNextApprover && isPreviousApproved && !isFinishedDocumnt) {
+    if ((isNextApprover && isPreviousApproved && !isFinishedDocumnt) || isOverride) {
       return (
         <>
           <button className="btn btn-blue" onClick={handleShowInstModal}>

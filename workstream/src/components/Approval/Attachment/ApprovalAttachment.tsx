@@ -20,11 +20,14 @@ const ApprovalAttachment = () => {
   const isReviseMode = useSelector((state: RootState) => state.approval.isReviseMode);
   const documentType = useSelector((state: RootState) => state.approval.documentType);
   const loginUser = useSelector((state: RootState) => state.user.userInfo.empNo);
+  const ccDocId = useSelector((state: RootState) => state.approval.ccId);
   const { id = '' } = useParams();
   const [isServerFile, setIsServerFile] = useState<CommonData | undefined>();
   const [drag, setDrag] = useState(false);
   const dispatch = useDispatch();
-  const { data } = useDocumentData(documentType, id);
+  // TODO: create인 경우엔 id가 없을 수도 있음.
+
+  const { data } = useDocumentData(documentType, id ? id : ccDocId);
 
   const regUser = data
     ? documentType === 'APPROVAL_COMMON'
@@ -34,12 +37,16 @@ const ApprovalAttachment = () => {
 
   const isSameUser = loginUser === regUser;
 
-  /*   useEffect(() => {
+  useEffect(() => {
     console.log('documentType', documentType);
+    // 시행문 작성시 문서타입은 EXECUTION
 
     console.log('id', id);
+    // create의 경우기 때문에 id가 없음
+
     console.log('data', data);
-  }, [documentType, id]); */
+    // 따라서 data가 없음
+  }, [documentType, id]);
 
   useEffect(() => {
     setSelectedFiles([]);

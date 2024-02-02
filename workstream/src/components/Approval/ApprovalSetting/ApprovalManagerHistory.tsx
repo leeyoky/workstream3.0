@@ -65,7 +65,7 @@ const ApprovalManagerHistory = () => {
                   </div>
                 </div>
               </div>
-              <div className={classes['reason-box']}>
+              <div className={`${classes['reason-box']} ${classes['history']}`}>
                 <span className={classes['content-title']}>사유</span>
                 <div className={classes['reason-wrapper']}>
                   <span className={classes['reason']}>{item.reason}</span>

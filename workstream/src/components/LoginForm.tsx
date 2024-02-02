@@ -49,55 +49,57 @@ const LoginForm: React.FC = () => {
   };
   return (
     <form className="login-form" onSubmit={handleLogin}>
-      <div className="account-container login-box">
-        <h2>WorkStream</h2>
-        {/* USER ID */}
-        <div className="account-box account">
-          <div className="bar"></div>
-          <label htmlFor="username">
-            <span>ID</span>
-            <br />
-            <input
-              type="text"
-              className="username"
-              placeholder="ID"
-              onChange={e => handleOnChange(e, setUsername)}
-              value={username}
-              ref={usernameInputRef}
-            />
-          </label>
+      <div className="login-info-wrapper">
+        <div className="account-container login-box">
+          <h2>WorkStream</h2>
+          {/* USER ID */}
+          <div className="account-box account">
+            <div className="bar"></div>
+            <label htmlFor="username">
+              <span>ID</span>
+              <br />
+              <input
+                type="text"
+                className="username"
+                placeholder="ID"
+                onChange={e => handleOnChange(e, setUsername)}
+                value={username}
+                ref={usernameInputRef}
+              />
+            </label>
+          </div>
+
+          {/* USER PASSWORD */}
+          <div className="account-box pw">
+            <div className="bar"></div>
+            <label htmlFor="password">
+              <span>Password</span>
+              <br />
+              <input
+                type="password"
+                className="password"
+                placeholder="password"
+                onChange={e => handleOnChange(e, setPassword)}
+                value={password}
+                ref={passwordInputRef}
+              />
+            </label>
+          </div>
+          {/* REMEMBER ME */}
+          <div className="remember-me">
+            <input className="remember-me-input" type="checkbox" />
+            <label className="remember-me-label">Remember me</label>
+          </div>
         </div>
 
-        {/* USER PASSWORD */}
-        <div className="account-box pw">
-          <div className="bar"></div>
-          <label htmlFor="password">
-            <span>Password</span>
-            <br />
-            <input
-              type="password"
-              className="password"
-              placeholder="password"
-              onChange={e => handleOnChange(e, setPassword)}
-              value={password}
-              ref={passwordInputRef}
-            />
-          </label>
-        </div>
-        {/* REMEMBER ME */}
-        <div className="remember-me">
-          <input className="remember-me-input" type="checkbox" />
-          <label className="remember-me-label">Remember me</label>
-        </div>
-      </div>
+        <p className="logMessage">{msg}</p>
 
-      <p className="logMessage">{msg}</p>
-
-      <div className="account-container login-btn-box">
-        <button className="custom-btn login-btn" type="submit">
-          <span>Login</span>
-        </button>
-        <button className="forgot-pw-btn">Forgot Password?</button>
+        <div className="account-container login-btn-box">
+          <button className="custom-btn login-btn" type="submit">
+            <span>Login</span>
+          </button>
+          <button className="forgot-pw-btn">Forgot Password?</button>
+        </div>
       </div>
     </form>
   );

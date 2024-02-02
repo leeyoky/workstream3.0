@@ -28,7 +28,7 @@ const SignatureEdit = () => {
       approvalType: string;
       modDate?: string | undefined;
       approvedYn?: string | undefined;
-      order: number;
+      order?: number | undefined;
     }[]
   >([]);
   const { approvedYn } = useApprovalAction();

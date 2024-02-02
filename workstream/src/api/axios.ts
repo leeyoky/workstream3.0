@@ -57,7 +57,7 @@ export function fetchResignationData(formData: resinationDocData) {
   return instance.post('approval/resignation', formData);
 }
 
-export function fetchExecutionData(formData: executiondocData) {
+export function fetchExecutionData(formData: executiondocData['execution']) {
   return instance.post('approval/execution', formData);
 }
 
@@ -163,7 +163,7 @@ export function updateResignReason() {
 }
 
 export function getApprovalList(params: {
-  id: string;
+  id?: string;
   page?: number;
   size?: number;
   state?: string;
@@ -173,10 +173,10 @@ export function getApprovalList(params: {
   docType?: string;
   regUsrNm?: string;
   orderBy?: string;
-  regDateGoe: string /* 시작일 */;
-  regDateLoe: string /* 종료일 */;
-  executeDateGoe: string /* 시행일자 시작일 */;
-  executeDateLoe: string /* 시행일자 종료일 */;
+  regDateGoe?: string /* 시작일 */;
+  regDateLoe?: string /* 종료일 */;
+  executeDateGoe?: string /* 시행일자 시작일 */;
+  executeDateLoe?: string /* 시행일자 종료일 */;
 }) {
   const queryString = Object.keys(params as Record<string, any>)
     .filter(key => (params as Record<string, any>)[key] !== undefined)

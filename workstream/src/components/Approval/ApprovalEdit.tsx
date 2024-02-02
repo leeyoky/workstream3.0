@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classes from '../../pages/Approval/Approval.module.css';
 
 import { RootState } from '../../store';
@@ -44,7 +44,7 @@ const ApprovalEdit = () => {
   }, [documentType, dispatch]);
 
   return (
-    <React.Fragment>
+    <div className="page-wrapper">
       <BoardTitle title={boardTitle.title} />
       <div className="index-box">
         <div className={classes['inner-container']}>
@@ -85,7 +85,7 @@ const ApprovalEdit = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

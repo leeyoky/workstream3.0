@@ -66,6 +66,8 @@
   box-shadow: #4444442e 0px 10px 20px 2px;
 }
 .inner-box{
+  display: flex;
+  flex-direction: column;
   padding: 5px 10px;
 }
 .inner-box__title{
@@ -79,12 +81,18 @@
 .inner-box__content {
   margin: 5px;
 }
+.chart-box{
+  width: 100%;
+  height: 22rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 /* 이달의리더쉽 */
 .leadership-wrapper{
   display: flex;
   align-items: center;
-  min-width: 300px;
 }
 .emp-photo-box{
   width: auto;
@@ -148,8 +156,6 @@
 
 /* 공지사항 */
 .notice-wrapper{
-  grid-column: auto/span 2;
-  min-width: 550px
   /* background-color: #ecf3fd */
 }
 .inner-box__content_notice {
@@ -163,7 +169,7 @@
 }
 .notice-card__table li:first-child {
   padding-right: 10px;
-  width: 70%;
+  width: 100%;
 }
 .notice-card__table li:nth-child(2){
   padding-right: 10px;
@@ -189,8 +195,98 @@
 
 /* 알림 */
 .news-wrapper{
-  grid-row: auto/span 2;
   background-color: #fffae1
+}
+/* 날씨 */
+.weather-main{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.weather-card-left {
+  display: flex;
+}
+.weather-card-right{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.weather-wrapper{
+  background-color: #93b9e4;
+  background-image: url(../assets/img/weather/sunny2.jpg);                  /* 맑음 */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #fff;
+}
+.weather-sky-fcstValue{
+  font-weight: 600;
+  color: #ffffff;
+}
+.weather-tmp-fcstValue{
+  font-weight: 600;
+  font-size: 8rem;
+  padding-top: 0.75rem;
+  position: relative;
+}
+.weather__time-date{
+  display: flex;
+  line-height: 2rem;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+.whether-temp-items{
+  display: flex;
+  justify-content: center;
+}
+.weather-tmp-fcstValue span {
+  font-size: 4rem;
+  position: absolute;
+  left: 100%;
+  top: 0%;
+}
+.whether-info-box{
+  display: flex;
+  color: #fff;
+}
+.whether-info-box i {
+  margin-right: 0.4rem;
+  color: #fff;
+}
+.whether-info-box._left{
+  flex-direction: column;
+}
+.whether-info-box._left .whether-temp-items{
+  line-height: 6rem;
+  color: #fff;
+}
+.weather__time {
+  display: flex;
+  line-height: 2rem;
+  justify-content: flex-end;
+}
+.weather__time span{
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+.weather__day {
+  color: #fff;
+  font-weight: 500;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1.5rem;
+  letter-spacing: 0.1rem;
+}
+.weather-pty-fcstValue{
+  line-height: 5rem;
+  font-weight: 700;
+  font-size: 3.5rem;
+}
+.weather-pty-box{
+  display: flex;
+  color: #fff;
+  justify-content: center;
 }
 /* 최근 입사자 */
 .newestEmp-wrapper{
@@ -226,9 +322,11 @@
 /* 일정 */
 .calender-wrapper{
   grid-row: auto/span 2;
+  grid-column: auto/span 2;
 }
 /* 최신문서 */
 .currentDoc-wrapper{
+  width: 32rem;
 }
 .document-card__table li:first-child {
   padding-right: 10px;

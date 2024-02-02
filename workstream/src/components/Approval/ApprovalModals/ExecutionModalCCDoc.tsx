@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import classes from '../../../pages/Approval/Approval.module.css';
 import { useApprovalList } from '../../../hooks/Approval/useApprovalList';
-import { useDispatch } from 'react-redux';
-import { uiActions } from '../../../store/ui-slice';
 import { ApprovalData, ApprovalListItem } from '../../../types/Approval/Approaval';
 import { formatDateOnly } from '../../../helpers/formatDateTime';
 import { DOCUMENT_TYPES } from '../../../constants/constants';
 import Pagination from '../../../Layout/BoardLayout/Pagination/Pagination';
 import Modal from '../../../Layout/Modal/Modal';
-import { getApprovalData } from '../../../api/axios';
+import { getApprovalData, getApprovalList } from '../../../api/axios';
+import { useDispatch } from 'react-redux';
+import { uiActions } from '../../../store/ui-slice';
 
 interface ExecutionModalCCDocProps {
   onClose: () => void;
@@ -25,19 +25,25 @@ const ExecutionModalCCDoc: React.FC<ExecutionModalCCDocProps> = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setQueryParam();
-    setCcDocData(listData);
+    fetchApprovalList();
   }, [listData]);
 
-  const setQueryParam = () => {
-    // 페이지 세팅
-    dispatch(uiActions.selectPage(0));
-    dispatch(uiActions.selectPageSize(15));
-    // 가져 오고자 하는 문서함의 상태 : 완료된 문서
-    dispatch(uiActions.selectMenu('completed'));
-    dispatch(uiActions.setState('APPROVED'));
-    // 가져 오고자 하는 문서의 TYPE
-    dispatch(uiActions.setDocType('APPROVAL_COMMON'));
+  const fetchApprovalList = async () => {
+    try {
+      const response = await getApprovalList({
+        page: 0,
+        size: 15,
+        state: 'APPROVED',
+        docType: 'APPROVAL_COMMON',
+        orderBy: 'modDate,desc',
+      });
+      const data = response.data.content;
+      const totalElements = response.data.totalElements;
+      dispatch(uiActions.setTotalItems(totalElements));
+      setCcDocData(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchDocumentData = async (id: string) => {

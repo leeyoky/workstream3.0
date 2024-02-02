@@ -7,6 +7,7 @@ import SubToolBar from './SubToolBar';
 import { useEffect } from 'react';
 import { useAuthActions } from '../../store/actions/authActions';
 import useApprovalDocumentCnt from '../../hooks/Approval/useApprovalDocumentCnt';
+import { menuItems } from './SideToolBarItem';
 
 const SideToolBar = () => {
   const { fetchEmployee } = useAuthActions();
@@ -23,13 +24,6 @@ const SideToolBar = () => {
       fetchEmployee();
     }
   }, [loginUserInfo]);
-
-  useEffect(() => {
-    /*     if (getToken === '') {
-      console.log('getToken!!', getToken);
-      dispatch(authActions.logout());
-    } */
-  }, []);
 
   const toggleSideBar = () => {
     dispatch(uiActions.toggle());
@@ -54,31 +48,6 @@ const SideToolBar = () => {
     listWrapper: `side-bar-list-wrapper ${!isSidebarOpen ? 'active' : ''}`,
     menuIcon: `menu-icon ${!isSidebarOpen ? 'active' : ''}`,
   };
-
-  const menuItems = [
-    { to: '/main', iconClass: 'fa-solid fa-house', label: '메인페이지', title: '메인페이지' },
-    { to: '/notice', iconClass: 'fa-regular fa-heart', label: '전사공지', title: '전사공지' },
-    {
-      to: '/approval/document',
-      iconClass: 'fa-regular fa-pen-to-square',
-      label: '전자결재',
-      title: '전자결재',
-    },
-    { to: '/booking', iconClass: 'fa-regular fa-calendar', label: '회의예약', title: '회의예약' },
-    { to: '/todoList', iconClass: 'fa-regular fa-circle-check', label: 'ToDo+', title: 'ToDo' },
-    {
-      to: '/request',
-      iconClass: 'fa-regular fa-paper-plane',
-      label: '요청사항',
-      title: '요청사항',
-    },
-    {
-      to: '/address',
-      iconClass: 'fa-regular fa-address-book',
-      label: '사내연락망',
-      title: '사내연락망',
-    },
-  ];
 
   return (
     <div className={classNames.wrapper}>

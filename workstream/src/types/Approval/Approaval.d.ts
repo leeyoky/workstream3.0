@@ -206,7 +206,7 @@ export interface editApprovalLine {
   approvedYn: string;
 }
 
-export interface ArrpovalLine {
+export interface ApprovalLine {
   id: number;
   approver: string;
   approverNm: string;

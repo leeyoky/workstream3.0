@@ -22,6 +22,8 @@ export const useDocumentData = (documentType: string, id: string) => {
         setData(response.data);
       } else if (documentType === 'EXECUTION') {
         const response = await getExecutionData(id);
+        console.log('시행문 당첨');
+
         setData(response.data);
       }
     } catch (error) {

@@ -212,6 +212,9 @@
   background-color: #e94c7d;
   color: #ffffff;
 }
+.darkMode .badge-temp {
+  background-color: #00000000;
+}
 .badge-temp {
   background-color: #c9c9c9;
   color: #ffffff;
@@ -229,6 +232,9 @@
   color: #ffffff;
 }
 
+.darkMode .badge-info {
+  background-color: #00000000;
+}
 .badge-info{
 /*   background-color: #3979AA;
   color: #ffffff; */
@@ -240,14 +246,17 @@
   background-color: #c8f1e3;
   color: #1aa771;
 }
+.darkMode .badge-success {
+  background-color: #00000000;
+}
 .btn-green{
   background-color: #1fa571;
   color: #ffffff;
 }
-
+.darkMode .badge-warning {
+  background-color: #00000000;
+}
 .badge-warning{
-/*   background-color: #ffb820;
-  color: #ffffff; */
   background-color: #f7e6c6;
   color: #e0a119;
 }

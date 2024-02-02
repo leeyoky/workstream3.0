@@ -1,30 +1,30 @@
-import mainImg from '../assets/img/main.jpg'
-import logo from '../assets/img/logo.png'
-import LoginForm from '../components/LoginForm'
+import mainImg from '../assets/img/main.jpg';
+import logo from '../assets/img/logo.png';
+import LoginForm from '../components/LoginForm';
 
 const LoginPage = () => {
   return (
     <div className="wrapper">
-        <div className="login-main-wrapper">
-          <img src={mainImg} alt="mainImg" /> 
+      <div className="login-main-wrapper">
+        <img src={mainImg} alt="mainImg" />
+      </div>
+      <div className="login-wrapper">
+        <div className="login-selectBox">
+          <select className="login-selectBox lang-select" name="" id="">
+            <option value="">Language</option>
+            <option value="">Korean</option>
+            <option value="">English</option>
+          </select>
         </div>
-        <div className="login-wrapper">
-            <div className="login-selectBox">
-                <select className="login-selectBox lang-select" name="" id="" >
-                    <option value="">Language</option>
-                    <option value="">Korean</option>
-                    <option value="">English</option>
-                </select>
-            </div>
-              <LoginForm />
-            <div className="login-wrapper-img">
-              <div>
-                <img src={logo} alt="logo" />
-              </div>
-            </div>
+        <LoginForm />
+        <div className="login-wrapper-img">
+          <div>
+            <img src={logo} alt="logo" />
+          </div>
         </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

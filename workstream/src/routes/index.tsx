@@ -11,23 +11,26 @@ import LoginPage from '../pages/LoginPage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import ApprovalManager from '../pages/Approval/ApprovalManager';
+import NoticePage from '../pages/Notice/NoticePage';
+import TodoPage from '../pages/Todo/TodoPage';
 
 export function AuthenticatedRoutes() {
   const isSidebarOpen: boolean = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const isSubBarOpen: boolean = useSelector((state: RootState) => state.ui.isSubbarOpen);
-
+  const isDarkMode: boolean = useSelector((state: RootState) => state.ui.isDarkMode);
   return (
     <React.Fragment>
       <Header />
-      <div className="test">
+      <div className={`test ${isDarkMode ? 'darkMode' : ''}`}>
         <SideToolBar />
         <main
           className={`index-wrapper ${!isSidebarOpen ? 'active' : ''} ${
             isSubBarOpen ? 'sub-bar' : ''
-          }`}>
+          } ${isDarkMode ? 'darkMode' : ''}`}>
           <Routes>
             <Route index element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
+            <Route path="/notice" element={<NoticePage />} />
             <Route path="/approval/document" index element={<ApprovalPage />} />
             <Route path="/approval/temporary" element={<ApprovalPage />} />
             <Route path="/approval/pending" element={<ApprovalPage />} />
@@ -37,6 +40,7 @@ export function AuthenticatedRoutes() {
             <Route path="/approval/create" element={<ApprovalEdit />} />
             <Route path="/approval/detail/:id" element={<ApprovalEdit />} />
             <Route path="/approval/delegation" element={<ApprovalManager />} />
+            <Route path="/todoList" element={<TodoPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </main>

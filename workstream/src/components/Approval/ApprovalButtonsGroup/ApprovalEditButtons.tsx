@@ -73,7 +73,9 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, ty
     const userOrder = documentData?.line.find(a => a.approver === userData)?.order!;
     const nextApprover = documentData?.line.find(approval => approval.order === userOrder + 1);
     const previousApprover = documentData?.line.find(approval => approval.order === userOrder - 1);
+    // 앞전 결재자가 승인 하지 않았음
     const isPreviousApproved = !(previousApprover?.approvedYn === 'N');
+    const isOverride: boolean = !!documentData?.line.find(approval => approval.overrideYn === 'Y');
 
     const approvedYn = userLineData?.approvedYn;
     const isLastApprover = !nextApprover;
@@ -86,6 +88,7 @@ const ApprovalEditButtons: React.FC<ApprovalEditButtonsProps> = ({ className, ty
         isLastApprover={isLastApprover}
         isPreviousApproved={isPreviousApproved}
         isFinishedDocumnt={isFinishedDocumnt}
+        isOverride={isOverride}
         handleShowInstModal={handleShowInstModal}
         isInstModalOpen={isInstModalOpen}
         approveDocumentHandler={approveDocumentHandler}

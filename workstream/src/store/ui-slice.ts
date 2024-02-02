@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-
 const uiSlice = createSlice({
   name: 'ui',
   initialState: {
     isSidebarOpen: true,
     isSubbarOpen: false,
+    isDarkMode: false,
     draggingItem: null,
     dropTarget: null,
     selectMenu: null,
@@ -33,6 +33,9 @@ const uiSlice = createSlice({
     // Sub Bar
     setSubToolBar(state, action) {
       state.isSubbarOpen = action.payload;
+    },
+    setDarkMode(state) {
+      state.isDarkMode = !state.isDarkMode;
     },
     // Dragging
     setDraggingItem(state, action) {
