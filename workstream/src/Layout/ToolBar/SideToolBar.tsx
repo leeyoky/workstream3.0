@@ -1,13 +1,14 @@
-/* import profile from '../../assets/img/test1.jpg'; */
-import { NavLink, useLocation } from 'react-router-dom';
+import profile from '../../assets/img/example.jpg';
+import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { uiActions } from '../../store/ui-slice';
-import SubToolBar from './SubToolBar';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useAuthActions } from '../../store/actions/authActions';
 import useApprovalDocumentCnt from '../../hooks/Approval/useApprovalDocumentCnt';
 import { menuItems } from './SideToolBarItem';
+import ApprovalSub from './SubToolBar/ApprovalSub';
+import NoticeSub from './SubToolBar/NoticeSub';
 
 const SideToolBar = () => {
   const { fetchEmployee } = useAuthActions();
@@ -15,9 +16,7 @@ const SideToolBar = () => {
   const isSidebarOpen = useSelector((state: RootState) => state.ui.isSidebarOpen);
   const loginUserInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch();
-  const location = useLocation(); // 현재 경로 가져오기
-  const isMainActive = location.pathname === '/' || location.pathname === '/main';
-  const isSubToolBarActive = location.pathname.startsWith('/approval');
+  const selectMenu = useSelector((state: RootState) => state.ui.selectMenu);
 
   useEffect(() => {
     if (!loginUserInfo || Object.keys(loginUserInfo).length === 0) {
@@ -29,17 +28,10 @@ const SideToolBar = () => {
     dispatch(uiActions.toggle());
   };
 
-  const toggleSubBar = () => {
-    dispatch(uiActions.setSubToolBar(isSubToolBarActive));
-  };
-
   const updatePath = (to: string) => {
     dispatch(uiActions.selectMenu(to));
+    dispatch(uiActions.setSubToolBar(false));
   };
-
-  useEffect(() => {
-    toggleSubBar();
-  }, [location.pathname]);
 
   const classNames = {
     wrapper: `side-bar-wrapper ${!isSidebarOpen ? 'active' : ''}`,
@@ -59,8 +51,7 @@ const SideToolBar = () => {
         </div>
         <div className={`side-bar-1200 ${!isSidebarOpen ? 'active' : ''}`}>
           <div className="side-bar-profile-wrapper side-sm">
-            {/* <img src={profile} alt="Profile" /> */}
-            <i className="fa-solid fa-user-tie"></i>
+            <img src={profile} alt="Profile" />
           </div>
           <div className="side-bar-profile">
             <h3>
@@ -73,34 +64,35 @@ const SideToolBar = () => {
         <div className={classNames.listWrapper}>
           <ul className={classNames.menuIcon}>
             {menuItems.map((item, index) => (
-              <li key={index}>
-                <NavLink
-                  to={item.to}
-                  className={`${item.to === '/main' ? (isMainActive ? 'active' : '') : ''} ${
-                    isSubToolBarActive && item.to === '/approval/document' ? 'active' : ''
-                  }`}
-                  onClick={() => updatePath(item.to)}>
-                  <i
-                    className={`${item.iconClass} ${classNames.menuIcon}`}
-                    title={`${item.title}`}></i>
-                  <span className={classNames.menuIcon}>{item.label}</span>
-                  {item.label === '전자결재' && (
-                    <span
-                      className={`badge-item ${
-                        documentCnt?.pendingCount === null || documentCnt?.pendingCount === 0
-                          ? 'none'
-                          : 'main'
-                      }`}>
-                      {documentCnt?.pendingCount}
-                    </span>
-                  )}
-                </NavLink>
-              </li>
+              <React.Fragment key={index}>
+                <li key={index} className="menus-li">
+                  <NavLink
+                    className="sideToolbar_navLink"
+                    to={item.to}
+                    onClick={() => updatePath(item.to)}>
+                    <i
+                      className={`${item.iconClass} ${classNames.menuIcon}`}
+                      title={`${item.title}`}></i>
+                    <span className={classNames.menuIcon}>{item.label}</span>
+                    {item.label === '전자결재' && (
+                      <span
+                        className={`badge-item ${
+                          documentCnt?.pendingCount === null || documentCnt?.pendingCount === 0
+                            ? 'none'
+                            : 'main'
+                        }`}>
+                        {documentCnt?.pendingCount}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+              </React.Fragment>
             ))}
           </ul>
         </div>
       </div>
-      {isSubToolBarActive && <SubToolBar />}
+      {selectMenu.startsWith('/approval') && <ApprovalSub />}
+      {selectMenu === '/notice' && <NoticeSub />}
     </div>
   );
 };

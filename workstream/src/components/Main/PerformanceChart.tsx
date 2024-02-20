@@ -55,7 +55,7 @@ export const options = {
       borderRadius: 5,
     },
   },
-  barThickness: 50, // 가로폭을 원하는 값으로 설정
+  barThickness: 40, // 가로폭을 원하는 값으로 설정
 };
 
 const realData = [50000000, 60000000, 35000000, 120000000];

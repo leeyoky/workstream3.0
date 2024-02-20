@@ -31,6 +31,7 @@ const ApprovalPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    navigate('/approval/document');
     setSortValue('modDate,desc');
   }, []);
 

@@ -1,6 +1,11 @@
-import { SubMenu } from '../Approval/Approaval';
-
-export const approvalMenuItems: SubMenu[] = [
+/* 전사공지 */
+export const noticeSubMenuItems = [
+  { label: 'Mail 전송', title: 'Mail 전송' },
+  { label: 'SMS 전송', title: 'SMS 전송' },
+  { label: 'SMS 전송', title: 'SMS 전송' },
+];
+/* 전자결재 */
+export const approvalMenuItems = [
   { to: '/approval/temporary', label: '임시보관함', title: '임시보관함', type: 'document' },
   { to: '/approval/document', label: '전체문서함', title: '전체문서함', type: 'document' },
   {

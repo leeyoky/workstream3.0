@@ -1,0 +1,31 @@
+.fc .fc-button-primary{
+  /* background-color: hsl(231, 100%, 27%); */
+  text-transform: uppercase;
+  font-size: 0.65rem !important;
+  padding: 0.1rem 0.25rem ;
+}
+.fc {
+  font-size: 0.8em !important;
+}
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem !important;
+}
+.fc .fc-toolbar-title {
+  margin-left: 6rem;
+}
+.fc-prev-button,
+.fc-next-button {
+  /* background-color: hsl(231, 100%, 18%) !important; */
+}
+.fc-button-active {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+:root {
+  --fc-button-active-bg-color: #ffffff;
+  --fc-button-active-border-color: #727272 !important;
+  --fc-event-bg-color: #ff9900;
+  --fc-event-border-color: #da8300;
+}

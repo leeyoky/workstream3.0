@@ -8,10 +8,10 @@ const DocumentCard = () => {
         </div>
         <div className="inner-box__content inner-box__content_notice">
           <ul className="document-card__table">
-            <li>React 기초 문서</li>
+            <li>[한화생명금융서비스][2024][1월][정기점검][Metastream]</li>
           </ul>
           <ul className="document-card__table">
-            <li>Next.js 입문</li>
+            <li>한국평가데이터_TeraStream_1월_정기점검문서</li>
           </ul>
         </div>
       </div>

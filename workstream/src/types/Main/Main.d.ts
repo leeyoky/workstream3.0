@@ -7,3 +7,16 @@ export interface WeatherData {
   ny: number;
   fcstValue: string;
 }
+
+/* Notice */
+
+export interface NoticeList {
+  id: string;
+  type: string;
+  title: string;
+  content: string;
+  regUsr: string;
+  regDate: string;
+  modUsr: string;
+  modDate: string;
+}

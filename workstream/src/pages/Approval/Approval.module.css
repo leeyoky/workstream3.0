@@ -86,7 +86,7 @@ footer p {
 }
 /* approval-wrapper */
 .approval-wrapper{
-  width: 55rem;
+  width: 100%;
   display: flex;
   align-items: center;
   border: 2px solid #5c5c5c;

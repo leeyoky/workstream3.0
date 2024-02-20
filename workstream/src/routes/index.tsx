@@ -31,6 +31,7 @@ export function AuthenticatedRoutes() {
             <Route index element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
             <Route path="/notice" element={<NoticePage />} />
+            <Route path="/approval" element={<ApprovalPage />} />
             <Route path="/approval/document" index element={<ApprovalPage />} />
             <Route path="/approval/temporary" element={<ApprovalPage />} />
             <Route path="/approval/pending" element={<ApprovalPage />} />

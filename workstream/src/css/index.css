@@ -51,7 +51,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 }
 .setting-page{
   background-color: #f3f3f3;
@@ -87,12 +87,15 @@ a {
   text-decoration: none;
 }
 
+p{
+  margin: 0;
+}
 html {
   max-width: initial;
   height: auto;
   font-family: "Noto Sans KR", sans-serif;
 }
-select,input{
+select,input,textarea{
   font-family: "Noto Sans KR", sans-serif;
 }
 
@@ -113,6 +116,12 @@ textarea:focus{
   box-shadow: none;
 }
 
+hr{
+  margin: 0;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .setData{
   outline: 1px solid #ffae00;
   box-shadow: none;
@@ -129,20 +138,32 @@ input:-webkit-autofill {
 }
 
 input {
+  border: none;
+  border: 1px solid #c2c2c2;
+  border-radius: 0.25rem;
   height: 1.8rem;
   background-color: #ffffff00;
   padding: 4px;
 }
 
 textarea {
-  height: 1.8rem;
-  background-color: rgb(245, 245, 245);
+  height: 1.85rem;
+  background-color: rgba(245, 245, 245, 0);
   padding: 4px;
+  border: 1px solid #c2c2c2;
+  border-radius: 0.25rem;
+  resize: none;
 }
 button {
   border: none;
   font-family: "Noto Sans KR", sans-serif;
   cursor: pointer;
+}
+select {
+  border: none;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  height: 1.75rem;
 }
 
 i:hover {
@@ -444,6 +465,7 @@ i[name]:hover::after {
 .margin-left {
   display: flex;
   align-items: center;
+  height: 3rem;
 }
 .toolbar-menus {
   display: flex;
@@ -721,7 +743,7 @@ i[name]:hover::after {
   justify-content: center;
 }
 
-.side-bar-container ul {
+.side-bar-list-wrapper > ul {
   margin: 0;
   padding: 0;
   margin-top: 1rem;
@@ -731,7 +753,7 @@ i[name]:hover::after {
   justify-content: flex-start;
   width: 100%;
 }
-.side-bar-container ul li {
+.side-bar-list-wrapper .menus-li {
   list-style: none;
   font-size: 1.2rem;
   letter-spacing: -1pt;
@@ -742,6 +764,7 @@ i[name]:hover::after {
   align-items: center;
   padding-left: 1rem;
 }
+
 .side-bar-wrapper ul li i {
   padding-right: 3rem;
   color: white;
@@ -770,7 +793,7 @@ i[name]:hover::after {
   color: #ffffff;
   transition: 0.2s;
 }
-.side-bar-list-wrapper a.active {
+.side-bar-list-wrapper .sideToolbar_navLink.active {
   background-color: #ffffff;
   border-radius: 25px 0px 0px 25px;
   height: 3rem;
@@ -778,7 +801,7 @@ i[name]:hover::after {
 .side-bar-list-wrapper a.active i {
   color: #FF9900;
 }
-.side-bar-list-wrapper a.active span{
+.side-bar-list-wrapper .sideToolbar_navLink.active span{
   color: #ff9900;
 }
 /* Active Side Toolbar */
@@ -878,10 +901,17 @@ i[name]:hover::after {
   flex-direction: column;
   z-index: 999;
   position: fixed;
+  top: 2.8rem;
+  line-height: 1rem;
   transition: 0.3s ease-out;
   margin-left: 13rem;
   border-right: 1px solid rgb(209, 209, 209);
-  margin-top: 45px;
+}
+.sub-toolbar-menu-box a{
+  height: 1.75rem;
+}
+.sub-toolbar-menu-box a:hover {
+  color: #000;
 }
 
 
@@ -924,7 +954,7 @@ i[name]:hover::after {
   /* margin-top: 5px; */
   padding: 0px;
   font-size: 11pt;
-  line-height: 1.7rem;
+  /* line-height: 1.7rem; */
   letter-spacing: -1px;
   font-weight: 500;
   cursor: pointer;
@@ -943,7 +973,7 @@ i[name]:hover::after {
   font-size: 10pt;
   background-color: #ffffff;
 }
-.sub-toolbar-menu-box ul ul li a {
+.side-bar-list-wrapper .sub-toolbar-menu-box ul ul li a {
   font-size: 10pt;
 }
 .sub-toolbar-menu-box ul li a span:nth-child(2) {
@@ -1061,7 +1091,7 @@ i[name]:hover::after {
 }
 
 .board-title p {
-  line-height: 0px;
+  line-height: 1.25rem;
 }
 
 .board-wrapper {
@@ -1095,7 +1125,7 @@ i[name]:hover::after {
   font-size: 9pt;
   font-weight: 400;
   padding: 1px 0px;
-  line-height: 20px;
+  line-height: 1.25rem;
 }
 .table-title-header{
   display: flex;
@@ -1302,11 +1332,31 @@ i[name]:hover::after {
 .card {
   display: flex;
   margin: 0 auto;
-  width: 30rem;
-  height: 18rem;
+  width: auto;
+  height: auto;
   border-radius: 10px;
   align-items: center;
   flex-direction: column;
+}
+.card .card__header {
+  width: 100%;
+}
+
+.card .card__content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.card .card__button-box {
+  width: 100%;
+  justify-content: flex-end;
+  display: flex;
+  margin-top: 0.8rem;
+  gap: 0.25rem;
+}
+.card__wrapper{
+  width: 100%;
+  padding: 0rem 0.25rem;
 }
 
 /* 검색창 */
@@ -1446,7 +1496,7 @@ i[name]:hover::after {
   border: 1px solid #e4e4e4;
   align-items: center;
   min-width: 300px;
-  padding: 10px 0px;
+  padding: 1rem 0px;
   border-radius: 15px;
 
 }
@@ -1789,9 +1839,15 @@ i[name]:hover::after {
 }
 
 /* TodoPage */
-.todo-wrapper{
+
+.todo-wrapper {
+  background-color: #fdfdfd;
+}
+.todo-wrapper .index-box {
   flex-direction: row;
   gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
 }
 .card-title{
   display: flex;
@@ -1812,7 +1868,6 @@ i[name]:hover::after {
 }
 .todo-wrapper .index-box{
   min-height: 90vh;
-  border: 1px solid #000;
   align-items: flex-start;
   padding:0;
 }
@@ -1825,6 +1880,7 @@ i[name]:hover::after {
   justify-content: space-between;
 }
 .todo-badge {
+  height: 0.75rem;
   width: 2.5rem;
   border-radius: 10px;
   font-size: 0.8rem;
@@ -1835,13 +1891,20 @@ i[name]:hover::after {
 }
 .todo-wrapper .card-containner{
   width: 20rem;
-  background-color: #f3f3f3;
+  background-color: #ebebeb8a;
   padding: 1rem;
   border-radius: 10px;
 }
 .card-containner ._card {
-  height: 6rem;
+  height: auto;
   border-radius: 10px;
+}
+.card-containner input {
+  width: 99%;
+  border-radius: 0.25rem;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
 }
 .profile-box {
   width: 2rem;
@@ -1856,27 +1919,162 @@ i[name]:hover::after {
   border-radius: 50%;
 }
 .todo-content{
-  height: 1rem;
-  font-size: 0.9rem;
-  font-weight: bolder;
+  padding: 0.25rem 0.25rem;
+  height: auto;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1rem;
+}
+.todo-content textarea {
+  background-color: #ffffff00;
+  width: 100%;
+  border-radius: 0.25rem;
+  overflow-y: hidden;
 }
 
-.add-card{
-  background-color: #555555;
+.todo-wrapper .add-card{
   color: #fff;
   padding: 0rem 1rem;
   height: 2rem;
   border-radius: 10px;
-  margin: 0;
-  margin-bottom: 0.5rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 0.8rem;
   font-weight: bold;
   gap: 1rem;
+  cursor: pointer;
+}
+.add-card._item{
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  background-color: #ff9900;
+}
+.add-card._list {
+  margin: 0.5rem;
+  background-color: #636363;
 }
 .add-card i {
   font-weight: 900;
   color: #fff;
 }
+
+.todo-setting-menu ul {
+  list-style: none;
+}
+
+
+/* TodoBox */
+
+.card-containner ._card span{
+  display: flex;
+  justify-content: space-between;
+}
+
+/* CreateNoticeModal */
+
+.notice-modal{
+  top: 5rem;
+  left: calc(40% - 5rem);
+  height: auto;
+  width: 40rem;
+}
+.notice-modal span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.notice-wrapper{
+  height: auto;
+}
+.notice-modal textarea {
+  height: 20rem;
+}
+.notice-modal select{
+  width: 5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.popup-wrapper {
+  margin: 0.5rem 0rem;
+  display: flex;
+  align-items: center;
+}
+.popup-wrapper span,
+.popup-date-wrapper span{
+  width: 8rem;
+}
+.popup-date-wrapper {
+  display: flex;
+  align-items: center;
+}
+.popup-date-wrapper p {
+  padding: 0rem 0.5rem;
+}
+.popup-date-wrapper input{
+  border: 1px solid#c2c2c2;
+  height: 1.7rem;
+  width: 7rem;
+  font-size: 0.8rem;
+}
+.popup-date-wrapper input::placeholder{
+  font-weight: 400;
+  font-size: 0.75rem;
+}
+
+
+
+/* Attachment */
+.attachment-wrapper{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.attachment-wrapper span > i {
+  margin-right: 0.25rem;
+}
+.attachment-content {
+  border: 1px dashed #c9c5c5;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  min-height: 5rem;
+  height: auto;
+  margin: 0.25rem 0rem;
+}
+.attachment-content p {
+  color: #636363;
+}
+.attachment-content i {
+  padding-left: 0.3rem;
+  padding-right: 0.1rem;
+  color: #5c5c5c;
+}
+.attachment-content label{
+  text-decoration-line: underline;
+  color: #5c5c5c;
+  font-weight: 700;
+}
+
+/* Switch Button */
+.switch-box-wrapper button {
+  font-weight: 400;
+  width: 2.5rem;
+  padding:0.1rem;
+  color: #a7a7a7;
+}
+.switch-box-wrapper button.active {
+  background-color: #ff9900;
+  font-weight: 800;
+  color: #000;
+}
+.switch-box-wrapper button:first-child {
+  border-radius: 0.5rem 0rem 0rem 0.5rem;
+}
+.switch-box-wrapper button:nth-child(2) {
+  border-radius: 0rem 0.5rem 0.5rem 0rem;
+}
+

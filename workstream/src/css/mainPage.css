@@ -1,8 +1,10 @@
 .main-wrapper {
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 10rem 7rem 10rem auto;
+  gap: 1rem;
+  margin:1rem;
 }
 
 .main-wrapper ul,
@@ -52,18 +54,19 @@
 
 }
 .dsvalue-wrapper{
+  grid-column: auto/span 4;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .dsvalue-wrapper img {
-  width: 30rem;
+  width: 25rem;
 }
 ._card{
-  margin: 15px;
   padding: 10px;
   border-radius: 25px;
   box-shadow: #4444442e 0px 10px 20px 2px;
+  box-sizing: content-box;
 }
 .inner-box{
   display: flex;
@@ -71,7 +74,7 @@
   padding: 5px 10px;
 }
 .inner-box__title{
-  font-size: 12pt;
+  font-size: 0.85rem;
   font-weight: bolder;
 }
 .inner-box__title i{
@@ -91,15 +94,16 @@
 
 /* 이달의리더쉽 */
 .leadership-wrapper{
+  grid-column: auto/span 3;
   display: flex;
   align-items: center;
 }
 .emp-photo-box{
   width: auto;
-  min-width: 90px;
-  height: 120px;
+  min-width: 5rem;
+  height: 6rem;
   overflow: hidden;
-  /* border-radius: 45%; */
+  border-radius: 45%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,16 +115,16 @@
   height: 100%;
 }
 .emp-photo-box i {
-  font-size: 6rem;
+  font-size: 5rem;
   color: #2B3499;
 }
 .emp-content-box{
-  flex-direction: column;
+  line-height: 1.1rem;
 }
 .emp-content__title strong,
 .emp-content__value strong {
   margin: 0 auto;
-  font-size: 11pt;
+  font-size: 0.9rem;
   display: flex;
   justify-content: center;
 }
@@ -129,18 +133,19 @@
 }
 
 .emp-content__value strong {
-  font-size: 10pt;
+  font-size: 0.8rem;
   color:#e76e1d
 }
 .emp-content__paragraph{
   padding-left: 10px;
   padding-top: 10px;
-  line-height: 15px;
+  line-height: 12px;
   color: #3f3f3f;
   overflow-y: scroll;
 }
 .emp-content__paragraph span {
-  font-size: 9pt;
+  font-size: 0.7rem;
+  font-weight: 500;
 }
 
 .inner-box_leadership,
@@ -156,29 +161,35 @@
 
 /* 공지사항 */
 .notice-wrapper{
-  /* background-color: #ecf3fd */
+  grid-column: auto/span 3;
 }
 .inner-box__content_notice {
-  line-height: 10px;
+  line-height: 1.25rem;
+}
+.notice-card__table li,
+.document-card__table li{
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: 400;
 }
 .document-card__table,
 .notice-card__table{
   display: flex;
   font-size: 10pt;
   padding: 0;
+  margin: 0;
 }
-.notice-card__table li:first-child {
-  padding-right: 10px;
-  width: 100%;
+.notice-card__table li span:first-child {
+  width: 3.5rem;
 }
-.notice-card__table li:nth-child(2){
+.notice-card__table li span:nth-child(2){
   padding-right: 10px;
-  width: 15%;
+  width: 5rem;
   text-align: center;
 }
-.notice-card__table li:nth-child(3){
+.notice-card__table li span:nth-child(3){
   padding-right: 10px;
-  width: 10%;
+  width: 6rem;
   text-align: center;
 }
 .notice-card__table li:nth-child(4){
@@ -189,13 +200,63 @@
 
 /* 이달의 수주실적 */
 .orderPerformance-wrapper{
-  grid-column: auto/span 2;
+  grid-column: auto/span 6;
   grid-row: auto/span 2;
 }
 
 /* 알림 */
 .news-wrapper{
+  grid-column: auto/span 2;
   background-color: #fffae1
+}
+/* 수주실적 */
+.cost-wrapper{
+  grid-column: auto/span 2;
+}
+.this-month{
+  background-color: #fff4e9;
+}
+.cost-wrapper .inner-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 1.25rem;
+  height: -webkit-fill-available;
+}
+.cost-wrapper .inner-box .won__icon{
+  background-color: #ffeccf;
+  height: 3rem;
+  width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+}
+.this-month i {
+  color: #fff !important;
+}
+.this-month .won__icon {
+  background-color: #ff8819 !important;
+}
+.cost-wrapper .inner-box .won__icon i {
+  color: #ff9900;
+  font-size: 1.5rem;
+}
+.cost-wrapper p {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #e76e1d;
+}
+.cost-wrapper .inner-box__title span {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.inner-box__title ._product {
+  font-size: 0.8rem;
+  color: #3f3f3f;
 }
 /* 날씨 */
 .weather-main{
@@ -212,6 +273,7 @@
   justify-content: space-between;
 }
 .weather-wrapper{
+  grid-column: auto/span 2;
   background-color: #93b9e4;
   background-image: url(../assets/img/weather/sunny2.jpg);                  /* 맑음 */
   background-size: cover;
@@ -225,9 +287,9 @@
 }
 .weather-tmp-fcstValue{
   font-weight: 600;
-  font-size: 8rem;
-  padding-top: 0.75rem;
+  font-size: 5rem;
   position: relative;
+  letter-spacing: -0.25rem;
 }
 .weather__time-date{
   display: flex;
@@ -276,7 +338,6 @@
   display: flex;
   justify-content: flex-end;
   font-size: 1.5rem;
-  letter-spacing: 0.1rem;
 }
 .weather-pty-fcstValue{
   line-height: 5rem;
@@ -290,6 +351,7 @@
 }
 /* 최근 입사자 */
 .newestEmp-wrapper{
+  grid-column: auto/span 2;
   display: flex;
   align-items: center;
 }
@@ -322,27 +384,31 @@
 /* 일정 */
 .calender-wrapper{
   grid-row: auto/span 2;
-  grid-column: auto/span 2;
+  grid-column: auto/span 4;
+}
+.calender-wrapper .inner-box {
+  height: 100%;
+  justify-content: center;
+}
+.calender-box {
+  width: 100%;
+  height: 100%;
+}
+.calender-wrapper .inner-box .inner-box__title {
+  display: flex;
+  justify-content: space-between;
 }
 /* 최신문서 */
 .currentDoc-wrapper{
-  width: 32rem;
+  grid-column: auto/span 3;
 }
 .document-card__table li:first-child {
   padding-right: 10px;
-  width: 60%;
+  width: 100%;
 }
-.document-card__table li:nth-child(2) {
-  padding-right: 10px;
-  width: 20%;
-  text-align: center;
-}
-.document-card__table li:nth-child(3) {
-  padding-right: 10px;
-  width: 10%;
-  text-align: center;
-}
+
 
 /* 생일자 */
 .birthday-wrapper{
+  grid-column: auto/span 3;
 }

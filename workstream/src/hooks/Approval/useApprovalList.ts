@@ -91,6 +91,9 @@ export function useApprovalList(sortValue: string) {
         // 각 항목에 'index' 속성을 추가합니다.
         return { ...item, index: getPage * getPageSize + index + 1 };
       });
+
+      console.log(data);
+
       const getTotalElements = response.data.totalElements;
       setListData(data);
       setTotalItems(getTotalElements);

@@ -1,3 +1,5 @@
+import profile from '../../assets/img/example.jpg';
+
 const Leadership = () => {
   /* 부서 받아오기 */
   /* 이름 받아오기 */
@@ -12,12 +14,12 @@ const Leadership = () => {
         </div>
         <div className="inner-box__content inner-box__content_leadership">
           <div className="emp-photo-box">
-            <i className="fa-solid fa-user-tie"></i>
-            {/* <img src={profile} alt="" /> */}
+            {/* <i className="fa-solid fa-user-tie"></i> */}
+            <img src={profile} alt="" />
           </div>
           <div className="emp-content-box">
             <div className="emp-content__title">
-              <strong>강이지 사원 / KM팀</strong>
+              <strong>김햄식 사원 / KM팀</strong>
             </div>
             <div className="emp-content__value">
               <strong>소통, 도전정신</strong>

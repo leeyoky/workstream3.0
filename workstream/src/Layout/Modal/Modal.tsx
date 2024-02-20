@@ -23,12 +23,12 @@ const Modal: React.FC<ModalProps> = props => {
     : `${classes.modal} ${className || ''}`;
 
   return ReactDOM.createPortal(
-    <div>
+    <>
       <div className={classes.backdrop} onClick={props.onClose}></div>
       <div className={modalClassName}>
         <div className={classes.content}>{props.children}</div>
       </div>
-    </div>,
+    </>,
     portalElement,
   );
 };

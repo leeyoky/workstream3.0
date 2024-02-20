@@ -1,5 +1,6 @@
 /* Menus */
 export type SubMenu = {
+  id: string;
   to: string;
   label: string;
   title: string;

@@ -1,11 +1,20 @@
-import test1 from '../../assets/img/test1.jpg';
-import { data } from './TodoData';
+import { useState } from 'react';
+import CreateTodoCardItem from './CreateTodoCardItem';
+import test1 from '../../assets/img/example.jpg';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { todoActions } from '../../store/Todo/todo-slice';
+import { useDispatch } from 'react-redux';
 
 interface TodoBoxProps {
-  cardTitle: string;
+  onCancel: () => void;
 }
+const TodoBox: React.FC<TodoBoxProps> = ({ onCancel }) => {
+  const [createItem, setCreateItem] = useState(false);
+  const [cardListTitle, setCardListTitle] = useState('');
+  const cards = useSelector((state: RootState) => state.todo.cards);
+  const dispatch = useDispatch();
 
-const TodoBox: React.FC<TodoBoxProps> = ({ cardTitle }) => {
   const getBadgeColorClass = (importance: string) => {
     if (importance === '긴급') {
       return 'badge-denger';
@@ -16,24 +25,58 @@ const TodoBox: React.FC<TodoBoxProps> = ({ cardTitle }) => {
     }
   };
 
+  const addNewCard = () => {
+    setCreateItem(prevCreateItem => !prevCreateItem);
+  };
+
+  const changeCardListTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCardListTitle(event.target.value);
+  };
+
+  const createCard = () => {
+    if (!cardListTitle.trim()) {
+      onCancel();
+      if (cards.length > 0) {
+        const lastCardId = cards[cards.length - 1].boardId;
+        dispatch(todoActions.removeCardList(lastCardId));
+      }
+    } else {
+      dispatch(
+        todoActions.addCardList({
+          id: cards.length + 1,
+        }),
+      );
+      console.log('취소');
+    }
+  };
+
   return (
-    <div className="card-containner">
+    <div className="card-containner" draggable={true} onBlur={createCard}>
       <div className="card-title">
-        <h2>{cardTitle}</h2>
-        <i className="fa-solid fa-ellipsis"></i>
+        <input
+          onChange={changeCardListTitle}
+          value={cardListTitle}
+          placeholder="카드의 제목을 입력하세요"
+        />
       </div>
-      {data.map(item => (
-        <div className="_card" key={item.id}>
-          <div className={`todo-badge ${getBadgeColorClass(item.importance)}`}>
-            {item.importance}
-          </div>
-          <div className="todo-content">{item.content}</div>
-          <div className="profile-box" title={item.regUsr}>
-            <img src={test1} alt="" />
-          </div>
+      {/* {cards.map(card => (
+        <div className="_card" key={card.boardId}>
+          {card.cardItems.map(item => (
+            <div key={item.id}>
+              <span>
+                <div className={`todo-badge ${getBadgeColorClass(item.importance)}`}></div>
+                <i className="fa-solid fa-ellipsis"></i>
+              </span>
+              <div className="todo-content">{item.content}</div>
+              <div className="profile-box">
+                <img src={test1} alt="" />
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-      <div className="add-card">
+      ))} */}
+      {createItem && <CreateTodoCardItem onCancel={() => setCreateItem(false)} />}
+      <div className="add-card _item" onClick={addNewCard}>
         <i className="fa-solid fa-plus"></i>
         <span>Add card</span>
       </div>

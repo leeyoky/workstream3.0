@@ -12,6 +12,7 @@ import textEditorSlice from './textEditor-slice';
 import fileSlice from './file-slice';
 import userSlice from './User/user-slice';
 import approvalSettingSlice from './Approval/setting-slice';
+import todoSlice from './Todo/todo-slice';
 
 const persistConfig = {
   key: 'root',
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   file: fileSlice.reducer,
   user: userSlice.reducer,
   setting: approvalSettingSlice.reducer,
+  todo: todoSlice.reducer,
 });
 
 const isDevelopment = process.env.NODE_ENV === 'development';

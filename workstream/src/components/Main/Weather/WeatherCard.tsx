@@ -17,6 +17,12 @@ const WeatherCard = () => {
   const baseTime = getWeatherDataOnTime();
   const getDay = getDayOfWeek();
 
+  // 현재 시간을 업데이트하는 함수
+  const updateCurrentTime = () => {
+    const currentTimeString = getCurrentTime();
+    setCurrentTime(currentTimeString);
+  };
+
   /**
    * @description 오픈 소스 API를 통해 기상청에서 단기예보를 가져오는 API
    * API 제공시간 : 02:10, 05:10, 08:10, 11:10, 14:10, 17:10, 20:10, 23:10
@@ -35,8 +41,13 @@ const WeatherCard = () => {
         console.error(error);
       }
     };
-    fetchData();
-  }, []);
+    fetchData(); // 데이터 업데이트
+
+    const intervalId = setInterval(fetchData, 60000); // 1분마다 갱신
+
+    // 컴포넌트가 언마운트되면 interval 해제
+    return () => clearInterval(intervalId);
+  }, [today, baseTime]);
 
   /**
    * @description 현재 시간을 1초마다 업데이트 시켜주는 함수
@@ -44,17 +55,9 @@ const WeatherCard = () => {
    */
 
   useEffect(() => {
-    // 현재 시간을 업데이트하는 함수
-    const updateCurrentTime = () => {
-      const currentTimeString = getCurrentTime();
-      setCurrentTime(currentTimeString);
-    };
-
     // 초기 렌더링 시 현재 시간 업데이트
     updateCurrentTime();
-
     const intervalId = setInterval(updateCurrentTime, 1000);
-
     // 컴포넌트가 언마운트되면 interval 해제
     return () => clearInterval(intervalId);
   }, []);
@@ -120,10 +123,11 @@ const WeatherCard = () => {
       weatherIconClass = 'fa-cloud';
       break;
     case '비/눈':
-      backgroundImage = 'rain2.jpg';
+      backgroundImage = 'rainny.jpg';
+      weatherIconClass = 'fa-cloud-showers-heavy';
       break;
     case '비':
-      backgroundImage = 'rain2.jpg';
+      backgroundImage = 'rainny.jpg';
       weatherIconClass = 'fa-cloud-showers-heavy';
       break;
     case '눈':
@@ -131,7 +135,7 @@ const WeatherCard = () => {
       weatherIconClass = 'fa-snowflake';
       break;
     case '소나기':
-      backgroundImage = 'shower.jpg';
+      backgroundImage = 'rain2.jpg';
       weatherIconClass = 'fa-cloud-sun-rain';
       break;
     default:

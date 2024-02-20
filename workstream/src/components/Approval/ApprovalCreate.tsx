@@ -52,17 +52,17 @@ const ApprovalCreate: React.FC<ApprovalCreateProps> = props => {
   };
 
   return (
-    <Modal isOpen={true} isEdit={props.isEdit}>
+    <Modal isOpen={true} isEdit={props.isEdit} onClose={props.onClose}>
       <div className={classes['approval-container']}>
         <div className={classes['organizaion-selector-wrapper']}>
           <ApprovalDocumentType onChange={handleDocumentTypeChange} />
         </div>
         <div className={classes['button--box']}>
-          <button className={classes['button--complete']} onClick={() => goCreatePage()}>
-            완료
-          </button>
           <button className={classes['button--alt']} onClick={closeModalHandler}>
             닫기
+          </button>
+          <button className={classes['button--complete']} onClick={() => goCreatePage()}>
+            완료
           </button>
         </div>
       </div>
