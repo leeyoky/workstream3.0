@@ -45,11 +45,10 @@ const createAxiosInstance = () => {
           };
           return await axios(originalConfig);
         } else if (newAccessToken === null || newAccessToken === undefined) {
-          // console.log('리프레시토큰 만료 ', newAccessToken);
           localStorage.removeItem('token');
           alert('토큰 만료로 인해 로그아웃 되었습니다.');
           store.dispatch(authActions.logout());
-          window.location.href = '/login';
+          // window.location.href = '/login';
         }
       }
       return Promise.reject(error);

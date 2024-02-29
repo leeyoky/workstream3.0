@@ -18,6 +18,7 @@ const MainPage = () => {
 
   useEffect(() => {
     dispatch(uiActions.setSubToolBar(false));
+    dispatch(uiActions.selectMenu(''));
   }, []);
 
   return (

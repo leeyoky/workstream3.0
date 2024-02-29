@@ -1,4 +1,10 @@
+import useNoticeList from '../../hooks/Notice/useNoticeList';
 const NoticeCard = () => {
+  const { noticeData } = useNoticeList();
+
+  // 최대 5개의 공지사항만 가져오기
+  const limitedNotices = noticeData.slice(0, 5);
+
   return (
     <div className="notice-wrapper _card">
       <div className="inner-box inner-box_notice">
@@ -7,12 +13,11 @@ const NoticeCard = () => {
           공지사항
         </div>
         <div className="inner-box__content inner-box__content_notice">
-          <ul className="notice-card__table">
-            <li>[인사발령] 강이지 사원 신규 입사</li>
-          </ul>
-          <ul className="notice-card__table">
-            <li>[인사발령] 김영철 과장 소속 변경 발령</li>
-          </ul>
+          {limitedNotices.map(item => (
+            <ul className="notice-card__table" key={item.id}>
+              <li>{item.title}</li>
+            </ul>
+          ))}
         </div>
       </div>
     </div>

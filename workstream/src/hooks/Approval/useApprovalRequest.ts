@@ -185,7 +185,6 @@ const useApprovalRequest = () => {
           contents: data.content,
           state: requestType, // 이 부분을 requestType에 따라 설정
         };
-        console.log('formData', formData);
 
         const response = await fetchApprovalData(formData);
         const responseData = response.data;

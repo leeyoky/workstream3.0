@@ -51,7 +51,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1rem;
 }
 .setting-page{
   background-color: #f3f3f3;
@@ -689,7 +689,7 @@ i[name]:hover::after {
   font-weight: 900;
 }
 .side-bar-container h3{
-  line-height: 1rem;
+  line-height: 2rem;
 }
 .side-bar-container p {
   color: #ffffff;
@@ -720,7 +720,7 @@ i[name]:hover::after {
   border-radius: 50%;
   overflow: hidden;
   display: flex;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   justify-content: center;
   align-items: center;
 }
@@ -741,6 +741,7 @@ i[name]:hover::after {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 1rem;
 }
 
 .side-bar-list-wrapper > ul {
@@ -1118,6 +1119,9 @@ i[name]:hover::after {
   font-weight: 500;
   cursor: pointer;
 }
+.table-board .notice-tbody td {
+  line-height: 1.75rem;
+}
 .table-board th:first-child {
   cursor: default;
 }
@@ -1341,6 +1345,22 @@ i[name]:hover::after {
 .card .card__header {
   width: 100%;
 }
+.card .card__header i {
+  margin-left: 0.25rem;
+}
+.card .card__header p{
+  display: flex;
+  justify-content: space-between;
+  min-height: 1.7rem;
+}
+.card .card__header .edit__buttons{
+  display: flex;
+  gap: 0.25rem;
+}
+.card .card__header div:first-child {
+  display: flex;
+  justify-content: space-between;
+}
 
 .card .card__content {
   display: flex;
@@ -1357,6 +1377,19 @@ i[name]:hover::after {
 .card__wrapper{
   width: 100%;
   padding: 0rem 0.25rem;
+}
+.card__content__detail{
+  height: 25rem;
+  border: 1px solid #c4c4c4;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+.card__title__detail{
+  font-weight: 400;
+  font-size: 0.85rem;
+  padding: 0.25rem;
 }
 
 /* 검색창 */
@@ -1974,7 +2007,7 @@ i[name]:hover::after {
 /* CreateNoticeModal */
 
 .notice-modal{
-  top: 5rem;
+  top: 2rem;
   left: calc(40% - 5rem);
   height: auto;
   width: 40rem;
@@ -1989,22 +2022,27 @@ i[name]:hover::after {
   height: auto;
 }
 .notice-modal textarea {
-  height: 20rem;
+  height: 25rem;
 }
 .notice-modal select{
-  width: 5rem;
+  width: 6rem;
   font-weight: 600;
   text-align: center;
 }
 
-.popup-wrapper {
+.popup-wrapper,
+.category-wrapper {
   margin: 0.5rem 0rem;
   display: flex;
   align-items: center;
 }
 .popup-wrapper span,
-.popup-date-wrapper span{
+.popup-date-wrapper span,
+.category-wrapper span{
   width: 8rem;
+}
+.category-wrapper span{
+  width: 6rem;
 }
 .popup-date-wrapper {
   display: flex;

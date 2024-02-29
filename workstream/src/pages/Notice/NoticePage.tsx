@@ -1,40 +1,31 @@
-import IndexPage from '../IndexPage';
-import { columns, searchTags } from './NoticePageTag';
-import classes from './NoticePage.module.css';
-import { getNoticeList } from '../../api/endpoints/notice';
-import { useEffect, useState } from 'react';
-import { NoticeList } from '../../types/Main/Main';
-import { formatDateOnly } from '../../helpers/formatDateTime';
 import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+
+import { formatDateOnly } from '../../helpers/formatDateTime';
 import { uiActions } from '../../store/ui-slice';
+import { columns, getCategoryLabel, searchTags } from './NoticePageTag';
+
+import classes from './NoticePage.module.css';
+import IndexPage from '../IndexPage';
 import DetailNoticeModal from '../../components/Notice/DetailNoticeModal';
+import useNoticeList from './../../hooks/Notice/useNoticeList';
 
 const NoticePage = () => {
-  const [noticeData, setNoticeData] = useState<NoticeList[]>([]);
   const [goDetail, setGoDetail] = useState(false);
   const [selectedNoticeId, setSelectedNoticeId] = useState<string>('');
-  const boardTitle = '전사공지';
+  const { fetchNoticeList, noticeData } = useNoticeList();
   const searchTag = [...searchTags];
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    fetchNoticeList();
-  }, []);
-
-  const fetchNoticeList = async () => {
-    try {
-      const response = await getNoticeList();
-      const data = response.data;
-      console.log(data);
-      setNoticeData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const boardTitle = '전사공지';
 
   useEffect(() => {
     dispatch(uiActions.setSubToolBar(true));
   }, []);
+
+  useEffect(() => {
+    fetchNoticeList();
+  }, [goDetail]);
 
   const goDetailPage = (id: string) => {
     setSelectedNoticeId(id);
@@ -63,13 +54,16 @@ const NoticePage = () => {
             {noticeData.length > 0 ? (
               noticeData.map((item, index) => (
                 <tr className="table-hover" key={index}>
+                  <td>
+                    <span>{getCategoryLabel(item.category)}</span>
+                  </td>
                   <td
                     className="approval-list-title left-align"
                     onClick={() => goDetailPage(item.id)}>
                     <span>{item.title}</span>
                   </td>
                   <td>
-                    <span>{item.regUsr}</span>
+                    <span>{item.regUsrNm}</span>
                   </td>
                   <td>
                     <span>{formatDateOnly(item.regDate)}</span>

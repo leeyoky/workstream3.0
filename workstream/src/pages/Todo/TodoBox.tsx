@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import CreateTodoCardItem from './CreateTodoCardItem';
-import test1 from '../../assets/img/example.jpg';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { todoActions } from '../../store/Todo/todo-slice';
@@ -15,7 +14,7 @@ const TodoBox: React.FC<TodoBoxProps> = ({ onCancel }) => {
   const cards = useSelector((state: RootState) => state.todo.cards);
   const dispatch = useDispatch();
 
-  const getBadgeColorClass = (importance: string) => {
+  /*   const getBadgeColorClass = (importance: string) => {
     if (importance === '긴급') {
       return 'badge-denger';
     } else if (importance === '보통') {
@@ -23,7 +22,7 @@ const TodoBox: React.FC<TodoBoxProps> = ({ onCancel }) => {
     } else if (importance === '중요') {
       return 'badge-info';
     }
-  };
+  }; */
 
   const addNewCard = () => {
     setCreateItem(prevCreateItem => !prevCreateItem);

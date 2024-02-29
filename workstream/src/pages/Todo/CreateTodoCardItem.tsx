@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import test1 from '../../assets/img/example.jpg';
-import { useDispatch, useSelector } from 'react-redux';
-import { todoActions } from '../../store/Todo/todo-slice';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 interface CreateTodoCardProps {
@@ -10,7 +9,6 @@ interface CreateTodoCardProps {
 const CreateTodoCardItem: React.FC<CreateTodoCardProps> = ({ onCancel }) => {
   const [newCardContent, setNewCardContent] = useState('');
   const cards = useSelector((state: RootState) => state.todo.cards);
-  const dispatch = useDispatch();
 
   const handleNewCardContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewCardContent(event.target.value);

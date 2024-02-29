@@ -1,6 +1,6 @@
 /* Menus */
 export type SubMenu = {
-  id: string;
+  /* id: string; */
   to: string;
   label: string;
   title: string;
@@ -323,3 +323,22 @@ export type resignReasonSelectData = {
   attr2: string;
   attr3: string;
 };
+
+/* params */
+
+export interface GetApprovalListParams {
+  id?: string;
+  page?: number;
+  size?: number;
+  state?: string;
+  pendingApproval?: string;
+  title?: string;
+  deptCd?: string;
+  docType?: string;
+  regUsrNm?: string;
+  orderBy?: string;
+  regDateGoe?: string /* 시작일 */;
+  regDateLoe?: string /* 종료일 */;
+  executeDateGoe?: string /* 시행일자 시작일 */;
+  executeDateLoe?: string /* 시행일자 종료일 */;
+}

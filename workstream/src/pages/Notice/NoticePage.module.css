@@ -1,15 +1,11 @@
-.notice-tbody td {
-  line-height: 1.5rem;
-}
-
-
 .notice-tbody td:first-child {
-  width: 50%;
-  text-align: center;
+  width: 10%;
 }
 /* 분류 */
 .notice-tbody td:nth-child(2) {
-  width: 10%;
+  width: 50%;
+  text-align: center;
+  line-height: 1.5rem;
 }
 /* 제목 */
 .notice-tbody td:nth-child(3) {

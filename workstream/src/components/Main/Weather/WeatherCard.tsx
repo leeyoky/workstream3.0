@@ -25,6 +25,7 @@ const WeatherCard = () => {
 
   /**
    * @description 오픈 소스 API를 통해 기상청에서 단기예보를 가져오는 API
+   * 격자 정보 : 서울 X:60 Y:127 서초구 X:61 Y:125
    * API 제공시간 : 02:10, 05:10, 08:10, 11:10, 14:10, 17:10, 20:10, 23:10
    */
   useEffect(() => {
@@ -33,7 +34,7 @@ const WeatherCard = () => {
         const response = await axios.get(
           `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${
             import.meta.env.VITE_REACT_APP_WEATHER_KEY
-          }&numOfRows=12&pageNo=1&dataType=JSON&base_date=${today}&base_time=${baseTime}&nx=61&ny=125`,
+          }&numOfRows=12&pageNo=1&dataType=JSON&base_date=${today}&base_time=${baseTime}&nx=60&ny=127`,
         );
         console.log(response.data.response.body.items.item);
         setWeatherData(response.data.response.body.items.item);
@@ -62,6 +63,11 @@ const WeatherCard = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  /**
+   * 하늘상태
+   * @param value
+   * @returns
+   */
   const getWeatherString = (value: string) => {
     switch (value) {
       case '1':
@@ -75,6 +81,11 @@ const WeatherCard = () => {
     }
   };
 
+  /**
+   * 강수형태
+   * @param value
+   * @returns
+   */
   const getPTYString = (value: string) => {
     switch (value) {
       case '0':
@@ -131,7 +142,7 @@ const WeatherCard = () => {
       weatherIconClass = 'fa-cloud-showers-heavy';
       break;
     case '눈':
-      backgroundImage = 'shower.jpg';
+      backgroundImage = 'snowing.jpg';
       weatherIconClass = 'fa-snowflake';
       break;
     case '소나기':

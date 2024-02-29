@@ -30,7 +30,8 @@ const SideToolBar = () => {
 
   const updatePath = (to: string) => {
     dispatch(uiActions.selectMenu(to));
-    dispatch(uiActions.setSubToolBar(false));
+    // 2024-02-28 SubMenu 여러 번 Click 시, subToolBar가 false상태로 바뀌어 UI가 깨지는 현상
+    // dispatch(uiActions.setSubToolBar(false));
   };
 
   const classNames = {
@@ -91,8 +92,12 @@ const SideToolBar = () => {
           </ul>
         </div>
       </div>
-      {selectMenu.startsWith('/approval') && <ApprovalSub />}
-      {selectMenu === '/notice' && <NoticeSub />}
+      {selectMenu &&
+        typeof selectMenu === 'string' &&
+        (selectMenu as string).startsWith('/approval') && <ApprovalSub />}
+      {selectMenu &&
+        typeof selectMenu === 'string' &&
+        (selectMenu as string).startsWith('/notice') && <NoticeSub />}
     </div>
   );
 };
