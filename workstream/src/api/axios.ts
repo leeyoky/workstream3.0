@@ -7,6 +7,7 @@ import {
   resinationDocData,
   executiondocData,
   updateApprovalLineData,
+  GetApprovalListParams,
 } from '../types/Approval/Approaval';
 import { AxiosResponse } from 'axios';
 
@@ -162,22 +163,7 @@ export function updateResignReason() {
   return instance.get('approval/resignation/reasons');
 }
 
-export function getApprovalList(params: {
-  id?: string;
-  page?: number;
-  size?: number;
-  state?: string;
-  pendingApproval?: string;
-  title?: string;
-  deptCd?: string;
-  docType?: string;
-  regUsrNm?: string;
-  orderBy?: string;
-  regDateGoe?: string /* 시작일 */;
-  regDateLoe?: string /* 종료일 */;
-  executeDateGoe?: string /* 시행일자 시작일 */;
-  executeDateLoe?: string /* 시행일자 종료일 */;
-}) {
+export function getApprovalList(params: GetApprovalListParams) {
   const queryString = Object.keys(params as Record<string, any>)
     .filter(key => (params as Record<string, any>)[key] !== undefined)
     .map(key => `${key}=${(params as Record<string, any>)[key]}`)
