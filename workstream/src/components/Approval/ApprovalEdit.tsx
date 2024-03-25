@@ -9,7 +9,7 @@ import { selectedActions } from '../../store/Approval/approval-slice';
 
 import BoardTitle from '../../Layout/BoardLayout/BoardTitle';
 import ApprovalEditButtons from './ApprovalButtonsGroup/ApprovalEditButtons';
-import ApprovalComment from './ApprovalComment';
+import ApprovalComment from './ApprovalLayout/ApprovalComment';
 import CommonDetail from './ApprovalType/CommonDetail';
 import CommonCreate from './ApprovalType/CommonCreate';
 import ResinationCreate from './ApprovalType/ResinationCreate';
@@ -19,6 +19,11 @@ import ExecutionDetail from './ApprovalType/ExecutionDetail';
 import CondolenceCreate from './ApprovalType/CondolenceCreate';
 import TransportationCreate from './ApprovalType/TransportationCreate';
 import ApprovalAttachment from './Attachment/ApprovalAttachment';
+import PurchaseCreate from './ApprovalType/PurchaseCreate';
+import { EquipmentConfirmCreate } from './ApprovalType/EquipmentConfirm/EquipmentConfirmCreate';
+import ExpenseReportCreate from './ApprovalType/ExpenseReport/ExpenseReportCreate';
+import StateReasonCreate from './ApprovalType/StateReason/StateReasonCreate';
+import MedicalSupportCreate from './ApprovalType/MedicalSupport/MedicalSupportCreate';
 
 const ApprovalEdit = () => {
   const [temp, setTemp] = useState(false);
@@ -57,8 +62,13 @@ const ApprovalEdit = () => {
                   {documentType === 'APPROVAL_COMMON' && <CommonCreate />}
                   {documentType === 'RESIGNATION' && <ResinationCreate />}
                   {documentType === 'EXECUTION' && <ExecutionCreate />}
+                  {documentType === 'MEDICAL_SUPPORT' && <MedicalSupportCreate />}
                   {documentType === 'CONDOLENCE' && <CondolenceCreate />}
+                  {documentType === 'PURCHASE' && <PurchaseCreate />}
                   {documentType === 'TRANSPORTATION' && <TransportationCreate />}
+                  {documentType === 'EQUIPMENT_RETURN_CONFIRMATION' && <EquipmentConfirmCreate />}
+                  {documentType === 'EXPENSEREPORT' && <ExpenseReportCreate />}
+                  {documentType === 'STATE_REASON' && <StateReasonCreate />}
                 </>
               ) : (
                 <>

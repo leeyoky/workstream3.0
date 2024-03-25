@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SearchBoxOption } from '../../../types/Approval/Approaval';
 import DatePick from '../../../components/DatePick';
 
@@ -11,11 +11,21 @@ interface DatePickerSearchProps {
   };
   localSearchInput: { [key: string]: string };
   setLocalSearchInput: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  reset: boolean;
 }
 
-const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ tag, setLocalSearchInput }) => {
+const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ tag, setLocalSearchInput, reset }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    updateLocalSearchInput(startDate, endDate, tag.name);
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    setStartDate(null);
+    setEndDate(null);
+  }, [reset]);
 
   const formatToYMD = (date: Date | null) => {
     if (!date) {
@@ -31,7 +41,6 @@ const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ tag, setLocalSearch
 
   const handleStartDateChange = (date: Date | null) => {
     setStartDate(date);
-    updateLocalSearchInput(date, endDate, tag.name);
   };
 
   const handleEndDateChange = (date: Date | null) => {
@@ -41,15 +50,17 @@ const DatePickerSearch: React.FC<DatePickerSearchProps> = ({ tag, setLocalSearch
       setEndDate(null);
     } else {
       setEndDate(date);
-      updateLocalSearchInput(startDate, endDate, tag.name);
     }
   };
 
   const updateLocalSearchInput = (start: Date | null, end: Date | null, name: string) => {
+    const startDateString = start ? formatToYMD(start) : ''; // startDate가 null이면 빈 문자열로 설정
+    const endDateString = end ? formatToYMD(end) : ''; // endDate가 null이면 빈 문자열로 설정
+
     setLocalSearchInput(prev => ({
       ...prev,
-      [`${name}Goe`]: formatToYMD(start),
-      [`${name}Loe`]: formatToYMD(end),
+      [`${name}Goe`]: startDateString,
+      [`${name}Loe`]: endDateString,
     }));
   };
 

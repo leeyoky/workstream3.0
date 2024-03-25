@@ -12,7 +12,7 @@ export interface WeatherData {
 
 export interface NoticeList {
   id: string;
-  status: string;
+  state: string;
   category: string;
   title: string;
   content: string;
@@ -24,6 +24,7 @@ export interface NoticeList {
   popupYn: string;
   popupStart: string;
   popupEnd: string;
+  fileCount: number;
 }
 
 export interface NoticeData {
@@ -34,6 +35,23 @@ export interface NoticeData {
   popupYn: string;
   popupStart: Date | null;
   popupEnd: Date | null;
+}
+
+/* Address */
+export interface AddressData {
+  deptNm: string;
+  empNm: string;
+  officeDuty: string;
+  rank: string;
+  extNum: string;
+  dirNum: string;
+  email: string;
+  skypeId: string;
+  cellphone: string;
+  tel: string;
+  enterDate: number;
+  birth: string;
+  affgrp: string;
 }
 
 /* params */
@@ -47,4 +65,5 @@ export interface GetNoticeListParams {
   regUsrNm?: string;
   regDateGoe?: string;
   regDateLoe?: string;
+  orderBy?: string;
 }

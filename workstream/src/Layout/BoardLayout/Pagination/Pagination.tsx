@@ -29,28 +29,30 @@ const Pagination = () => {
   );
 
   return (
-    <div className="pagination">
-      <button className="previous" onClick={() => goToPage(0)}>
-        <i className="fa-solid fa-angles-left"></i>
-      </button>
-      <button className="previous" onClick={() => goToPage(activePage - 1)}>
-        <i className="fa-solid fa-angle-left"></i>
-      </button>
-      {pages.map(page => (
-        <button
-          key={page}
-          className={`page ${activePage === page ? 'active' : ''}`}
-          onClick={() => goToPage(page)}>
-          {page + 1}
+    totalItems > 0 && (
+      <div className="pagination">
+        <button className="previous" onClick={() => goToPage(0)}>
+          <i className="fa-solid fa-angles-left"></i>
         </button>
-      ))}
-      <button className="next" onClick={() => goToPage(activePage + 1)}>
-        <i className="fa-solid fa-angle-right"></i>
-      </button>
-      <button className="next" onClick={() => goToPage(totalPages - 1)}>
-        <i className="fa-solid fa-angles-right"></i>
-      </button>
-    </div>
+        <button className="previous" onClick={() => goToPage(activePage - 1)}>
+          <i className="fa-solid fa-angle-left"></i>
+        </button>
+        {pages.map(page => (
+          <button
+            key={page}
+            className={`page ${activePage === page ? 'active' : ''}`}
+            onClick={() => goToPage(page)}>
+            {page + 1}
+          </button>
+        ))}
+        <button className="next" onClick={() => goToPage(activePage + 1)}>
+          <i className="fa-solid fa-angle-right"></i>
+        </button>
+        <button className="next" onClick={() => goToPage(totalPages - 1)}>
+          <i className="fa-solid fa-angles-right"></i>
+        </button>
+      </div>
+    )
   );
 };
 

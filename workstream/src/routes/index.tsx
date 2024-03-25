@@ -9,11 +9,12 @@ import SideToolBar from '../Layout/ToolBar/SideToolBar';
 import MainPage from '../pages/MainPage';
 import ApprovalPage from '../pages/Approval/ApprovalPage';
 import ApprovalEdit from '../components/Approval/ApprovalEdit';
-import NotFoundPage from '../pages/NotFoundPage';
+import NotFoundPage from '../pages/Common/NotFoundPage';
 import LoginPage from '../pages/LoginPage';
 import ApprovalManager from '../pages/Approval/ApprovalManager';
 import NoticePage from '../pages/Notice/NoticePage';
 import TodoPage from '../pages/Todo/TodoPage';
+import AddressPage from '../pages/Address/AddressPage';
 
 export function AuthenticatedRoutes() {
   const isSidebarOpen: boolean = useSelector((state: RootState) => state.ui.isSidebarOpen);
@@ -31,11 +32,14 @@ export function AuthenticatedRoutes() {
           <Routes>
             {/* 메인페이지 */}
             <Route index element={<MainPage />} />
+            <Route path="/" element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
             {/* 전사공지 */}
             <Route path="/notice" element={<NoticePage />} />
             <Route path="/notice/document" element={<NoticePage />} />
+            <Route path="/notice/personelOrder" element={<NoticePage />} />
             <Route path="/notice/temp" element={<NoticePage />} />
+            <Route path="/notice/familyEvent" element={<NoticePage />} />
             {/* 전자결재 */}
             <Route path="/approval" element={<ApprovalPage />} />
             <Route path="/approval/document" index element={<ApprovalPage />} />
@@ -49,6 +53,8 @@ export function AuthenticatedRoutes() {
             <Route path="/approval/delegation" element={<ApprovalManager />} />
             {/* Todo */}
             <Route path="/todoList" element={<TodoPage />} />
+            {/* 사내연락망 */}
+            <Route path="/address" element={<AddressPage />} />
             {/* 404 */}
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>

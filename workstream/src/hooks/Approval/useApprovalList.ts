@@ -87,8 +87,9 @@ export function useApprovalList(sortValue: string) {
         executeDateLoe: executeDateLoe,
       });
 
+      console.log(regDateGoe, regDateLoe);
+
       const data = response.data.content.map((item: any, index: number) => {
-        // 각 항목에 'index' 속성을 추가합니다.
         return { ...item, index: getPage * getPageSize + index + 1 };
       });
 

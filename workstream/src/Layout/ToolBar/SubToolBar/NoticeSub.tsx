@@ -48,21 +48,16 @@ const NoticeSub = () => {
   return (
     <SubToolBar>
       <div className="sub-toolbar-menu-box">
-        <Button onShowModal={handleShowModal}>공지 작성</Button>
+        <Button onShowModal={handleShowModal}>새 글 작성</Button>
         {isModalOpen && <CreateNoticeModal onClose={handleCloseModal} />}
       </div>
       <div className="sub-toolbar-menu-box notice-sub-menus">
-        <strong>메인</strong>
-        {renderMenuItems([noticeMenuItems[0]])}
+        <strong>메뉴</strong>
+        {renderMenuItems(noticeMenuItems.slice(0, 3))}
       </div>
       <div className="sub-toolbar-menu-box notice-sub-menus">
         <strong>작성</strong>
-        {renderMenuItems(noticeMenuItems.slice(1, 3))}
-      </div>
-
-      <div className="sub-toolbar-menu-box notice-sub-menus">
-        <strong>보관함</strong>
-        {renderMenuItems(noticeMenuItems.slice(3))}
+        {renderMenuItems(noticeMenuItems.slice(3, 4))}
       </div>
     </SubToolBar>
   );

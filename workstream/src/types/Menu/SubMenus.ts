@@ -1,9 +1,9 @@
 /* 전사공지 */
 export const noticeMenuItems = [
   { to: '/notice/document', label: '공지사항', title: '공지사항', type: 'document' },
+  { to: '/notice/personelOrder', label: '인사발령', title: '인사발령', type: 'document' },
+  { to: '/notice/familyEvent', label: '경조사', title: '경조사', type: 'document' },
   { to: '/notice/temp', label: '임시저장', title: '임시저장', type: 'document' },
-  { to: '/notice/mail', label: '공지메일', title: '공지메일', type: 'document' },
-  { to: '/sent-mails', label: '보낸메일함', title: '보낸메일함', type: 'document' },
 ];
 /* 전자결재 */
 export const approvalMenuItems = [

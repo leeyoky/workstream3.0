@@ -7,7 +7,7 @@ import logoSmall from '../../../assets/img/logo.png';
 import classes from '../../../pages/Approval/Approval.module.css';
 import TextEditor from '../../TextEditor';
 import Signature from '../ApprovalSign/Signature';
-import ApprovalReference from '../ApprovalReference';
+import ApprovalReference from '../ApprovalLayout/ApprovalReference';
 import ApprovalInstructions from '../ApprovalInstruction/ApprovalInstructions';
 
 const CommonCreate = () => {

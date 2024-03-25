@@ -1,31 +1,43 @@
 import { useEffect, useRef, useState } from 'react';
-
 import { formatDateOnly } from '../../helpers/formatDateTime';
+import { getCategoryLabel, noticeCategories } from '../../pages/Notice/NoticePageTag';
 
-import SwitchButton from '../Common/SwitchButton';
 import Modal from '../../Layout/Modal/Modal';
 import DatePick from '../DatePick';
-import Attachment from '../Common/Attachment';
+import SwitchButton from '../Common/SwitchButton';
 import useNoticeRequest from './../../hooks/Notice/useNoticeRequest';
-import { getCategoryLabel, noticeCategories } from '../../pages/Notice/NoticePageTag';
+import useUpdateFiles from '../../hooks/Common/useUpdateFiles';
 
 interface DetailNoticeModalProps {
   noticeId: string;
   onClose: () => void;
 }
 const DetailNoticeModal: React.FC<DetailNoticeModalProps> = props => {
-  const { noticeData, getData, popupYn, setPopupYn, removeNotice, updateData, setNoticeData } =
-    useNoticeRequest(props.noticeId, () => getData());
+  const {
+    isTemp,
+    noticeData,
+    getData,
+    popupYn,
+    setPopupYn,
+    removeNotice,
+    updateData,
+    setNoticeData,
+  } = useNoticeRequest(props.noticeId, () => getData());
   const [updateMode, setUpdateMode] = useState(false);
+  const { getFileList /* apiFileList */ } = useUpdateFiles();
+
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    getData();
-  }, [props.noticeId]);
+    if (isTemp) {
+      setUpdateMode(true);
+    }
+  }, [isTemp]);
 
-  const closeModalHandler = () => {
-    props.onClose();
-  };
+  useEffect(() => {
+    getData();
+    getFileList(props.noticeId);
+  }, [props.noticeId]);
 
   useEffect(() => {
     if (updateMode && titleRef.current) {
@@ -33,14 +45,42 @@ const DetailNoticeModal: React.FC<DetailNoticeModalProps> = props => {
     }
   }, [updateMode]);
 
-  const updateModeHandler = () => {
+  const closeModalHandler = () => {
+    props.onClose();
+  };
+
+  const updateChangeMode = () => {
     setUpdateMode(true);
-    if (updateMode && window.confirm('수정하시겠습니까?')) {
-      setUpdateMode(false);
+  };
+
+  const updateModeHandler = async () => {
+    setUpdateMode(true);
+
+    const result = window.confirm('수정하시겠습니까?');
+
+    if (result) {
+      const currentDate = new Date(); // 현재 시간을 나타내는 Date 객체 생성
+      const formattedDate = currentDate.toISOString(); // ISO 형식의 문자열로 변환
+
+      setNoticeData(prevData => ({
+        ...prevData!,
+        popupYn: popupYn,
+        state: 'SAVE',
+        regDate: formattedDate,
+      }));
+
       props.onClose();
+
       if (noticeData) {
-        updateData(props.noticeId, noticeData);
+        await updateData(props.noticeId, {
+          ...noticeData,
+          popupYn: popupYn,
+          state: 'SAVE',
+          regDate: formattedDate,
+        });
       }
+
+      setUpdateMode(false);
     }
   };
 
@@ -85,7 +125,7 @@ const DetailNoticeModal: React.FC<DetailNoticeModalProps> = props => {
       }
       return {
         ...prevData,
-        popupEnd: date ? date.toISOString() : '', // Date를 string으로 변환
+        popupEnd: date ? formatDateOnly(date.toISOString()) : '', // Date를 string으로 변환
       };
     });
   };
@@ -153,16 +193,20 @@ const DetailNoticeModal: React.FC<DetailNoticeModalProps> = props => {
             <>
               <div className="popup-wrapper">
                 <span>팝업창 생성 여부</span>
-                <SwitchButton
-                  value1="ON"
-                  value2="OFF"
-                  defaultValue={popupYn}
-                  onButtonToggle={buttonNumber => {
-                    setPopupYn(buttonNumber === 1 ? 'Y' : 'N');
-                  }}
-                />
+                {updateMode ? (
+                  <SwitchButton
+                    value1="ON"
+                    value2="OFF"
+                    defaultValue={noticeData?.popupYn}
+                    onButtonToggle={buttonNumber => {
+                      setPopupYn(buttonNumber === 1 ? 'Y' : 'N');
+                    }}
+                  />
+                ) : (
+                  <div>{noticeData?.popupYn === 'Y' ? 'ON' : 'OFF'}</div>
+                )}
               </div>
-              {popupYn === 'Y' && (
+              {updateMode ? (
                 <div className="popup-date-wrapper">
                   <span>팝업 게시 기간</span>
                   <DatePick
@@ -176,20 +220,34 @@ const DetailNoticeModal: React.FC<DetailNoticeModalProps> = props => {
                     placeholderText="종료일"
                     dateFormat="yyyy-MM-dd"
                     onChange={endDateChangeHandler}
-                    selected={noticeData?.popupStart ? new Date(noticeData.popupEnd) : null}
+                    selected={noticeData?.popupEnd ? new Date(noticeData.popupEnd) : null}
                   />
                 </div>
+              ) : (
+                noticeData?.popupYn === 'Y' && (
+                  <div className="popup-date-wrapper">
+                    <span>팝업 게시 기간</span>
+                    <div>{formatDateOnly(noticeData?.popupStart)}</div>
+                    <p>~</p>
+                    <div>{formatDateOnly(noticeData?.popupEnd)}</div>
+                  </div>
+                )
               )}
             </>
           </div>
-          <Attachment />
+          {/* <Attachment fileData={apiFileList} updateMode={updateMode} /> */}
           <div className="card__button-box">
             {updateMode ? (
-              <button className="btn btn-secondary" onClick={updateModeHandler}>
-                수정완료
-              </button>
+              <>
+                <button className="btn btn-secondary" onClick={updateModeHandler}>
+                  수정완료
+                </button>
+                <button className="btn btn-border" onClick={updateModeHandler}>
+                  임시저장
+                </button>
+              </>
             ) : (
-              <button className="btn btn-border" onClick={updateModeHandler}>
+              <button className="btn btn-border" onClick={updateChangeMode}>
                 수정
               </button>
             )}

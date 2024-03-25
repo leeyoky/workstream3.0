@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import classes from '../../pages/Approval/ApprovalSelect.module.css';
+import classes from '../../../pages/Approval/ApprovalSelect.module.css';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { documentTypes } from '../../pages/Approval/ApprovalSearchTag';
+import { RootState } from '../../../store';
+import { documentTypes } from '../../../pages/Approval/ApprovalSearchTag';
 
 interface ApprovalDocumentTypeProps {
   onChange: (documentType: string) => void;

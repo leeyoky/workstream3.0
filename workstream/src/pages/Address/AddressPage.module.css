@@ -1,0 +1,53 @@
+/* 부서 */
+.address-tbody td:first-child{      
+  width: 7%;
+}
+/* 이름 */
+.address-tbody td:nth-child(2){
+  width: 7%;
+}
+/* 직책 */
+.address-tbody td:nth-child(3){
+  width: 5%;
+}
+/* 직위 */
+.address-tbody td:nth-child(4){
+  width: 5%;
+}
+/* 내선 */
+.address-tbody td:nth-child(5){
+  width: 5%;
+}
+/* 직통번호 */
+.address-tbody td:nth-child(6){
+  width: 10%;
+}
+/* Email */
+.address-tbody td:nth-child(7){
+  width: 10%;
+}
+/* skype */
+.address-tbody td:nth-child(8){
+  width: 10%;
+}
+/* 핸드폰 */
+.address-tbody td:nth-child(9){
+  width: 10%;
+}
+/* 자택번호 */
+.address-tbody td:nth-child(10){
+  width: 7%;
+}
+/* 입사일 */
+.address-tbody td:nth-child(11){
+  width: 5%;
+}
+/* 생일 */
+.address-tbody td:nth-child(12){
+  width: 7%;
+}
+/* 프로젝트 */
+.address-tbody td:nth-child(10){
+  width: 7%;
+}
+

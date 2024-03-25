@@ -7,6 +7,7 @@ import DatePickerSearch from './DatePickerSearch';
 
 const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
   const [localSearchInput, setLocalSearchInput] = useState<{ [key: string]: string }>({});
+  const [reset, setReset] = useState(false);
   const dispatch = useDispatch();
 
   const inputChangeHandler = (
@@ -28,6 +29,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
     // 수정된 검색어 객체를 사용하여 쿼리를 서버로 보냄
     dispatch(uiActions.searchInput(updatedSearchInput));
     dispatch(uiActions.selectPage(0));
+    setReset(false);
   };
 
   /* 엔터키로 검색 */
@@ -40,6 +42,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
   const resetFilter = () => {
     setLocalSearchInput({});
     dispatch(uiActions.resetSearchInput());
+    setReset(true);
   };
 
   return (
@@ -57,9 +60,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({ tags }) => {
                 />
               ) : tag.type === 'date' ? (
                 <DatePickerSearch
+                  key={reset.toString()}
                   tag={tag}
                   localSearchInput={localSearchInput}
                   setLocalSearchInput={setLocalSearchInput}
+                  reset={reset}
                 />
               ) : (
                 <input

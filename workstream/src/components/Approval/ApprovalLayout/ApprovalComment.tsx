@@ -6,14 +6,14 @@ import {
   getApprovalData,
   getResignationData,
   updateComment,
-} from '../../api/axios';
-import { formatDateMinutes } from '../../helpers/formatDateTime';
-import classes from '../../pages/Approval/Approval.module.css';
-import { ApprovalData, CommentItem, ResignationData } from '../../types/Approval/Approaval';
-import Alert from '../../Layout/Alert/Alert';
+} from '../../../api/axios';
+import { formatDateMinutes } from '../../../helpers/formatDateTime';
+import classes from '../../../pages/Approval/Approval.module.css';
+import { ApprovalData, CommentItem, ResignationData } from '../../../types/Approval/Approaval';
+import Alert from '../../../Layout/Alert/Alert';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { useDocumentData } from '../../hooks/Approval/useDocumentData';
+import { RootState } from '../../../store';
+import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
 
 const ApprovalComment = () => {
   const { id = '' } = useParams<string>();

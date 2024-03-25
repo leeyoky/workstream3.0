@@ -1,25 +1,66 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { uiActions } from '../store/ui-slice';
+import { useDispatch } from 'react-redux';
+
 import dsValue from '../assets/img/dsvalue.png';
 import BirthdayCard from '../components/Main/BirthdayCard';
 import CalendarCard from '../components/Main/Calendar/CalendarCard';
 import DocumentCard from '../components/Main/DocumentCard';
 import Leadership from '../components/Main/Leadership';
 import NewestEmp from '../components/Main/NewestEmp';
-import NoticeCard from '../components/Main/NoticeCard';
+import NoticeCard from '../components/Main/Notice/NoticeCard';
 import Performance from '../components/Main/Performance';
 import WeatherCard from '../components/Main/Weather/WeatherCard';
-import { uiActions } from '../store/ui-slice';
-import { useDispatch } from 'react-redux';
+import PopupModal from '../components/Main/Notice/PopupModal';
+import { getPopupList } from '../api/endpoints/notice';
 
 const MainPage = () => {
+  const [popupStates, setPopupStates] = useState<boolean[]>([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
+  const [popupList, setPopupList] = useState([]);
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const dispatch = useDispatch();
 
+  // subToolbar 유무
   useEffect(() => {
     dispatch(uiActions.setSubToolBar(false));
     dispatch(uiActions.selectMenu(''));
+    getPopupData();
+    console.log(isPopupOpen);
   }, []);
+
+  // useEffect(() => {
+  //   const storedPopupStates = localStorage.getItem('popupStates');
+  //   if (storedPopupStates) {
+  //     setPopupStates(JSON.parse(storedPopupStates));
+  //   }
+  // }, []);
+
+  // 모달 닫기 이벤트 핸들러
+  const handleCloseModal = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handle7DaysClose = (index: number) => {
+    const updatedPopupStates = [...popupStates];
+    updatedPopupStates[index] = true;
+    setPopupStates(updatedPopupStates);
+
+    // localStorage.setItem('popupStates', JSON.stringify(updatedPopupStates));
+  };
+
+  const getPopupData = async () => {
+    try {
+      const response = await getPopupList();
+      const popupData = response.data;
+      const initialPopupStates = popupData.map(() => false);
+      setPopupStates(initialPopupStates);
+      setPopupList(popupData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="main-wrapper">
@@ -80,6 +121,15 @@ const MainPage = () => {
           </div>
         </div>
       </div>
+      {popupList.map((popup, index) => (
+        <PopupModal
+          key={index}
+          data={popup}
+          onClose={handleCloseModal}
+          on7DaysClose={() => handle7DaysClose(index)}
+          className={`main_popup_modal md-idx${index}`}
+        />
+      ))}
     </div>
   );
 };

@@ -4,16 +4,13 @@ import favicon from '../../assets/img/favicon.png';
 import { useAuthActions } from '../../store/actions/authActions';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { useDispatch } from 'react-redux';
-import { uiActions } from '../../store/ui-slice';
 
 const Header = () => {
   const isDarkMode: boolean = useSelector((state: RootState) => state.ui.isDarkMode);
   const { logout } = useAuthActions();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  let lastClickTime = 0;
+  // let lastClickTime = 0;
 
   const logoClickHandler = () => {
     navigate('/main');
@@ -31,14 +28,14 @@ const Header = () => {
   /**
    * 재빠르게 누르면 작동 하지 않는 현상
    */
-  const modeChangeHandler = () => {
-    const currentTime = new Date().getTime();
-    if (currentTime - lastClickTime > 100) {
-      // 클릭 간격이 300ms 이상인 경우에만 처리
-      lastClickTime = currentTime;
-      dispatch(uiActions.setDarkMode());
-    }
-  };
+  // const modeChangeHandler = () => {
+  //   const currentTime = new Date().getTime();
+  //   if (currentTime - lastClickTime > 100) {
+  //     // 클릭 간격이 300ms 이상인 경우에만 처리
+  //     lastClickTime = currentTime;
+  //     dispatch(uiActions.setDarkMode());
+  //   }
+  // };
 
   return (
     <div className={`header ${isDarkMode ? 'darkMode' : ''}`}>
@@ -124,12 +121,12 @@ const Header = () => {
       </div>
 
       <div className="sidebar-right margin-left">
-        <div className="dark-mode-box">
+        {/* <div className="dark-mode-box">
           <input type="checkbox" id="lightModeSwitch" hidden></input>
           <label htmlFor="lightModeSwitch" className="light-toggle">
             <span className="lightToggleButton" onClick={modeChangeHandler}></span>
           </label>
-        </div>
+        </div> */}
         <span className="sidebar-right-divr">
           <i className="fa-regular fa-circle-question"></i>
         </span>

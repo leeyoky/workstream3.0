@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ApprovalState, ccDept, Employee } from '../../types/Approval/Approaval';
 
 const initialState: ApprovalState = {
-  documentCnt: '',
-  isEditMode: false,
-  isDetailMode: true,
-  isReviseMode: false,
-  documentType: '',
+  documentCnt: '', // 총 게시물 갯수
+  isEditMode: false, // 수정상태
+  isDetailMode: true, // ReadOnly상태
+  isReviseMode: false, // 뭐더라
+  documentType: '', // 문서 타입
   selectedOption: 'approval', // 결재 타입
   agreementType: 'sequential', // 합의 타입
   deferredYn: 'N', // 후결
@@ -14,14 +14,14 @@ const initialState: ApprovalState = {
   approvers: [], // 결재자 정보
   updateApprovers: [], // 결재자 업데이트 배열
   overrideIndex: null, // 전결 체크박스
-  ccDept: [],
-  ccUser: [],
-  isReference: false,
+  ccDept: [], // 참조부서
+  ccUser: [], // 참조자
+  isReference: false, // 지시사항 여부
   title: '',
   content: '',
   executeDate: '',
   comment: '',
-  pendingCnt: '',
+  pendingCnt: '', // 결재 대기문서 갯수
   finalSign: false,
   /* 사직원 */
   reasonCd: '',

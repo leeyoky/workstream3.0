@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { selectedActions } from '../../store/Approval/approval-slice';
 import Modal from '../../Layout/Modal/Modal';
-import ApprovalDocumentType from './ApprovalModalDocument';
+import ApprovalDocumentType from './ApprovalLayout/ApprovalModalDocument';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -58,11 +58,11 @@ const ApprovalCreate: React.FC<ApprovalCreateProps> = props => {
           <ApprovalDocumentType onChange={handleDocumentTypeChange} />
         </div>
         <div className={classes['button--box']}>
-          <button className={classes['button--alt']} onClick={closeModalHandler}>
-            닫기
-          </button>
           <button className={classes['button--complete']} onClick={() => goCreatePage()}>
             완료
+          </button>
+          <button className={classes['button--alt']} onClick={closeModalHandler}>
+            취소
           </button>
         </div>
       </div>

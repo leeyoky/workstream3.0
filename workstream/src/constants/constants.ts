@@ -34,8 +34,8 @@ export const DOCUMENT_TYPES: Record<string, string> = {
   EXECUTION: '시행문',
 };
 
-// 컬럼 정렬 속성 상수 정의
-export const COLUMN_SORT_ATTRIBUTES: Record<string, string> = {
+// 전자결재 컬럼 정렬 속성 상수 정의
+export const APPROVAL_COLUMN_SORT_ATTRIBUTES: Record<string, string> = {
   문서번호: 'id',
   문서명: 'title',
   문서종류: 'docType',
@@ -43,6 +43,12 @@ export const COLUMN_SORT_ATTRIBUTES: Record<string, string> = {
   기안일자: 'modDate',
   시행일자: 'executeDate',
   진행현황: 'state',
+};
+// 공지사항 컬럼 정렬 속성 상수 정의
+export const NOTICE_COLUMN_SORT_ATTRIBUTES: Record<string, string> = {
+  제목: 'title',
+  작성자: 'regUsrNm',
+  작성일: 'regDate',
 };
 // alert 메세지
 export const ALERT_MESSAGES = {

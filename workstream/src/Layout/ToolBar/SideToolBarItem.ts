@@ -26,8 +26,8 @@ export const menuItems = [
     iconClass: 'fa-regular fa-heart',
     parentId: null,
     menu: 'notice',
-    label: '전사공지',
-    title: '전사공지',
+    label: '전사공유',
+    title: '전사공유',
     subMenus: [],
   },
   {

@@ -7,7 +7,9 @@ import AlertManager from './helpers/AlertManager';
 function App() {
   const isLogin: boolean = useSelector((state: RootState) => state.auth.isLogin);
   const token = useSelector((state: RootState) => state.auth.token);
-  useEffect(() => {}, [isLogin]);
+  useEffect(() => {
+    console.log('token :', token);
+  }, [isLogin]);
   return (
     <React.Fragment>
       <AlertManager />

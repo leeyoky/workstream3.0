@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { NoticeList } from '../../types/Main/Main';
 import { deleteNotice, getNoticeData, updateNoticeData } from '../../api/endpoints/notice';
+import useNoticeList from './useNoticeList';
 
 const useNoticeRequest = (noticeId: string, onNoticeUpdated: () => void) => {
   const [noticeData, setNoticeData] = useState<NoticeList | null>(null);
   const [popupYn, setPopupYn] = useState<string>('');
+  const [isTemp, setIsTemp] = useState(false);
+  const { fetchNoticeList } = useNoticeList('regDate,desc');
 
   useEffect(() => {
     getData();
@@ -16,7 +19,12 @@ const useNoticeRequest = (noticeId: string, onNoticeUpdated: () => void) => {
       const response = await getNoticeData(noticeId);
       const data = response.data;
       setNoticeData(data);
-      setPopupYn(data?.popupYn);
+      console.log(data);
+
+      // 가져온 글이 임시저장 상태이면 임시저장모드 true
+      if (data.state === 'TEMP') {
+        setIsTemp(true);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -29,6 +37,7 @@ const useNoticeRequest = (noticeId: string, onNoticeUpdated: () => void) => {
       const data = response;
       console.log(data);
       onNoticeUpdated();
+      fetchNoticeList();
     } catch (error) {
       console.log(error);
     }
@@ -41,6 +50,8 @@ const useNoticeRequest = (noticeId: string, onNoticeUpdated: () => void) => {
       console.log(response);
       if (response.status === 200) {
         alert('삭제가 완료되었습니다.');
+        getData();
+        onNoticeUpdated();
         // props.onClose();
       }
     } catch (error) {
@@ -56,6 +67,7 @@ const useNoticeRequest = (noticeId: string, onNoticeUpdated: () => void) => {
     getData,
     updateData,
     removeNotice,
+    isTemp,
   };
 };
 

@@ -1,0 +1,15 @@
+export const columns = [
+  { name: '부서', sort: 'false' },
+  { name: '이름', sort: 'false' },
+  { name: '직책', sort: 'false' },
+  { name: '직위', sort: 'false' },
+  { name: '내선', sort: 'false' },
+  { name: '직통번호', sort: 'false' },
+  { name: 'Email', sort: 'false' },
+  { name: 'Skype ID', sort: 'false' },
+  { name: '핸드폰', sort: 'false' },
+  { name: '자택번호', sort: 'false' },
+  { name: '입사일', sort: 'false' },
+  { name: '생일', sort: 'false' },
+  { name: '현재프로젝트', sort: 'false' },
+];

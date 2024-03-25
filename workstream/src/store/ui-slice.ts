@@ -5,6 +5,7 @@ const uiSlice = createSlice({
     isSidebarOpen: true,
     isSubbarOpen: false,
     isDarkMode: false,
+    popupData: [],
     draggingItem: null,
     dropTarget: null,
     selectMenu: null,
@@ -13,6 +14,7 @@ const uiSlice = createSlice({
     totalItems: 0,
     searchInput: {
       id: '',
+      category: '',
       title: '',
       deptCd: '',
       docType: '',
@@ -36,6 +38,9 @@ const uiSlice = createSlice({
     },
     setDarkMode(state) {
       state.isDarkMode = !state.isDarkMode;
+    },
+    setPopupData(state, action) {
+      state.popupData = action.payload;
     },
     // Dragging
     setDraggingItem(state, action) {
@@ -78,6 +83,7 @@ const uiSlice = createSlice({
       state.selectPage = 0;
       state.totalItems = 0;
       state.searchInput.id = '';
+      state.searchInput.category = '';
       state.searchInput.title = '';
       state.searchInput.deptCd = '';
       state.searchInput.docType = '';
@@ -89,6 +95,7 @@ const uiSlice = createSlice({
     // resetSearchInput
     resetSearchInput(state) {
       state.searchInput.id = '';
+      state.searchInput.category = '';
       state.searchInput.title = '';
       state.searchInput.deptCd = '';
       state.searchInput.docType = '';

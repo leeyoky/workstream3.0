@@ -153,6 +153,7 @@ footer p {
   justify-content: space-between;
   height: 200px;
   margin-bottom: 0.25rem;
+  gap: 1rem;
 }
 .header__left{
   width: 49%;
@@ -231,7 +232,6 @@ footer p {
   box-sizing: border-box;
 }
 .reference-table input::placeholder {
-  font-size: 8pt;
   font-weight: 400;
   color: #a0a0a0;
 }
@@ -571,7 +571,7 @@ footer p {
 }
 .user-sign span:first-child {
   font-size: 12pt;
-  width: 4rem;
+  width: auto;
 }
 .user-sign span:nth-child(2) {
   width: 6rem;
@@ -1232,13 +1232,72 @@ footer p {
 }
 /* 경조사비 */
 
+.equipment-form,
+.approval-form,
 .condolence-form,
+.purchase-form,
 .transporm-form{
   justify-content:flex-start !important;
 }
+
+.approval-form table,
+.purchase-form table,
 .condolence-form table,
 .transporm-form table{
   border-collapse: collapse;
+}
+
+.purchase-form tr td {
+  height: 1.5rem;
+}
+.purchase-form tfoot td{
+  min-width: 2rem;
+}
+.purchase-form tfoot td span {
+  padding: 0rem 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.purchase-form tfoot textarea{
+  height: 3rem;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+.purchase-form .header__right .header-table {
+  width: 100%;
+}
+.purchase-form .header__right .header-table th {
+  height: 0.5rem;
+}
+.header-info-msg {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.content_table {
+  margin-top: 0.5rem;
+}
+
+.purchase-form .header-info-table {
+  height: 12rem;
+}
+.purchase-form .header-info-table td {
+  padding: 0rem 0.5rem;
+  font-size: 0.8rem;
+}
+.purchase-form .header-table-wrapper{
+  height: auto;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 2rem;
+}
+.purchase-form .header__right {
+  flex: 1;
+  justify-content: space-between;
 }
 .condolence-form .header-info-table {
   margin: 50px 0px;
@@ -1341,4 +1400,304 @@ footer p {
 }
 .transportation__table_content input:focus {
   background-color: #fff4e8;
+}
+
+/* 구매기안서 th */
+
+.purchase-form .content_table{
+  width: 103%;
+}
+.purchase-form .content_table i {
+  padding-left: 0.5rem;
+}
+
+.purchase-form .content_table thead th:first-child {
+  width: 15%;
+}
+.purchase-form .content_table thead th:nth-child(2) {
+  width: 35%;
+}
+.purchase-form .content_table thead th:nth-child(3) {
+  width: 10%;
+}
+.purchase-form .content_table thead th:nth-child(4) {
+  width: 10%;
+}
+.purchase-form .content_table thead th:nth-child(5) {
+  width: 15%;
+}
+.purchase-form .content_table thead th:nth-child(6) {
+  width: 15%;
+}
+.purchase-form .content_table input[type="text"]{
+  width: 100%;
+  border: none;
+  border-radius: 0;
+}
+.purchase-form .content_table input[type="number"]{
+  width: 100%;
+  border: none;
+  border-radius: 0;
+}
+.purchase-form .content_table tbody input[type="number"] {
+  padding-left: 1rem;
+}
+.purchase-form .content_table select {
+  width: 100%;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: none;
+}
+
+
+
+.button-control-box {
+  display: flex;
+  margin-top: 0.5rem;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* 회사 장비 비품 반출 */
+
+.equipment-table tr th {
+  width: 25%;
+}
+.equipment-table tr:nth-child(1){
+  height: 4rem;
+}
+.equipment-table tr:nth-child(2){
+  height: 6rem;
+}
+.equipment-table tr:nth-child(3){
+  height: 3rem;
+}
+.equipment-table tr:nth-child(4){
+  height: 3rem;
+}
+.equipment-table tr:nth-child(5){
+  height: 3rem;
+}
+.equipment-warning{
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  
+}
+.equipment-warning span {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5rem;
+}
+
+.equipment-warning > span:first-child{
+  padding-bottom: 1rem;
+  font-weight: 500;
+}
+.equipment-warning span:nth-child(2),
+.equipment-warning span:nth-child(3),
+.equipment-warning span:nth-child(4) {
+  padding-left: 1rem;
+}
+.equipment-sign{
+  width: 10rem;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid;
+}
+
+/* 지출결의서 */
+
+.expense-report-form .header__left {
+  border: none;
+}
+.expense-report-form .header-info-msg {
+  justify-content: space-around;
+  padding: 3rem 3rem;
+}
+.expense-report-form .header-info-msg div {
+  border-bottom: 1px solid;
+  display: flex;
+  font-size: 1rem;
+  justify-content: space-around;
+}
+.header-info-msg .total-cost {
+  display: flex;
+  min-width: 8rem;
+  width: auto;
+  justify-content: flex-end;
+  font-size: 1rem;
+}
+.expense-report-form .content_table thead th:nth-child(2) {
+  width: 20% !important;
+}
+.expense-report-table tr input {
+  height: 1.5rem;
+  font-weight: 500;
+}
+
+.expense-report-form .foot-info-msg {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.foot-info-msg {
+  padding: 2rem 0rem;
+}
+.foot-info-msg div {
+  display: flex;
+  flex-direction: column;
+}
+.expense-report-form .foot-info-msg div:first-child{
+  line-height: 2.5rem;
+  font-size: 1.2rem;
+  align-items: center;
+}
+.expense-report-form .foot-info-msg div:first-child span:first-child{
+  font-weight: 500;
+}
+.expense-report-form .foot-info-msg div {
+  margin: 1rem 0rem;
+}
+.expense-report-table tbody tr td:first-child{
+  width: 50%;
+}
+.expense-report-table tbody tr td:nth-child(2){
+  width: 10%;
+}
+.expense-report-table tbody tr td:nth-child(3){
+  width: 40%;
+}
+.expense-report-table tfoot td {
+  padding-right: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.expense-report-table thead tr,
+.expense-report-table tfoot tr {
+  height: 1.5rem;
+}
+.expense-report-form .reg-info-box{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.expense-report-form .reg-info-box div{
+  display: flex;
+  width: 15rem;
+}
+.expense-report-form .reg-info-box div span:first-child{
+  margin-right: 2rem;
+}
+.expense-report-form .reg-info-box div span:nth-child(2) {
+  width: 7rem;
+  min-width: 5rem;
+  padding-left: 1rem;
+}
+
+.expense-report-form .user-sign-box{
+  border: none;
+}
+
+.expense-report-form .header__left p {
+  font-size: 0.8rem;
+}
+
+
+/* 사유서 */
+
+.state-reason-form .state-reason-table {
+  width: 100% !important;
+}
+.state-reason-form .content_table thead td:nth-child(2) {
+  width: 35% !important;
+}
+.state-reason-form .content_table thead th:nth-child(3) {
+  width: 15% !important;
+}
+.state-reason-form .content_table tr {
+  height: 1.8rem;
+}
+.state-reason-form .content_table {
+  width: 100% !important;
+}
+.state-reason-form con
+.state-reason-form .content_table textarea {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+}
+.state-reason-form .content_table th {
+  padding-left: 0.5rem;
+}
+.state-reason-form .content_table td {
+  font-size: 0.8rem;
+  margin: 0rem 0.2rem;
+}
+.content_table .reason-state-1{
+  height: 27rem;
+}
+.content_table .reason-state-1 textarea,
+.content_table .reason-state-2 textarea {
+  height: -webkit-fill-available;
+  width: 100%;
+  border: none;
+}
+.content_table .reason-state-2{
+  height: 10rem;
+}
+.state-reason-form .content_table td span{
+  padding: 0rem 0.2rem;
+}
+.state-reason-form .content_table input {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Medical Support */
+
+.medical-support-form h1 {
+  word-spacing: 0;
+}
+.medical-head__1{
+  font-size: 0.95rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+.medical-table__1 tr th:first-child{
+  width: 20%;
+}
+.medical-table__1 tr th:nth-child(3){
+  width: 20%;
+}
+.medical-table__1 tr{
+  height: 1.8rem;
+}
+.medical-table__1 td {
+  padding: 0rem 0.25rem;
+  font-size: 0.8rem;
+}
+.medical-table__2 tr th:first-child {
+  width: 15%;
+}
+.medical-table__2 tr td input {
+  border: none;
+  border-radius: 0;
+  height: 1.5rem;
+}
+.medical-textarea__1 {
+  display: flex;
+  flex-direction: row;
+}
+.medical-textarea__1 textarea {
+  height: 5rem;
+  border: none;
+  border-radius: 0;
+  font-weight: 500;
+  font-size: 0.75rem;
 }

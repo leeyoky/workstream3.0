@@ -7,7 +7,7 @@ interface GetListParams {
 const NODE_API_SERVER = 'http://localhost:5500';
 
 /**
- * @description get요청 시 query를 담아 보내는 함수
+ * @description [node.js] get요청 시 query를 담아 보내는 함수
  * @date 2024-02-29
  * @author Yeongkyung Lee
  */

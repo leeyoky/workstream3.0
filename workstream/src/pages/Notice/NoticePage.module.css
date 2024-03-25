@@ -1,25 +1,25 @@
+/* 분류 */
 .notice-tbody td:first-child {
   width: 10%;
 }
-/* 분류 */
+/* 제목 */
 .notice-tbody td:nth-child(2) {
-  width: 50%;
-  text-align: center;
+  width: 60%;
   line-height: 1.5rem;
 }
-/* 제목 */
+/* 작성자 */
 .notice-tbody td:nth-child(3) {
   width: 10%;
 }
-/* 작성자 */
+/* 작성일 */
 .notice-tbody td:nth-child(4) {
   width: 10%;
 }
-/* 작성일 */
+/* 팝업노출 */
 .notice-tbody td:nth-child(5) {
-  width: 10%;
+  width: 5%;
 }
 /* 첨부파일 */
 .notice-tbody td:nth-child(6) {
-  width: 10%;
+  width: 5%;
 }

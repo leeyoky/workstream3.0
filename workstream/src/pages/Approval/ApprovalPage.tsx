@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { RootState } from '../../store';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -10,30 +10,21 @@ import {
   DOCUMENT_TYPES,
   MENU_PATHS,
   STATUS_LABELS,
-  COLUMN_SORT_ATTRIBUTES,
+  APPROVAL_COLUMN_SORT_ATTRIBUTES,
 } from '../../constants/constants';
+import useSortColumn from '../../hooks/Common/useSortColumn';
+import DataNotExist from '../Common/DataNotExist';
 
 const ApprovalPage: React.FC = () => {
-  const [sortValue, setSortValue] = useState<string>('');
-  const [sortDirections, setSortDirections] = useState<Record<string, 'asc' | 'desc' | ''>>(
-    columns.reduce(
-      (acc, column) => {
-        acc[column.name] = column.name === '기안일자' ? 'desc' : '';
-        return acc;
-      },
-      {} as Record<string, 'asc' | 'desc' | ''>,
-    ),
+  const { sortValue, sortDirections, currentSortColumn, sortHandler } = useSortColumn(
+    'modDate',
+    'desc',
+    APPROVAL_COLUMN_SORT_ATTRIBUTES,
   );
-  const [currentSortColumn, setCurrentSortColumn] = useState<string | null>(null);
 
   const selectMenu = useSelector((state: RootState) => state.ui.selectMenu || '');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate('/approval/document');
-    setSortValue('modDate,desc');
-  }, []);
 
   const getMenuTitle = (menuPath: string): string => {
     const menuTitles: Record<string, string> = {
@@ -47,66 +38,11 @@ const ApprovalPage: React.FC = () => {
     return menuTitles[menuPath] || '';
   };
 
-  const toggleSortDirection = (column: string) => {
-    setSortDirections(prevSortDirections => {
-      const newSortDirections = { ...prevSortDirections };
-
-      // 현재 정렬 중인 컬럼 이외의 나머지 컬럼을 모두 초기값으로 리셋
-      Object.keys(newSortDirections).forEach(key => {
-        if (key !== column) {
-          newSortDirections[key] = '';
-        }
-      });
-
-      // 현재 컬럼 토글
-      newSortDirections[column] =
-        newSortDirections[column] === ''
-          ? 'asc'
-          : newSortDirections[column] === 'asc'
-          ? 'desc'
-          : '';
-
-      // Set currentSortColumn state
-      setCurrentSortColumn(column);
-
-      return newSortDirections;
-    });
-  };
-
-  /* 정렬 함수 */
-  const sortHandler = (column: string) => {
-    // 현재 정렬 중인 열이 다른 열을 클릭한 경우, 초기값을 설정
-    if (currentSortColumn && currentSortColumn !== column) {
-      setSortDirections(prevSortDirections => ({
-        ...prevSortDirections,
-        [column]: '',
-      }));
-
-      setSortValue(`${COLUMN_SORT_ATTRIBUTES[column]},desc`);
-      toggleSortDirection(column);
-    } else {
-      let newSortValue = '';
-
-      if (sortDirections[column] === 'desc') {
-        newSortValue = 'modDate,desc';
-      } else {
-        // 컬럼별 정렬 방향 설정
-        const sortOrder =
-          sortDirections[column] === '' ? 'asc' : sortDirections[column] === 'asc' ? 'desc' : '';
-
-        // 선택된 컬럼에 따라 새로운 정렬 방향 설정
-        newSortValue = `${COLUMN_SORT_ATTRIBUTES[column]},${sortOrder}`;
-      }
-
-      setSortValue(newSortValue);
-      toggleSortDirection(column);
-    }
-  };
-
   const { listData, totalItems } = useApprovalList(sortValue);
 
   const searchTagsToUse =
     selectMenu === '/approval/document' ? [...searchTags, ...progressSearchTags] : searchTags;
+
   const boardTitle = `전자결재 > ${getMenuTitle(selectMenu)} (${totalItems})`;
 
   const goDetailPage = (isDetail: boolean, id: string, docType: string) => {
@@ -150,13 +86,6 @@ const ApprovalPage: React.FC = () => {
           </td>
           <td>
             <span>{item.executeDate ? item.executeDate : '-'}</span>
-          </td>
-          <td>
-            {item.lineType === '순차' || item.lineType === '병렬' ? (
-              <span>결재+합의</span>
-            ) : (
-              <span>결재</span>
-            )}
           </td>
           <td>
             <span>{item.commentCount}</span>
@@ -224,15 +153,7 @@ const ApprovalPage: React.FC = () => {
               ))}
             </tr>
           </thead>
-          <tbody>
-            {memoizedList.length > 0 ? (
-              memoizedList
-            ) : (
-              <tr className="table-not-exist">
-                <td colSpan={12}>작성된 글이 없습니다.</td>
-              </tr>
-            )}
-          </tbody>
+          <tbody>{memoizedList.length > 0 ? memoizedList : <DataNotExist />}</tbody>
         </table>
       </div>
     </IndexPage>

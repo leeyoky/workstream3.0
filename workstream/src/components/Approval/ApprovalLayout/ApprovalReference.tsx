@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
-import classes from '../../pages/Approval/Approval.module.css';
-import { RootState } from '../../store';
-import { Employee, ccDept, ccUser } from '../../types/Approval/Approaval';
-import { useDocumentData } from '../../hooks/Approval/useDocumentData';
+import classes from '../../../pages/Approval/Approval.module.css';
+import { RootState } from '../../../store';
+import { Employee, ccDept, ccUser } from '../../../types/Approval/Approaval';
+import { useDocumentData } from '../../../hooks/Approval/useDocumentData';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { selectedActions } from '../../store/Approval/approval-slice';
+import { selectedActions } from '../../../store/Approval/approval-slice';
 import { useDispatch } from 'react-redux';
 
 const ApprovalReference = () => {

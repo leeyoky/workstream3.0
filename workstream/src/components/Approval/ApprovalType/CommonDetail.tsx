@@ -11,7 +11,7 @@ import { selectedActions } from '../../../store/Approval/approval-slice';
 import { formatDateOnly, getToday } from './../../../helpers/formatDateTime';
 import TextEditor from '../../TextEditor';
 import SignatureEdit from '../ApprovalSign/SignatureEdit';
-import ApprovalReference from '../ApprovalReference';
+import ApprovalReference from '../ApprovalLayout/ApprovalReference';
 import ApprovalInstructions from '../ApprovalInstruction/ApprovalInstructions';
 
 type CommonDetailProps = {

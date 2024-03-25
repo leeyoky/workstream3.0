@@ -9,6 +9,15 @@ export interface serverFile {
   fileSize: number;
 }
 
+export interface serverFileData {
+  fileId: number;
+  docNumber: string;
+  docType: string;
+  fileExtension: string;
+  fileName: string;
+  fileSize: number;
+}
+
 declare global {
   interface Window {
     jsPDF: typeof jsPDF;

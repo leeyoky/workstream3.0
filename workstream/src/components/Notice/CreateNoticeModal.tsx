@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
@@ -9,6 +9,8 @@ import Modal from '../../Layout/Modal/Modal';
 import DatePick from '../DatePick';
 import Attachment from '../Common/Attachment';
 import { noticeCategories } from '../../pages/Notice/NoticePageTag';
+import useUpdateFiles from '../../hooks/Common/useUpdateFiles';
+import useNoticeList from '../../hooks/Notice/useNoticeList';
 interface CreateNoticeModalProps {
   onClose: () => void;
 }
@@ -20,6 +22,18 @@ const CreateNoticeModal: React.FC<CreateNoticeModalProps> = props => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isPopup, setIsPopup] = useState('N');
   const regUser = useSelector((state: RootState) => state.user.userInfo.empNo);
+  // 첨부파일
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const { updateFileData } = useUpdateFiles();
+  const { fetchNoticeList } = useNoticeList('regDate,desc');
+
+  useEffect(() => {
+    console.log('selectedFiles', selectedFiles);
+  }, []);
+
+  const handleAttachmentChange = (files: File[]) => {
+    setSelectedFiles(files);
+  };
 
   const closeModalHadler = () => {
     props.onClose();
@@ -29,16 +43,16 @@ const CreateNoticeModal: React.FC<CreateNoticeModalProps> = props => {
     setCategory(event.target.value);
   };
 
-  const submitNotice = async (value: string) => {
-    let status = '';
+  const createNotice = async (value: string) => {
+    let state = '';
 
     if (value === 'SAVE') {
-      status = 'SAVE';
+      state = 'SAVE';
     } else if (value === 'TEMP') {
-      status = 'TEMP';
+      state = 'TEMP';
     }
 
-    const result = window.confirm(`${status === 'SAVE' ? '저장' : '임시저장'} 하시겠습니까?`);
+    const result = window.confirm(`${state === 'SAVE' ? '저장' : '임시저장'} 하시겠습니까?`);
 
     if (!result) {
       return;
@@ -46,10 +60,10 @@ const CreateNoticeModal: React.FC<CreateNoticeModalProps> = props => {
 
     try {
       const formData = {
-        title: title,
-        status: status,
-        category: category,
-        content: content,
+        title,
+        state,
+        category,
+        content,
         regUsr: regUser,
         popupYn: isPopup,
         popupStart: startDate,
@@ -58,14 +72,20 @@ const CreateNoticeModal: React.FC<CreateNoticeModalProps> = props => {
 
       console.log(formData);
       const response = await fetchNotice(formData);
+      const documentId = response.data.notice.id;
 
       if (response.status === 201) {
+        if (selectedFiles.length > 0) {
+          await updateFileData(documentId, selectedFiles, 'NOTICE');
+        }
         props.onClose();
       } else {
         console.error('Failed to save notice:', response.statusText);
       }
     } catch (error) {
       console.error('Error saving notice:', error);
+    } finally {
+      fetchNoticeList();
     }
   };
 
@@ -137,12 +157,12 @@ const CreateNoticeModal: React.FC<CreateNoticeModalProps> = props => {
               </div>
             )}
           </div>
-          <Attachment />
+          <Attachment onFileChange={handleAttachmentChange} />
           <div className="card__button-box">
-            <button className="btn btn-primary" onClick={() => submitNotice('SAVE')}>
+            <button className="btn btn-primary" onClick={() => createNotice('SAVE')}>
               저장
             </button>
-            <button className="btn btn-border" onClick={() => submitNotice('TEMP')}>
+            <button className="btn btn-border" onClick={() => createNotice('TEMP')}>
               임시저장
             </button>
             <button className="btn" onClick={closeModalHadler}>

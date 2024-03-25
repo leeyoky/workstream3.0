@@ -9,21 +9,26 @@ import classes from './NoticePage.module.css';
 import IndexPage from '../IndexPage';
 import DetailNoticeModal from '../../components/Notice/DetailNoticeModal';
 import useNoticeList from './../../hooks/Notice/useNoticeList';
+import DataNotExist from '../Common/DataNotExist';
+import { NOTICE_COLUMN_SORT_ATTRIBUTES } from '../../constants/constants';
+import useSortColumn from '../../hooks/Common/useSortColumn';
 
 const NoticePage = () => {
   const [goDetail, setGoDetail] = useState(false);
   const [selectedNoticeId, setSelectedNoticeId] = useState<string>('');
-  const { fetchNoticeList, noticeData } = useNoticeList();
   const searchTag = [...searchTags];
   const dispatch = useDispatch();
+  const { sortValue, sortDirections, currentSortColumn, sortHandler } = useSortColumn(
+    'regDate',
+    'desc',
+    NOTICE_COLUMN_SORT_ATTRIBUTES,
+  );
+  const { fetchNoticeList, noticeData } = useNoticeList(sortValue);
 
-  const boardTitle = '전사공지';
+  const boardTitle = '공지사항';
 
   useEffect(() => {
     dispatch(uiActions.setSubToolBar(true));
-  }, []);
-
-  useEffect(() => {
     fetchNoticeList();
   }, [goDetail]);
 
@@ -34,7 +39,8 @@ const NoticePage = () => {
 
   // 모달 닫기 이벤트 핸들러
   const handleCloseModal = () => {
-    setGoDetail(false);
+    setGoDetail(prevState => !prevState);
+    fetchNoticeList();
   };
 
   return (
@@ -45,7 +51,25 @@ const NoticePage = () => {
             <tr>
               {columns.map((columns, index) => (
                 <th key={index}>
-                  <span>{columns.name}</span>
+                  <span
+                    className={`table-title-header ${
+                      currentSortColumn === columns.name && sortDirections[columns.name] !== ''
+                        ? `sorted-${sortDirections[columns.name]}`
+                        : ''
+                    }`}
+                    onClick={() => sortHandler(columns.name)}>
+                    <span>{columns.name}</span>
+                    {index !== 0 && columns.sort === true && (
+                      <i
+                        className={`fa-solid ${
+                          sortDirections[columns.name] === ''
+                            ? 'fa-sort'
+                            : sortDirections[columns.name] === 'asc'
+                            ? 'fa-sort-up'
+                            : 'fa-sort-down'
+                        }`}></i>
+                    )}
+                  </span>
                 </th>
               ))}
             </tr>
@@ -69,14 +93,19 @@ const NoticePage = () => {
                     <span>{formatDateOnly(item.regDate)}</span>
                   </td>
                   <td>
-                    <span></span>
+                    <span>{item.popupYn}</span>
+                  </td>
+                  <td>
+                    {item.fileCount > 0 && (
+                      <span className="approval-list__paperclip">
+                        <i className="fa-solid fa-paperclip"></i>
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))
             ) : (
-              <tr className="table-not-exist">
-                <td colSpan={12}>작성된 글이 없습니다.</td>
-              </tr>
+              <DataNotExist />
             )}
             {goDetail && (
               <DetailNoticeModal noticeId={selectedNoticeId} onClose={handleCloseModal} />

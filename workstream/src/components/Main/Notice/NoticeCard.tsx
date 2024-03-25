@@ -1,6 +1,6 @@
-import useNoticeList from '../../hooks/Notice/useNoticeList';
+import useNoticeList from '../../../hooks/Notice/useNoticeList';
 const NoticeCard = () => {
-  const { noticeData } = useNoticeList();
+  const { noticeData } = useNoticeList('regDate,desc');
 
   // 최대 5개의 공지사항만 가져오기
   const limitedNotices = noticeData.slice(0, 5);
